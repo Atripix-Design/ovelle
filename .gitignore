@@ -8,3 +8,8 @@ out/
 coverage/
 release/
 GATES.md
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log

@@ -2,7 +2,7 @@
 
 ## Resource ownership
 
-The personal Cloudflare account is `47b7e4cbf6e4918eecb9241815337c9e`. The resources were created with Wrangler and are currently operated through `wrangler.jsonc`; Terraform state has not been configured for this personal account. Keep the Worker names, D1 IDs, and R2 bucket names in that file aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
+The personal Cloudflare account is `47b7e4cbf6e4918eecb9241815337c9e`. The resources were created with Wrangler. Keep the Worker names, D1 IDs, and R2 bucket names in `wrangler.jsonc` aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
 
 | Environment | Worker | D1 name and ID | R2 bucket |
 | --- | --- | --- | --- |
@@ -10,6 +10,19 @@ The personal Cloudflare account is `47b7e4cbf6e4918eecb9241815337c9e`. The resou
 | Production | `ovelle-production` | `ovelle-db-production`, `692c48ec-2b6c-402e-bfa1-eb93730c1bd2` | `ovelle-storage-production` |
 
 Wrangler owns Worker code, static assets, and bindings. The ubuntu-box user supplies the personal Cloudflare OAuth credential from `~/.config/.wrangler`; no Cloudflare token is committed to Git or put inside the build container. Refresh authentication with `npx wrangler login` on the host if delivery reports an authentication failure.
+
+## Terraform adoption
+
+`infra/terraform/envs/development` and `infra/terraform/envs/production` follow the business-site layout. Terraform is configured to own only the durable D1 database and R2 bucket in each environment. Wrangler remains the sole owner of Worker builds, deployment, assets, bindings, and secrets. The live D1 databases have read replication disabled, as declared in the module.
+
+The configurations name HCP Terraform workspaces `ovelle-development` and `ovelle-production` for separate remote state. They have passed `terraform fmt -check` and `terraform init -backend=false` plus `terraform validate`. **The live resources have not yet been imported into Terraform state.** Do not run `terraform apply` against empty state: that would try to create resources with names that already exist. Before adoption, create and authenticate the two HCP workspaces with local execution and a personal-account Cloudflare API token, then import the exact live IDs below into the matching environment. Follow the import-first procedure in the Atripix Terraform websites skill, check state addresses individually so retries are safe, and require a post-import plan of exactly `0 to add, 0 to change, 0 to destroy` before treating Terraform as the live owner. Production adoption also needs a D1 Time Travel bookmark and owner approval.
+
+| Environment | Terraform address | Existing import ID |
+| --- | --- | --- |
+| Development | `module.site.cloudflare_d1_database.app` | `47b7e4cbf6e4918eecb9241815337c9e/6faa4ab6-6773-4078-9fe4-01ef0972a458` |
+| Development | `module.site.cloudflare_r2_bucket.storage` | `47b7e4cbf6e4918eecb9241815337c9e/ovelle-storage-development/default` |
+| Production | `module.site.cloudflare_d1_database.app` | `47b7e4cbf6e4918eecb9241815337c9e/692c48ec-2b6c-402e-bfa1-eb93730c1bd2` |
+| Production | `module.site.cloudflare_r2_bucket.storage` | `47b7e4cbf6e4918eecb9241815337c9e/ovelle-storage-production/default` |
 
 ## Host service
 
