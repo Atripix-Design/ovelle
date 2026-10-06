@@ -10,7 +10,11 @@
     "lint": "oxlint src",
     "build": "npm run check && electron-vite build",
     "start": "electron-vite preview",
-    "setup": "install-electron"
+    "setup": "install-electron",
+    "package:mac:x64": "npm run build && electron-builder --mac zip --x64 --publish never && node ../../scripts/repack-mac.mjs x64",
+    "package:mac:arm64": "npm run build && electron-builder --mac zip --arm64 --publish never && node ../../scripts/repack-mac.mjs arm64",
+    "package:windows": "npm run build && electron-builder --win portable --x64 --publish never",
+    "package:all": "npm run package:mac:x64 && npm run package:mac:arm64 && npm run package:windows"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -22,10 +26,39 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^5.2.0",
-    "electron": "^44.5.1",
+    "electron": "44.5.1",
+    "electron-builder": "^26.15.3",
     "electron-vite": "^5.0.0",
     "oxlint": "^1.81.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.7"
-  }
+  },
+  "build": {
+    "appId": "com.ovelle.desktop",
+    "productName": "Ovelle",
+    "directories": {
+      "output": "../../release/desktop"
+    },
+    "files": [
+      "out/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "artifactName": "Ovelle-${version}-${os}-${arch}.${ext}",
+    "mac": {
+      "target": [
+        "zip"
+      ],
+      "category": "public.app-category.education",
+      "identity": null
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "publish": null
+  },
+  "description": "Ovelle desktop application for FBLA Coding & Programming",
+  "author": "Ovelle"
 }
