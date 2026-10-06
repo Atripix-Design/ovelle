@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [development, main]
+  push:
+    branches: [development, main]
+  workflow_dispatch:
+    inputs:
+      force_hosted: { type: boolean, default: false }
+      source_event: { type: string, default: "" }
+      source_sha: { type: string, default: "" }
+      source_ref: { type: string, default: "" }
+      dispatch_ref: { type: string, default: "" }
+      pull_request_number: { type: string, default: "" }
+      pull_request_base: { type: string, default: "" }
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ci-${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  route:
+    uses: Atripix-Design/ci-infrastructure/.github/workflows/select-runners.yml@9d96739889abafddf80bb8a546df0da7568199c6
+    with:
+      desired_slots: 2
+      lane_names_json: '["web", "desktop"]'
+      force_hosted: ${{ inputs.force_hosted || false }}
+      trusted: ${{ github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}
+      runner_app_id: ${{ vars.ATRIPIX_RUNNER_APP_ID }}
+    secrets:
+      runner_app_private_key: ${{ secrets.ATRIPIX_RUNNER_APP_PRIVATE_KEY }}
+
+  web:
+    name: Web
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.slot_1) }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+      - uses: Atripix-Design/ci-infrastructure/actions/setup-node-adaptive@9d96739889abafddf80bb8a546df0da7568199c6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run check -w @ovelle/web
+      - run: npm run lint -w @ovelle/web
+      - run: npm run build -w @ovelle/web
+
+  desktop:
+    name: Desktop
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.slot_2) }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+      - uses: Atripix-Design/ci-infrastructure/actions/setup-node-adaptive@9d96739889abafddf80bb8a546df0da7568199c6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run check -w @ovelle/desktop
+      - run: npm run lint -w @ovelle/desktop
+      - run: npm run build -w @ovelle/desktop
+
+  hosted-fallback-on-failure:
+    if: >-
+      ${{ always() && inputs.force_hosted != true && (
+        (contains(fromJSON(needs.route.outputs.local_slots_json), 1) && needs.web.result == 'failure') ||
+        (contains(fromJSON(needs.route.outputs.local_slots_json), 2) && needs.desktop.result == 'failure')
+      ) }}
+    needs: [route, web, desktop]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: Atripix-Design/ci-infrastructure/actions/dispatch-hosted-fallback@9d96739889abafddf80bb8a546df0da7568199c6
+        with:
+          github-token: ${{ github.token }}
+          workflow-file: ci.yml
+          dispatch-ref: ${{ inputs.dispatch_ref || github.head_ref || github.ref_name }}
+          force-hosted: ${{ inputs.force_hosted || false }}
+          source-event: ${{ inputs.source_event || github.event_name }}
+          source-sha: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+          source-ref: ${{ inputs.source_ref || github.event.pull_request.head.ref || github.ref }}
+          pull-request-number: ${{ inputs.pull_request_number || github.event.pull_request.number || '' }}
+          pull-request-base: ${{ inputs.pull_request_base || github.event.pull_request.base.ref || '' }}
