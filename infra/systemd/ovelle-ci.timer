@@ -1,0 +1,11 @@
+[Unit]
+Description=Poll Ovelle development and main for ubuntu-box delivery
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=3min
+Persistent=true
+Unit=ovelle-ci.service
+
+[Install]
+WantedBy=timers.target

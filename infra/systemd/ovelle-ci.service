@@ -1,0 +1,10 @@
+[Unit]
+Description=Ovelle ubuntu-box CI and Cloudflare delivery
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Documents/GitHub/ovelle
+ExecStart=%h/.local/bin/node %h/Documents/GitHub/ovelle/scripts/ci/host-ci.mjs
+TimeoutStartSec=45min
