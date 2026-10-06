@@ -150,9 +150,9 @@ async function processBranch(branch) {
     const filenames = publishReleases(workdir, branch, environment)
     run(join(workdir, 'node_modules/.bin/wrangler'), ['deploy', '--env', environment], { cwd: workdir })
     const url = await verifyDeployment(environment, filenames)
+    commitStatus(sha, 'success', `Built and deployed ${environment} on ubuntu-box`, url)
     writeFileSync(`${stateFile}.tmp`, JSON.stringify({ sha, environment, host: hostname(), url, completedAt: new Date().toISOString() }) + '\n')
     renameSync(`${stateFile}.tmp`, stateFile)
-    commitStatus(sha, 'success', `Built and deployed ${environment} on ubuntu-box`, url)
     console.log(`${branch}: delivered ${sha} to ${url}`)
   } catch (error) {
     try { commitStatus(sha, 'failure', `ubuntu-box delivery failed: ${error.message}`) } catch {}

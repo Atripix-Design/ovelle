@@ -11,8 +11,8 @@
     "build": "npm run check && electron-vite build",
     "start": "electron-vite preview",
     "setup": "install-electron",
-    "package:mac:x64": "npm run build && electron-builder --mac zip --x64 --publish never && node ../../scripts/repack-mac.mjs x64",
-    "package:mac:arm64": "npm run build && electron-builder --mac zip --arm64 --publish never && node ../../scripts/repack-mac.mjs arm64",
+    "package:mac:x64": "npm run build && electron-builder --mac --dir --x64 --publish never && node ../../scripts/repack-mac.mjs x64",
+    "package:mac:arm64": "npm run build && electron-builder --mac --dir --arm64 --publish never && node ../../scripts/repack-mac.mjs arm64",
     "package:windows": "npm run build && electron-builder --win portable --x64 --publish never",
     "package:all": "npm run package:mac:x64 && npm run package:mac:arm64 && npm run package:windows"
   },
