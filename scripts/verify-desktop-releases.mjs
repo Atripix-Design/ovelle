@@ -33,10 +33,30 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
       const entries = execFileSync('unzip', ['-Z', '-1', path], { encoding: 'utf8' })
       if (!entries.includes('Ovelle.app/Contents/MacOS/Ovelle')) throw new Error(`Missing macOS executable: ${path}`)
     }
-    const response = await fetch(`https://ovelle-${environment}.jeremymathewgithub.workers.dev/downloads/${filename}`, { method: 'HEAD' })
+    const response = await fetch(`https://ovelle-${environment}.jeremymathew100.workers.dev/downloads/${filename}`, { method: 'HEAD' })
     if (!response.ok || Number(response.headers.get('content-length')) !== size) {
       throw new Error(`${environment} download mismatch: ${filename}`)
     }
+    const redirect = await fetch(`https://ovelle-${environment}.jeremymathew100.workers.dev/downloads/${filename}`, {
+      redirect: 'manual',
+    })
+    if (redirect.status === 302) {
+      const signed = new URL(redirect.headers.get('location') ?? 'https://invalid.example')
+      if (signed.hostname !== '83952a1be987e4a12647732861a60925.r2.cloudflarestorage.com' ||
+          signed.pathname !== `/ovelle-storage-${environment}/releases/desktop/${filename}` ||
+          signed.searchParams.get('X-Amz-Algorithm') !== 'AWS4-HMAC-SHA256' ||
+          Number(signed.searchParams.get('X-Amz-Expires')) > 300) {
+        throw new Error(`${environment} issued an invalid R2 presigned download: ${filename}`)
+      }
+      const sample = await fetch(signed, { headers: { Range: 'bytes=0-0' } })
+      if (sample.status !== 206 || !sample.headers.get('content-disposition')?.includes(filename)) {
+        throw new Error(`${environment} presigned download failed: ${filename} (${sample.status})`)
+      }
+      await sample.body?.cancel()
+    } else if (redirect.status !== 200 || !redirect.headers.get('content-disposition')?.includes(filename)) {
+      throw new Error(`${environment} download failed: ${filename} (${redirect.status})`)
+    }
+    await redirect.body?.cancel()
   }
 }
 console.log('ovelle desktop releases verified')

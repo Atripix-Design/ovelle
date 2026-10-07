@@ -1,14 +1,19 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "ovelle",
-  "account_id": "47b7e4cbf6e4918eecb9241815337c9e",
+  "account_id": "83952a1be987e4a12647732861a60925",
   "main": "src/cloudflare/worker.ts",
   "compatibility_date": "2026-10-06",
   "workers_dev": true,
   "env": {
     "development": {
       "name": "ovelle-development",
-      "vars": { "APP_ENV": "development" },
+      "routes": [{ "pattern": "dev.ovelle.org", "custom_domain": true }],
+      "vars": {
+        "APP_ENV": "development",
+        "R2_ACCOUNT_ID": "83952a1be987e4a12647732861a60925",
+        "R2_BUCKET_NAME": "ovelle-storage-development"
+      },
       "assets": {
         "binding": "ASSETS",
         "directory": "./apps/web/dist",
@@ -18,7 +23,7 @@
         {
           "binding": "DB",
           "database_name": "ovelle-db-development",
-          "database_id": "6faa4ab6-6773-4078-9fe4-01ef0972a458"
+          "database_id": "d5d4e909-cac1-4ce4-ad56-888cdb24a05a"
         }
       ],
       "r2_buckets": [
@@ -27,7 +32,12 @@
     },
     "production": {
       "name": "ovelle-production",
-      "vars": { "APP_ENV": "production" },
+      "routes": [{ "pattern": "ovelle.org", "custom_domain": true }],
+      "vars": {
+        "APP_ENV": "production",
+        "R2_ACCOUNT_ID": "83952a1be987e4a12647732861a60925",
+        "R2_BUCKET_NAME": "ovelle-storage-production"
+      },
       "assets": {
         "binding": "ASSETS",
         "directory": "./apps/web/dist",
@@ -37,7 +47,7 @@
         {
           "binding": "DB",
           "database_name": "ovelle-db-production",
-          "database_id": "692c48ec-2b6c-402e-bfa1-eb93730c1bd2"
+          "database_id": "03263655-7eca-4586-a46f-9e502d52675b"
         }
       ],
       "r2_buckets": [
