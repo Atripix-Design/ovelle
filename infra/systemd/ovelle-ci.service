@@ -7,6 +7,7 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory=%h/Documents/GitHub/ovelle
 Environment=XDG_CONFIG_HOME=%h/.config/ovelle-auth-flow
+Environment=GH_CONFIG_DIR=%h/.config/gh
 Environment=CLOUDFLARE_ACCOUNT_ID=83952a1be987e4a12647732861a60925
 ExecStart=%h/.local/bin/node %h/Documents/GitHub/ovelle/scripts/ci/host-ci.mjs
 TimeoutStartSec=45min
