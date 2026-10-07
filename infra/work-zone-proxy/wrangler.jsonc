@@ -1,0 +1,11 @@
+{
+  "name": "ovelle-domain-bridge",
+  "account_id": "83952a1be987e4a12647732861a60925",
+  "main": "./worker.ts",
+  "compatibility_date": "2026-10-06",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "ovelle.org", "custom_domain": true },
+    { "pattern": "dev.ovelle.org", "custom_domain": true }
+  ]
+}
