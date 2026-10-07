@@ -6,7 +6,7 @@ import { join } from 'node:path'
 const repository = 'Atripix-Design/ovelle'
 const origin = `git@github.com:${repository}.git`
 const image = 'ovelle-ci-builder:node22'
-const accountHost = 'jeremymathewgithub.workers.dev'
+const accountHost = 'jeremymathew100.workers.dev'
 const stateRoot = join(homedir(), '.local/state/ovelle-ci')
 const cacheRoot = join(homedir(), '.cache/ovelle-ci')
 const branches = ['development', 'main']
@@ -64,6 +64,28 @@ async function verifyDeployment(environment, filenames) {
         if (!head.ok || Number(head.headers.get('content-length')) <= 0) {
           throw new Error(`Download unavailable: ${filename} (${head.status})`)
         }
+        const redirect = await fetch(`${base}/downloads/${filename}`, {
+          redirect: 'manual', signal: AbortSignal.timeout(15000),
+        })
+        if (redirect.status === 302) {
+          const signed = new URL(redirect.headers.get('location') ?? base)
+          if (signed.hostname !== '83952a1be987e4a12647732861a60925.r2.cloudflarestorage.com' ||
+              !signed.pathname.startsWith(`/ovelle-storage-${environment}/releases/desktop/`) ||
+              signed.searchParams.get('X-Amz-Algorithm') !== 'AWS4-HMAC-SHA256' ||
+              Number(signed.searchParams.get('X-Amz-Expires')) > 300) {
+            throw new Error(`Invalid R2 presigned URL: ${filename}`)
+          }
+          const sample = await fetch(signed, {
+            headers: { Range: 'bytes=0-0' }, signal: AbortSignal.timeout(15000),
+          })
+          if (sample.status !== 206 || !sample.headers.get('content-disposition')?.includes(filename)) {
+            throw new Error(`Presigned download failed: ${filename} (${sample.status})`)
+          }
+          await sample.body?.cancel()
+        } else if (redirect.status !== 200 || !redirect.headers.get('content-disposition')?.includes(filename)) {
+          throw new Error(`Download failed: ${filename} (${redirect.status})`)
+        }
+        await redirect.body?.cancel()
       }
       return base
     } catch (error) {
@@ -118,6 +140,7 @@ function publishReleases(workdir, branch, environment) {
       `ovelle-storage-${environment}/releases/desktop/${filename}`,
       '--file', archive,
       '--content-type', filename.endsWith('.zip') ? 'application/zip' : 'application/octet-stream',
+      '--content-disposition', `attachment; filename="${filename}"`,
       '--remote',
     ], { cwd: workdir })
   }

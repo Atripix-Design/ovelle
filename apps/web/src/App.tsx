@@ -19,7 +19,7 @@ export default function App() {
         <p>Preview build {desktopVersion}. The Mac and Windows packages are unsigned.</p>
         <div className="download-links">
           {downloads.map(({ label, file }) => (
-            <a key={file} href={`/downloads/${file}`}>{label}</a>
+            <a key={file} href={`/downloads/${file}`} download={file}>{label}</a>
           ))}
         </div>
       </section>

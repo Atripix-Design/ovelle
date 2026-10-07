@@ -2,14 +2,24 @@
 
 ## Resource ownership
 
-The personal Cloudflare account is `47b7e4cbf6e4918eecb9241815337c9e`. The resources were created with Wrangler. Keep the Worker names, D1 IDs, and R2 bucket names in `wrangler.jsonc` aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
+The personal Cloudflare account is `jeremymathew100` (`83952a1be987e4a12647732861a60925`), including the `ovelle.org` zone. The Atripix GitHub repository remains the CI/CD source. Keep the Worker names, D1 IDs, and R2 bucket names in `wrangler.jsonc` aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
 
 | Environment | Worker | D1 name and ID | R2 bucket |
 | --- | --- | --- | --- |
-| Development | `ovelle-development` | `ovelle-db-development`, `6faa4ab6-6773-4078-9fe4-01ef0972a458` | `ovelle-storage-development` |
-| Production | `ovelle-production` | `ovelle-db-production`, `692c48ec-2b6c-402e-bfa1-eb93730c1bd2` | `ovelle-storage-production` |
+| Development | `ovelle-development` | `ovelle-db-development`, `d5d4e909-cac1-4ce4-ad56-888cdb24a05a` | `ovelle-storage-development` |
+| Production | `ovelle-production` | `ovelle-db-production`, `03263655-7eca-4586-a46f-9e502d52675b` | `ovelle-storage-production` |
 
-Wrangler owns Worker code, static assets, and bindings. The ubuntu-box user supplies the personal Cloudflare OAuth credential from `~/.config/.wrangler`; no Cloudflare token is committed to Git or put inside the build container. Refresh authentication with `npx wrangler login` on the host if delivery reports an authentication failure.
+Wrangler owns Worker code, static assets, custom domains, and bindings. The ubuntu-box service uses the isolated personal Cloudflare OAuth login in `~/.config/ovelle-auth-flow/.wrangler`; the service sets `XDG_CONFIG_HOME` and `CLOUDFLARE_ACCOUNT_ID`. No Cloudflare token is committed to Git or put inside the build container. Refresh this isolated login if delivery reports an authentication failure.
+
+## Desktop download signing
+
+The desktop files are uploaded from ubuntu-box to each environment's R2 bucket with `Content-Disposition: attachment`. A download request to the application Worker checks that the file exists. Until signing credentials are installed, it streams the object with attachment headers. When both signing secrets are present, it responds with a five-minute presigned `GET` URL on the personal account's R2 S3 API domain. The presigned URL is a bearer token and is not logged or cached by the Worker.
+
+Create a personal-account **R2 Object Read** API token limited to `ovelle-storage-development` and `ovelle-storage-production`. Store its Access Key ID and Secret Access Key as `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` secrets on each application Worker in the Cloudflare dashboard. The credentials do not need to be stored on ubuntu-box. Alternatively, from an interactive ubuntu-box terminal, run `bash scripts/ci/install-r2-signing-secrets.sh`; it verifies a one-byte ranged GET from both buckets and writes the values directly into the four Worker secrets without recording them in shell history. Keep the values out of Git and CI logs. The existing Wrangler OAuth token can upload objects but cannot create R2 S3 signing keys. The host verification accepts either a valid streamed download or a redirect with a one-byte ranged GET through the signed URL.
+
+## Custom domains
+
+`dev.ovelle.org` is the custom domain of `ovelle-development`; `ovelle.org` is the custom domain of `ovelle-production`. Both the zone and Workers belong to `jeremymathew100`. The temporary bridge used during migration has been removed.
 
 ## Terraform adoption
 
@@ -19,10 +29,10 @@ The configurations name HCP Terraform workspaces `ovelle-development` and `ovell
 
 | Environment | Terraform address | Existing import ID |
 | --- | --- | --- |
-| Development | `module.site.cloudflare_d1_database.app` | `47b7e4cbf6e4918eecb9241815337c9e/6faa4ab6-6773-4078-9fe4-01ef0972a458` |
-| Development | `module.site.cloudflare_r2_bucket.storage` | `47b7e4cbf6e4918eecb9241815337c9e/ovelle-storage-development/default` |
-| Production | `module.site.cloudflare_d1_database.app` | `47b7e4cbf6e4918eecb9241815337c9e/692c48ec-2b6c-402e-bfa1-eb93730c1bd2` |
-| Production | `module.site.cloudflare_r2_bucket.storage` | `47b7e4cbf6e4918eecb9241815337c9e/ovelle-storage-production/default` |
+| Development | `module.site.cloudflare_d1_database.app` | `83952a1be987e4a12647732861a60925/d5d4e909-cac1-4ce4-ad56-888cdb24a05a` |
+| Development | `module.site.cloudflare_r2_bucket.storage` | `83952a1be987e4a12647732861a60925/ovelle-storage-development/default` |
+| Production | `module.site.cloudflare_d1_database.app` | `83952a1be987e4a12647732861a60925/03263655-7eca-4586-a46f-9e502d52675b` |
+| Production | `module.site.cloudflare_r2_bucket.storage` | `83952a1be987e4a12647732861a60925/ovelle-storage-production/default` |
 
 ## Host service
 
