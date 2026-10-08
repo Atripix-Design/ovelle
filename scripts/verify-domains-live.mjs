@@ -23,12 +23,13 @@ for (const [host, cdnHost, environment] of mappings) {
   const scriptPath = html.match(/src="(\/assets\/[^\"]+\.js)"/)?.[1]
   if (!scriptPath) throw new Error(`${host} has no application script`)
   const javascript = await (await fetch(new URL(scriptPath, base))).text()
-  if (!javascript.includes(cdnHost) || !javascript.includes('/releases/desktop/')) {
+  if (!javascript.includes(cdnHost) || !javascript.includes('/releases/desktop/') || !javascript.includes('?v=')) {
     throw new Error(`${host} is not linking downloads to ${cdnHost}`)
   }
-  const downloadUrl = `https://${cdnHost}/releases/desktop/Ovelle-${version}-mac-arm64.zip`
+  const downloadUrl = `https://${cdnHost}/releases/desktop/Ovelle-${version}-mac-arm64.zip?v=${Date.now()}`
   const download = await fetch(downloadUrl, { headers: { Range: 'bytes=0-1' } })
   if (download.status !== 206 || !download.headers.get('content-disposition')?.includes('attachment') ||
+      !download.headers.get('cache-control')?.includes('no-store') ||
       Number(download.headers.get('content-range')?.split('/')[1]) < 1_000_000 ||
       Buffer.from(await download.arrayBuffer()).toString('ascii') !== 'PK') {
     throw new Error(`${cdnHost} did not serve a ranged ZIP download (${download.status})`)

@@ -41,7 +41,7 @@ The website uses plain React, TypeScript, and Vite. Electron has a separate Type
 
 ## Desktop downloads
 
-The ubuntu-box pipeline produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. They are stored on ubuntu-box under `~/.local/state/ovelle-ci/releases/<branch>/` and uploaded to the branch's R2 bucket with attachment metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each R2 custom domain supports ranged downloads from its own bucket.
+The ubuntu-box pipeline produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. They are stored on ubuntu-box under `~/.local/state/ovelle-ci/releases/<branch>/` and uploaded to the branch's R2 bucket with attachment and `Cache-Control: no-store` metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA as a query value to bypass older cached copies. Each R2 custom domain supports ranged downloads from its own bucket.
 
 Packaging manually on ubuntu-box:
 

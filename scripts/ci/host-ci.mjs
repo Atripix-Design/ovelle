@@ -48,7 +48,7 @@ function commitStatus(sha, state, description, targetUrl) {
   run('gh', args, { stdio: 'ignore' })
 }
 
-async function verifyDeployment(environment, filenames) {
+async function verifyDeployment(environment, filenames, sha) {
   const base = `https://ovelle-${environment}.${accountHost}`
   const cdnHost = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
   for (let attempt = 0; attempt < 12; attempt += 1) {
@@ -59,12 +59,13 @@ async function verifyDeployment(environment, filenames) {
         throw new Error(`Unexpected health response: ${JSON.stringify(health)}`)
       }
       for (const filename of filenames) {
-        const cdn = await fetch(`https://${cdnHost}/releases/desktop/${filename}`, {
+        const cdn = await fetch(`https://${cdnHost}/releases/desktop/${filename}?v=${sha}`, {
           headers: { Range: 'bytes=0-1' }, signal: AbortSignal.timeout(15000),
         })
         const bytes = Buffer.from(await cdn.arrayBuffer()).toString('ascii')
         if (cdn.status !== 206 ||
             !cdn.headers.get('content-disposition')?.includes(filename) ||
+            !cdn.headers.get('cache-control')?.includes('no-store') ||
             Number(cdn.headers.get('content-range')?.split('/')[1]) < 1_000_000 ||
             bytes !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
           throw new Error(`CDN download failed: ${filename} (${cdn.status})`)
@@ -107,7 +108,7 @@ async function verifyDeployment(environment, filenames) {
   throw new Error('Cloudflare deployment did not become healthy')
 }
 
-function buildInContainer(workdir, environment) {
+function buildInContainer(workdir, environment, sha) {
   const command = [
     'npm ci',
     'npm run check',
@@ -122,7 +123,7 @@ function buildInContainer(workdir, environment) {
     '--user', `${process.getuid()}:${process.getgid()}`,
     '--cap-drop=ALL', '--security-opt', 'no-new-privileges',
     '--cpus=4', '--memory=7g', '--pids-limit=1024',
-    '-e', 'CI=1', '-e', 'HOME=/home/node',
+    '-e', 'CI=1', '-e', 'HOME=/home/node', '-e', `VITE_RELEASE_SHA=${sha}`,
     '-v', `${workdir}:/workspace`,
     '-v', `${join(cacheRoot, 'npm')}:/home/node/.npm`,
     '-v', `${join(cacheRoot, 'electron')}:/home/node/.cache`,
@@ -152,6 +153,7 @@ function publishReleases(workdir, branch, environment) {
       '--file', archive,
       '--content-type', filename.endsWith('.zip') ? 'application/zip' : 'application/octet-stream',
       '--content-disposition', `attachment; filename="${filename}"`,
+      '--cache-control', 'no-store',
       '--remote',
     ], { cwd: workdir })
   }
@@ -180,10 +182,10 @@ async function processBranch(branch) {
     }
 
     commitStatus(sha, 'pending', 'Building and deploying on ubuntu-box')
-    buildInContainer(workdir, environment)
+    buildInContainer(workdir, environment, sha)
     const filenames = publishReleases(workdir, branch, environment)
     run(join(workdir, 'node_modules/.bin/wrangler'), ['deploy', '--env', environment], { cwd: workdir })
-    const url = await verifyDeployment(environment, filenames)
+    const url = await verifyDeployment(environment, filenames, sha)
     commitStatus(sha, 'success', `Built and deployed ${environment} on ubuntu-box`, url)
     writeFileSync(`${stateFile}.tmp`, JSON.stringify({ sha, environment, host: hostname(), url, completedAt: new Date().toISOString() }) + '\n')
     renameSync(`${stateFile}.tmp`, stateFile)
