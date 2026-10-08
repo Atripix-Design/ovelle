@@ -59,13 +59,17 @@ async function verifyDeployment(environment, filenames, sha) {
         throw new Error(`Unexpected health response: ${JSON.stringify(health)}`)
       }
       for (const filename of filenames) {
-        const cdn = await fetch(`https://${cdnHost}/releases/desktop/${filename}?v=${sha}`, {
+        const cdnUrl = `https://${cdnHost}/releases/desktop/${filename}?v=${sha}`
+        const metadata = await fetch(cdnUrl, { method: 'HEAD', signal: AbortSignal.timeout(15000) })
+        if (!metadata.ok || !metadata.headers.get('cache-control')?.includes('no-store')) {
+          throw new Error(`CDN metadata failed: ${filename} (${metadata.status})`)
+        }
+        const cdn = await fetch(cdnUrl, {
           headers: { Range: 'bytes=0-1' }, signal: AbortSignal.timeout(15000),
         })
         const bytes = Buffer.from(await cdn.arrayBuffer()).toString('ascii')
         if (cdn.status !== 206 ||
             !cdn.headers.get('content-disposition')?.includes(filename) ||
-            !cdn.headers.get('cache-control')?.includes('no-store') ||
             Number(cdn.headers.get('content-range')?.split('/')[1]) < 1_000_000 ||
             bytes !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
           throw new Error(`CDN download failed: ${filename} (${cdn.status})`)

@@ -35,11 +35,14 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
       if (!entries.includes('Ovelle.app/Contents/MacOS/Ovelle')) throw new Error(`Missing macOS executable: ${path}`)
     }
     const cdnUrl = `https://${cdnHost}/releases/desktop/${filename}?v=${Date.now()}`
+    const metadata = await fetch(cdnUrl, { method: 'HEAD' })
+    if (!metadata.ok || !metadata.headers.get('cache-control')?.includes('no-store')) {
+      throw new Error(`${cdnHost} missing no-store metadata: ${filename} (${metadata.status})`)
+    }
     const cdn = await fetch(cdnUrl, { headers: { Range: 'bytes=0-1' } })
     const contentRange = cdn.headers.get('content-range')
     if (cdn.status !== 206 || contentRange !== `bytes 0-1/${size}` ||
-        !cdn.headers.get('content-disposition')?.includes(filename) ||
-        !cdn.headers.get('cache-control')?.includes('no-store')) {
+        !cdn.headers.get('content-disposition')?.includes(filename)) {
       throw new Error(`${cdnHost} download mismatch: ${filename} (${cdn.status})`)
     }
     const cdnHeader = Buffer.from(await cdn.arrayBuffer()).toString('ascii')
