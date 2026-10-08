@@ -19,6 +19,7 @@ for (const name of existsSync(workflowDir) ? readdirSync(workflowDir) : []) {
 }
 
 for (const [branch, environment] of [['development', 'development'], ['main', 'production']]) {
+  const cdnHost = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
   for (const filename of filenames) {
     const path = join(homedir(), '.local/state/ovelle-ci/releases', branch, filename)
     const size = statSync(path).size
@@ -32,6 +33,17 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
     if (filename.endsWith('.zip')) {
       const entries = execFileSync('unzip', ['-Z', '-1', path], { encoding: 'utf8' })
       if (!entries.includes('Ovelle.app/Contents/MacOS/Ovelle')) throw new Error(`Missing macOS executable: ${path}`)
+    }
+    const cdnUrl = `https://${cdnHost}/releases/desktop/${filename}`
+    const cdn = await fetch(cdnUrl, { headers: { Range: 'bytes=0-1' } })
+    const contentRange = cdn.headers.get('content-range')
+    if (cdn.status !== 206 || contentRange !== `bytes 0-1/${size}` ||
+        !cdn.headers.get('content-disposition')?.includes(filename)) {
+      throw new Error(`${cdnHost} download mismatch: ${filename} (${cdn.status})`)
+    }
+    const cdnHeader = Buffer.from(await cdn.arrayBuffer()).toString('ascii')
+    if (cdnHeader !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
+      throw new Error(`${cdnHost} served an invalid package header: ${filename}`)
     }
     const response = await fetch(`https://ovelle-${environment}.jeremymathew100.workers.dev/downloads/${filename}`, { method: 'HEAD' })
     if (!response.ok || Number(response.headers.get('content-length')) !== size) {

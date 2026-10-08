@@ -24,7 +24,9 @@ if (mode === 'workers') {
     const scriptPath = html.match(/src="(\/assets\/[^\"]+\.js)"/)?.[1]
     if (!scriptPath) throw new Error(`${environment} asset URL missing`)
     const javascript = await (await fetch(new URL(scriptPath, base))).text()
-    if (!javascript.includes('mac-arm64.zip') || !javascript.includes(environment)) {
+    const cdnHost = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
+    if (!javascript.includes('mac-arm64.zip') || !javascript.includes(environment) ||
+        !javascript.includes(cdnHost) || !javascript.includes('/releases/desktop/')) {
       throw new Error(`${environment} bundle has unexpected content`)
     }
   }

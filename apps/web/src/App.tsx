@@ -6,6 +6,7 @@ const downloads = [
   { label: 'Mac · Intel', file: `Ovelle-${desktopVersion}-mac-x64.zip` },
   { label: 'Windows · x64', file: `Ovelle-${desktopVersion}-win-x64.exe` },
 ]
+const cdnHost = import.meta.env.VITE_APP_ENV === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
 
 export default function App() {
   return (
@@ -19,7 +20,7 @@ export default function App() {
         <p>Preview build {desktopVersion}. The Mac and Windows packages are unsigned.</p>
         <div className="download-links">
           {downloads.map(({ label, file }) => (
-            <a key={file} href={`/downloads/${file}`} download={file}>{label}</a>
+            <a key={file} href={`https://${cdnHost}/releases/desktop/${file}`}>{label}</a>
           ))}
         </div>
       </section>

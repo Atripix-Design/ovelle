@@ -3,11 +3,11 @@ import { resolve } from 'node:path'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
 const mappings = [
-  ['ovelle.org', 'production'],
-  ['dev.ovelle.org', 'development'],
+  ['ovelle.org', 'cdn.ovelle.org', 'production'],
+  ['dev.ovelle.org', 'cdn.dev.ovelle.org', 'development'],
 ]
 
-for (const [host, environment] of mappings) {
+for (const [host, cdnHost, environment] of mappings) {
   const base = `https://${host}`
   const health = await fetch(`${base}/health`)
   if (!health.ok) throw new Error(`${host} health returned ${health.status}`)
@@ -16,20 +16,23 @@ for (const [host, environment] of mappings) {
     throw new Error(`${host} is not connected to ${environment}`)
   }
   const page = await fetch(base)
-  if (!page.ok || !(await page.text()).includes('<title>Ovelle</title>')) {
+  const html = await page.text()
+  if (!page.ok || !html.includes('<title>Ovelle</title>')) {
     throw new Error(`${host} is not serving the Ovelle website`)
   }
-  const download = await fetch(`${base}/downloads/Ovelle-${version}-win-x64.exe`, { redirect: 'manual' })
-  if (download.status === 302) {
-    const location = new URL(download.headers.get('location') ?? 'https://invalid.example')
-    if (location.hostname !== '83952a1be987e4a12647732861a60925.r2.cloudflarestorage.com' ||
-        !location.searchParams.has('X-Amz-Signature')) {
-      throw new Error(`${host} did not redirect to a personal-account R2 presigned URL`)
-    }
-  } else if (download.status !== 200 || !download.headers.get('content-disposition')?.includes('attachment')) {
-    throw new Error(`${host} download failed (${download.status})`)
+  const scriptPath = html.match(/src="(\/assets\/[^\"]+\.js)"/)?.[1]
+  if (!scriptPath) throw new Error(`${host} has no application script`)
+  const javascript = await (await fetch(new URL(scriptPath, base))).text()
+  if (!javascript.includes(cdnHost) || !javascript.includes('/releases/desktop/')) {
+    throw new Error(`${host} is not linking downloads to ${cdnHost}`)
   }
-  await download.body?.cancel()
+  const downloadUrl = `https://${cdnHost}/releases/desktop/Ovelle-${version}-mac-arm64.zip`
+  const download = await fetch(downloadUrl, { headers: { Range: 'bytes=0-1' } })
+  if (download.status !== 206 || !download.headers.get('content-disposition')?.includes('attachment') ||
+      Number(download.headers.get('content-range')?.split('/')[1]) < 1_000_000 ||
+      Buffer.from(await download.arrayBuffer()).toString('ascii') !== 'PK') {
+    throw new Error(`${cdnHost} did not serve a ranged ZIP download (${download.status})`)
+  }
 }
 
 console.log('ovelle custom domains verified')
