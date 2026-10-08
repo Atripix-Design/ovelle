@@ -11,7 +11,7 @@ Ovelle is the 2026–2027 FBLA Coding & Programming project. The competition bri
 | R2 | `ovelle-storage-development` | `ovelle-storage-production` |
 | Source branch | `development` | `main` |
 
-Cloudflare resources live in the personal `jeremymathew100` account (`83952a1be987e4a12647732861a60925`). `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. It streams desktop downloads from R2 until bucket-scoped signing credentials are installed as Worker secrets; then it issues five-minute R2 presigned URLs. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
+Cloudflare resources live in the personal `jeremymathew100` account (`83952a1be987e4a12647732861a60925`). `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. Public desktop downloads use the environment's R2 custom domain: `cdn.dev.ovelle.org` or `cdn.ovelle.org`. The Worker also retains its legacy `/downloads/` route. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
 
 ## Local development
 
@@ -41,7 +41,7 @@ The website uses plain React, TypeScript, and Vite. Electron has a separate Type
 
 ## Desktop downloads
 
-The ubuntu-box pipeline produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. They are stored on ubuntu-box under `~/.local/state/ovelle-ci/releases/<branch>/` and uploaded to the branch's R2 bucket with attachment metadata. GitHub Actions artifacts and Releases are not used for these packages. Downloads are linked from each website. A bucket-scoped read-only R2 S3 key, stored as `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` Worker secrets in each environment, enables short-lived direct R2 links.
+The ubuntu-box pipeline produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. They are stored on ubuntu-box under `~/.local/state/ovelle-ci/releases/<branch>/` and uploaded to the branch's R2 bucket with attachment and `Cache-Control: no-store` metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA as a query value to bypass older cached copies. Each R2 custom domain supports ranged downloads from its own bucket.
 
 Packaging manually on ubuntu-box:
 

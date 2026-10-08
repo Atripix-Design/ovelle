@@ -19,3 +19,9 @@ resource "cloudflare_r2_bucket" "storage" {
     prevent_destroy = true
   }
 }
+
+data "cloudflare_r2_custom_domain" "downloads" {
+  account_id  = var.cloudflare_account_id
+  bucket_name = cloudflare_r2_bucket.storage.name
+  domain      = var.cdn_domain
+}
