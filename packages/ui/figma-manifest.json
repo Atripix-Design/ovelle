@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "fileKey": "6jsC9SLa0LYsZKjJXxlY1K",
+  "package": "@ovelle/ui",
+  "framework": "React 19 + TypeScript + Tailwind CSS 4",
+  "materialMapping": {
+    "Solid": "solid",
+    "Liquid Glass": "liquid-glass",
+    "Soft Glass": "soft-glass"
+  },
+  "glass": {
+    "variable": "glass/intensity",
+    "prop": "glassFrost",
+    "min": 0,
+    "max": 100,
+    "default": 35,
+    "direction": "liquid to frosted",
+    "accessibility": "reduceTransparency"
+  },
+  "components": [
+    {
+      "id": "52:1552",
+      "name": "Ovelle / Button",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Style": {
+          "type": "VARIANT",
+          "defaultValue": "Primary",
+          "variantOptions": [
+            "Primary",
+            "Secondary",
+            "Quiet"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass",
+            "Soft Glass"
+          ]
+        }
+      },
+      "variants": 9,
+      "export": "Button",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Style": "variant",
+        "Tone": "tone",
+        "State": "disabled / state / browser pseudo classes",
+        "Label": "children",
+        "Loading label": "loadingLabel",
+        "Success label": "successLabel"
+      }
+    },
+    {
+      "id": "54:1230",
+      "name": "Ovelle / Icon action",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "IconAction",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Icon": "icon",
+        "Label": "label",
+        "Tone": "tone",
+        "State": "disabled / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1243",
+      "name": "Ovelle / Field",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Field",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Kind": "kind",
+        "Label": "label",
+        "Value": "value / defaultValue",
+        "Placeholder": "placeholder",
+        "Hint": "hint",
+        "Error": "error",
+        "Success": "success",
+        "State": "disabled / validation / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1262",
+      "name": "Ovelle / Select",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Select",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Value": "value / defaultValue",
+        "Options": "options",
+        "State": "disabled / error / native open"
+      }
+    },
+    {
+      "id": "54:1269",
+      "name": "Ovelle / Filter chip",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "FilterChip",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "Tone": "tone",
+        "State": "selected / disabled / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1278",
+      "name": "Ovelle / Checkbox",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Checkbox",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "label",
+        "Value": "checked / defaultChecked / mixed",
+        "State": "disabled / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1289",
+      "name": "Ovelle / Switch",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Switch",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "label",
+        "Value": "checked / defaultChecked",
+        "State": "disabled / browser pseudo classes",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      }
+    },
+    {
+      "id": "54:1296",
+      "name": "Ovelle / Navigation item",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "NavigationItem",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "State": "current / disabled / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1305",
+      "name": "Ovelle / Section label",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SectionLabel",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "Tone": "tone"
+      }
+    },
+    {
+      "id": "54:1326",
+      "name": "Ovelle / Status message",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "StatusMessage",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Tone": "tone",
+        "Title": "title",
+        "Body": "children"
+      }
+    },
+    {
+      "id": "54:1345",
+      "name": "Ovelle / FAQ row",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "FAQRow",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Number": "number",
+        "Question": "question",
+        "Answer": "answer",
+        "State": "open / native disclosure",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      }
+    },
+    {
+      "id": "54:1378",
+      "name": "Ovelle / Feature card",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "FeatureCard",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Surface": "surface",
+        "Icon": "icon",
+        "Title": "title",
+        "Body": "children",
+        "Link": "link",
+        "State": "browser hover / focus-within"
+      }
+    },
+    {
+      "id": "54:1415",
+      "name": "Ovelle / Download card",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "DownloadCard",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Platform": "platform",
+        "Title": "title",
+        "Body": "children",
+        "Action": "action",
+        "State": "unavailable / browser hover"
+      }
+    },
+    {
+      "id": "54:1434",
+      "name": "Ovelle / Download action",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "DownloadAction",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Tone": "tone",
+        "Label": "label",
+        "Detail": "detail",
+        "State": "unavailable / state / browser pseudo classes"
+      }
+    },
+    {
+      "id": "54:1469",
+      "name": "Ovelle / Site navigation / Desktop",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SiteNavigationDesktop",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Brand": "brand",
+        "Current": "links[].current",
+        "Links": "links",
+        "CTA": "action"
+      }
+    },
+    {
+      "id": "54:1492",
+      "name": "Ovelle / Site navigation / Mobile",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SiteNavigationMobile",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Brand": "brand",
+        "Current": "links[].current",
+        "Links": "links",
+        "CTA": "action",
+        "Menu": "native details open"
+      }
+    },
+    {
+      "id": "54:1509",
+      "name": "Ovelle / Segmented control",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SegmentedControl",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Value": "value / defaultValue",
+        "Labels": "options",
+        "State": "disabled / browser pseudo classes",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      }
+    },
+    {
+      "id": "54:1520",
+      "name": "Ovelle / Confirmation dialog",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "ConfirmationDialog",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Title": "title",
+        "Body": "children",
+        "State": "open / state / error",
+        "Action": "confirmLabel / onConfirm",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      }
+    }
+  ],
+  "limitations": [
+    "Figma Code Connect publishing requires an eligible plan; manifest is explicit mapping, not published Code Connect.",
+    "CSS backdrop filtering approximates native Figma refraction; optical parity is not guaranteed.",
+    "Native select option popups use the platform renderer rather than custom glass menus."
+  ],
+  "tokens": "tokens.json"
+}
