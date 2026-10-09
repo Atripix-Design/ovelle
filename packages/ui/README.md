@@ -98,6 +98,14 @@ Glass samples actual colors and content **behind** the component via `backdrop-f
 
 Native Figma GLASS refraction cannot be reproduced identically by CSS. Native select popups/checkboxes also use platform rendering; they are deliberately not custom Figma replicas. The glass tuner plugin edits Figma effects; it is not required at runtime in the apps. Student-plan Code Connect publishing is unavailable; use the checked-in manifest and the React export descriptions on the Figma assets.
 
+## Adding custom components
+
+Every new custom component belongs in both this shared package and the Figma **05 Components** sheet. Match the established tokens and Apple Design conventions, establish all applicable variants and states, and update the manifest and Figma asset description with its React export. Keep the sheet's horizontal family columns and vertical variant layout.
+
+Compose existing parts with linked Figma instances and existing React components. For example, a new toolbar should contain instances of `Ovelle / Button` and `Ovelle / Field` in Figma and render `<Button>` and `<Field>` in React. Expose their nested properties rather than redrawing or detaching them. If an existing part needs a new capability, extend its source variant so other compositions can reuse it.
+
+The repository's [AGENTS.md](../../AGENTS.md) records these requirements for future development. Updates propagate through instances within Figma and through imports within React; maintaining parity between Figma and code is an explicit development step.
+
 ## Verification
 
 `npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Browser visual parity and editor plugin UI are separate from these checks.
