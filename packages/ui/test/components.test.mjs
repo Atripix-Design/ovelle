@@ -8,8 +8,8 @@ const manifest = JSON.parse(readFileSync(new URL('../figma-manifest.json', impor
 const render = (component, props, children) => renderToStaticMarkup(h(component, props, children));
 
 test('every public Figma asset has a distinct React export and mapping', () => {
-  assert.equal(manifest.components.length, 18);
-  assert.equal(new Set(manifest.components.map(c => c.id)).size, 18);
+  assert.equal(manifest.components.length, 22);
+  assert.equal(new Set(manifest.components.map(c => c.id)).size, 22);
   for (const component of manifest.components) {
     assert.equal(typeof ui[component.export], 'function', component.export);
     assert.equal(component.propertyMapping.Material, 'material');
@@ -41,16 +41,16 @@ test('provider applies material settings with independent component overrides', 
 test('loading disables submission and supplies a readable busy label', () => {
   const html = render(ui.Button, { state: 'loading', loadingLabel: 'Saving', className: 'w-full' }, 'Save');
   assert.match(html, /type="button"/); assert.match(html, /disabled=""/);
-  assert.match(html, /aria-busy="true"/); assert.match(html, />Saving<\/button>/);
+  assert.match(html, /aria-busy="true"/); assert.match(html, />Saving<\/span>/);
   assert.match(html, /ov-button w-full/);
-  assert.match(render(ui.Button, { state: 'success', successLabel: 'Saved' }), />Saved<\/button>/);
+  assert.match(render(ui.Button, { state: 'success', successLabel: 'Saved' }), />Saved<\/span>/);
   assert.match(render(ui.IconAction, { label: 'Remove contact', icon: '×' }), /aria-label="Remove contact"/);
 });
 test('fields/selects connect labels, validation and existing descriptions', () => {
   const field = render(ui.Field, { id: 'contact', label: 'Contact', error: 'Required', 'aria-describedby': 'external', wrapperClassName: 'w-full' });
   assert.match(field, /for="contact"/); assert.match(field, /aria-invalid="true"/);
   assert.match(field, /aria-describedby="external contact-message"/);
-  assert.match(field, /id="contact-message"/); assert.match(field, /ov-field-group w-full/);
+  assert.match(field, /id="contact-message"/); assert.match(field, /ov-field-group[^"]*w-full/);
   const select = render(ui.Select, { label: 'Status', defaultValue: 'active', options: [{ value: 'all', label: 'All' }, { value: 'active', label: 'Active' }] });
   assert.match(select, /value="active" selected=""/);
 });
@@ -69,7 +69,7 @@ test('native state semantics are exported for selection and navigation', () => {
 test('download actions cannot navigate when unavailable or preparing', () => {
   for (const props of [{ unavailable: true }, { state: 'loading' }]) {
     const html = render(ui.DownloadAction, { href: '/app.zip', label: 'Download', ...props });
-    assert.doesNotMatch(html, /href=/); assert.match(html, /aria-disabled="true"/);
+    assert.doesNotMatch(html, /<a[^>]*href=/); assert.match(html, /aria-disabled="true"/);
   }
   assert.match(render(ui.DownloadAction, { href: '/app.zip', label: 'Download', download: true }), /download=""/);
 });

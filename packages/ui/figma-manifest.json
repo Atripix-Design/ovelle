@@ -40,9 +40,17 @@
             "Liquid Glass",
             "Soft Glass"
           ]
+        },
+        "Size": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Compact"
+          ]
         }
       },
-      "variants": 9,
+      "variants": 18,
       "export": "Button",
       "source": "src/index.tsx",
       "propertyMapping": {
@@ -52,8 +60,33 @@
         "State": "disabled / state / browser pseudo classes",
         "Label": "children",
         "Loading label": "loadingLabel",
-        "Success label": "successLabel"
-      }
+        "Success label": "successLabel",
+        "Size": "size"
+      },
+      "sourceProperties": {
+        "id": "52:1552",
+        "properties": [
+          "Style",
+          "Material",
+          "Size"
+        ],
+        "nested": [
+          {
+            "name": "Button appearance",
+            "id": "52:1517",
+            "exposed": true,
+            "properties": [
+              "Loading label#7:22",
+              "Success label#7:44",
+              "Label#7:0",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1230",
@@ -75,9 +108,30 @@
       "propertyMapping": {
         "Material": "material",
         "Icon": "icon",
-        "Label": "label",
         "Tone": "tone",
         "State": "disabled / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1230",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1217",
+            "exposed": true,
+            "properties": [
+              "Icon#7:198",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Label": "label"
       }
     },
     {
@@ -104,9 +158,35 @@
         "Value": "value / defaultValue",
         "Placeholder": "placeholder",
         "Hint": "hint",
-        "Error": "error",
-        "Success": "success",
         "State": "disabled / validation / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1243",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1232",
+            "exposed": true,
+            "properties": [
+              "Success message#7:284",
+              "Error message#7:269",
+              "Placeholder#7:239",
+              "Hint#7:254",
+              "Value#7:224",
+              "Label#7:209",
+              "Kind",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Error": "error",
+        "Success": "success"
       }
     },
     {
@@ -129,8 +209,29 @@
       "propertyMapping": {
         "Material": "material",
         "Value": "value / defaultValue",
-        "Options": "options",
-        "State": "disabled / error / native open"
+        "State": "disabled / error / internal listbox open"
+      },
+      "sourceProperties": {
+        "id": "54:1262",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1245",
+            "exposed": true,
+            "properties": [
+              "Label#7:299",
+              "Value",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Options": "options"
       }
     },
     {
@@ -155,7 +256,27 @@
         "Label": "children",
         "Tone": "tone",
         "State": "selected / disabled / browser pseudo classes"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1269",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1264",
+            "exposed": true,
+            "properties": [
+              "Label#7:318",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1278",
@@ -179,7 +300,27 @@
         "Label": "label",
         "Value": "checked / defaultChecked / mixed",
         "State": "disabled / browser pseudo classes"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1278",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1271",
+            "exposed": true,
+            "properties": [
+              "Label#7:327",
+              "Value",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1289",
@@ -204,7 +345,28 @@
         "Value": "checked / defaultChecked",
         "State": "disabled / browser pseudo classes",
         "Motion": "OvelleProvider.reduceMotion / OS preference"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1289",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1280",
+            "exposed": true,
+            "properties": [
+              "Label#7:340",
+              "Value",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1296",
@@ -227,7 +389,26 @@
         "Material": "material",
         "Label": "children",
         "State": "current / disabled / browser pseudo classes"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1296",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1291",
+            "exposed": true,
+            "properties": [
+              "Label#7:353",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1305",
@@ -250,7 +431,26 @@
         "Material": "material",
         "Label": "children",
         "Tone": "tone"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1305",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1298",
+            "exposed": true,
+            "properties": [
+              "Label#9:0",
+              "Tone"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1326",
@@ -274,7 +474,27 @@
         "Tone": "tone",
         "Title": "title",
         "Body": "children"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1326",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1307",
+            "exposed": true,
+            "properties": [
+              "Body#9:9",
+              "Title#9:4",
+              "Tone"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1345",
@@ -300,7 +520,29 @@
         "Answer": "answer",
         "State": "open / native disclosure",
         "Motion": "OvelleProvider.reduceMotion / OS preference"
-      }
+      },
+      "sourceProperties": {
+        "id": "54:1345",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1328",
+            "exposed": true,
+            "properties": [
+              "Answer#9:21",
+              "Number#9:28",
+              "Question#9:14",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
     },
     {
       "id": "54:1378",
@@ -321,12 +563,36 @@
       "source": "src/index.tsx",
       "propertyMapping": {
         "Material": "material",
-        "Surface": "surface",
         "Icon": "icon",
         "Title": "title",
         "Body": "children",
-        "Link": "link",
         "State": "browser hover / focus-within"
+      },
+      "sourceProperties": {
+        "id": "54:1378",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1347",
+            "exposed": true,
+            "properties": [
+              "Icon#9:65",
+              "Link label#9:55",
+              "Body#9:45",
+              "Title#9:35",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Surface": "surface",
+        "Link": "link"
       }
     },
     {
@@ -349,10 +615,30 @@
       "propertyMapping": {
         "Material": "material",
         "Platform": "platform",
+        "State": "unavailable / browser hover"
+      },
+      "sourceProperties": {
+        "id": "54:1415",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1380",
+            "exposed": true,
+            "properties": [
+              "Platform",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
         "Title": "title",
         "Body": "children",
-        "Action": "action",
-        "State": "unavailable / browser hover"
+        "Action": "action"
       }
     },
     {
@@ -376,8 +662,32 @@
         "Material": "material",
         "Tone": "tone",
         "Label": "label",
-        "Detail": "detail",
         "State": "unavailable / state / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1434",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1417",
+            "exposed": true,
+            "properties": [
+              "Loading label#7:22",
+              "Success label#7:44",
+              "Label#7:0",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {},
+      "reactOnlyProps": {
+        "detail": "Legacy optional caller content; absent from the source default and not a Figma property."
       }
     },
     {
@@ -399,8 +709,27 @@
       "source": "src/index.tsx",
       "propertyMapping": {
         "Material": "material",
+        "Current": "links[].current"
+      },
+      "sourceProperties": {
+        "id": "54:1469",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1436",
+            "exposed": true,
+            "properties": [
+              "Current"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
         "Brand": "brand",
-        "Current": "links[].current",
         "Links": "links",
         "CTA": "action"
       }
@@ -424,11 +753,32 @@
       "source": "src/index.tsx",
       "propertyMapping": {
         "Material": "material",
-        "Brand": "brand",
         "Current": "links[].current",
+        "Menu": "native details open"
+      },
+      "sourceProperties": {
+        "id": "54:1492",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1471",
+            "exposed": true,
+            "properties": [
+              "Current",
+              "Menu"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Brand": "brand",
         "Links": "links",
         "CTA": "action",
-        "Menu": "native details open"
+        "Menu": "menuOpen / defaultMenuOpen / onMenuOpenChange"
       }
     },
     {
@@ -451,9 +801,33 @@
       "propertyMapping": {
         "Material": "material",
         "Value": "value / defaultValue",
-        "Labels": "options",
         "State": "disabled / browser pseudo classes",
         "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1509",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1494",
+            "exposed": true,
+            "properties": [
+              "Label / Companies#23:25",
+              "Label / Campaigns#23:50",
+              "Label / Contacts#23:0",
+              "Value",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Labels": "options"
       }
     },
     {
@@ -478,8 +852,273 @@
         "Title": "title",
         "Body": "children",
         "State": "open / state / error",
-        "Action": "confirmLabel / onConfirm",
         "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1520",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1511",
+            "exposed": true,
+            "properties": [
+              "Body#22:21",
+              "Title#22:0",
+              "Purpose",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Action": "confirmLabel / onConfirm"
+      }
+    },
+    {
+      "id": "80:2385",
+      "name": "Ovelle / Date picker",
+      "type": "COMPONENT_SET",
+      "variants": 28,
+      "export": "DatePicker",
+      "source": "src/date-picker.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "State": "value / disabled / error / internal open",
+        "Label": "label",
+        "Value": "value / defaultValue"
+      },
+      "sourceProperties": {
+        "id": "80:2385",
+        "properties": [
+          "Label#86:0",
+          "Value#86:21",
+          "Material",
+          "Theme",
+          "State"
+        ],
+        "nested": []
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "80:2992",
+      "name": "Ovelle / Pagination",
+      "type": "COMPONENT_SET",
+      "variants": 24,
+      "export": "Pagination",
+      "source": "src/pagination.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "State": "page / pageCount / disabled / size"
+      },
+      "sourceProperties": {
+        "id": "80:2992",
+        "properties": [
+          "Material",
+          "Theme",
+          "State"
+        ],
+        "nested": [
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2389",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3082",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3086",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3091",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2411",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Page": "page",
+        "Count": "pageCount"
+      }
+    },
+    {
+      "id": "80:3107",
+      "name": "Ovelle / Empty state",
+      "type": "COMPONENT_SET",
+      "variants": 16,
+      "export": "EmptyState",
+      "source": "src/empty-state.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "Size": "size",
+        "Align": "align",
+        "Title": "title",
+        "Description": "children",
+        "Action": "action",
+        "Show action": "action presence"
+      },
+      "sourceProperties": {
+        "id": "80:3107",
+        "properties": [
+          "Title#80:0",
+          "Description#80:17",
+          "Show action#86:42",
+          "Action#86:59",
+          "Material",
+          "Theme",
+          "Size",
+          "Align"
+        ],
+        "nested": [
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2998",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "80:3122",
+      "name": "Ovelle / Skeleton",
+      "type": "COMPONENT_SET",
+      "variants": 12,
+      "export": "Skeleton",
+      "source": "src/skeleton.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "Shape": "shape"
+      },
+      "sourceProperties": {
+        "id": "80:3122",
+        "properties": [
+          "Material",
+          "Theme",
+          "Shape"
+        ],
+        "nested": []
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Content": "children",
+        "Motion": "animated / OvelleProvider.reduceMotion"
       }
     }
   ],
@@ -488,5 +1127,183 @@
     "CSS backdrop filtering approximates native Figma refraction; optical parity is not guaranteed.",
     "Native select option popups use the platform renderer rather than custom glass menus."
   ],
-  "tokens": "tokens.json"
+  "tokens": "tokens.json",
+  "skeletonCounterparts": [
+    {
+      "sourceId": "52:1552",
+      "sourceName": "Ovelle / Button",
+      "id": "81:2420",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1230",
+      "sourceName": "Ovelle / Icon action",
+      "id": "81:2457",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1243",
+      "sourceName": "Ovelle / Field",
+      "id": "81:2498",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1262",
+      "sourceName": "Ovelle / Select",
+      "id": "81:2555",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1269",
+      "sourceName": "Ovelle / Filter chip",
+      "id": "81:2576",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1278",
+      "sourceName": "Ovelle / Checkbox",
+      "id": "81:2601",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1289",
+      "sourceName": "Ovelle / Switch",
+      "id": "81:2634",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1296",
+      "sourceName": "Ovelle / Navigation item",
+      "id": "81:2655",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1305",
+      "sourceName": "Ovelle / Section label",
+      "id": "81:2684",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1326",
+      "sourceName": "Ovelle / Status message",
+      "id": "81:2741",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1345",
+      "sourceName": "Ovelle / FAQ row",
+      "id": "81:2790",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1378",
+      "sourceName": "Ovelle / Feature card",
+      "id": "81:2895",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1415",
+      "sourceName": "Ovelle / Download card",
+      "id": "81:3000",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1434",
+      "sourceName": "Ovelle / Download action",
+      "id": "81:3053",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1469",
+      "sourceName": "Ovelle / Site navigation / Desktop",
+      "id": "81:3146",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1492",
+      "sourceName": "Ovelle / Site navigation / Mobile",
+      "id": "81:3203",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1509",
+      "sourceName": "Ovelle / Segmented control",
+      "id": "81:3252",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "54:1520",
+      "sourceName": "Ovelle / Confirmation dialog",
+      "id": "81:3281",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "80:2385",
+      "sourceName": "Ovelle / Date picker",
+      "id": "84:2970",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "80:2992",
+      "sourceName": "Ovelle / Pagination",
+      "id": "84:3099",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    },
+    {
+      "sourceId": "80:3107",
+      "sourceName": "Ovelle / Empty state",
+      "id": "84:3144",
+      "variants": 4,
+      "export": "Skeleton",
+      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
+    }
+  ],
+  "fidelity": {
+    "sourceFile": "6jsC9SLa0LYsZKjJXxlY1K",
+    "referenceInventory": "../../docs/design-system/migration/sources.json",
+    "variantInventory": "../../docs/design-system/migration/variants.json",
+    "workflow": "../../docs/design-system/skeleton-workflow.md",
+    "verification": "node scripts/check-figma-fidelity.mjs",
+    "synchronization": "Figma and React are separately maintained; source context, exact assets and screenshot comparisons are required."
+  }
 }

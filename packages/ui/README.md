@@ -1,8 +1,8 @@
 # @ovelle/ui
 
-Shared **React 19 + TypeScript** components for the Ovelle website and Electron renderer, with **Tailwind CSS 4** overrides. All 18 public Figma assets have named exports and typed props.
+Shared **React 19 + TypeScript** components for the Ovelle website and Electron renderer, with **Tailwind CSS 4** overrides. All 22 public Figma families have named exports and typed props. Default geometry and meaningful states are derived from their actual high fidelity source contexts; Inter and original Light/Dark assets are bundled.
 
-[Figma components](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=4-2) · [Property mapping](./figma-manifest.json) · [Glass audit](../../docs/design-system/glass-audit.md)
+[Figma components](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=4-2) · [Property mapping](./figma-manifest.json) · [Migration evidence](../../docs/design-system/migration/README.md) · [Glass audit](../../docs/design-system/glass-audit.md)
 
 ## Use in either app
 
@@ -38,13 +38,13 @@ Import `@ovelle/ui/styles.css` once. For Tailwind 4, configure `@tailwindcss/vit
 @source "../node_modules/@ovelle/ui/dist";
 ```
 
-The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`, so Tailwind utilities override its defaults. `className` styles the component surface; `Field` and `Select` also expose `wrapperClassName` for layout.
+The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`, so Tailwind utilities override its defaults. `className` styles the public wrapper; action controls expose `surfaceClassName` for the inner surface. `Field` and `Select` expose `wrapperClassName` for layout; Field exposes `inputClassName`.
 
 ## Exports
 
 | Export | Main props |
 | --- | --- |
-| `Button` | `variant`, `tone`, `disabled`, `state`, `loadingLabel`, `successLabel` |
+| `Button` | `variant`, `tone`, `size`, `disabled`, `state`, `loadingLabel`, `successLabel` |
 | `IconAction` | `icon`, accessible `label`, Button props |
 | `Field` | `label`, `kind`, `value`/`defaultValue`, `hint`, `error`, `success` |
 | `Select` | `label`, `options`, `value`/`defaultValue`, `error`, `disabled` |
@@ -61,7 +61,14 @@ The path is relative to that stylesheet; adjust it for your project. In this mon
 | `SiteNavigationDesktop` | `brand`, `links`, `action` |
 | `SiteNavigationMobile` | `brand`, `links`, `action` |
 | `SegmentedControl` | `label`, `options`, `value`/`defaultValue`, `onValueChange` |
-| `ConfirmationDialog` | `open`, `onOpenChange`, `onConfirm`, `title`, children, `state`, `error` |
+| `ConfirmationDialog` | `open`, `onOpenChange`, `onConfirm`, `title`, children, `state`, `error`, `purpose`, `showTrigger` |
+| `DatePicker` | `label`, `value`/`defaultValue`, `onValueChange`, `min`, `max`, `disabled`, `required`, `error`, `hint` |
+| `Pagination` | `page`, `pageCount`, `onPageChange`, `disabled`, `size` |
+| `EmptyState` | `title`, children, `icon`, `action`, `size`, `align`, content/action slot classes |
+| `Skeleton` | children (real layout), `shape`, `width`, `height`, `animated` |
+| `SkeletonRegion` | one accessible loading `label`, children |
+
+[Content states and future skeleton workflow](../../docs/design-system/skeleton-workflow.md). The Skeleton column includes linked counterparts for all 18 original component families and the three new control/content families. Wrap real components to retain their geometry instead of guessing generic bars. DatePicker uses a custom accessible single-date calendar; Pagination is controlled and switches to compact display on narrow screens. These components are previewed at website `/components` and desktop `?components`.
 
 All surfaces accept `material`, `glassFrost`, `reduceTransparency`, `className` and `style`. Native events and attributes are exposed on the appropriate HTML element. Icons and links are React nodes, so consumers can supply their own icon library or router link. IconAction requires an accessible label.
 
@@ -73,7 +80,7 @@ Section labels use content-based width, a 6px tone marker, an 8px internal gap, 
 
 ## States and behavior
 
-Hover, pressed and focus-visible states come from CSS automatically. Native inputs/selects provide keyboard behavior; checked/selected values can be controlled or uncontrolled. Native `details` drives FAQ/mobile menu open state. SegmentedControl uses radios, including native arrow-key navigation. ConfirmationDialog uses `showModal()`, providing browser focus containment, Escape handling and restoration; the caller owns its open state. Keep the dialog mounted while toggling `open`.
+Hover, pressed and focus-visible states come from CSS automatically. Native inputs provide keyboard behavior; Select uses a source-matched combobox/listbox with arrow, Home/End, Enter, Escape and type-ahead handling. Checked/selected values can be controlled or uncontrolled. Native `details` drives FAQ; the mobile menu supports controlled or uncontrolled open state. SegmentedControl uses radios, including native arrow-key navigation. ConfirmationDialog uses `showModal()`, providing browser focus containment, Escape handling and restoration; the caller owns its open state. Keep the dialog mounted while toggling `open`.
 
 Loading, success and validation are application state; components do not simulate network requests or downloads. Example:
 
@@ -98,7 +105,7 @@ Pass `unavailable` to both DownloadCard and its DownloadAction when the download
 
 Glass samples actual colors and content **behind** the component via `backdrop-filter`; keep the surface over real backgrounds to see it. Text/icons remain opaque. Panel blur progresses 0–40px; controls 0–24px; menu blur 8–32px. Pigmented and dark surfaces use stronger tint for readable labels. Reduce Transparency makes surfaces opaque without changing the frost setting. OS reduced-motion/reduced-transparency preferences and forced colors have CSS fallbacks; unsupported backdrop filtering uses opaque surfaces.
 
-Native Figma GLASS refraction cannot be reproduced identically by CSS. Native select popups/checkboxes also use platform rendering; they are deliberately not custom Figma replicas. The glass tuner plugin edits Figma effects; it is not required at runtime in the apps. Student-plan Code Connect publishing is unavailable; use the checked-in manifest and the React export descriptions on the Figma assets.
+Native Figma GLASS refraction cannot be reproduced identically by CSS. Select menus and native checkbox/switch skins retain the Figma visual slots and exact Light/Dark SVGs. The glass tuner plugin edits Figma effects; it is not required at runtime in the apps. Student-plan Code Connect publishing is unavailable; use the checked-in manifest and the React export descriptions on the Figma assets.
 
 ## Adding custom components
 
@@ -110,4 +117,4 @@ The repository's [AGENTS.md](../../AGENTS.md) records these requirements for fut
 
 ## Verification
 
-`npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Browser visual parity and editor plugin UI are separate from these checks.
+`npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Run `node scripts/check-figma-fidelity.mjs` and `node scripts/check-content-components.mjs` against the web preview and built desktop renderer. Set `OVELLE_PLAYWRIGHT_MODULE` if Playwright is installed elsewhere, and `OVELLE_PREVIEW_URL` for the desktop URL. Figma reference captures and source/variant inventories live in `docs/design-system/migration`. The fidelity check verifies native root dimensions for all 22 families, action child geometry/typography/states, keyboard/focus and exact SVG geometry; screenshots still require human inspection.

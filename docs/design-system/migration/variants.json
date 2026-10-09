@@ -1,0 +1,2464 @@
+[
+  {
+    "id": "7:92",
+    "name": "Internal / Button / Primary / Solid",
+    "variants": [
+      {
+        "id": "7:71",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "7:72",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "7:73",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "7:74",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "7:75",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "7:76",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "7:77",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "7:78",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "7:79",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "7:80",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "7:81",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "7:82",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "7:83",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "7:84",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "7:85",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "7:86",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "7:87",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "7:88",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "7:89",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "7:90",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "7:91",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "7:174",
+    "name": "Internal / Button / Secondary / Solid",
+    "variants": [
+      {
+        "id": "7:153",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "7:154",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "7:155",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "7:156",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "7:157",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "7:158",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "7:159",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "7:160",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "7:161",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "7:162",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "7:163",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "7:164",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "7:165",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "7:166",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "7:167",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "7:168",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "7:169",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "7:170",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "7:171",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "7:172",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "7:173",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "7:256",
+    "name": "Internal / Button / Quiet / Solid",
+    "variants": [
+      {
+        "id": "7:235",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "7:236",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "7:237",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "7:238",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "7:239",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "7:240",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "7:241",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "7:242",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "7:243",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "7:244",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "7:245",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "7:246",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "7:247",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "7:248",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "7:249",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "7:250",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "7:251",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "7:252",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "7:253",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "7:254",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "7:255",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "7:327",
+    "name": "Internal / Icon action / Solid",
+    "variants": [
+      {
+        "id": "7:317",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "7:318",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "7:319",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "7:320",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "7:321",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "7:322",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "7:323",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "7:324",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "7:325",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "7:326",
+        "name": "Tone=Neutral, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "7:392",
+    "name": "Internal / Field / Solid",
+    "variants": [
+      {
+        "id": "7:378",
+        "name": "Kind=Text, State=Default"
+      },
+      {
+        "id": "7:379",
+        "name": "Kind=Text, State=Hover"
+      },
+      {
+        "id": "7:380",
+        "name": "Kind=Text, State=Focused"
+      },
+      {
+        "id": "7:381",
+        "name": "Kind=Text, State=Filled"
+      },
+      {
+        "id": "7:382",
+        "name": "Kind=Text, State=Error"
+      },
+      {
+        "id": "7:383",
+        "name": "Kind=Text, State=Success"
+      },
+      {
+        "id": "7:384",
+        "name": "Kind=Text, State=Disabled"
+      },
+      {
+        "id": "7:385",
+        "name": "Kind=Search, State=Default"
+      },
+      {
+        "id": "7:386",
+        "name": "Kind=Search, State=Hover"
+      },
+      {
+        "id": "7:387",
+        "name": "Kind=Search, State=Focused"
+      },
+      {
+        "id": "7:388",
+        "name": "Kind=Search, State=Filled"
+      },
+      {
+        "id": "7:389",
+        "name": "Kind=Search, State=Error"
+      },
+      {
+        "id": "7:390",
+        "name": "Kind=Search, State=Success"
+      },
+      {
+        "id": "7:391",
+        "name": "Kind=Search, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "7:515",
+    "name": "Internal / Select / Solid",
+    "variants": [
+      {
+        "id": "7:497",
+        "name": "Value=All contacts, State=Default"
+      },
+      {
+        "id": "7:498",
+        "name": "Value=All contacts, State=Hover"
+      },
+      {
+        "id": "7:499",
+        "name": "Value=All contacts, State=Focused"
+      },
+      {
+        "id": "7:500",
+        "name": "Value=All contacts, State=Open"
+      },
+      {
+        "id": "7:501",
+        "name": "Value=All contacts, State=Disabled"
+      },
+      {
+        "id": "7:502",
+        "name": "Value=All contacts, State=Error"
+      },
+      {
+        "id": "7:503",
+        "name": "Value=Active, State=Default"
+      },
+      {
+        "id": "7:504",
+        "name": "Value=Active, State=Hover"
+      },
+      {
+        "id": "7:505",
+        "name": "Value=Active, State=Focused"
+      },
+      {
+        "id": "7:506",
+        "name": "Value=Active, State=Open"
+      },
+      {
+        "id": "7:507",
+        "name": "Value=Active, State=Disabled"
+      },
+      {
+        "id": "7:508",
+        "name": "Value=Active, State=Error"
+      },
+      {
+        "id": "7:509",
+        "name": "Value=Archived, State=Default"
+      },
+      {
+        "id": "7:510",
+        "name": "Value=Archived, State=Hover"
+      },
+      {
+        "id": "7:511",
+        "name": "Value=Archived, State=Focused"
+      },
+      {
+        "id": "7:512",
+        "name": "Value=Archived, State=Open"
+      },
+      {
+        "id": "7:513",
+        "name": "Value=Archived, State=Disabled"
+      },
+      {
+        "id": "7:514",
+        "name": "Value=Archived, State=Error"
+      }
+    ]
+  },
+  {
+    "id": "7:680",
+    "name": "Internal / Filter chip / Solid",
+    "variants": [
+      {
+        "id": "7:672",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "7:673",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "7:674",
+        "name": "Tone=Blue, State=Selected"
+      },
+      {
+        "id": "7:675",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "7:676",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "7:677",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "7:678",
+        "name": "Tone=Neutral, State=Selected"
+      },
+      {
+        "id": "7:679",
+        "name": "Tone=Neutral, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "7:707",
+    "name": "Internal / Checkbox / Solid",
+    "variants": [
+      {
+        "id": "7:695",
+        "name": "Value=Off, State=Default"
+      },
+      {
+        "id": "7:696",
+        "name": "Value=Off, State=Hover"
+      },
+      {
+        "id": "7:697",
+        "name": "Value=Off, State=Focused"
+      },
+      {
+        "id": "7:698",
+        "name": "Value=Off, State=Disabled"
+      },
+      {
+        "id": "7:699",
+        "name": "Value=On, State=Default"
+      },
+      {
+        "id": "7:700",
+        "name": "Value=On, State=Hover"
+      },
+      {
+        "id": "7:701",
+        "name": "Value=On, State=Focused"
+      },
+      {
+        "id": "7:702",
+        "name": "Value=On, State=Disabled"
+      },
+      {
+        "id": "7:703",
+        "name": "Value=Mixed, State=Default"
+      },
+      {
+        "id": "7:704",
+        "name": "Value=Mixed, State=Hover"
+      },
+      {
+        "id": "7:705",
+        "name": "Value=Mixed, State=Focused"
+      },
+      {
+        "id": "7:706",
+        "name": "Value=Mixed, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "7:768",
+    "name": "Internal / Switch / Solid",
+    "variants": [
+      {
+        "id": "7:756",
+        "name": "Value=Off, State=Default, Motion=Standard"
+      },
+      {
+        "id": "7:757",
+        "name": "Value=Off, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "7:758",
+        "name": "Value=Off, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "7:759",
+        "name": "Value=Off, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "7:760",
+        "name": "Value=Off, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "7:761",
+        "name": "Value=Off, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "7:762",
+        "name": "Value=On, State=Default, Motion=Standard"
+      },
+      {
+        "id": "7:763",
+        "name": "Value=On, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "7:764",
+        "name": "Value=On, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "7:765",
+        "name": "Value=On, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "7:766",
+        "name": "Value=On, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "7:767",
+        "name": "Value=On, State=Disabled, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "7:810",
+    "name": "Internal / Navigation item / Solid",
+    "variants": [
+      {
+        "id": "7:805",
+        "name": "State=Default"
+      },
+      {
+        "id": "7:806",
+        "name": "State=Hover"
+      },
+      {
+        "id": "7:807",
+        "name": "State=Current"
+      },
+      {
+        "id": "7:808",
+        "name": "State=Focused"
+      },
+      {
+        "id": "7:809",
+        "name": "State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "9:168",
+    "name": "Internal / Section label / Solid",
+    "variants": [
+      {
+        "id": "9:165",
+        "name": "Tone=Blue"
+      },
+      {
+        "id": "9:166",
+        "name": "Tone=Neutral"
+      },
+      {
+        "id": "9:167",
+        "name": "Tone=Success"
+      }
+    ]
+  },
+  {
+    "id": "9:179",
+    "name": "Internal / Status message / Solid",
+    "variants": [
+      {
+        "id": "9:175",
+        "name": "Tone=Info"
+      },
+      {
+        "id": "9:176",
+        "name": "Tone=Success"
+      },
+      {
+        "id": "9:177",
+        "name": "Tone=Warning"
+      },
+      {
+        "id": "9:178",
+        "name": "Tone=Error"
+      }
+    ]
+  },
+  {
+    "id": "9:217",
+    "name": "Internal / FAQ row / Solid",
+    "variants": [
+      {
+        "id": "9:211",
+        "name": "State=Closed, Motion=Standard"
+      },
+      {
+        "id": "9:212",
+        "name": "State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "9:213",
+        "name": "State=Hover, Motion=Standard"
+      },
+      {
+        "id": "9:214",
+        "name": "State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "9:215",
+        "name": "State=Open, Motion=Standard"
+      },
+      {
+        "id": "9:216",
+        "name": "State=Open, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "9:269",
+    "name": "Internal / Feature card / Solid",
+    "variants": [
+      {
+        "id": "9:260",
+        "name": "Tone=White, State=Default"
+      },
+      {
+        "id": "9:261",
+        "name": "Tone=White, State=Hover"
+      },
+      {
+        "id": "9:262",
+        "name": "Tone=White, State=Focused"
+      },
+      {
+        "id": "9:263",
+        "name": "Tone=Ice, State=Default"
+      },
+      {
+        "id": "9:264",
+        "name": "Tone=Ice, State=Hover"
+      },
+      {
+        "id": "9:265",
+        "name": "Tone=Ice, State=Focused"
+      },
+      {
+        "id": "9:266",
+        "name": "Tone=Cream, State=Default"
+      },
+      {
+        "id": "9:267",
+        "name": "Tone=Cream, State=Hover"
+      },
+      {
+        "id": "9:268",
+        "name": "Tone=Cream, State=Focused"
+      }
+    ]
+  },
+  {
+    "id": "9:402",
+    "name": "Internal / Download card / Solid",
+    "variants": [
+      {
+        "id": "9:396",
+        "name": "Platform=macOS, State=Default"
+      },
+      {
+        "id": "9:397",
+        "name": "Platform=macOS, State=Hover"
+      },
+      {
+        "id": "9:398",
+        "name": "Platform=macOS, State=Unavailable"
+      },
+      {
+        "id": "9:399",
+        "name": "Platform=Windows, State=Default"
+      },
+      {
+        "id": "9:400",
+        "name": "Platform=Windows, State=Hover"
+      },
+      {
+        "id": "9:401",
+        "name": "Platform=Windows, State=Unavailable"
+      }
+    ]
+  },
+  {
+    "id": "14:2016",
+    "name": "Internal / Download action / Solid",
+    "variants": [
+      {
+        "id": "14:2017",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2020",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2023",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:2026",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:2029",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2032",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "14:2036",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "14:2040",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2043",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2046",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:2049",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:2052",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "14:2055",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "14:2059",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "14:2063",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "14:2066",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "14:2069",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "14:2072",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "14:2075",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "14:2078",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "14:2082",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "9:472",
+    "name": "Internal / Site navigation / Desktop / Solid",
+    "variants": [
+      {
+        "id": "9:469",
+        "name": "Current=Home"
+      },
+      {
+        "id": "9:470",
+        "name": "Current=Features"
+      },
+      {
+        "id": "9:471",
+        "name": "Current=Download"
+      }
+    ]
+  },
+  {
+    "id": "9:524",
+    "name": "Internal / Site navigation / Mobile / Solid",
+    "variants": [
+      {
+        "id": "9:518",
+        "name": "Current=Home, Menu=Closed"
+      },
+      {
+        "id": "9:519",
+        "name": "Current=Home, Menu=Open"
+      },
+      {
+        "id": "9:520",
+        "name": "Current=Features, Menu=Closed"
+      },
+      {
+        "id": "9:521",
+        "name": "Current=Features, Menu=Open"
+      },
+      {
+        "id": "9:522",
+        "name": "Current=Download, Menu=Closed"
+      },
+      {
+        "id": "9:523",
+        "name": "Current=Download, Menu=Open"
+      }
+    ]
+  },
+  {
+    "id": "22:1287",
+    "name": "Internal / Segmented control / Solid",
+    "variants": [
+      {
+        "id": "22:1263",
+        "name": "Value=Contacts, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1264",
+        "name": "Value=Contacts, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1265",
+        "name": "Value=Contacts, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1266",
+        "name": "Value=Contacts, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1267",
+        "name": "Value=Contacts, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1268",
+        "name": "Value=Contacts, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1269",
+        "name": "Value=Contacts, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1270",
+        "name": "Value=Contacts, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "22:1271",
+        "name": "Value=Companies, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1272",
+        "name": "Value=Companies, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1273",
+        "name": "Value=Companies, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1274",
+        "name": "Value=Companies, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1275",
+        "name": "Value=Companies, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1276",
+        "name": "Value=Companies, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1277",
+        "name": "Value=Companies, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1278",
+        "name": "Value=Companies, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "22:1279",
+        "name": "Value=Campaigns, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1280",
+        "name": "Value=Campaigns, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1281",
+        "name": "Value=Campaigns, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1282",
+        "name": "Value=Campaigns, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1283",
+        "name": "Value=Campaigns, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1284",
+        "name": "Value=Campaigns, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1285",
+        "name": "Value=Campaigns, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1286",
+        "name": "Value=Campaigns, State=Disabled, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "22:1452",
+    "name": "Internal / Confirmation dialog / Solid",
+    "variants": [
+      {
+        "id": "22:1432",
+        "name": "Purpose=Archive, State=Closed, Motion=Standard"
+      },
+      {
+        "id": "22:1433",
+        "name": "Purpose=Archive, State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "22:1434",
+        "name": "Purpose=Archive, State=Open, Motion=Standard"
+      },
+      {
+        "id": "22:1435",
+        "name": "Purpose=Archive, State=Open, Motion=Reduced"
+      },
+      {
+        "id": "22:1436",
+        "name": "Purpose=Archive, State=Loading, Motion=Standard"
+      },
+      {
+        "id": "22:1437",
+        "name": "Purpose=Archive, State=Loading, Motion=Reduced"
+      },
+      {
+        "id": "22:1438",
+        "name": "Purpose=Archive, State=Success, Motion=Standard"
+      },
+      {
+        "id": "22:1439",
+        "name": "Purpose=Archive, State=Success, Motion=Reduced"
+      },
+      {
+        "id": "22:1440",
+        "name": "Purpose=Archive, State=Error, Motion=Standard"
+      },
+      {
+        "id": "22:1441",
+        "name": "Purpose=Archive, State=Error, Motion=Reduced"
+      },
+      {
+        "id": "22:1442",
+        "name": "Purpose=Export, State=Closed, Motion=Standard"
+      },
+      {
+        "id": "22:1443",
+        "name": "Purpose=Export, State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "22:1444",
+        "name": "Purpose=Export, State=Open, Motion=Standard"
+      },
+      {
+        "id": "22:1445",
+        "name": "Purpose=Export, State=Open, Motion=Reduced"
+      },
+      {
+        "id": "22:1446",
+        "name": "Purpose=Export, State=Loading, Motion=Standard"
+      },
+      {
+        "id": "22:1447",
+        "name": "Purpose=Export, State=Loading, Motion=Reduced"
+      },
+      {
+        "id": "22:1448",
+        "name": "Purpose=Export, State=Success, Motion=Standard"
+      },
+      {
+        "id": "22:1449",
+        "name": "Purpose=Export, State=Success, Motion=Reduced"
+      },
+      {
+        "id": "22:1450",
+        "name": "Purpose=Export, State=Error, Motion=Standard"
+      },
+      {
+        "id": "22:1451",
+        "name": "Purpose=Export, State=Error, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "14:2203",
+    "name": "Internal / Button / Primary / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2204",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2207",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2210",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:2213",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:2216",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2219",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "14:2223",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "14:2227",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2230",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2233",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:2236",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:2239",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "14:2242",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "14:2246",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "14:2250",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "14:2253",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "14:2256",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "14:2259",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "14:2262",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "14:2265",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "14:2269",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "14:2285",
+    "name": "Internal / Button / Secondary / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2286",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2289",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2292",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:2295",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:2298",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2301",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "14:2305",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "14:2309",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2312",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2315",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:2318",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:2321",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "14:2324",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "14:2328",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "14:2332",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "14:2335",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "14:2338",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "14:2341",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "14:2344",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "14:2347",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "14:2351",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "14:2367",
+    "name": "Internal / Button / Quiet / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2368",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2371",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2374",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:2377",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:2380",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2383",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "14:2387",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "14:2391",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2394",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2397",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:2400",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:2403",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "14:2406",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "14:2410",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "14:2414",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "14:2417",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "14:2420",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "14:2423",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "14:2426",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "14:2429",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "14:2433",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "14:2449",
+    "name": "Internal / Icon action / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2450",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2453",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2456",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:2459",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:2462",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2465",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2468",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2471",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:2474",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:2477",
+        "name": "Tone=Neutral, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "14:2510",
+    "name": "Internal / Field / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2511",
+        "name": "Kind=Text, State=Default"
+      },
+      {
+        "id": "14:2516",
+        "name": "Kind=Text, State=Hover"
+      },
+      {
+        "id": "14:2521",
+        "name": "Kind=Text, State=Focused"
+      },
+      {
+        "id": "14:2527",
+        "name": "Kind=Text, State=Filled"
+      },
+      {
+        "id": "14:2532",
+        "name": "Kind=Text, State=Error"
+      },
+      {
+        "id": "14:2538",
+        "name": "Kind=Text, State=Success"
+      },
+      {
+        "id": "14:2544",
+        "name": "Kind=Text, State=Disabled"
+      },
+      {
+        "id": "14:2549",
+        "name": "Kind=Search, State=Default"
+      },
+      {
+        "id": "14:2555",
+        "name": "Kind=Search, State=Hover"
+      },
+      {
+        "id": "14:2561",
+        "name": "Kind=Search, State=Focused"
+      },
+      {
+        "id": "14:2568",
+        "name": "Kind=Search, State=Filled"
+      },
+      {
+        "id": "14:2574",
+        "name": "Kind=Search, State=Error"
+      },
+      {
+        "id": "14:2581",
+        "name": "Kind=Search, State=Success"
+      },
+      {
+        "id": "14:2588",
+        "name": "Kind=Search, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "14:2629",
+    "name": "Internal / Select / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2630",
+        "name": "Value=All contacts, State=Default"
+      },
+      {
+        "id": "14:2636",
+        "name": "Value=All contacts, State=Hover"
+      },
+      {
+        "id": "14:2642",
+        "name": "Value=All contacts, State=Focused"
+      },
+      {
+        "id": "14:2648",
+        "name": "Value=All contacts, State=Open"
+      },
+      {
+        "id": "14:2662",
+        "name": "Value=All contacts, State=Disabled"
+      },
+      {
+        "id": "14:2668",
+        "name": "Value=All contacts, State=Error"
+      },
+      {
+        "id": "14:2674",
+        "name": "Value=Active, State=Default"
+      },
+      {
+        "id": "14:2680",
+        "name": "Value=Active, State=Hover"
+      },
+      {
+        "id": "14:2686",
+        "name": "Value=Active, State=Focused"
+      },
+      {
+        "id": "14:2692",
+        "name": "Value=Active, State=Open"
+      },
+      {
+        "id": "14:2706",
+        "name": "Value=Active, State=Disabled"
+      },
+      {
+        "id": "14:2712",
+        "name": "Value=Active, State=Error"
+      },
+      {
+        "id": "14:2718",
+        "name": "Value=Archived, State=Default"
+      },
+      {
+        "id": "14:2724",
+        "name": "Value=Archived, State=Hover"
+      },
+      {
+        "id": "14:2730",
+        "name": "Value=Archived, State=Focused"
+      },
+      {
+        "id": "14:2736",
+        "name": "Value=Archived, State=Open"
+      },
+      {
+        "id": "14:2750",
+        "name": "Value=Archived, State=Disabled"
+      },
+      {
+        "id": "14:2756",
+        "name": "Value=Archived, State=Error"
+      }
+    ]
+  },
+  {
+    "id": "14:2804",
+    "name": "Internal / Filter chip / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2805",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:2807",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:2809",
+        "name": "Tone=Blue, State=Selected"
+      },
+      {
+        "id": "14:2812",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:2814",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:2816",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:2818",
+        "name": "Tone=Neutral, State=Selected"
+      },
+      {
+        "id": "14:2821",
+        "name": "Tone=Neutral, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "14:2827",
+    "name": "Internal / Checkbox / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2828",
+        "name": "Value=Off, State=Default"
+      },
+      {
+        "id": "14:2831",
+        "name": "Value=Off, State=Hover"
+      },
+      {
+        "id": "14:2834",
+        "name": "Value=Off, State=Focused"
+      },
+      {
+        "id": "14:2837",
+        "name": "Value=Off, State=Disabled"
+      },
+      {
+        "id": "14:2840",
+        "name": "Value=On, State=Default"
+      },
+      {
+        "id": "14:2844",
+        "name": "Value=On, State=Hover"
+      },
+      {
+        "id": "14:2848",
+        "name": "Value=On, State=Focused"
+      },
+      {
+        "id": "14:2852",
+        "name": "Value=On, State=Disabled"
+      },
+      {
+        "id": "14:2856",
+        "name": "Value=Mixed, State=Default"
+      },
+      {
+        "id": "14:2860",
+        "name": "Value=Mixed, State=Hover"
+      },
+      {
+        "id": "14:2864",
+        "name": "Value=Mixed, State=Focused"
+      },
+      {
+        "id": "14:2868",
+        "name": "Value=Mixed, State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "14:2888",
+    "name": "Internal / Switch / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2889",
+        "name": "Value=Off, State=Default, Motion=Standard"
+      },
+      {
+        "id": "14:2893",
+        "name": "Value=Off, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "14:2897",
+        "name": "Value=Off, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "14:2901",
+        "name": "Value=Off, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "14:2905",
+        "name": "Value=Off, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "14:2909",
+        "name": "Value=Off, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "14:2913",
+        "name": "Value=On, State=Default, Motion=Standard"
+      },
+      {
+        "id": "14:2917",
+        "name": "Value=On, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "14:2921",
+        "name": "Value=On, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "14:2925",
+        "name": "Value=On, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "14:2929",
+        "name": "Value=On, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "14:2933",
+        "name": "Value=On, State=Disabled, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "14:2937",
+    "name": "Internal / Navigation item / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2938",
+        "name": "State=Default"
+      },
+      {
+        "id": "14:2940",
+        "name": "State=Hover"
+      },
+      {
+        "id": "14:2942",
+        "name": "State=Current"
+      },
+      {
+        "id": "14:2945",
+        "name": "State=Focused"
+      },
+      {
+        "id": "14:2947",
+        "name": "State=Disabled"
+      }
+    ]
+  },
+  {
+    "id": "14:2949",
+    "name": "Internal / Section label / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2950",
+        "name": "Tone=Blue"
+      },
+      {
+        "id": "14:2953",
+        "name": "Tone=Neutral"
+      },
+      {
+        "id": "14:2956",
+        "name": "Tone=Success"
+      }
+    ]
+  },
+  {
+    "id": "14:2959",
+    "name": "Internal / Status message / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2960",
+        "name": "Tone=Info"
+      },
+      {
+        "id": "14:2965",
+        "name": "Tone=Success"
+      },
+      {
+        "id": "14:2970",
+        "name": "Tone=Warning"
+      },
+      {
+        "id": "14:2975",
+        "name": "Tone=Error"
+      }
+    ]
+  },
+  {
+    "id": "14:2995",
+    "name": "Internal / FAQ row / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:2996",
+        "name": "State=Closed, Motion=Standard"
+      },
+      {
+        "id": "14:3001",
+        "name": "State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "14:3006",
+        "name": "State=Hover, Motion=Standard"
+      },
+      {
+        "id": "14:3011",
+        "name": "State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "14:3016",
+        "name": "State=Open, Motion=Standard"
+      },
+      {
+        "id": "14:3022",
+        "name": "State=Open, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "14:3044",
+    "name": "Internal / Feature card / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:3045",
+        "name": "Tone=White, State=Default"
+      },
+      {
+        "id": "14:3052",
+        "name": "Tone=White, State=Hover"
+      },
+      {
+        "id": "14:3059",
+        "name": "Tone=White, State=Focused"
+      },
+      {
+        "id": "14:3066",
+        "name": "Tone=Ice, State=Default"
+      },
+      {
+        "id": "14:3073",
+        "name": "Tone=Ice, State=Hover"
+      },
+      {
+        "id": "14:3080",
+        "name": "Tone=Ice, State=Focused"
+      },
+      {
+        "id": "14:3087",
+        "name": "Tone=Cream, State=Default"
+      },
+      {
+        "id": "14:3094",
+        "name": "Tone=Cream, State=Hover"
+      },
+      {
+        "id": "14:3101",
+        "name": "Tone=Cream, State=Focused"
+      }
+    ]
+  },
+  {
+    "id": "14:3180",
+    "name": "Internal / Download card / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:3181",
+        "name": "Platform=macOS, State=Default"
+      },
+      {
+        "id": "14:3187",
+        "name": "Platform=macOS, State=Hover"
+      },
+      {
+        "id": "14:3193",
+        "name": "Platform=macOS, State=Unavailable"
+      },
+      {
+        "id": "14:3199",
+        "name": "Platform=Windows, State=Default"
+      },
+      {
+        "id": "14:3205",
+        "name": "Platform=Windows, State=Hover"
+      },
+      {
+        "id": "14:3211",
+        "name": "Platform=Windows, State=Unavailable"
+      }
+    ]
+  },
+  {
+    "id": "14:3375",
+    "name": "Internal / Download action / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:3376",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "14:3380",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "14:3384",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "14:3388",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "14:3392",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "14:3396",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "14:3401",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "14:3406",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "14:3410",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "14:3414",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "14:3418",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "14:3422",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "14:3426",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "14:3431",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "14:3436",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "14:3440",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "14:3444",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "14:3448",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "14:3452",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "14:3456",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "14:3461",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "14:3253",
+    "name": "Internal / Site navigation / Desktop / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:3254",
+        "name": "Current=Home"
+      },
+      {
+        "id": "14:3264",
+        "name": "Current=Features"
+      },
+      {
+        "id": "14:3274",
+        "name": "Current=Download"
+      }
+    ]
+  },
+  {
+    "id": "14:3302",
+    "name": "Internal / Site navigation / Mobile / Liquid Glass",
+    "variants": [
+      {
+        "id": "14:3303",
+        "name": "Current=Home, Menu=Closed"
+      },
+      {
+        "id": "14:3308",
+        "name": "Current=Home, Menu=Open"
+      },
+      {
+        "id": "14:3320",
+        "name": "Current=Features, Menu=Closed"
+      },
+      {
+        "id": "14:3325",
+        "name": "Current=Features, Menu=Open"
+      },
+      {
+        "id": "14:3337",
+        "name": "Current=Download, Menu=Closed"
+      },
+      {
+        "id": "14:3342",
+        "name": "Current=Download, Menu=Open"
+      }
+    ]
+  },
+  {
+    "id": "22:1683",
+    "name": "Internal / Segmented control / Liquid Glass",
+    "variants": [
+      {
+        "id": "22:1684",
+        "name": "Value=Contacts, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1691",
+        "name": "Value=Contacts, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1698",
+        "name": "Value=Contacts, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1705",
+        "name": "Value=Contacts, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1712",
+        "name": "Value=Contacts, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1719",
+        "name": "Value=Contacts, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1726",
+        "name": "Value=Contacts, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1733",
+        "name": "Value=Contacts, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "22:1740",
+        "name": "Value=Companies, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1747",
+        "name": "Value=Companies, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1754",
+        "name": "Value=Companies, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1761",
+        "name": "Value=Companies, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1768",
+        "name": "Value=Companies, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1775",
+        "name": "Value=Companies, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1782",
+        "name": "Value=Companies, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1789",
+        "name": "Value=Companies, State=Disabled, Motion=Reduced"
+      },
+      {
+        "id": "22:1796",
+        "name": "Value=Campaigns, State=Default, Motion=Standard"
+      },
+      {
+        "id": "22:1803",
+        "name": "Value=Campaigns, State=Default, Motion=Reduced"
+      },
+      {
+        "id": "22:1810",
+        "name": "Value=Campaigns, State=Hover, Motion=Standard"
+      },
+      {
+        "id": "22:1817",
+        "name": "Value=Campaigns, State=Hover, Motion=Reduced"
+      },
+      {
+        "id": "22:1824",
+        "name": "Value=Campaigns, State=Focused, Motion=Standard"
+      },
+      {
+        "id": "22:1831",
+        "name": "Value=Campaigns, State=Focused, Motion=Reduced"
+      },
+      {
+        "id": "22:1838",
+        "name": "Value=Campaigns, State=Disabled, Motion=Standard"
+      },
+      {
+        "id": "22:1845",
+        "name": "Value=Campaigns, State=Disabled, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "22:1852",
+    "name": "Internal / Confirmation dialog / Liquid Glass",
+    "variants": [
+      {
+        "id": "22:1853",
+        "name": "Purpose=Archive, State=Closed, Motion=Standard"
+      },
+      {
+        "id": "22:1855",
+        "name": "Purpose=Archive, State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "22:1857",
+        "name": "Purpose=Archive, State=Open, Motion=Standard"
+      },
+      {
+        "id": "22:1865",
+        "name": "Purpose=Archive, State=Open, Motion=Reduced"
+      },
+      {
+        "id": "22:1873",
+        "name": "Purpose=Archive, State=Loading, Motion=Standard"
+      },
+      {
+        "id": "22:1881",
+        "name": "Purpose=Archive, State=Loading, Motion=Reduced"
+      },
+      {
+        "id": "22:1889",
+        "name": "Purpose=Archive, State=Success, Motion=Standard"
+      },
+      {
+        "id": "22:1897",
+        "name": "Purpose=Archive, State=Success, Motion=Reduced"
+      },
+      {
+        "id": "22:1905",
+        "name": "Purpose=Archive, State=Error, Motion=Standard"
+      },
+      {
+        "id": "22:1914",
+        "name": "Purpose=Archive, State=Error, Motion=Reduced"
+      },
+      {
+        "id": "22:1923",
+        "name": "Purpose=Export, State=Closed, Motion=Standard"
+      },
+      {
+        "id": "22:1925",
+        "name": "Purpose=Export, State=Closed, Motion=Reduced"
+      },
+      {
+        "id": "22:1927",
+        "name": "Purpose=Export, State=Open, Motion=Standard"
+      },
+      {
+        "id": "22:1935",
+        "name": "Purpose=Export, State=Open, Motion=Reduced"
+      },
+      {
+        "id": "22:1943",
+        "name": "Purpose=Export, State=Loading, Motion=Standard"
+      },
+      {
+        "id": "22:1951",
+        "name": "Purpose=Export, State=Loading, Motion=Reduced"
+      },
+      {
+        "id": "22:1959",
+        "name": "Purpose=Export, State=Success, Motion=Standard"
+      },
+      {
+        "id": "22:1967",
+        "name": "Purpose=Export, State=Success, Motion=Reduced"
+      },
+      {
+        "id": "22:1975",
+        "name": "Purpose=Export, State=Error, Motion=Standard"
+      },
+      {
+        "id": "22:1984",
+        "name": "Purpose=Export, State=Error, Motion=Reduced"
+      }
+    ]
+  },
+  {
+    "id": "52:1162",
+    "name": "Internal / Button / Primary / Soft Glass",
+    "variants": [
+      {
+        "id": "52:1163",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "52:1166",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "52:1169",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "52:1172",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "52:1175",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "52:1178",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "52:1182",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "52:1186",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "52:1189",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "52:1192",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "52:1195",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "52:1198",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "52:1201",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "52:1205",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "52:1209",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "52:1212",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "52:1215",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "52:1218",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "52:1221",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "52:1224",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "52:1228",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "52:1280",
+    "name": "Internal / Button / Secondary / Soft Glass",
+    "variants": [
+      {
+        "id": "52:1281",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "52:1284",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "52:1287",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "52:1290",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "52:1293",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "52:1296",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "52:1300",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "52:1304",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "52:1307",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "52:1310",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "52:1313",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "52:1316",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "52:1319",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "52:1323",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "52:1327",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "52:1330",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "52:1333",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "52:1336",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "52:1339",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "52:1342",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "52:1346",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "52:1398",
+    "name": "Internal / Button / Quiet / Soft Glass",
+    "variants": [
+      {
+        "id": "52:1399",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "52:1402",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "52:1405",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "52:1408",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "52:1411",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "52:1414",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "52:1418",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "52:1422",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "52:1425",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "52:1428",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "52:1431",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "52:1434",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "52:1437",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "52:1441",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "52:1445",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "52:1448",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "52:1451",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "52:1454",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "52:1457",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "52:1460",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "52:1464",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  }
+]

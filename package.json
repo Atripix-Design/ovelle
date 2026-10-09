@@ -17,10 +17,13 @@
     "lint": "npm run lint --workspaces",
     "check:worker": "tsc -p tsconfig.worker.json",
     "cf:deploy:dev": "npm run build:development -w @ovelle/web && wrangler deploy --env development",
-    "cf:deploy:prod": "npm run build -w @ovelle/web && wrangler deploy --env production"
+    "cf:deploy:prod": "npm run build -w @ovelle/web && wrangler deploy --env production",
+    "check:figma": "node scripts/check-figma-fidelity.mjs",
+    "check:components": "node scripts/check-content-components.mjs"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261006.1",
+    "playwright": "^1.64.0",
     "wrangler": "^4.148.0"
   },
   "dependencies": {

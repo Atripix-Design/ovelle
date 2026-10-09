@@ -1,0 +1,112 @@
+@layer components {
+  .ov-source-asset { display: contents; }
+  .ov-source-asset > .ov-source-dark { display: none; }
+  [data-ovelle-theme="dark"] .ov-source-asset > .ov-source-light { display: none; }
+  [data-ovelle-theme="dark"] .ov-source-asset > .ov-source-dark { display: block; }
+  .ov-field-group { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 4px; width: 320px; max-width: 100%; color: var(--ov-text-primary); font-family: Inter, sans-serif; }
+  .ov-field-source { min-height: 96px; }
+  .ov-field-group > label { font-size: 14px; line-height: 20px; font-weight: 500; }
+  .ov-field-group > .ov-hint { margin: 0; font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: .1px; color: var(--ov-text-secondary); }
+  .ov-field-group:has(> .ov[data-material="liquid-glass"]):not(:has(> .ov[data-reduce-transparency="true"])) > .ov-hint { color: var(--ov-text-primary); }
+  .ov-field-group > .ov-hint[data-validation="error"] { color: var(--ov-status-error); }
+  .ov-field-group > .ov-hint[data-validation="success"] { color: var(--ov-status-success); }
+  .ov-field, .ov-select { box-sizing: border-box; display: flex; flex-shrink: 0; align-items: center; gap: 8px; width: 100%; height: 44px; min-height: 44px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--ov-border-default); font: 400 15px/22px Inter, sans-serif; color: var(--ov-text-primary); }
+  .ov-field > input { flex: 1; min-width: 0; height: 100%; padding: 0; margin: 0; border: 0; border-radius: 0; outline: none; background: transparent; box-shadow: none; font: inherit; color: inherit; caret-color: var(--ov-text-brand); }
+  .ov-field > input::placeholder { color: var(--ov-text-secondary); opacity: 1; }
+  .ov-field[data-material="liquid-glass"] > input::placeholder { color: var(--ov-text-primary); }
+  .ov-field:not([data-disabled]):hover, .ov-select:not(:disabled):hover { border-color: var(--ov-border-strong); }
+  .ov-field[data-material="liquid-glass"]:not([data-disabled]):hover, .ov-select[data-material="liquid-glass"]:not(:disabled):hover { border-color: rgb(255 255 255 / .95); }
+  .ov-field:focus-within, .ov-select:focus-visible, .ov-select[data-open] { border: 2px solid var(--ov-border-focus); outline: none; padding-inline: 11px; }
+  .ov-field[data-validation="error"], .ov-select[data-validation="error"] { border-color: var(--ov-border-error); }
+  .ov-field[data-disabled], .ov-select:disabled { --ov-tint: var(--ov-surface-subtle-channels); background: var(--ov-surface-subtle); color: var(--ov-text-disabled); }
+  .ov-field > input:disabled, .ov-field > input:disabled::placeholder { color: var(--ov-text-disabled); }
+  .ov-select { text-align: left; cursor: pointer; }
+  .ov-select > span:first-child { flex: 1; min-width: 0; }
+  .ov-select-native { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
+  .ov-select-menu { position: absolute; z-index: 20; top: 76px; left: 0; right: 0; display: flex; flex-direction: column; gap: 4px; padding: 4px; border-radius: 12px; overflow: hidden; }
+  .ov-select-menu > [role="option"] { display: flex; gap: 8px; align-items: center; flex-shrink: 0; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 7px; font: 500 14px/20px Inter, sans-serif; cursor: pointer; color: var(--ov-text-primary); }
+  .ov-select-menu > [role="option"] > span { flex: 1; }
+  .ov-select-menu > [aria-selected="true"], .ov-select-menu > [data-active="true"] { background: var(--ov-surface-selected); color: var(--ov-text-brand); }
+  .ov-select-menu > [aria-disabled="true"] { color: var(--ov-text-disabled); cursor: not-allowed; }
+  .ov-filter-chip { display: inline-flex; gap: 8px; align-items: center; justify-content: center; height: 44px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 999px; font: 500 14px/20px Inter, sans-serif; white-space: nowrap; cursor: pointer; --ov-tint: var(--ov-surface-subtle-channels); background: var(--ov-surface-subtle); color: var(--ov-text-primary); }
+  .ov-filter-chip:not(:disabled):hover { --ov-tint: var(--ov-surface-selected-channels); background: var(--ov-surface-selected); }
+  .ov-filter-chip[aria-pressed="true"] { --ov-tint: var(--ov-action-brand-channels); --ov-effective-alpha: var(--ov-heavy-alpha); background: var(--ov-action-brand); color: var(--ov-text-on-brand); }
+  .ov-filter-chip[data-tone="neutral"][aria-pressed="true"] { --ov-tint: var(--ov-surface-selected-channels); background: var(--ov-surface-selected); color: var(--ov-text-primary); }
+  .ov-filter-chip:disabled { --ov-tint: var(--ov-action-disabled-channels); background: var(--ov-action-disabled); color: var(--ov-text-disabled); }
+  .ov-filter-chip[data-material="liquid-glass"] { border: 1px solid rgb(255 255 255 / .95); }
+  .ov-check-label { position: relative; display: inline-flex; gap: 12px; align-items: center; min-height: 44px; height: 44px; color: var(--ov-text-primary); font: 500 14px/20px Inter, sans-serif; cursor: pointer; border-radius: 8px; }
+  .ov-check-label > input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; z-index: 1; cursor: inherit; }
+  .ov-check-label:has(> input:disabled) { color: var(--ov-text-disabled); cursor: not-allowed; }
+  .ov-checkbox-source:has(> input:focus-visible) { outline: none; box-shadow: inset 0 0 0 2px var(--ov-border-focus); }
+  .ov-check { flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 5px; overflow: hidden; border: 1px solid var(--ov-border-default); }
+  .ov-check-on, .ov-check-mixed { display: none; width: 16px; height: 16px; align-items: center; justify-content: center; }
+  .ov-checkbox-source:has(> input:checked) > .ov-check, .ov-checkbox-source:has(> input:indeterminate) > .ov-check { --ov-tint: var(--ov-action-brand-channels); --ov-effective-alpha: var(--ov-heavy-alpha); }
+  .ov-checkbox-source:has(> input:checked) > .ov-check > .ov-check-on, .ov-checkbox-source:has(> input:indeterminate) > .ov-check > .ov-check-mixed { display: flex; }
+  .ov-checkbox-source:has(> input:indeterminate) > .ov-check > .ov-check-on { display: none; }
+  .ov-checkbox-source:hover:not(:has(> input:checked, > input:indeterminate, > input:disabled)) > .ov-check { --ov-tint: var(--ov-surface-hover-channels); }
+  .ov-checkbox-source:has(> input:disabled) > .ov-check { --ov-tint: var(--ov-action-disabled-channels); }
+  .ov-checkbox-source:has(> input:focus-visible) > .ov-check { border: 2px solid var(--ov-border-focus); }
+  .ov-switch-source > .ov-switch { position: relative; flex-shrink: 0; display: block; width: 44px; height: 26px; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 13px; background: transparent; box-shadow: none; backdrop-filter: none; }
+  .ov-switch-source > .ov-switch::after { content: none; }
+  .ov-switch-source > .ov-switch > span { position: absolute; inset: 0; display: none; }
+  .ov-switch-source > .ov-switch > .ov-switch-off { display: block; }
+  .ov-switch-source:has(> input:checked) > .ov-switch > .ov-switch-off { display: none; }
+  .ov-switch-source:has(> input:checked) > .ov-switch > .ov-switch-on { display: block; }
+  .ov-switch-source:has(> input:focus-visible) { outline: none; }
+  .ov-switch-source:has(> input:focus-visible) > .ov-switch > .ov-switch-off, .ov-switch-source:has(> input:focus-visible) > .ov-switch > .ov-switch-on { display: none; }
+  .ov-switch-source:has(> input:focus-visible) > .ov-switch > .ov-switch-off-focus { display: block; left: -2px; top: -2px; }
+  .ov-switch-source:has(> input:checked:focus-visible) > .ov-switch > .ov-switch-off-focus { display: none; }
+  .ov-switch-source:has(> input:checked:focus-visible) > .ov-switch > .ov-switch-on-focus { display: block; left: -2px; top: -2px; }
+  .ov-navigation-item { position: relative; display: inline-flex; flex-direction: column; flex-shrink: 0; justify-content: center; align-items: center; box-sizing: border-box; width: 144px; height: 44px; min-height: 44px; padding: 8px 16px; border: 0; border-radius: 12px; font: 500 14px/20px Inter, sans-serif; color: var(--ov-text-primary); background: transparent; text-decoration: none; cursor: pointer; }
+  .ov-navigation-item:not([aria-disabled="true"]):hover { background: var(--ov-surface-hover); }
+  .ov-navigation-item[aria-current="page"] { --ov-tint: var(--ov-surface-selected-channels); background: var(--ov-surface-selected); color: var(--ov-text-brand); }
+  .ov-navigation-item[aria-current="page"]::after { content: ''; position: absolute; bottom: 2px; left: calc(50% - 12px); width: 24px; height: 2px; background: var(--ov-text-brand); }
+  .ov-navigation-item:focus-visible { border: 2px solid var(--ov-border-focus); outline: none; background: var(--ov-surface-default); }
+  .ov-navigation-item[aria-disabled="true"] { color: var(--ov-text-disabled); background: transparent; }
+  .ov-section-label { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--ov-border-default); font: 400 12px/18px Inter, sans-serif; letter-spacing: .1px; color: var(--ov-text-primary); }
+  .ov-section-label::before { content: none; }
+  .ov-section-marker { position: relative; display: block; flex-shrink: 0; width: 6px; height: 6px; }
+  .ov-section-marker img { position: absolute; top: 0; left: 0; }
+  .ov-section-label[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) .ov-section-marker img { top: -7px; left: -10px; }
+  .ov-segmented-control { display: flex; gap: 4px; width: 420px; max-width: 100%; height: 52px; min-inline-size: 0; margin: 0; padding: 4px; box-sizing: border-box; align-items: center; border: 1px solid var(--ov-border-default); border-radius: 999px; --ov-tint: var(--ov-surface-subtle-channels); background: var(--ov-surface-subtle); }
+  .ov-segmented-control > label { position: relative; flex: 1; min-width: 0; height: 44px; border-radius: 999px; overflow: hidden; }
+  .ov-segmented-control > label > input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; z-index: 1; cursor: pointer; }
+  .ov-segmented-control > label > span { display: flex; height: 44px; align-items: center; justify-content: center; gap: 8px; padding: 0; border-radius: 999px; font: 500 14px/20px Inter, sans-serif; color: var(--ov-text-secondary); }
+  .ov-segmented-control > label:has(> input:checked) > span { background: var(--ov-surface-default); color: var(--ov-text-brand); }
+  .ov-segmented-control > label:has(> input:checked):hover > span { background: var(--ov-surface-hover); }
+  .ov-segmented-control > label:has(> input:disabled) > span, .ov-segmented-control:disabled > label > span { color: var(--ov-text-disabled); }
+  .ov-segmented-control > label:has(> input:disabled:checked) > span, .ov-segmented-control:disabled > label:has(> input:checked) > span { background: var(--ov-action-disabled); }
+  .ov-segmented-control > label:has(> input:focus-visible) { outline: none; }
+  .ov-segmented-control:has(input:focus-visible) { outline: none; border: 2px solid var(--ov-border-focus); padding: 3px; }
+  /* Reapply the measured Liquid surface after state tint selection. State rules
+     change the tint rather than flattening the real backdrop material. */
+  :is(.ov-field,.ov-select,.ov-select-menu,.ov-filter-chip,.ov-section-label,.ov-segmented-control,.ov-check)[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) {
+    background: linear-gradient(180deg, rgb(255 255 255 / calc(.3 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 30%, rgb(181 232 255 / calc(.14 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-effective-alpha));
+  }
+  .ov-checkbox-source:has(> input:checked, > input:indeterminate, > input:disabled) > .ov-check[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) {
+    background: linear-gradient(180deg, rgb(255 255 255 / calc(.3 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 30%, rgb(181 232 255 / calc(.14 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-effective-alpha));
+  }
+  .ov-navigation-item[data-material="liquid-glass"] { background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .ov-navigation-item[data-material="liquid-glass"]:not([aria-disabled="true"]):hover,
+  .ov-navigation-item[data-material="liquid-glass"][aria-current="page"] { background: rgb(var(--ov-surface-selected-channels) / var(--ov-alpha)); }
+  .ov-navigation-item[data-material="liquid-glass"]:focus-visible { background: rgb(var(--ov-surface-default-channels) / var(--ov-alpha)); }
+  .ov-navigation-item[data-material="liquid-glass"][data-reduce-transparency="true"]:is(:hover,[aria-current="page"]) { background: var(--ov-surface-selected); }
+  .ov-field[data-disabled] { --ov-tint: var(--ov-surface-subtle-channels); }
+  .ov-select:disabled { --ov-tint: var(--ov-surface-subtle-channels); }
+  .ov-switch-source > .ov-switch[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) { -webkit-backdrop-filter: blur(var(--ov-micro-blur)) saturate(var(--ov-saturation)); backdrop-filter: blur(var(--ov-micro-blur)) saturate(var(--ov-saturation)); }
+
+  .ov-select-menu { --ov-effective-alpha: var(--ov-menu-alpha); --ov-effective-blur: var(--ov-menu-blur); }
+  .ov-select[data-material="liquid-glass"][data-open]:not([data-reduce-transparency="true"]) { border-color: rgb(255 255 255 / .95); }
+  .ov-select-menu[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) > [aria-selected="true"] { background: linear-gradient(180deg, rgb(255 255 255 / .3) 0%, rgb(255 255 255 / .02) 30%, rgb(181 232 255 / .14) 100%), var(--ov-surface-selected); }
+  .ov-segmented-control[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) > label:has(> input:checked) > span { --ov-segment-tint: var(--ov-surface-default-channels); background: linear-gradient(180deg, rgb(255 255 255 / calc(.28 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 35%, rgb(181 232 255 / calc(.12 * var(--ov-sheen))) 100%), rgb(var(--ov-segment-tint) / var(--ov-alpha)); -webkit-backdrop-filter: blur(var(--ov-blur)) saturate(var(--ov-saturation)); backdrop-filter: blur(var(--ov-blur)) saturate(var(--ov-saturation)); box-shadow: 0 3px 10px rgb(5 31 48 / .12); }
+  .ov-segmented-control[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) > label:has(> input:checked):hover > span { --ov-segment-tint: var(--ov-surface-hover-channels); }
+  .ov-segmented-control[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) > label:has(> input:checked:disabled) > span,
+  .ov-segmented-control[data-material="liquid-glass"]:disabled:not([data-reduce-transparency="true"]) > label:has(> input:checked) > span { --ov-segment-tint: var(--ov-action-disabled-channels); }
+
+  .ov-checkbox-source > .ov-check[data-material="liquid-glass"] { --ov-effective-alpha: 1; }
+  .ov-filter-chip[data-tone="neutral"][aria-pressed="true"] { --ov-effective-alpha: var(--ov-alpha); }
+  :is(.ov-filter-chip,.ov-section-label)[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) { box-shadow: 0 3px 5px rgb(5 31 48 / .12); }
+  .ov-segmented-control[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) { background: linear-gradient(180deg, rgb(255 255 255 / calc(.28 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 35%, rgb(181 232 255 / calc(.12 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-alpha)); border-color: var(--ov-border-default); box-shadow: 0 3px 5px rgb(5 31 48 / .12); }
+  .ov-segmented-control[data-material="liquid-glass"]:has(input:focus-visible) { border-color: var(--ov-border-focus); }
+
+}

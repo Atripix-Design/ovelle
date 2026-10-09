@@ -9,7 +9,12 @@
     "figma-manifest.json",
     "README.md",
     "src/tokens.css",
-    "tokens.json"
+    "tokens.json",
+    "assets",
+    "src/base.css",
+    "src/controls.css",
+    "src/composites.css",
+    "src/content.css"
   ],
   "exports": {
     ".": {
@@ -36,7 +41,10 @@
   "devDependencies": {
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
-    "typescript": "~5.9.3",
-    "oxlint": "^1.81.0"
+    "oxlint": "^1.81.0",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0"
   }
 }

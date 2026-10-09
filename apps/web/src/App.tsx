@@ -1,4 +1,5 @@
 import './App.css'
+import ComponentPreview from '../../shared/ComponentPreview'
 import { version as desktopVersion } from '../../desktop/package.json'
 
 const downloads = [
@@ -10,6 +11,7 @@ const cdnHost = import.meta.env.VITE_APP_ENV === 'production' ? 'cdn.ovelle.org'
 const releaseId = import.meta.env.VITE_RELEASE_SHA || desktopVersion
 
 export default function App() {
+  if (window.location.pathname === "/components") return <ComponentPreview/>;
   return (
     <main className="app-shell">
       <p className="eyebrow">FBLA 2026–2027 · Coding &amp; Programming</p>
