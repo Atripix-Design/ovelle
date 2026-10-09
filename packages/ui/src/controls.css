@@ -83,9 +83,7 @@
   :is(.ov-field,.ov-select,.ov-select-menu,.ov-filter-chip,.ov-section-label,.ov-segmented-control,.ov-check)[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) {
     background: linear-gradient(180deg, rgb(255 255 255 / calc(.3 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 30%, rgb(181 232 255 / calc(.14 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-effective-alpha));
   }
-  .ov-checkbox-source:has(> input:checked, > input:indeterminate, > input:disabled) > .ov-check[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) {
-    background: linear-gradient(180deg, rgb(255 255 255 / calc(.3 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 30%, rgb(181 232 255 / calc(.14 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-effective-alpha));
-  }
+
   .ov-navigation-item[data-material="liquid-glass"] { background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .ov-navigation-item[data-material="liquid-glass"]:not([aria-disabled="true"]):hover,
   .ov-navigation-item[data-material="liquid-glass"][aria-current="page"] { background: rgb(var(--ov-surface-selected-channels) / var(--ov-alpha)); }
@@ -108,5 +106,13 @@
   :is(.ov-filter-chip,.ov-section-label)[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) { box-shadow: 0 3px 5px rgb(5 31 48 / .12); }
   .ov-segmented-control[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) { background: linear-gradient(180deg, rgb(255 255 255 / calc(.28 * var(--ov-sheen))) 0%, rgb(255 255 255 / calc(.02 * var(--ov-sheen))) 35%, rgb(181 232 255 / calc(.12 * var(--ov-sheen))) 100%), rgb(var(--ov-tint) / var(--ov-alpha)); border-color: var(--ov-border-default); box-shadow: 0 3px 5px rgb(5 31 48 / .12); }
   .ov-segmented-control[data-material="liquid-glass"]:has(input:focus-visible) { border-color: var(--ov-border-focus); }
+
+  /* Tiny shapes keep their semantic edge; panel-scale highlights and shadows overwhelm them. */
+  .ov-checkbox-source > .ov-check[data-material="liquid-glass"]:not([data-reduce-transparency="true"]) {
+    background: linear-gradient(180deg, rgb(255 255 255 / calc(.06 * var(--ov-sheen))), transparent 65%), rgb(var(--ov-tint) / var(--ov-effective-alpha));
+    border-color: var(--ov-border-default); box-shadow: none;
+    backdrop-filter: blur(var(--ov-micro-blur)); -webkit-backdrop-filter: blur(var(--ov-micro-blur));
+  }
+  .ov-checkbox-source:has(> input:focus-visible) > .ov-check[data-material="liquid-glass"] { border-color: var(--ov-border-focus); }
 
 }

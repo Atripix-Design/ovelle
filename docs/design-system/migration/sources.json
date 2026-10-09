@@ -378,8 +378,8 @@
     ],
     "reference": "references/80-1461.png",
     "width": 320,
-    "height": 80,
-    "contextSha256": "33452e6d617679374d6c6094d8390ca5d4161863428703c07250f99add3aa52a",
+    "height": 72,
+    "contextSha256": "3e9c2189df2727e64897c5525f6710b085eb6f3f3cf2abd2ca5ac7c8fdefa3d2",
     "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-1461"
   },
   {
@@ -398,8 +398,8 @@
     ],
     "reference": "references/80-2388.png",
     "width": 291,
-    "height": 100,
-    "contextSha256": "4568d2ee80942f20479e3054f463540aa1b61e428f9c0d26994bd81d6400340a",
+    "height": 62,
+    "contextSha256": "c26872500c8bb91f1ce94f16a0afeb0d9645884cab6d81a7099fad01e96cdbe2",
     "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-2388"
   },
   {
@@ -421,25 +421,5 @@
     "height": 188,
     "contextSha256": "e1788821923a82677eeee0dd16dd5a015e9cf6326c6fa0f992f02c449e5ee701",
     "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-2995"
-  },
-  {
-    "id": "80:3122",
-    "name": "Ovelle / Skeleton",
-    "variantCount": 12,
-    "masters": [
-      {
-        "id": "80:3110",
-        "name": "Material=Solid, Theme=Light, Shape=Text"
-      },
-      {
-        "id": "80:3116",
-        "name": "Material=Liquid Glass, Theme=Light, Shape=Text"
-      }
-    ],
-    "reference": "references/80-3110.png",
-    "width": 320,
-    "height": 20,
-    "contextSha256": "6c5d2877f2687e468d041ed18d7a15192076f9a2b5759db5da9eb865c1985137",
-    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-3110"
   }
 ]

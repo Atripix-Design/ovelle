@@ -26,7 +26,8 @@ function tintOpacity(color:RGB,t:number,tiny:boolean,menu:boolean):number{
 async function tuneSurface(n:Surface,base:Baseline,value:number,reduceTransparency=false,scope='library'){
  const t=Math.max(0,Math.min(100,value))/100;
  const tiny=n.width<=60&&n.height<=40,menu=/Options|Popover|Menu panel/.test(n.name);
- n.effects=base.effects.map(e=>e.type==='GLASS'?{...e,visible:e.visible&&!reduceTransparency,refraction:e.refraction*(1-.8*t),dispersion:e.dispersion*Math.pow(1-t,2),depth:e.depth*(1-.5*t),lightIntensity:e.lightIntensity*(1-.25*t),radius:tiny?2+4*t:menu?8+24*t:(e.depth>=12?40:24)*t}:e);
+ const shapeDriven=n.name==='Indicator';
+ n.effects=base.effects.filter(e=>!shapeDriven||e.type!=='DROP_SHADOW').map(e=>e.type==='GLASS'?{...e,visible:e.visible&&!reduceTransparency,refraction:e.refraction*(1-.8*t),dispersion:e.dispersion*Math.pow(1-t,2),depth:e.depth*(1-.5*t),lightIntensity:e.lightIntensity*(1-.25*t),...(shapeDriven?{refraction:0,dispersion:0,depth:1.6,lightIntensity:.08}:{}),radius:tiny?2+4*t:menu?8+24*t:(e.depth>=12?40:24)*t}:e);
  const paints:Paint[]=[];
  for(const paint of base.fills){
   if(paint.type==='SOLID'){
@@ -42,7 +43,7 @@ async function tuneSurface(n:Surface,base:Baseline,value:number,reduceTransparen
     for(const mode of collection.modes){const color=resolveColor(source,mode.modeId,mode.name,paint.color);tint.setValueForMode(mode.modeId,{...color,a:reduceTransparency?1:tintOpacity(color,t,tiny,menu)});}
     paints.push(figma.variables.setBoundVariableForPaint({...paint,opacity:1},'color',tint));
    }else paints.push({...paint,boundVariables:{},opacity:reduceTransparency?1:tintOpacity(paint.color,t,tiny,menu)});
-  }else if(paint.type.startsWith('GRADIENT'))paints.push({...paint,opacity:reduceTransparency?0:Math.min(1,Math.max(0,(paint.opacity??1)*(1-.4*t)))});
+  }else if(paint.type.startsWith('GRADIENT'))paints.push({...paint,...(shapeDriven?{gradientStops:(paint as GradientPaint).gradientStops.map(s=>({...s,color:{...s.color,a:Math.min(s.color.a,.06)}}))}:{}),opacity:reduceTransparency?0:Math.min(1,Math.max(0,(paint.opacity??1)*(1-.4*t)))});
   else paints.push(paint);
  }
  n.fills=paints;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { Button, Checkbox, ConfirmationDialog, DatePicker, DownloadAction, DownloadCard, EmptyState, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, OvelleProvider, Pagination, SectionLabel, SegmentedControl, Select, SiteNavigationDesktop, SiteNavigationMobile, Skeleton, SkeletonRegion, StatusMessage, Switch } from '@ovelle/ui';
 import './component-preview.css';
+import LoadingPreview from './LoadingPreview';
 import FidelityVariants from './FidelityVariants';
 
 const noop = () => {};
@@ -34,11 +35,12 @@ export default function ComponentPreview() {
   ];
   return <OvelleProvider theme={theme} material={glass ? 'liquid-glass' : 'solid'} glassFrost={frost} reduceTransparency={opaque}>
     <main className="component-preview" id="components">
-      <header><p>Ovelle / Components</p><h1>Content, waiting.</h1><p>Each skeleton reserves the rendered component’s real layout.</p></header>
+      <header><p>Ovelle / Components</p><h1>Content, waiting.</h1><p>Source components and dynamic loading from their actual layout.</p></header>
       <div className="preview-settings"><Switch label="Dark theme" checked={theme === 'dark'} onChange={event => setTheme(event.target.checked ? 'dark' : 'light')}/><Switch label="Liquid Glass" checked={glass} onChange={event => setGlass(event.target.checked)}/><Switch label="Reduce transparency" checked={opaque} onChange={event => setOpaque(event.target.checked)}/><label>Frost {frost}<input type="range" min="0" max="100" value={frost} onChange={event => setFrost(Number(event.target.value))}/></label></div>
+      <LoadingPreview/>
       <section className="preview-interactive"><h2>Date picker and pagination</h2><DatePicker label="Report date" value={date} onValueChange={setDate} min="2026-10-03" max="2026-11-20"/><p>Selected date: <output>{date || 'None'}</output></p><Pagination page={page} pageCount={12} onPageChange={setPage}/><p>Selected page: <output>{page}</output></p></section>
       <section><h2>Contextual empty regions</h2><div className="preview-empty-grid"><div><h3>Search results</h3><Field label="Search" kind="search" defaultValue="Morgan"/><EmptyState size="compact" align="start" title="No matching contacts" action={<Button variant="secondary">Clear search</Button>}>Try a different name or clear your search.</EmptyState></div><div><h3>Desktop downloads</h3><EmptyState align="start" title="No builds available" action={<Button variant="secondary">Check again</Button>}>Mac and Windows builds will appear here when a release is ready.</EmptyState></div></div></section>
-      <section><h2>Component skeleton counterparts</h2><p>Content stays in place as text wraps. Loading controls cannot receive focus.</p><div className="preview-specimens">{specimens.map(([name, component]) => <article className="preview-specimen" key={name} data-specimen={name}><h3>{name}</h3><div className="preview-pair"><div className="preview-live">{component}</div><SkeletonRegion label={`Loading ${name.toLowerCase()}…`}><Skeleton className="preview-skeleton">{component}</Skeleton></SkeletonRegion></div></article>)}</div></section>
+      <section><h2>Dynamic component layout checks</h2><p>Content stays in place as text wraps. Loading controls cannot receive focus.</p><div className="preview-specimens">{specimens.map(([name, component]) => <article className="preview-specimen" key={name} data-specimen={name}><h3>{name}</h3><div className="preview-pair"><div className="preview-live">{component}</div><SkeletonRegion label={`Loading ${name.toLowerCase()}…`}><Skeleton className="preview-skeleton">{component}</Skeleton></SkeletonRegion></div></article>)}</div></section>
     <FidelityVariants/>
     </main>
   </OvelleProvider>;

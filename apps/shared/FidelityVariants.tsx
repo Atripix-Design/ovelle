@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Button, Checkbox, ConfirmationDialog, DownloadAction, DownloadCard, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, SectionLabel, SegmentedControl, Select, SiteNavigationMobile, Skeleton, StatusMessage, Switch } from '@ovelle/ui';
+import { Button, Checkbox, ConfirmationDialog, DownloadAction, DownloadCard, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, SectionLabel, SegmentedControl, Select, SiteNavigationMobile, StatusMessage, Switch } from '@ovelle/ui';
 const links = [{ label: 'Home', href: '#components', current: true }, { label: 'Features', href: '#features' }, { label: 'Download', href: '#download' }];
 export default function FidelityVariants() {
   const [dialog, setDialog] = useState(false), [state, setState] = useState<'default' | 'loading' | 'success' | 'error'>('default');
   return <section className="preview-variants"><h2>Source variants and states</h2><p>Hover, press and focus the controls. Theme and material settings above apply to every example.</p>
-    <div data-fidelity="Skeleton"><Skeleton animated={false}/></div>
     <div className="preview-state-grid">{(['primary', 'secondary', 'quiet'] as const).flatMap(variant => (['blue', 'neutral', 'danger'] as const).map(tone => <div key={`${variant}-${tone}`} data-variant-case={`Button/${variant}/${tone}`}><h3>{variant} / {tone}</h3><Button variant={variant} tone={tone}>Save contact</Button><Button variant={variant} tone={tone} disabled>Save contact</Button><Button variant={variant} tone={tone} state="loading"/><Button variant={variant} tone={tone} state="success"/></div>))}
     <div data-variant-case="Icon action"><IconAction label="Next"/><IconAction label="Next neutral" tone="neutral"/><IconAction label="Next disabled" disabled/></div>
     <div data-variant-case="Download action">{(['blue', 'neutral', 'danger'] as const).map(tone => <div key={tone}><DownloadAction tone={tone} label="Download Ovelle" href="#components"/><DownloadAction tone={tone} label="Download Ovelle" unavailable/><DownloadAction tone={tone} label="Download Ovelle" state="loading"/><DownloadAction tone={tone} label="Download Ovelle" state="success"/></div>)}</div>

@@ -2460,5 +2460,815 @@
         "name": "Tone=Danger, State=Success"
       }
     ]
+  },
+  {
+    "id": "117:2392",
+    "name": "Internal / Button / Compact / Primary / Solid",
+    "variants": [
+      {
+        "id": "117:2393",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2396",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2399",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2402",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2405",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2408",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2412",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2416",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2419",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2422",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2425",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2428",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2431",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2435",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2439",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2442",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2445",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2448",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2451",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2454",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2458",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2474",
+    "name": "Internal / Button / Compact / Primary / Liquid Glass",
+    "variants": [
+      {
+        "id": "117:2475",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2478",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2481",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2484",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2487",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2490",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2494",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2498",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2501",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2504",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2507",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2510",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2513",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2517",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2521",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2524",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2527",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2530",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2533",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2536",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2540",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2556",
+    "name": "Internal / Button / Compact / Primary / Soft Glass",
+    "variants": [
+      {
+        "id": "117:2557",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2560",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2563",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2566",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2569",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2572",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2576",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2580",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2583",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2586",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2589",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2592",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2595",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2599",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2603",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2606",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2609",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2612",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2615",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2618",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2622",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2638",
+    "name": "Internal / Button / Compact / Secondary / Solid",
+    "variants": [
+      {
+        "id": "117:2639",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2642",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2645",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2648",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2651",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2654",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2658",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2662",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2665",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2668",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2671",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2674",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2677",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2681",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2685",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2688",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2691",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2694",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2697",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2700",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2704",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2720",
+    "name": "Internal / Button / Compact / Secondary / Liquid Glass",
+    "variants": [
+      {
+        "id": "117:2721",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2724",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2727",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2730",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2733",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2736",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2740",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2744",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2747",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2750",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2753",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2756",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2759",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2763",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2767",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2770",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2773",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2776",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2779",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2782",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2786",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2802",
+    "name": "Internal / Button / Compact / Secondary / Soft Glass",
+    "variants": [
+      {
+        "id": "117:2803",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2806",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2809",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2812",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2815",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2818",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2822",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2826",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2829",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2832",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2835",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2838",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2841",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2845",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2849",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2852",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2855",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2858",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2861",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2864",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2868",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2884",
+    "name": "Internal / Button / Compact / Quiet / Solid",
+    "variants": [
+      {
+        "id": "117:2885",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2888",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2891",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2894",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2897",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2900",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2904",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2908",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2911",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2914",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2917",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:2920",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:2923",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:2927",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:2931",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:2934",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:2937",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:2940",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:2943",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:2946",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:2950",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:2966",
+    "name": "Internal / Button / Compact / Quiet / Liquid Glass",
+    "variants": [
+      {
+        "id": "117:2967",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:2970",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:2973",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:2976",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:2979",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:2982",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:2986",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:2990",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:2993",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:2996",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:2999",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:3002",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:3005",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:3009",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:3013",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:3016",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:3019",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:3022",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:3025",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:3028",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:3032",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
+  },
+  {
+    "id": "117:3048",
+    "name": "Internal / Button / Compact / Quiet / Soft Glass",
+    "variants": [
+      {
+        "id": "117:3049",
+        "name": "Tone=Blue, State=Default"
+      },
+      {
+        "id": "117:3052",
+        "name": "Tone=Blue, State=Hover"
+      },
+      {
+        "id": "117:3055",
+        "name": "Tone=Blue, State=Pressed"
+      },
+      {
+        "id": "117:3058",
+        "name": "Tone=Blue, State=Focused"
+      },
+      {
+        "id": "117:3061",
+        "name": "Tone=Blue, State=Disabled"
+      },
+      {
+        "id": "117:3064",
+        "name": "Tone=Blue, State=Loading"
+      },
+      {
+        "id": "117:3068",
+        "name": "Tone=Blue, State=Success"
+      },
+      {
+        "id": "117:3072",
+        "name": "Tone=Neutral, State=Default"
+      },
+      {
+        "id": "117:3075",
+        "name": "Tone=Neutral, State=Hover"
+      },
+      {
+        "id": "117:3078",
+        "name": "Tone=Neutral, State=Pressed"
+      },
+      {
+        "id": "117:3081",
+        "name": "Tone=Neutral, State=Focused"
+      },
+      {
+        "id": "117:3084",
+        "name": "Tone=Neutral, State=Disabled"
+      },
+      {
+        "id": "117:3087",
+        "name": "Tone=Neutral, State=Loading"
+      },
+      {
+        "id": "117:3091",
+        "name": "Tone=Neutral, State=Success"
+      },
+      {
+        "id": "117:3095",
+        "name": "Tone=Danger, State=Default"
+      },
+      {
+        "id": "117:3098",
+        "name": "Tone=Danger, State=Hover"
+      },
+      {
+        "id": "117:3101",
+        "name": "Tone=Danger, State=Pressed"
+      },
+      {
+        "id": "117:3104",
+        "name": "Tone=Danger, State=Focused"
+      },
+      {
+        "id": "117:3107",
+        "name": "Tone=Danger, State=Disabled"
+      },
+      {
+        "id": "117:3110",
+        "name": "Tone=Danger, State=Loading"
+      },
+      {
+        "id": "117:3114",
+        "name": "Tone=Danger, State=Success"
+      }
+    ]
   }
 ]

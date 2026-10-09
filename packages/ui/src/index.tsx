@@ -23,8 +23,8 @@ export function Button({ material, glassFrost, reduceTransparency, className, st
   const settings = { material, glassFrost, reduceTransparency };
   const outer = useMaterial({ ...settings, className, style }, 'button');
   const surface = useMaterial({ ...settings, className: surfaceClassName }, 'action-surface');
-  return <button type="button" {...rest} {...outer} data-variant={variant} data-size={size} data-tone={tone} data-state={state} disabled={disabled || state === 'loading'} aria-busy={state === 'loading' || undefined}>
-    <span {...surface}>{state !== 'default' && <FigmaAsset className={state === 'loading' ? 'ov-loading-icon' : undefined} name={stateAsset(variant, tone, state)} darkName={stateAsset(variant, tone, state, true)}/>}<span>{state === 'loading' ? loadingLabel : state === 'success' ? successLabel : children}</span></span>
+  return <button type="button" {...rest} {...outer} data-variant={variant} data-size={size} data-tone={tone} data-state={state} disabled={disabled || state === 'loading'} aria-busy={state === 'loading' || undefined} aria-label={size === 'compact' && state !== 'default' ? (rest['aria-label'] ?? (state === 'loading' ? 'Loading' : 'Saved')) : rest['aria-label']}>
+    <span {...surface}>{state !== 'default' && <FigmaAsset className={state === 'loading' ? 'ov-loading-icon' : undefined} name={stateAsset(variant, tone, state)} darkName={stateAsset(variant, tone, state, true)}/>}{(size !== 'compact' || state === 'default') && <span>{state === 'loading' ? loadingLabel : state === 'success' ? successLabel : children}</span>}</span>
   </button>;
 }
 export type IconActionProps = Omit<ButtonProps, 'children'> & { icon?: ReactNode; label: string };
@@ -52,5 +52,5 @@ export { Pagination } from './pagination.js';
 export type { PaginationProps } from './pagination.js';
 export { EmptyState } from './empty-state.js';
 export type { EmptyStateProps } from './empty-state.js';
-export { Skeleton, SkeletonRegion } from './skeleton.js';
-export type { SkeletonProps, SkeletonRegionProps } from './skeleton.js';
+export { Skeleton, SkeletonRegion, LoadingBoundary } from './skeleton.js';
+export type { SkeletonProps, SkeletonRegionProps, LoadingBoundaryProps } from './skeleton.js';

@@ -68,7 +68,7 @@ The path is relative to that stylesheet; adjust it for your project. In this mon
 | `Skeleton` | children (real layout), `shape`, `width`, `height`, `animated` |
 | `SkeletonRegion` | one accessible loading `label`, children |
 
-[Content states and future skeleton workflow](../../docs/design-system/skeleton-workflow.md). The Skeleton column includes linked counterparts for all 18 original component families and the three new control/content families. Wrap real components to retain their geometry instead of guessing generic bars. DatePicker uses a custom accessible single-date calendar; Pagination is controlled and switches to compact display on narrow screens. These components are previewed at website `/components` and desktop `?components`.
+[Dynamic loading workflow](../../docs/design-system/skeleton-workflow.md). `LoadingBoundary` measures the actual mounted page layout and accepts `loading`, `label`, `regionClassName`, material settings and Skeleton props. Loading controls are inert; finishing loading restores the same mounted content. Initial requests need representative content or an expected layout. There is no Figma Skeleton sheet. DatePicker and Pagination are reusable controls, previewed at website `/components` and desktop `?components`.
 
 All surfaces accept `material`, `glassFrost`, `reduceTransparency`, `className` and `style`. Native events and attributes are exposed on the appropriate HTML element. Icons and links are React nodes, so consumers can supply their own icon library or router link. IconAction requires an accessible label.
 
@@ -118,3 +118,5 @@ The repository's [AGENTS.md](../../AGENTS.md) records these requirements for fut
 ## Verification
 
 `npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Run `node scripts/check-figma-fidelity.mjs` and `node scripts/check-content-components.mjs` against the web preview and built desktop renderer. Set `OVELLE_PLAYWRIGHT_MODULE` if Playwright is installed elsewhere, and `OVELLE_PREVIEW_URL` for the desktop URL. Figma reference captures and source/variant inventories live in `docs/design-system/migration`. The fidelity check verifies native root dimensions for all 22 families, action child geometry/typography/states, keyboard/focus and exact SVG geometry; screenshots still require human inspection.
+
+Compact Button loading/success states use icon-only content to preserve square geometry. Supply `aria-label` for a contextual accessible label.

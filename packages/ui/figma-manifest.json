@@ -1077,49 +1077,6 @@
       },
       "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
       "reactContentAndBehaviorMapping": {}
-    },
-    {
-      "id": "80:3122",
-      "name": "Ovelle / Skeleton",
-      "type": "COMPONENT_SET",
-      "variants": 12,
-      "export": "Skeleton",
-      "source": "src/skeleton.tsx",
-      "properties": {
-        "Material": {
-          "type": "VARIANT",
-          "variantOptions": [
-            "Solid",
-            "Liquid Glass"
-          ]
-        },
-        "Theme": {
-          "type": "VARIANT",
-          "variantOptions": [
-            "Light",
-            "Dark"
-          ]
-        }
-      },
-      "propertyMapping": {
-        "Material": "material",
-        "Theme": "OvelleProvider.theme",
-        "Shape": "shape"
-      },
-      "sourceProperties": {
-        "id": "80:3122",
-        "properties": [
-          "Material",
-          "Theme",
-          "Shape"
-        ],
-        "nested": []
-      },
-      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
-      "reactContentAndBehaviorMapping": {
-        "Content": "children",
-        "Motion": "animated / OvelleProvider.reduceMotion"
-      }
     }
   ],
   "limitations": [
@@ -1128,176 +1085,6 @@
     "Native select option popups use the platform renderer rather than custom glass menus."
   ],
   "tokens": "tokens.json",
-  "skeletonCounterparts": [
-    {
-      "sourceId": "52:1552",
-      "sourceName": "Ovelle / Button",
-      "id": "81:2420",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1230",
-      "sourceName": "Ovelle / Icon action",
-      "id": "81:2457",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1243",
-      "sourceName": "Ovelle / Field",
-      "id": "81:2498",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1262",
-      "sourceName": "Ovelle / Select",
-      "id": "81:2555",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1269",
-      "sourceName": "Ovelle / Filter chip",
-      "id": "81:2576",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1278",
-      "sourceName": "Ovelle / Checkbox",
-      "id": "81:2601",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1289",
-      "sourceName": "Ovelle / Switch",
-      "id": "81:2634",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1296",
-      "sourceName": "Ovelle / Navigation item",
-      "id": "81:2655",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1305",
-      "sourceName": "Ovelle / Section label",
-      "id": "81:2684",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1326",
-      "sourceName": "Ovelle / Status message",
-      "id": "81:2741",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1345",
-      "sourceName": "Ovelle / FAQ row",
-      "id": "81:2790",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1378",
-      "sourceName": "Ovelle / Feature card",
-      "id": "81:2895",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1415",
-      "sourceName": "Ovelle / Download card",
-      "id": "81:3000",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1434",
-      "sourceName": "Ovelle / Download action",
-      "id": "81:3053",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1469",
-      "sourceName": "Ovelle / Site navigation / Desktop",
-      "id": "81:3146",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1492",
-      "sourceName": "Ovelle / Site navigation / Mobile",
-      "id": "81:3203",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1509",
-      "sourceName": "Ovelle / Segmented control",
-      "id": "81:3252",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "54:1520",
-      "sourceName": "Ovelle / Confirmation dialog",
-      "id": "81:3281",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "80:2385",
-      "sourceName": "Ovelle / Date picker",
-      "id": "84:2970",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "80:2992",
-      "sourceName": "Ovelle / Pagination",
-      "id": "84:3099",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    },
-    {
-      "sourceId": "80:3107",
-      "sourceName": "Ovelle / Empty state",
-      "id": "84:3144",
-      "variants": 4,
-      "export": "Skeleton",
-      "usage": "<Skeleton>{sourceComponent}</Skeleton>"
-    }
-  ],
   "fidelity": {
     "sourceFile": "6jsC9SLa0LYsZKjJXxlY1K",
     "referenceInventory": "../../docs/design-system/migration/sources.json",
@@ -1305,5 +1092,10 @@
     "workflow": "../../docs/design-system/skeleton-workflow.md",
     "verification": "node scripts/check-figma-fidelity.mjs",
     "synchronization": "Figma and React are separately maintained; source context, exact assets and screenshot comparisons are required."
+  },
+  "dynamicLoading": {
+    "export": "LoadingBoundary",
+    "measurement": "Actual mounted DOM; no Figma sheet or component registry",
+    "workflow": "docs/design-system/skeleton-workflow.md"
   }
 }

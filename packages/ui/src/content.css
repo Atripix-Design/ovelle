@@ -8,30 +8,31 @@
   .ov-skeleton[data-material="liquid-glass"], .ov-skeleton[data-material="soft-glass"] { background-image: none; box-shadow: none; }
   .ov-date-group { display: flex; flex-direction: column; align-items: stretch; position: relative; gap: 8px; width: 320px; max-width: 100%; color: var(--ov-text-primary); }
   .ov-date-group > label { font: 500 14px/20px 'Inter', sans-serif; }
-  .ov-date-picker { display: flex; align-items: center; justify-content: space-between; gap: 16px; text-align: start; width: 100%; height: 52px; min-height: 52px; padding: 0 16px; font: 400 15px/22px 'Inter', sans-serif; cursor: pointer; }
+  .ov-date-picker { display: flex; align-items: center; justify-content: space-between; gap: 16px; text-align: start; width: 100%; height: 44px; min-height: 44px; padding: 0 16px; font: 400 15px/22px 'Inter', sans-serif; cursor: pointer; }
   .ov-date-picker:hover:not(:disabled), .ov-date-picker:active:not(:disabled) { border-color: var(--ov-border-focus); }
   .ov-date-picker:focus-visible { outline: none; border: 3px solid var(--ov-border-focus); padding-inline: 14px; }
   .ov-date-picker[aria-invalid="true"] { border-color: var(--ov-border-error); }
   .ov-date-picker:disabled { opacity: .5; color: var(--ov-text-primary); }
   .ov-date-group > .ov-hint { margin: 0; font: 400 12px/18px 'Inter', sans-serif; letter-spacing: .1px; }
   .ov-date-group > .ov-hint[data-validation="error"] { color: var(--ov-status-error); }
-  .ov-calendar { display: flex; flex-direction: column; gap: 8px; position: relative; width: 320px; max-width: 100%; padding: 12px; border-radius: 20px; overflow: hidden; --ov-effective-blur: var(--ov-panel-blur); }
+  .ov-calendar { display: flex; flex-direction: column; gap: 4px; position: relative; width: 320px; max-width: 100%; padding: 12px; border-radius: 20px; overflow: hidden; --ov-effective-blur: var(--ov-panel-blur); }
   .ov-calendar-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; height: 44px; }
   .ov-calendar-header strong { font: 500 14px/20px 'Inter', sans-serif; }
-  .ov-calendar-grid { display: flex; flex-direction: column; width: 100%; gap: 8px; border-collapse: collapse; }
+  .ov-calendar-grid { display: flex; flex-direction: column; width: 100%; gap: 4px; border-collapse: collapse; }
   .ov-calendar-grid thead { display: block; }
-  .ov-calendar-grid thead tr { display: flex; gap: 8px; }
-  .ov-calendar-grid th { flex: 1 1 34px; min-width: 0; height: 18px; padding: 0; text-align: start; color: var(--ov-text-primary); font: 400 12px/18px 'Inter', sans-serif; letter-spacing: .1px; }
+  .ov-calendar-grid thead tr { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); }
+  .ov-calendar-grid th { min-width: 0; height: 18px; padding: 0; text-align: center; color: var(--ov-text-primary); font: 400 12px/18px 'Inter', sans-serif; letter-spacing: .1px; }
   .ov-calendar-grid abbr { text-decoration: none; }
-  .ov-calendar-grid tbody { display: flex; flex-direction: column; gap: 8px; }
-  .ov-calendar-grid tbody tr { display: flex; height: 44px; }
-  .ov-calendar-grid td { flex: 0 0 44px; width: 44px; height: 44px; padding: 0; }
-  .ov-calendar-day.ov-button { width: 44px; height: 44px; min-height: 44px; }
+  .ov-calendar-grid tbody { display: flex; flex-direction: column; gap: 4px; }
+  .ov-calendar-grid tbody tr { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); }
+  .ov-calendar-grid td { min-width: 0; aspect-ratio: 1; padding: 0; }
+  .ov-calendar-day.ov-button { width: 100%; min-width: 0; height: 100%; min-height: 0; padding: 3px; }
+  .ov-calendar-day.ov-button > .ov-action-surface { width: 100%; height: 100%; aspect-ratio: 1; }
   .ov-calendar-day[data-outside] { color: var(--ov-text-brand); }
   .ov-calendar-day[data-outside]:disabled { color: var(--ov-text-disabled); }
   .ov-calendar-clear.ov-button { width: 100%; height: 44px; min-height: 44px; }
-  .ov-calendar-clear .ov-action-surface { height: 44px; min-height: 44px; }
-  .ov-pagination { display: inline-flex; align-items: center; gap: 8px; padding: 8px; height: 100px; max-width: 100%; border-radius: 12px; }
+  .ov-calendar-clear .ov-action-surface { height: 36px; min-height: 36px; }
+  .ov-pagination { display: inline-flex; align-items: center; gap: 8px; padding: 8px; height: 62px; max-width: 100%; border-radius: 12px; }
   .ov-pagination-pages { display: flex; align-items: center; gap: 8px; }
   .ov-pagination-pages > span { font: 400 15px/22px 'Inter', sans-serif; }
   .ov-pagination .ov-button { flex-shrink: 0; width: 44px; height: 44px; min-height: 44px; }
@@ -51,18 +52,19 @@
   .ov-skeleton[data-shape="rectangle"] { border-radius: 12px; height: 120px; }
   .ov-skeleton[data-shape="circle"] { border-radius: 22px; width: 44px; height: 44px; }
   .ov-skeleton[data-content] { width: 100%; height: auto; border-radius: 0; background: transparent; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; font: inherit; }
-  .ov-skeleton-content { visibility: hidden; pointer-events: none; }
+  .ov-skeleton[data-loading="true"] > .ov-skeleton-content { visibility: hidden; pointer-events: none; }
+  .ov-skeleton-content { display: flow-root; }
   .ov-skeleton-map { position: absolute; inset: 0; fill: var(--ov-surface-subtle); overflow: visible; }
   .ov-skeleton[data-content][data-material="liquid-glass"] .ov-skeleton-map,
   .ov-skeleton[data-content][data-material="soft-glass"] .ov-skeleton-map { fill: rgb(var(--ov-surface-subtle-channels) / var(--ov-effective-alpha, var(--ov-alpha))); backdrop-filter: blur(var(--ov-micro-blur)); }
   .ov-skeleton[data-reduce-transparency="true"] .ov-skeleton-map { fill: var(--ov-surface-subtle); backdrop-filter: none; }
-  .ov-skeleton[data-animated="true"]::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 20%, rgb(255 255 255 / .35) 48%, transparent 76%); transform: translateX(-100%); animation: ov-skeleton-shimmer 1.8s ease-in-out infinite; pointer-events: none; }
+  .ov-skeleton[data-loading="true"][data-animated="true"]::after { content: ''; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 20%, rgb(255 255 255 / .35) 48%, transparent 76%); transform: translateX(-100%); animation: ov-skeleton-shimmer 1.8s ease-in-out infinite; pointer-events: none; }
   .ov-skeleton[data-content]::after { display: none; }
   .ov-skeleton[data-content][data-animated="true"] .ov-skeleton-map { animation: ov-skeleton-pulse 1.8s ease-in-out infinite; }
   [data-ovelle-reduced-motion="true"] .ov-skeleton::after, [data-ovelle-reduced-motion="true"] .ov-skeleton-map { animation: none !important; }
   @keyframes ov-skeleton-shimmer { to { transform: translateX(100%); } }
   @keyframes ov-skeleton-pulse { 50% { opacity: .55; } }
-  @media (max-width: 480px) { .ov-pagination-pages { display: none; } .ov-pagination-summary { display: block; } .ov-calendar-grid td { flex: 1 1 0; min-width: 0; } .ov-calendar-day.ov-button { width: 100%; } }
+  @media (max-width: 480px) { .ov-pagination-pages { display: none; } .ov-pagination-summary { display: block; } }
   @media (prefers-reduced-motion: reduce) { .ov-skeleton::after, .ov-skeleton-map { animation: none !important; } }
   @media (prefers-reduced-transparency: reduce) { .ov-skeleton .ov-skeleton-map { fill: var(--ov-surface-subtle) !important; backdrop-filter: none !important; } }
   @supports not (backdrop-filter: blur(1px)) { .ov-skeleton .ov-skeleton-map { fill: var(--ov-surface-subtle) !important; } }

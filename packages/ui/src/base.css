@@ -70,7 +70,7 @@
   .ov-button:disabled:not([aria-busy="true"]) > .ov-action-surface { --ov-tint: var(--ov-action-disabled-channels); --ov-effective-alpha: var(--ov-alpha); color: var(--ov-text-disabled); }
   .ov-button:disabled:not([aria-busy="true"]):is([data-variant="secondary"],[data-variant="quiet"]) > .ov-action-surface { --ov-tint: var(--ov-surface-subtle-channels); }
   .ov-button[data-size="compact"] { width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 4px; }
-  .ov-button[data-size="compact"] > .ov-action-surface { height: 44px; padding: 0 4px; border-radius: 8px; }
+  .ov-button[data-size="compact"] > .ov-action-surface { height: 36px; padding: 0 4px; border-radius: 8px; }
   .ov-icon-action { width: 44px; min-width: 44px; padding: 0; }
   .ov-icon-action > .ov-action-surface { flex: 0 0 44px; width: 44px; padding: 0; color: var(--ov-text-brand); }
   .ov-icon-action:not(:disabled):active { width: 44px; }

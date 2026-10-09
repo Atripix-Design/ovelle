@@ -8,7 +8,6 @@ const sources = JSON.parse(await readFile(new URL('../docs/design-system/migrati
 const assets = JSON.parse(await readFile(new URL('../docs/design-system/migration/assets.json', import.meta.url)));
 const manifest = JSON.parse(await readFile(new URL('../packages/ui/figma-manifest.json', import.meta.url)));
 assert.deepEqual(sources.map(s=>s.id).sort(), manifest.components.map(s=>s.id).sort(), 'Every public family needs an independent source baseline');
-assert.deepEqual(manifest.skeletonCounterparts.map(s=>s.sourceId).sort(), sources.filter(s=>s.name !== 'Ovelle / Skeleton').map(s=>s.id).sort(), 'Every loaded family needs a linked skeleton counterpart');
 for (const source of sources) assert.ok((await readFile(new URL(`../docs/design-system/migration/${source.reference}`, import.meta.url))).length > 100, `Missing reference ${source.name}`);
 for (const [name, metadata] of Object.entries(assets)) {
   const file = await readFile(new URL(`../packages/ui/assets/${name}`, import.meta.url));
@@ -31,7 +30,7 @@ try {
   await page.mouse.move(0, 0);
   for (const source of sources) {
     const name = source.name.replace('Ovelle / ', '');
-    const node = name === 'Skeleton' ? page.locator('[data-fidelity="Skeleton"] > *') : page.locator(`[data-specimen="${name}"] .preview-live > *`);
+    const node = page.locator(`[data-specimen="${name}"] .preview-live > *`);
     const box = await node.boundingBox();
     assert.ok(box, `Missing ${name}`);
     assert.ok(Math.abs(box.width - source.width) < 1, `${name} width: ${box.width} vs Figma ${source.width}`);

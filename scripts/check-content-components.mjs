@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 const manifest = JSON.parse(await readFile(new URL('../packages/ui/figma-manifest.json', import.meta.url)));
-const expectedPairs = manifest.skeletonCounterparts.length;
+const expectedPairs = manifest.components.length;
 const { chromium } = await import(process.env.OVELLE_PLAYWRIGHT_MODULE || 'playwright');
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });

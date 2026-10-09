@@ -39,3 +39,5 @@ Deployed version: `8adfcaa4fc115c9e8e8e4a6185d44e2ba77c4728`. Source is preserve
 `@ovelle/ui` uses real browser `backdrop-filter` sampling and RGBA surface colors. It accepts fractional `glassFrost` values, defaults to 35, and mirrors panel/control blur and tint progression. `reduceTransparency`, OS reduced-transparency preferences, reduced motion, forced colors and a missing-backdrop-filter fallback are independent considerations.
 
 Figma optical refraction and CSS backdrop filtering are different renderers. The package reproduces the material progression and component structure; it does not claim lossless optical export. Native select menus and checkboxes retain platform rendering for reliable keyboard behavior.
+
+Checkbox indicators use zero refraction/dispersion, shallow depth, restrained sheen and no drop shadow. The Glass Tuner preserves this at all intensity values, including previously saved baselines. Plugin version: `0871f41cd2c369c096afb9fe2c711db8c9e25e79`.

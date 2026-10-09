@@ -8,8 +8,8 @@ const manifest = JSON.parse(readFileSync(new URL('../figma-manifest.json', impor
 const render = (component, props, children) => renderToStaticMarkup(h(component, props, children));
 
 test('every public Figma asset has a distinct React export and mapping', () => {
-  assert.equal(manifest.components.length, 22);
-  assert.equal(new Set(manifest.components.map(c => c.id)).size, 22);
+  assert.equal(manifest.components.length, 21);
+  assert.equal(new Set(manifest.components.map(c => c.id)).size, 21);
   for (const component of manifest.components) {
     assert.equal(typeof ui[component.export], 'function', component.export);
     assert.equal(component.propertyMapping.Material, 'material');

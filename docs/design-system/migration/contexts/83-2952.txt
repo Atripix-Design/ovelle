@@ -1,0 +1,42 @@
+const assetPathPrefix = "https://www.figma.com/api/mcp/asset/a4104612-4495-4bca-9539-07a74c1250b0";
+type OvelleButtonProps = {
+  className?: string;
+  material?: "Solid";
+  size?: "Compact";
+  style?: "Primary";
+};
+
+function OvelleButton({ className, material = "Solid", size = "Compact", style = "Primary" }: OvelleButtonProps) {
+  return (
+    <div className={className || "content-stretch flex items-start relative size-[44px]"} data-node-id="83:2952">
+      <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="83:2953" data-name="Button appearance">
+        <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I83:2953;117:2394" data-name="Surface">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I83:2953;117:2395">
+            1
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Source fidelity: retrieve high fidelity design context and screenshot for every meaningful variant before implementation; preserve exact geometry, Inter typography and original Light/Dark SVGs. Refresh source references and linked skeleton masks, run scripts/check-figma-fidelity.mjs and scripts/check-content-components.mjs in both apps, and inspect Figma/browser captures before parity claims. Workflow: docs/design-system/skeleton-workflow.md. Figma and React are separately maintained.
+
+## Internal / Button / Compact / Primary / Solid
+**Node ID:** 117:2392
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.
