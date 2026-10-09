@@ -3,10 +3,14 @@ import type { ReactNode } from 'react';
 import { Button, Checkbox, ConfirmationDialog, DatePicker, DownloadAction, DownloadCard, EmptyState, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, OvelleProvider, Pagination, SectionLabel, SegmentedControl, Select, SiteNavigationDesktop, SiteNavigationMobile, Skeleton, SkeletonRegion, StatusMessage, Switch } from '@ovelle/ui';
 import './component-preview.css';
 import LoadingPreview from './LoadingPreview';
+import VideoWalkthrough from './VideoWalkthrough';
 import FidelityVariants from './FidelityVariants';
 
 const noop = () => {};
 export default function ComponentPreview() {
+  return new URLSearchParams(window.location.search).has('walkthrough') ? <VideoWalkthrough/> : <ComponentGallery/>;
+}
+function ComponentGallery() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [glass, setGlass] = useState(false), [frost, setFrost] = useState(35), [opaque, setOpaque] = useState(false);
   const [date, setDate] = useState('2026-10-08'), [page, setPage] = useState(4);
