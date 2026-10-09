@@ -1,5 +1,7 @@
 # Home section redesign — 2026-10-09
 
+The current desktop revision is documented in [desktop-v2.md](desktop-v2.md). The dimensions and captures below record the first iteration.
+
 Replaces the Connected workspace and Desktop companion sections in the existing Home desktop composition.
 
 - [Connected workspace](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=139-479): 1440 × 1032. Introduction, edge-to-edge 1440 × 440 photograph, three native Ovelle FeatureCard instances.
