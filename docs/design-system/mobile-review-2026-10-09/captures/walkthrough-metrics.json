@@ -1,0 +1,53 @@
+{
+  "method": "Fixed CSS viewport, touch enabled, desktop Chromium layout; no mobile auto-shrink",
+  "results": [
+    {
+      "chapter": 1,
+      "name": "fields",
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "chapter": 4,
+      "name": "faq",
+      "viewport": 390,
+      "documentWidth": 398
+    },
+    {
+      "chapter": 6,
+      "name": "downloads",
+      "viewport": 390,
+      "documentWidth": 404
+    },
+    {
+      "chapter": 7,
+      "name": "navigation",
+      "viewport": 390,
+      "documentWidth": 913
+    },
+    {
+      "chapter": 8,
+      "name": "segments",
+      "viewport": 390,
+      "documentWidth": 444
+    },
+    {
+      "chapter": 10,
+      "name": "calendar",
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "chapter": 11,
+      "name": "pagination",
+      "viewport": 390,
+      "documentWidth": 500
+    },
+    {
+      "chapter": 12,
+      "name": "loading",
+      "viewport": 390,
+      "documentWidth": 390
+    }
+  ]
+}
