@@ -65,6 +65,8 @@ The path is relative to that stylesheet; adjust it for your project. In this mon
 
 All surfaces accept `material`, `glassFrost`, `reduceTransparency`, `className` and `style`. Native events and attributes are exposed on the appropriate HTML element. Icons and links are React nodes, so consumers can supply their own icon library or router link. IconAction requires an accessible label.
 
+Section labels use content-based width, a 6px tone marker, an 8px internal gap, 12px vertical / 16px horizontal padding, and a 44px minimum height. These dimensions match the linked Figma masters.
+
 ## Design tokens
 
 `@ovelle/ui/tokens.json` exports all 25 semantic Figma colors in Light/Dark modes. The stylesheet uses matching `--ov-surface-*`, `--ov-text-*`, `--ov-border-*`, `--ov-action-*` and `--ov-status-*` CSS variables. Semantic colors were resolved directly from the Figma variable collection; spacing, radius and component dimensions are implemented in the component stylesheet.

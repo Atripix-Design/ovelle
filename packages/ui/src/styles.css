@@ -75,9 +75,10 @@
   .ov-switch:checked::after { transform: translateX(18px); }
   .ov-navigation-item { min-height: 44px; padding: 10px 18px; border-color: transparent; }
   .ov-navigation-item[aria-current="page"] { color: var(--ov-focus); border-color: var(--ov-focus); }
-  .ov-section-label { display: inline-flex; align-items: center; min-height: 36px; padding: 6px 12px; color: var(--ov-focus); font-size: 13px; font-weight: 600; }
-  .ov-section-label[data-tone="neutral"] { color: var(--ov-ink); }
-  .ov-section-label[data-tone="success"] { color: var(--ov-status-success, #226b4e); }
+  .ov-section-label { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 12px 16px; border-radius: 999px; color: var(--ov-ink); --ov-marker-color: var(--ov-action-brand); font-size: 13px; line-height: 18px; font-weight: 600; }
+  .ov-section-label::before { content: ""; width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--ov-marker-color); }
+  .ov-section-label[data-tone="neutral"] { --ov-marker-color: var(--ov-text-secondary); }
+  .ov-section-label[data-tone="success"] { --ov-marker-color: var(--ov-status-success); }
   .ov-status-message { width: 374px; max-width: 100%; padding: 20px; display: grid; gap: 8px; --ov-effective-blur: var(--ov-panel-blur); }
   .ov-status-message[data-tone="success"] { border-left: 4px solid var(--ov-status-success); }
   .ov-status-message[data-tone="warning"] { border-left: 4px solid var(--ov-status-warning); }
