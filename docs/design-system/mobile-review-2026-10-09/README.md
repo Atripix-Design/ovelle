@@ -57,7 +57,7 @@ The implemented web `/` is a project placeholder with desktop download links. `/
 
 Use the existing source strings first. Change wrapping, grouping, placement, and spacing before shortening copy. Important facts stay visible; disclosures may hold optional explanations, not essential capabilities, statuses, or caveats. Do not use a required horizontal swipe to reveal cards or workflow stages.
 
-**Options:** ordinary scroll sections provide the best discoverability and strongest content coverage; a tap-through workflow reduces page length but hides two stages until selected; a pinned mobile story retains desktop drama but adds viewport and gesture complexity. Recommend ordinary scroll sections. The user's preference between scroll and tap-through is pending; this proposal records the default, not an approved final design.
+**Options:** ordinary scroll sections provide the best discoverability and strongest content coverage; a tap-through workflow reduces page length but hides two stages until selected; a pinned mobile story retains desktop drama but adds viewport and gesture complexity. The user approved three ordinary scroll sections on October 10, 2026. See the resulting [Mobile Home design](../mobile-home-2026-10-10/README.md).
 
 ## Visual rules to prototype
 
