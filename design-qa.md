@@ -1,5 +1,18 @@
 # Mobile Home Figma reference QA
 
+## Latest contrast correction — October 10, 2026
+
+P1 desktop Light card text disappeared against white; P1 desktop Dark card text stayed dark; P1 desktop/mobile Dark hero copy turned pale over the unchanged bright photo. Restored desktop instance source foregrounds, bound mobile counts/metadata to text/secondary, and used the dark navy primitive for text on the coastal image in both themes. Caption uses white with a subtle shadow.
+
+Opened and inspected combined before/after evidence in docs/design-system/mobile-home-2026-10-10/contrast-fix: desktop-light-comparison.png, desktop-dark-comparison.png, mobile-dark-comparison.png. Native viewports/density: desktop 1440×920 and mobile 390×699 at one pixel per design unit; no device chrome. Final render paths: desktop-light.png, desktop-dark.png, mobile-light.png, mobile-dark.png. Earlier captures are retained as before-state evidence; this update supersedes their contrast findings.
+
+Typography, spacing/layout, image quality and copy remain unchanged. Color bindings alone were corrected, plus the caption shadow. The original geometry, image hashes and transforms are recorded in contrast-fix/geometry.json. No photo positioning or layout edits. Existing linked controls remain native. No actionable contrast finding remains in the inspected Figma renders; this is visual QA, not certification of all pixel-level contrast ratios or production accessibility.
+
+Existing React gallery regression passed again: 21 source dimensions, controls/states/keyboard/focus, 96 SVGs and 12 theme/material/frost settings. No mobile Home code implementation or consumer parity claim.
+
+Contrast correction final result: passed
+
+
 Scope: editable native Figma design matched to the user's attached generated board. This is Figma render QA, not a browser implementation or real-device accessibility acceptance.
 
 **Findings**
