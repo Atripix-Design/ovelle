@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-10",
+  "scope": "Figma-only compact mobile hero revision",
+  "fileKey": "6jsC9SLa0LYsZKjJXxlY1K",
+  "results": [
+    {
+      "id": "182:2114",
+      "width": 390,
+      "height": 7682,
+      "instances": 100,
+      "unlinked": [],
+      "overflow": []
+    },
+    {
+      "id": "185:9144",
+      "width": 320,
+      "height": 7936,
+      "instances": 100,
+      "unlinked": [],
+      "overflow": []
+    }
+  ],
+  "heroControls": [
+    {
+      "id": "182:2115",
+      "labels": 6,
+      "wrapped": []
+    },
+    {
+      "id": "185:9145",
+      "labels": 6,
+      "wrapped": []
+    },
+    {
+      "id": "202:4285",
+      "labels": 22,
+      "wrapped": []
+    }
+  ],
+  "workflowPreservation": [
+    {
+      "id": "182:2188",
+      "missing": [],
+      "visibleStrings": [
+        "01 · Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams · Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment · 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring · 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community · 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "182:2244",
+      "missing": [],
+      "visibleStrings": [
+        "02 · Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer · Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday · 9:00–12:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "182:2300",
+      "missing": [],
+      "visibleStrings": [
+        "03 · Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up · Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday · 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    },
+    {
+      "id": "185:9163",
+      "missing": [],
+      "visibleStrings": [
+        "01 · Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams · Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment · 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring · 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community · 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "185:9164",
+      "missing": [],
+      "visibleStrings": [
+        "02 · Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer · Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday · 9:00–12:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "185:9165",
+      "missing": [],
+      "visibleStrings": [
+        "03 · Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up · Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday · 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    }
+  ],
+  "prototype": {
+    "closed": [
+      {
+        "id": "188:9676",
+        "scene": "188:9689",
+        "content": "188:9677"
+      },
+      {
+        "id": "202:3149",
+        "scene": "202:3166",
+        "content": "202:3150"
+      },
+      {
+        "id": "202:3549",
+        "scene": "202:3566",
+        "content": "202:3550"
+      }
+    ],
+    "open": [
+      {
+        "id": "202:3949",
+        "name": "Prototype / Hero stage sheet / Partners"
+      },
+      {
+        "id": "202:4057",
+        "name": "Prototype / Hero stage sheet / Relationships"
+      },
+      {
+        "id": "202:4165",
+        "name": "Prototype / Hero stage sheet / Opportunities"
+      }
+    ],
+    "qa": "202:4285"
+  },
+  "sources": {
+    "heroSet": "199:7256",
+    "heroVariants": [
+      {
+        "id": "199:6980",
+        "name": "Stage=Partners, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7010",
+        "action": "199:7020"
+      },
+      {
+        "id": "199:7026",
+        "name": "Stage=Relationships, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7056",
+        "action": "199:7066"
+      },
+      {
+        "id": "199:7072",
+        "name": "Stage=Opportunities, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7102",
+        "action": "199:7112"
+      },
+      {
+        "id": "199:7118",
+        "name": "Stage=Partners, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7148",
+        "action": "199:7158"
+      },
+      {
+        "id": "199:7164",
+        "name": "Stage=Relationships, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7194",
+        "action": "199:7204"
+      },
+      {
+        "id": "199:7210",
+        "name": "Stage=Opportunities, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7240",
+        "action": "199:7250"
+      }
+    ],
+    "sheetSet": "201:6782",
+    "sheetVariants": [
+      {
+        "id": "201:6722",
+        "name": "Stage=Partners",
+        "height": 292
+      },
+      {
+        "id": "201:6742",
+        "name": "Stage=Relationships",
+        "height": 292
+      },
+      {
+        "id": "201:6762",
+        "name": "Stage=Opportunities",
+        "height": 292
+      }
+    ]
+  },
+  "limitations": [
+    "Screen-state navigation simulates the sheet; no real browser focus or gesture verification.",
+    "No new React implementation or parity claim."
+  ]
+}
