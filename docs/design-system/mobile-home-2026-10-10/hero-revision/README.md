@@ -1,6 +1,6 @@
 # Compact mobile hero revision
 
-Revised October 10, 2026 following the approved Cluely-inspired approach: compose a focused product scene for the phone, with complete information in the three ordinary-scroll workflow sections. These captures come from the native Figma design, not the earlier generated concept image.
+Revised October 10, 2026 following the approved Cluely-inspired approach: compose a focused product scene for the phone, with complete information in the three ordinary-scroll workflow sections. The user then selected [the generated image](reference-generated.png) as the direct source for the button layout and background positioning. Captures below show the resulting native Figma design.
 
 - [390 px Home](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=182-2114)
 - [320 px Home](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=185-9144)
@@ -10,7 +10,9 @@ Revised October 10, 2026 following the approved Cluely-inspired approach: compos
 
 ## Design and interaction
 
-The hero now contains one stage selector, one featured record with its status and context, and an action linking to the complete section. The scene is 260 px tall. Hero heights are 800 px at 390 px width and 792 px at 320 px width, compared with 1090/1212 px previously. Primary and secondary actions use deliberate full-width rows; the 320 px headline uses 32/38 typography to preserve its two-line composition. The exact coastal photograph remains, with a stronger gradient behind the introductory text.
+The hero contains one stage selector, one featured record with its status and context, and an action linking to the complete section. The scene is 260 px tall. Hero heights are 740 px at 390 px width and 732 px at 320 px width. Get Ovelle and Learn more are equally sized linked Regular buttons in a single horizontal row with a 16 px gap: 163×52 px at 390 and 136×52 px at 320. Their native visible surfaces remain 44 px tall; labels stay 14/20 and do not wrap. The separate “See Ovelle in action” row and its prototype hit targets are removed from all eight mobile hero compositions.
+
+The [exact coastal photograph](coastal-source.png) remains a native image fill. Its image layer starts at 22% of hero height and fills the remaining 78%, putting the horizon at approximately 54.4%, with the cliff behind the CTA row and foreground rocks along the bottom, following the generated reference. A pale sky base and short gradient blend the photo into the introductory area. The image is not stretched or replaced with rasterized UI. A 62 px bottom inset in the copy group gives the scene room below the buttons. The 320 px headline retains 32/38 typography and its two-line composition.
 
 The stage selector opens a sheet containing Partners, Relationships and Opportunities as separate single-line rows. Choosing a row changes the hero scene. Close and backdrop dismissal return to the current scene. The featured-scene action scrolls to its corresponding complete workflow section. The prototype uses explicit screen-state navigation to simulate a sheet; it does not establish production focus trapping, Escape handling, native overlay behavior or gesture dismissal.
 
@@ -28,7 +30,7 @@ The three workflow sections retain their original copy, actions, complete record
 
 ## Evidence
 
-The preservation audit found no missing original workflow content at either width, excluding redundant cross-stage tab labels that are available in the hero sheet. Both Home artboards have 100 linked instances and no horizontal overflow or missing source references. All checked hero, scene and sheet control labels are single-line. Prototype destination wiring was structurally inspected; a real-device presentation session was not tested. See [audit.json](audit.json).
+The preservation audit found no missing original workflow content at either width, excluding redundant cross-stage tab labels that are available in the hero sheet. Both Home artboards have 95 linked instances and no horizontal overflow or missing source references after removing the demo controls. All eight hero compositions have equal-width horizontal buttons and no demo row. CTA hit areas match their resized buttons; stage-selector and section-scroll hits follow the moved scene. All checked hero, scene and sheet control labels are single-line. Prototype destination wiring was structurally inspected; a real-device presentation session was not tested. See [audit.json](audit.json).
 
 Visually inspected all three full workflow sections at 320 px, both hero widths, the open sheet, all three compact scenes at 320 px, and Dark/Solid plus Light/Dark Liquid Glass scenes against the source coast image. Dark glass renders more opaque than Light in the inherited source material; no renderer parity claim is made. Continuous frost, reduced transparency, enlarged text and real-browser accessibility remain implementation checks.
 

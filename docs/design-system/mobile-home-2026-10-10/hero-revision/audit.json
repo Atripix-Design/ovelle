@@ -6,16 +6,16 @@
     {
       "id": "182:2114",
       "width": 390,
-      "height": 7682,
-      "instances": 100,
+      "height": 7622,
+      "instances": 95,
       "unlinked": [],
       "overflow": []
     },
     {
       "id": "185:9144",
       "width": 320,
-      "height": 7936,
-      "instances": 100,
+      "height": 7876,
+      "instances": 95,
       "unlinked": [],
       "overflow": []
     }
@@ -23,12 +23,12 @@
   "heroControls": [
     {
       "id": "182:2115",
-      "labels": 6,
+      "labels": 5,
       "wrapped": []
     },
     {
       "id": "185:9145",
-      "labels": 6,
+      "labels": 5,
       "wrapped": []
     },
     {
@@ -291,5 +291,415 @@
   "limitations": [
     "Screen-state navigation simulates the sheet; no real browser focus or gesture verification.",
     "No new React implementation or parity claim."
-  ]
+  ],
+  "heroReferenceRevision": [
+    {
+      "id": "182:2115",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4180",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "182:2131",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "182:2132",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "185:9145",
+      "width": 320,
+      "height": 732,
+      "sceneY": 422,
+      "background": {
+        "id": "211:4181",
+        "y": 161.0399932861328,
+        "height": 570.9600219726562,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "185:9151",
+            "x": 0,
+            "width": 136,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "185:9152",
+            "x": 152,
+            "width": 136,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "188:9678",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4182",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "188:9684",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "188:9685",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3151",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4183",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3157",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3158",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3551",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4184",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3557",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3558",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3950",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4185",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3956",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3957",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:4058",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4186",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:4064",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:4065",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:4166",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4187",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:4172",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:4173",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    }
+  ],
+  "sourceReference": {
+    "path": "reference-generated.png",
+    "authorization": "User selected generated image as direct source for CTA layout and background positioning",
+    "backgroundAsset": "coastal-source.png",
+    "horizon": "Approximately 54.4% of hero height",
+    "cta": "Two equal linked Regular buttons, horizontal NO_WRAP, 16px gap; 163px at390, 136px at320",
+    "removed": "See Ovelle in action mobile row"
+  }
 }
