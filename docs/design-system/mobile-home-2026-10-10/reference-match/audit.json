@@ -1,0 +1,229 @@
+{
+  "sections": [
+    {
+      "id": "182:2188",
+      "text": [
+        "01 · Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams · Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment · 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring · 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community · 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "182:2244",
+      "text": [
+        "02 · Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer · Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday · 9:00–12:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "182:2300",
+      "text": [
+        "03 · Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up · Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday · 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    },
+    {
+      "id": "185:9163",
+      "text": [
+        "01 · Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams · Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment · 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring · 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community · 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "185:9164",
+      "text": [
+        "02 · Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer · Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday · 9:00–12:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "185:9165",
+      "text": [
+        "03 · Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up · Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday · 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    }
+  ],
+  "heroes": [
+    {
+      "id": "182:2115",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "185:9145",
+      "width": 320,
+      "height": 573.5384521484375,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "188:9678",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "202:3151",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "202:3551",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "202:3950",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "202:4058",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    },
+    {
+      "id": "202:4166",
+      "width": 390,
+      "height": 699,
+      "unlinked": [],
+      "demoText": []
+    }
+  ],
+  "volunteerAlignment": {
+    "regular": {
+      "textCenter": [
+        227,
+        82
+      ],
+      "dividerCenter": [
+        227,
+        82
+      ],
+      "nameHeight": 16
+    },
+    "compact": {
+      "textCenter": [
+        187,
+        65
+      ],
+      "dividerCenter": [
+        187,
+        65
+      ],
+      "nameHeight": 14
+    },
+    "materials": [
+      "Solid",
+      "Liquid Glass"
+    ]
+  },
+  "workflowWidthsHaveIdenticalContent": true
+}

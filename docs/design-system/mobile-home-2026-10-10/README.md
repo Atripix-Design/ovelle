@@ -1,3 +1,5 @@
+Current mobile hero: [direct reference match and alignment correction](reference-match/README.md). Earlier captures below remain historical evidence.
+
 # Mobile Home design
 
 Created October 10, 2026 using the approved three-section scroll plan. This is a native, editable Figma design; application implementation remains pending.

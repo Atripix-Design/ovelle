@@ -1,5 +1,7 @@
 # Compact mobile hero revision
 
+> Historical revision, superseded by the [direct reference match](../reference-match/README.md). The geometry and captures below describe the earlier state; use the new handoff and audit for current Figma geometry.
+
 Revised October 10, 2026 following the approved Cluely-inspired approach: compose a focused product scene for the phone, with complete information in the three ordinary-scroll workflow sections. The user then selected [the generated image](reference-generated.png) as the direct source for the button layout and background positioning. Captures below show the resulting native Figma design.
 
 - [390 px Home](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=182-2114)
