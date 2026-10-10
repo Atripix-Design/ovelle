@@ -1,0 +1,36 @@
+{
+  "sections": [
+    {
+      "id": "182:2490",
+      "w": 390,
+      "h": 440,
+      "platformLabels": [],
+      "missingSources": [],
+      "texts": [
+        "Get Ovelle on\nyour computer.",
+        "We’ll email you a download link to open on your computer.",
+        "Email address",
+        "you@example.com",
+        "We’ll only email you this download link.",
+        "Email me the link"
+      ]
+    },
+    {
+      "id": "185:9192",
+      "w": 320,
+      "h": 440,
+      "platformLabels": [],
+      "missingSources": [],
+      "texts": [
+        "Get Ovelle on\nyour computer.",
+        "We’ll email you a download link to open on your computer.",
+        "Email address",
+        "you@example.com",
+        "We’ll only email you this download link.",
+        "Email me the link"
+      ]
+    }
+  ],
+  "componentSet": "246:8205",
+  "stateReview": "248:4129"
+}
