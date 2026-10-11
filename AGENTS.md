@@ -1,5 +1,12 @@
 # Ovelle component system
 
+## Electron feature planning and rubric priorities
+
+- The next phase is a solid feature list driven by the topic's rubric. The user will provide planning documents to speed up implementation of the Electron application; use those documents and the rubric to prioritize features before implementation.
+- Treat code quality as a rubric priority: keep responsibilities decoupled, with clear boundaries between shared UI, application logic, data access and native Electron integrations.
+- Write useful comments that explain intent, non-obvious behavior and architectural decisions. Keep comments accurate as the code changes.
+- Do not invent rubric requirements before the user supplies them.
+
 ## Shared website and desktop UI
 
 - Use `@ovelle/ui` in both the website and Electron renderer. Keep shared component implementations in `packages/ui`; app-specific routing, data and native desktop integrations belong in their apps.
