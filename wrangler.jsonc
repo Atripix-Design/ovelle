@@ -3,7 +3,7 @@
   "name": "ovelle",
   "main": "src/cloudflare/worker.ts",
   "compatibility_date": "2026-10-06",
-  "workers_dev": true,
+  "workers_dev": false,
   "env": {
     "development": {
       "name": "ovelle-development",

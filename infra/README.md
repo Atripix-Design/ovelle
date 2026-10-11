@@ -4,7 +4,7 @@
 
 Configure account identifiers and credentials outside Git. GitHub Actions uses the `CLOUDFLARE_ACCOUNT_ID` repository variable and `CLOUDFLARE_API_TOKEN` repository secret. The token needs Account Settings Read, Workers Scripts Edit, Workers R2 Storage Edit and Zone Read/Workers Routes Edit for `ovelle.org`. Direct D1 inventory needs D1 Read; applying migrations separately needs D1 Edit.
 
-Wrangler owns Worker code, assets, domains and bindings. The workflow injects `R2_ACCOUNT_ID` as a Worker variable during deployment. For manual deployment, export `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, then use `node scripts/ci/deliver.mjs development` or `production` after building the website and desktop packages. Manual delivery uploads packages and deploys; it does not apply D1 migrations.
+Wrangler owns Worker code, assets, domains and bindings. Account-named `workers.dev` endpoints are disabled; application access and checks use the branded custom domains. The workflow injects `R2_ACCOUNT_ID` as a Worker variable during deployment. For manual deployment, export `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, then use `node scripts/ci/deliver.mjs development` or `production` after building the website and desktop packages. Manual delivery uploads packages and deploys; it does not apply D1 migrations.
 
 | Environment | Worker | D1 name | R2 bucket | Application domain |
 | --- | --- | --- | --- | --- |
