@@ -6,11 +6,14 @@ for (const branch of branches) {
   if (!['development', 'main'].includes(branch)) throw new Error('Expected development or main')
   const sha = execFileSync('gh', ['api', `repos/${repository}/git/ref/heads/${branch}`, '--jq', '.object.sha'], { encoding: 'utf8' }).trim()
   const runs = JSON.parse(execFileSync('gh', ['api', `repos/${repository}/actions/workflows/ci.yml/runs?head_sha=${sha}&per_page=100`], { encoding: 'utf8' })).workflow_runs
-  const successful = runs.find(run => run.conclusion === 'success')
-  if (!successful) throw new Error(`${branch} has no successful CI/CD run at its current SHA`)
-  const jobs = JSON.parse(execFileSync('gh', ['api', `repos/${repository}/actions/runs/${successful.id}/jobs?per_page=100`], { encoding: 'utf8' })).jobs
-  for (const name of ['build', 'typecheck', 'lint', 'Deploy application']) {
-    if (!jobs.some(job => job.name === name && job.conclusion === 'success')) throw new Error(`${branch} is missing successful ${name}`)
+  let delivered = false
+  for (const run of runs.filter(run => run.conclusion === 'success' && ['push', 'workflow_dispatch'].includes(run.event))) {
+    const jobs = JSON.parse(execFileSync('gh', ['api', `repos/${repository}/actions/runs/${run.id}/jobs?per_page=100`], { encoding: 'utf8' })).jobs
+    if (['build', 'typecheck', 'lint', 'Deploy application'].every(name => jobs.some(job => job.name === name && job.conclusion === 'success'))) {
+      delivered = true
+      break
+    }
   }
+  if (!delivered) throw new Error(`${branch} has no successful delivery run at its current SHA`)
   console.log(`${branch}: CI/CD verified at ${sha}`)
 }

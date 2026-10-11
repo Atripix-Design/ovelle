@@ -107,3 +107,21 @@ test('vendored CI components match their recorded reviewed source adaptations', 
     assert.equal(createHash('sha256').update(readFileSync(join(root, component.target))).digest('hex'), component.vendoredSha256)
   }
 })
+
+test('live verifier distinguishes successful PR checks from successful delivery', () => {
+  const dir = mkdtempSync(join(root, '.ci-monitor-test-'))
+  try {
+    const gh = join(dir, 'gh')
+    writeFileSync(gh, `#!/bin/sh
+case "$2" in
+  */git/ref/heads/*) printf '%s' aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ;;
+  */workflows/ci.yml/runs*) printf '%s' '{"workflow_runs":[{"id":1,"event":"pull_request","conclusion":"success"},{"id":2,"event":"push","conclusion":"success"}]}' ;;
+  */runs/2/jobs*) if [ "$TEST_DELIVERY_OK" = 1 ]; then printf '%s' '{"jobs":[{"name":"build","conclusion":"success"},{"name":"typecheck","conclusion":"success"},{"name":"lint","conclusion":"success"},{"name":"Deploy application","conclusion":"success"}]}'; else printf '%s' '{"jobs":[]}'; fi ;;
+  *) exit 1 ;;
+esac
+`); chmodSync(gh, 0o755)
+    const run = success => spawnSync(node, ['scripts/verify-ci-live.mjs', 'development'], { cwd: root, encoding: 'utf8', env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, TEST_DELIVERY_OK: success ? '1' : '0' } })
+    const valid = run(true); assert.equal(valid.status, 0, valid.stderr)
+    assert.notEqual(run(false).status, 0)
+  } finally { rmSync(dir, { recursive: true, force: true }) }
+})
