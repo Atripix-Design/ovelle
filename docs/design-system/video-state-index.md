@@ -1,8 +1,8 @@
 # Ovelle component walkthrough — recorded coverage
 
-Final video: `/home/jeremy-mathew/Videos/ovelle-walkthrough/ovelle-component-walkthrough.mp4` (14:15.87, H.264, 1440 × 900, 30 fps, no audio).
+Final video: `ovelle-component-walkthrough.mp4` (stored outside Git) (14:15.87, H.264, 1440 × 900, 30 fps, no audio).
 
-Recorded 2026-10-09 from actual shared React components. The dedicated fixture is available at `http://100.114.150.83:5174/components?walkthrough`; the built desktop renderer uses `http://100.114.150.83:5175/?components&walkthrough`. Both consumers were independently checked. The video demonstrates browser UI, not Electron native integrations.
+Recorded 2026-10-09 from actual shared React components. The dedicated fixture is available at `http://127.0.0.1:5174/components?walkthrough`; the built desktop renderer uses `http://127.0.0.1:5175/?components&walkthrough`. Both consumers were independently checked. The video demonstrates browser UI, not Electron native integrations.
 
 ## Chapters
 
@@ -38,7 +38,7 @@ A complete human visual watch of the assembled video at normal speed remains unv
 
 The initial LoadingBoundary pseudo-element motion probe inspected a hidden `::after`; those base clip events are not evidence of visible reduced motion. The final verified motion comparison instead inspects `.ov-skeleton-map`, asserts pulse/none and adds visible captions.
 
-Persistent source clips, render report and QA frames: `/home/jeremy-mathew/Videos/ovelle-walkthrough/`.
+Persistent source clips, render report and QA frames: the external recording output directory.
 
 ## Re-recording
 

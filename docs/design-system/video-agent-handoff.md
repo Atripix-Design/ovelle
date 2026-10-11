@@ -4,15 +4,15 @@
 
 Create a polished video showing every Ovelle public component, its real interactions and all meaningful associated states. The user explicitly requested a separate agent solely focused on the video. Do not redesign components, regenerate Figma, create skeleton sheets or broadly refactor code. Report a discovered component bug before relying on it in a recording. Small reversible demo-fixture corrections needed for truthful interaction are permitted.
 
-Load `/home/jeremy-mathew/.codex/skills/video-creator/SKILL.md` and its references before recording. Follow repository AGENTS.md and the publishing instructions for any repository changes. Deliver the final playable video with an absolute local path, plus a timestamped chapter/state index. Do not merely supply a script or still screenshots.
+Load `the installed `video-creator` skill` and its references before recording. Follow repository AGENTS.md and the publishing instructions for any repository changes. Deliver the final playable video with an absolute local path, plus a timestamped chapter/state index. Do not merely supply a script or still screenshots.
 
 ## Repository and runnable previews
 
-Workspace: `/home/jeremy-mathew/Documents/GitHub/ovelle`; shared implementations: `packages/ui`; shared demo: `apps/shared/ComponentPreview.tsx`, `FidelityVariants.tsx`, `LoadingPreview.tsx`.
+Workspace: `the repository root`; shared implementations: `packages/ui`; shared demo: `apps/shared/ComponentPreview.tsx`, `FidelityVariants.tsx`, `LoadingPreview.tsx`.
 
-Website: `http://100.114.150.83:5174/components`
+Website: `http://127.0.0.1:5174/components`
 
-Built desktop renderer: `http://100.114.150.83:5175/?components`
+Built desktop renderer: `http://127.0.0.1:5175/?components`
 
 Confirm HTTP success before sharing a URL. Restart if needed:
 

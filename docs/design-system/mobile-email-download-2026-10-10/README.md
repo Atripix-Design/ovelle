@@ -25,4 +25,4 @@ Visually inspected the actual 390 px Home section beside its FAQ and footer, the
 
 Structural audit: no OS-choice labels and no missing source references in either live mobile download section. See audit.json.
 
-Existing component regression passed: 21 source dimensions, action geometry/typography/states, Select/Dialog keyboard/focus, 96 exact SVGs, and SVG geometry across 12 theme/material/frost settings. The first run was blocked because the gallery was stopped; restarting the unchanged gallery resolved it. Preview verified HTTP 200: http://100.114.150.83:5174/components. This is the existing component gallery, not an implemented email flow.
+Existing component regression passed: 21 source dimensions, action geometry/typography/states, Select/Dialog keyboard/focus, 96 exact SVGs, and SVG geometry across 12 theme/material/frost settings. The first run was blocked because the gallery was stopped; restarting the unchanged gallery resolved it. Preview verified HTTP 200: http://127.0.0.1:5174/components. This is the existing component gallery, not an implemented email flow.

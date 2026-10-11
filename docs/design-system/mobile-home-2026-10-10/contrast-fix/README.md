@@ -13,4 +13,4 @@ Desktop and all eight mobile hero compositions now use the existing dark navy pr
 
 Inspected native Figma renders at 1440×920 and 390×699. No dimensions, positions, typography or image fills were edited. Public controls and scene instances retain their source links. Temporary capture frames were removed.
 
-Existing React gallery regression passed: 21 source dimensions, action geometry/typography/states, Select/Dialog keyboard/focus, 96 exact SVGs, and native SVG geometry across 12 theme/material/frost settings. Gallery verified HTTP 200 at http://100.114.150.83:5174/components. These checks do not establish production mobile Home parity. This correction is Figma-only; browser/Electron implementation remains separate.
+Existing React gallery regression passed: 21 source dimensions, action geometry/typography/states, Select/Dialog keyboard/focus, 96 exact SVGs, and native SVG geometry across 12 theme/material/frost settings. Gallery verified HTTP 200 at http://127.0.0.1:5174/components. These checks do not establish production mobile Home parity. This correction is Figma-only; browser/Electron implementation remains separate.

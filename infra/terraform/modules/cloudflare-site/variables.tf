@@ -1,5 +1,5 @@
 variable "cloudflare_account_id" {
-  description = "Personal Cloudflare account that owns Ovelle resources."
+  description = "Cloudflare account that owns the application resources."
   type        = string
 }
 

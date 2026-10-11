@@ -1,6 +1,5 @@
 import { execFileSync } from 'node:child_process'
 import { closeSync, existsSync, openSync, readFileSync, readSync, readdirSync, statSync } from 'node:fs'
-import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
@@ -18,10 +17,22 @@ for (const name of existsSync(workflowDir) ? readdirSync(workflowDir) : []) {
   }
 }
 
-for (const [branch, environment] of [['development', 'development'], ['main', 'production']]) {
+const mode = process.argv[2]
+if (mode && !['local', 'development', 'production'].includes(mode)) throw new Error('Expected local, development or production')
+const releaseDir = resolve(process.env.OVELLE_RELEASE_DIR || 'release/desktop')
+const environments = mode === 'local' ? ['local'] : mode ? [mode] : ['development', 'production']
+for (const environment of environments) {
+  if (environment !== 'local') {
+    const base = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
+    const response = await fetch(`${base}/health`, { signal: AbortSignal.timeout(15000) })
+    const health = await response.json()
+    if (!response.ok || health.application !== 'ovelle' || health.environment !== environment || health.database !== true) {
+      throw new Error(`${environment} Worker health or D1 binding did not verify`)
+    }
+  }
   const cdnHost = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
   for (const filename of filenames) {
-    const path = join(homedir(), '.local/state/ovelle-ci/releases', branch, filename)
+    const path = join(releaseDir, filename)
     const size = statSync(path).size
     if (size < 1_000_000 || size > 300 * 1024 * 1024) throw new Error(`Unexpected package size: ${path}`)
     const descriptor = openSync(path, 'r')
@@ -34,6 +45,8 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
       const entries = execFileSync('unzip', ['-Z', '-1', path], { encoding: 'utf8' })
       if (!entries.includes('Ovelle.app/Contents/MacOS/Ovelle')) throw new Error(`Missing macOS executable: ${path}`)
     }
+    if (environment === 'local') continue
+    const base = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
     const cdnUrl = `https://${cdnHost}/releases/desktop/${filename}?v=${Date.now()}`
     const metadata = await fetch(cdnUrl, { method: 'HEAD' })
     if (!metadata.ok || !metadata.headers.get('cache-control')?.includes('no-store')) {
@@ -49,16 +62,18 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
     if (cdnHeader !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
       throw new Error(`${cdnHost} served an invalid package header: ${filename}`)
     }
-    const response = await fetch(`https://ovelle-${environment}.jeremymathew100.workers.dev/downloads/${filename}`, { method: 'HEAD' })
+    const response = await fetch(`${base}/downloads/${filename}`, { method: 'HEAD' })
     if (!response.ok || Number(response.headers.get('content-length')) !== size) {
       throw new Error(`${environment} download mismatch: ${filename}`)
     }
-    const redirect = await fetch(`https://ovelle-${environment}.jeremymathew100.workers.dev/downloads/${filename}`, {
+    const redirect = await fetch(`${base}/downloads/${filename}`, {
       redirect: 'manual',
     })
     if (redirect.status === 302) {
       const signed = new URL(redirect.headers.get('location') ?? 'https://invalid.example')
-      if (signed.hostname !== '83952a1be987e4a12647732861a60925.r2.cloudflarestorage.com' ||
+      const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+      if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID is required to verify signed downloads')
+      if (signed.hostname !== `${accountId}.r2.cloudflarestorage.com` ||
           signed.pathname !== `/ovelle-storage-${environment}/releases/desktop/${filename}` ||
           signed.searchParams.get('X-Amz-Algorithm') !== 'AWS4-HMAC-SHA256' ||
           Number(signed.searchParams.get('X-Amz-Expires')) > 300) {
@@ -75,4 +90,4 @@ for (const [branch, environment] of [['development', 'development'], ['main', 'p
     await redirect.body?.cancel()
   }
 }
-console.log('ovelle desktop releases verified')
+console.log(`ovelle desktop releases verified: ${environments.join(', ')}`)

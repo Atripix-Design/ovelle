@@ -1,8 +1,9 @@
-name: Ovelle checks
+name: Ovelle CI/CD
 
 on:
   pull_request:
   push:
+    branches: [development, main]
   workflow_dispatch:
     inputs:
       force_hosted: { type: boolean, default: false }
@@ -37,13 +38,14 @@ jobs:
     name: build
     needs: route
     runs-on: ${{ fromJSON(needs.route.outputs.slot_1) }}
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-node@v4
+      - uses: Atripix-Design/ci-infrastructure/actions/setup-node-adaptive@9d96739889abafddf80bb8a546df0da7568199c6
         with:
           node-version: 22
           cache: npm
@@ -54,13 +56,14 @@ jobs:
     name: typecheck
     needs: route
     runs-on: ${{ fromJSON(needs.route.outputs.slot_2) }}
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-node@v4
+      - uses: Atripix-Design/ci-infrastructure/actions/setup-node-adaptive@9d96739889abafddf80bb8a546df0da7568199c6
         with:
           node-version: 22
           cache: npm
@@ -68,18 +71,21 @@ jobs:
       - run: npm run build -w @ovelle/ui
       - run: npm run check
       - run: npm run check:download-email
+      - run: node scripts/check-repository-privacy.mjs
+      - run: npm run check:ci
 
   lint:
     name: lint
     needs: route
     runs-on: ${{ fromJSON(needs.route.outputs.slot_3) }}
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-node@v4
+      - uses: Atripix-Design/ci-infrastructure/actions/setup-node-adaptive@9d96739889abafddf80bb8a546df0da7568199c6
         with:
           node-version: 22
           cache: npm
@@ -107,3 +113,76 @@ jobs:
           source-ref: ${{ inputs.source_ref || github.event.pull_request.head.ref || github.ref }}
           pull-request-number: ${{ inputs.pull_request_number || github.event.pull_request.number || '' }}
           pull-request-base: ${{ inputs.pull_request_base || github.event.pull_request.base.ref || '' }}
+
+  # Publishing and secret-bearing work stay hosted under the platform contract.
+  deploy:
+    name: Deploy application
+    needs: [build, typecheck, lint]
+    if: >-
+      ${{ github.actor != 'dependabot[bot]' &&
+        (inputs.source_event || github.event_name) == 'push' &&
+        ((inputs.source_ref || github.ref) == 'refs/heads/development' ||
+         (inputs.source_ref || github.ref) == 'refs/heads/main') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    environment: ${{ (inputs.source_ref || github.ref) == 'refs/heads/main' && 'production' || 'development' }}
+    concurrency:
+      group: delivery-${{ inputs.source_ref || github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Verify current branch source
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DELIVERY_SOURCE_EVENT: ${{ inputs.source_event || github.event_name }}
+          DELIVERY_SOURCE_SHA: ${{ inputs.source_sha || github.sha }}
+          DELIVERY_SOURCE_REF: ${{ inputs.source_ref || github.ref }}
+        run: node scripts/ci/verify-delivery-source.mjs
+      - run: npm ci
+      - run: npm run build -w @ovelle/ui
+      - name: Package desktop applications
+        env:
+          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
+        run: npm run package:all -w @ovelle/desktop
+      - name: Verify local packages
+        env:
+          OVELLE_RELEASE_DIR: release/desktop
+        run: node scripts/verify-desktop-releases.mjs local
+      - name: Build website
+        env:
+          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
+          APP_ENV: ${{ steps.source.outputs.environment }}
+        run: |
+          if [ "$APP_ENV" = development ]; then
+            npm run build:development -w @ovelle/web
+          else
+            npm run build -w @ovelle/web
+          fi
+      - name: Recheck branch before publishing
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DELIVERY_SOURCE_EVENT: ${{ inputs.source_event || github.event_name }}
+          DELIVERY_SOURCE_SHA: ${{ inputs.source_sha || github.sha }}
+          DELIVERY_SOURCE_REF: ${{ inputs.source_ref || github.ref }}
+        run: node scripts/ci/verify-delivery-source.mjs
+      - name: Upload packages and deploy Worker
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          APP_ENV: ${{ steps.source.outputs.environment }}
+        run: node scripts/ci/deliver.mjs "$APP_ENV"
+      - name: Verify deployed downloads
+        env:
+          OVELLE_RELEASE_DIR: release/desktop
+          APP_ENV: ${{ steps.source.outputs.environment }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/verify-desktop-releases.mjs "$APP_ENV"

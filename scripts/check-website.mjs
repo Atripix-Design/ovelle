@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
-const base = process.env.OVELLE_WEBSITE_URL || 'http://100.114.150.83:5174';
+const base = process.env.OVELLE_WEBSITE_URL || 'http://127.0.0.1:5174';
 const output = process.env.OVELLE_WEBSITE_OUTPUT || '/tmp/ovelle-website';
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();

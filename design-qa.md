@@ -21,7 +21,7 @@ No remaining actionable P0/P1/P2 findings in the inspected native mobile composi
 
 **Evidence and normalization**
 
-- Visual truth: /home/jeremy-mathew/.codex/attachments/ebbb5751-f8d2-4143-a83c-f6738de63557/codex-clipboard-a2861204-1d0f-42f8-b4ac-ab0dfad7b958.png.
+- Visual truth: the user-supplied reference board (external attachment; not committed).
 - Source: 1536×1024 board; closed crop (239,78)–(719,938), open crop (818,78)–(1298,938), each 480×860. Normalize by 390/480 to 390×699.
 - Implementation: docs/design-system/mobile-home-2026-10-10/reference-match/implementation-closed.png and implementation-open.png, 390×699, Light, Partners selected; implementation-320.png is 320×574.
 - CSS size/deviceScaleFactor: not applicable to native Figma. Figma exports use one pixel per design unit; source density normalized as above. Board captions and surrounding whitespace excluded.

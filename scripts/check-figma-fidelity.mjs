@@ -30,7 +30,7 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
 const errors = []; page.on('pageerror', error => errors.push(error.message));
 try {
-  await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://100.114.150.83:5174/components');
+  await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://127.0.0.1:5174/components');
   await page.evaluate(() => document.fonts.ready);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.mouse.move(0, 0);

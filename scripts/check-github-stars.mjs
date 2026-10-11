@@ -8,7 +8,7 @@ const browser = await chromium.launch();
 const api = 'https://api.github.com/repos/Atripix-Design/ovelle';
 const audit = [];
 try {
-  for (const [consumer, base] of [['web', 'http://100.114.150.83:5174'], ['desktop', 'http://100.114.150.83:5175']]) {
+  for (const [consumer, base] of [['web', process.env.OVELLE_WEBSITE_URL || 'http://127.0.0.1:5174'], ['desktop', process.env.OVELLE_DESKTOP_WEBSITE_URL || 'http://127.0.0.1:5175']]) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     let calls = 0, release;

@@ -38,7 +38,7 @@ Both consumers passed fidelity checks for 31 public families, independent websit
 
 ## Development deployment and email
 
-Deployed [dev.ovelle.org](https://dev.ovelle.org) and [the development Worker](https://ovelle-development.jeremymathew100.workers.dev), version `95a6ee83-af92-45ec-8584-aeb42da28bd4`.
+Deployed [dev.ovelle.org](https://dev.ovelle.org) and [the development Worker](https://dev.ovelle.org), version `95a6ee83-af92-45ec-8584-aeb42da28bd4`.
 
 | Binding | Development resource |
 | --- | --- |
@@ -61,4 +61,4 @@ SPF/DKIM configuration and real delivery are verified; the Outlook connector doe
 
 The development endpoint validates same-origin JSON and bounded request/email lengths, acknowledges provider delivery acceptance, and stores only hashed recipient/IP quota keys. D1 enforces atomic limits of three messages per recipient and five per IP per hour. Error responses retain the email for retry. It creates no account or subscription.
 
-For a fresh checkout, build `@ovelle/ui` before consumer builds. `npm run cf:deploy:dev` now does this automatically. Apply migrations with `npx wrangler d1 migrations apply DB --env development --remote` before deploying a fresh database. Run `npm run check:download-email` for validation/quota regressions. Run fidelity/loading/website checks against the web preview and desktop renderer (`OVELLE_PREVIEW_URL=http://100.114.150.83:5175/?components`, `OVELLE_WEBSITE_URL=http://100.114.150.83:5175`). The verified website preview is [http://100.114.150.83:5174](http://100.114.150.83:5174).
+For a fresh checkout, build `@ovelle/ui` before consumer builds. `npm run cf:deploy:dev` now does this automatically. Apply migrations with `npx wrangler d1 migrations apply DB --env development --remote` before deploying a fresh database. Run `npm run check:download-email` for validation/quota regressions. Run fidelity/loading/website checks against the web preview and desktop renderer (`OVELLE_PREVIEW_URL=http://127.0.0.1:5175/?components`, `OVELLE_WEBSITE_URL=http://127.0.0.1:5175`). The verified website preview is [http://127.0.0.1:5174](http://127.0.0.1:5174).

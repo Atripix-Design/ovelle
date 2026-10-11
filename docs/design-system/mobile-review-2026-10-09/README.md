@@ -105,4 +105,4 @@ All captures were retrieved in this review. Source images are reference evidence
 - [Live phone-width fields](captures/web-fields-390.png), [segments at 390px](captures/web-segments-390.png), [segments at 320px](captures/web-segments-320.png), and [pagination](captures/web-pagination-390.png)
 - Measurements: [gallery](captures/viewport-metrics.json), [walkthrough](captures/walkthrough-metrics.json)
 
-Preview verified to return HTTP 200: http://100.114.150.83:5174/components. It shows the existing library, not the proposed mobile Home.
+Preview verified to return HTTP 200: http://127.0.0.1:5174/components. It shows the existing library, not the proposed mobile Home.

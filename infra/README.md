@@ -1,69 +1,57 @@
 # Ovelle infrastructure operations
 
-## Resource ownership
+## Configuration and resources
 
-The personal Cloudflare account is `jeremymathew100` (`83952a1be987e4a12647732861a60925`), including the `ovelle.org` zone. The Atripix GitHub repository remains the CI/CD source. Keep the Worker names, D1 IDs, and R2 bucket names in `wrangler.jsonc` aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
+Configure account identifiers and credentials outside Git. GitHub Actions uses the `CLOUDFLARE_ACCOUNT_ID` repository variable and `CLOUDFLARE_API_TOKEN` repository secret. The token needs Account Settings Read, Workers Scripts Edit, Workers R2 Storage Edit and Zone Read/Workers Routes Edit for `ovelle.org`. Direct D1 inventory needs D1 Read; applying migrations separately needs D1 Edit.
 
-| Environment | Worker | D1 name and ID | R2 bucket |
-| --- | --- | --- | --- |
-| Development | `ovelle-development` | `ovelle-db-development`, `d5d4e909-cac1-4ce4-ad56-888cdb24a05a` | `ovelle-storage-development` |
-| Production | `ovelle-production` | `ovelle-db-production`, `03263655-7eca-4586-a46f-9e502d52675b` | `ovelle-storage-production` |
+Wrangler owns Worker code, assets, domains and bindings. The workflow injects `R2_ACCOUNT_ID` as a Worker variable during deployment. For manual deployment, export `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN`, then use `node scripts/ci/deliver.mjs development` or `production` after building the website and desktop packages. Manual delivery uploads packages and deploys; it does not apply D1 migrations.
 
-Wrangler owns Worker code, static assets, custom domains, and bindings. The ubuntu-box service uses the isolated personal Cloudflare OAuth login in `~/.config/ovelle-auth-flow/.wrangler`; the service sets `XDG_CONFIG_HOME` and `CLOUDFLARE_ACCOUNT_ID`. No Cloudflare token is committed to Git or put inside the build container. Refresh this isolated login if delivery reports an authentication failure.
+| Environment | Worker | D1 name | R2 bucket | Application domain |
+| --- | --- | --- | --- | --- |
+| Development | `ovelle-development` | `ovelle-db-development` | `ovelle-storage-development` | `dev.ovelle.org` |
+| Production | `ovelle-production` | `ovelle-db-production` | `ovelle-storage-production` | `ovelle.org` |
 
-## Desktop download signing
+Keep resource bindings in `wrangler.jsonc` aligned with live resources. Never recreate a missing database or bucket without inventorying the account first.
 
-The desktop files are uploaded from ubuntu-box to each environment's R2 bucket with `Content-Disposition: attachment` and `Cache-Control: no-store`. The public site links directly to that bucket's R2 custom domain: `cdn.dev.ovelle.org` for development and `cdn.ovelle.org` for production. Download paths are `/releases/desktop/<filename>?v=<deployment SHA>`, which bypasses copies cached before `no-store` was applied. R2 handles range requests so browsers can resume interrupted downloads. The application Worker's legacy `/downloads/` route remains available; it streams from R2 or issues a five-minute presigned `GET` URL when signing credentials are installed.
+## Desktop downloads
 
-Create a personal-account **R2 Object Read** API token limited to `ovelle-storage-development` and `ovelle-storage-production`. Store its Access Key ID and Secret Access Key as `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` secrets on each application Worker in the Cloudflare dashboard. The credentials do not need to be stored on ubuntu-box. Alternatively, from an interactive ubuntu-box terminal, run `bash scripts/ci/install-r2-signing-secrets.sh`; it verifies a one-byte ranged GET from both buckets and writes the values directly into the four Worker secrets without recording them in shell history. Keep the values out of Git and CI logs. The existing Wrangler OAuth token can upload objects but cannot create R2 S3 signing keys. The host verification accepts either a valid streamed download or a redirect with a one-byte ranged GET through the signed URL.
+Delivery uploads packages directly to R2 with `Content-Disposition: attachment` and `Cache-Control: no-store`. The site links to `cdn.dev.ovelle.org` or `cdn.ovelle.org`, with a deployment SHA query parameter. R2 supports range requests. The Worker's legacy `/downloads/` route streams from R2 or returns a five-minute presigned URL when signing credentials are installed.
 
-## Custom domains
-
-`dev.ovelle.org` is the custom domain of `ovelle-development`; `ovelle.org` is the custom domain of `ovelle-production`. Both the zone and Workers belong to `jeremymathew100`. The temporary bridge used during migration has been removed.
+Optional download-signing credentials are separate from the deployment API token. Create an **R2 Object Read** key limited to the two application buckets and store `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` as Worker secrets. With `CLOUDFLARE_ACCOUNT_ID` configured, `bash scripts/ci/install-r2-signing-secrets.sh` reads the keys interactively, verifies ranged downloads and writes both environments' Worker secrets. Keep values out of Git and CI logs.
 
 ## Terraform adoption
 
 `infra/terraform/envs/development` and `infra/terraform/envs/production` follow the business-site layout. Terraform declares the durable D1 database and R2 bucket in each environment and reads the matching R2 custom domain as a data source. Wrangler owns the CDN domain connections and the Worker builds, deployment, assets, bindings, and secrets. The live D1 databases have read replication disabled, as declared in the module.
 
-The configurations name HCP Terraform workspaces `ovelle-development` and `ovelle-production` for separate remote state. **The live resources have not yet been imported into Terraform state.** Do not run `terraform apply` against empty state: that would try to create resources with names that already exist. The two CDN domains were attached to the existing buckets through Wrangler. The Cloudflare provider cannot import an R2 custom-domain resource, so Terraform reads those connections instead of owning them. Before adoption, create and authenticate the two HCP workspaces with local execution and a personal-account Cloudflare API token, then import the exact live IDs below into the matching environment. Follow the import-first procedure in the Atripix Terraform websites skill, check state addresses individually so retries are safe, and require a post-import plan of exactly `0 to add, 0 to change, 0 to destroy` before treating Terraform as the live owner. Production adoption also needs a D1 Time Travel bookmark and owner approval.
+The configurations name HCP Terraform workspaces `ovelle-development` and `ovelle-production` for separate remote state. **The live resources have not yet been imported into Terraform state.** Do not run `terraform apply` against empty state: that would try to create resources with names that already exist. The two CDN domains were attached to the existing buckets through Wrangler. The Cloudflare provider cannot import an R2 custom-domain resource, so Terraform reads those connections instead of owning them. Before adoption, create and authenticate the two HCP workspaces with local execution and a scoped Cloudflare API token, then import the exact live IDs below into the matching environment. Follow the import-first procedure in the Atripix Terraform websites skill, check state addresses individually so retries are safe, and require a post-import plan of exactly `0 to add, 0 to change, 0 to destroy` before treating Terraform as the live owner. Production adoption also needs a D1 Time Travel bookmark and owner approval.
 
 | Environment | Terraform address | Existing import ID |
 | --- | --- | --- |
-| Development | `module.site.cloudflare_d1_database.app` | `83952a1be987e4a12647732861a60925/d5d4e909-cac1-4ce4-ad56-888cdb24a05a` |
-| Development | `module.site.cloudflare_r2_bucket.storage` | `83952a1be987e4a12647732861a60925/ovelle-storage-development/default` |
-| Production | `module.site.cloudflare_d1_database.app` | `83952a1be987e4a12647732861a60925/03263655-7eca-4586-a46f-9e502d52675b` |
-| Production | `module.site.cloudflare_r2_bucket.storage` | `83952a1be987e4a12647732861a60925/ovelle-storage-production/default` |
+| Development | `module.site.cloudflare_d1_database.app` | `<account-id>/d5d4e909-cac1-4ce4-ad56-888cdb24a05a` |
+| Development | `module.site.cloudflare_r2_bucket.storage` | `<account-id>/ovelle-storage-development/default` |
+| Production | `module.site.cloudflare_d1_database.app` | `<account-id>/03263655-7eca-4586-a46f-9e502d52675b` |
+| Production | `module.site.cloudflare_r2_bucket.storage` | `<account-id>/ovelle-storage-production/default` |
 
-## Host service
+## Custom CI/CD
 
-The host uses Docker for an isolated Node 22 build and a user systemd timer for polling. It needs `git`, `gh`, Docker, Node 22+, an authenticated `gh` CLI, and Wrangler authentication to the personal Cloudflare account. The user must have Docker access and systemd lingering enabled. Build containers receive only the temporary checkout and task-specific npm/Electron caches; they do not receive the host's SSH key, Cloudflare OAuth config, GitHub token, Docker socket, or other home directories.
+The only delivery pipeline is `.github/workflows/ci.yml`. Atripix's selector routes three non-secret check lanes; the hosted fallback preserves the original source SHA and prevents replay loops. Forks and Dependabot stay hosted. The selector and failure replay use the reviewed no-watchdog revision `57557facab9b8fa6404a874c122d39845f0cbd50`. The adaptive Node action uses reviewed revision `9d96739889abafddf80bb8a546df0da7568199c6`, also used by Atripix consumers; the no-watchdog revision omitted that action, so its existing implementation is pinned separately. No queue watchdog is used.
 
-From the repository on ubuntu-box:
-
-```bash
-docker build -t ovelle-ci-builder:node22 -f scripts/ci/Dockerfile .
-mkdir -p ~/.config/systemd/user
-cp infra/systemd/ovelle-ci.service infra/systemd/ovelle-ci.timer ~/.config/systemd/user/
-systemctl --user daemon-reload
-systemctl --user enable --now ovelle-ci.timer
-systemctl --user start ovelle-ci.service
-```
-
-The service runs `scripts/ci/host-ci.mjs`. It clones the exact remote SHA for each branch, runs `npm ci`, typechecks, lint, production builds, and all three desktop packages inside Docker, then uploads packages to R2 and deploys the matching Worker on the host. It verifies the Worker health and download headers before marking the commit successful. A failed branch remains eligible for the next timer run. Successful SHAs and local release copies are stored in `~/.local/state/ovelle-ci/`.
+After all checks pass, trusted application-branch pushes package and publish on hosted runners. Provider credentials are supplied only to the publish step. The hosted job creates no GitHub release or artifact. It verifies local archives before uploading, rechecks the source SHA before publishing, and verifies ranged CDN downloads afterward. Branch protection requires the `build`, `typecheck` and `lint` checks before promotion to `main`.
 
 Check operation:
 
 ```bash
-systemctl --user status ovelle-ci.timer ovelle-ci.service
-journalctl --user -u ovelle-ci.service -n 100 --no-pager
+node scripts/check-repository-privacy.mjs
+node scripts/verify-ci-live.mjs development
 node scripts/verify-cloudflare-live.mjs workers
 node scripts/verify-cloudflare-live.mjs resources
-node scripts/verify-ci-live.mjs
-node scripts/verify-desktop-releases.mjs
+OVELLE_RELEASE_DIR=release/desktop node scripts/verify-desktop-releases.mjs local
 ```
 
-To retry immediately, run `systemctl --user start ovelle-ci.service`. To rebuild the image after changing `scripts/ci/Dockerfile`, run `docker build` again before retrying. Keep `development` as the integration branch and promote it to protected `main` through a pull request. Do not place desktop packages in GitHub Actions artifacts or Releases.
+Use `node scripts/verify-ci-live.mjs main` after source is promoted to production. To verify published downloads against locally built packages, pass `development` or `production` to `verify-desktop-releases.mjs`; signed redirects also require `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Recovery
 
-If a Worker deployment fails, inspect the user journal and `npx wrangler whoami` in this repository. The timer retries a branch whose SHA is not in its successful state file. Restore a Worker by rerunning the host service after fixing the cause; it rebuilds from the exact remote commit. If R2 upload fails, the service stops before Worker deployment and retries the upload on the next run. The most recent successful desktop packages also remain in the branch-specific local release directory. D1 databases are separate from Worker deployments and are not recreated or overwritten by this pipeline.
+Inspect the failed workflow job in GitHub Actions. Rerun it if the source still matches the branch head, or push a corrective commit. Upload failures stop delivery before Worker deployment. A Worker deployment failure can leave the previous application version active; R2 downloads retain their existing versioned names. D1 databases are not recreated or migrated by delivery. Apply reviewed migrations separately before deploying source that requires them.
+
+For local/manual tooling, provide credentials through environment variables. Set `TF_VAR_cloudflare_account_id` for Terraform; do not commit account identifiers or tokens in variable files. Terraform adoption still requires the import-first checks above.

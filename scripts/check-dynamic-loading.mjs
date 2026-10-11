@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
 try {
- await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://100.114.150.83:5174/components');
+ await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://127.0.0.1:5174/components');
  const demo=page.locator('.preview-loading'), content=demo.locator('.preview-dynamic-layout'), input=demo.getByLabel('Workspace name');
  await input.fill('Persisted input'); const original=await input.elementHandle();
  for(const width of [1440,390]) {

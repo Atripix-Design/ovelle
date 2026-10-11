@@ -1,7 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
-import { homedir } from 'node:os'
-import { join, resolve } from 'node:path'
+import { resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '..')
 const config = JSON.parse(readFileSync(resolve(root, 'wrangler.jsonc'), 'utf8'))
@@ -11,7 +10,7 @@ if (mode !== 'workers' && mode !== 'resources') throw new Error('Expected worker
 
 if (mode === 'workers') {
   for (const environment of expected) {
-    const base = `https://ovelle-${environment}.jeremymathew100.workers.dev`
+    const base = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
     const healthResponse = await fetch(`${base}/health`)
     if (!healthResponse.ok) throw new Error(`${environment} health returned ${healthResponse.status}`)
     const health = await healthResponse.json()
@@ -32,11 +31,11 @@ if (mode === 'workers') {
   }
   console.log('ovelle workers verified')
 } else {
-  if (config.account_id !== '83952a1be987e4a12647732861a60925') throw new Error('Wrong Cloudflare account')
+  const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+  if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID is required')
   const wranglerEnvironment = {
     ...process.env,
-    XDG_CONFIG_HOME: join(homedir(), '.config/ovelle-auth-flow'),
-    CLOUDFLARE_ACCOUNT_ID: config.account_id,
+    CLOUDFLARE_ACCOUNT_ID: accountId,
   }
   const d1 = JSON.parse(execFileSync(resolve(root, 'node_modules/.bin/wrangler'), ['d1', 'list', '--json'], { cwd: root, encoding: 'utf8', env: wranglerEnvironment }))
   const buckets = execFileSync(resolve(root, 'node_modules/.bin/wrangler'), ['r2', 'bucket', 'list'], { cwd: root, encoding: 'utf8', env: wranglerEnvironment })

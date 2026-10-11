@@ -46,4 +46,4 @@ Inspected workflow-320.png, workflow-390.png, connected-320.png, connected-390.p
 
 Existing React regression checks passed in both consumers: scripts/check-figma-fidelity.mjs and scripts/check-dynamic-loading.mjs. These verify the current 21 implemented families, 96 exact SVG assets, loaded/skeleton retention and inert controls, themes/materials and keyboard behavior; they do not prove parity for these Figma-only additions.
 
-HTTP 200 verified for the existing gallery at http://100.114.150.83:5174/components and desktop renderer at http://100.114.150.83:5175/?components. These previews contain the existing component gallery, not the new mobile Home.
+HTTP 200 verified for the existing gallery at http://127.0.0.1:5174/components and desktop renderer at http://127.0.0.1:5175/?components. These previews contain the existing component gallery, not the new mobile Home.

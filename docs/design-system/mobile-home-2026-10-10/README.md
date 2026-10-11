@@ -63,7 +63,7 @@ Platform choices navigate to phone-sized scroll screens: macOS `189:3204`, Windo
 - Real iOS/Android, browser chrome, safe areas, keyboard behavior, enlarged text and measured contrast were not tested in this Figma deliverable. The long page preserves discoverability of all essential information.
 - The original third FAQ answer says “all platforms,” while download guidance names desktop builds. The source wording is preserved; reconcile the product claim before website publication.
 
-Existing library preview verified HTTP 200: http://100.114.150.83:5174/components. It displays the shared gallery; the new Home design is in Figma.
+Existing library preview verified HTTP 200: http://127.0.0.1:5174/components. It displays the shared gallery; the new Home design is in Figma.
 
 ## Accepted captures
 

@@ -7,7 +7,7 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
 const audit = [];
 try {
-  for (const [consumer, url] of [['web', 'http://100.114.150.83:5174/components'], ['desktop', 'http://100.114.150.83:5175/?components']]) {
+  for (const [consumer, url] of [['web', process.env.OVELLE_PREVIEW_URL || 'http://127.0.0.1:5174/components'], ['desktop', process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/?components']]) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     await page.goto(url); await page.evaluate(() => document.fonts.ready);

@@ -7,7 +7,7 @@ const { createInteractionDriver } = await import(process.env.OVELLE_VIDEO_INTERA
 const args=process.argv.slice(2), arg=(key,fallback)=>args.includes(key)?args[args.indexOf(key)+1]:fallback;
 const chapters=arg('--chapters','0,1,2,3,4,5,6,7,8,9,10,11,12').split(',').map(Number), out=resolve(arg('--output','/tmp/ovelle-video'));
 const appearancesOnly=args.includes('--appearance-only');
-const url=arg('--url','http://100.114.150.83:5174/components?walkthrough');
+const url=arg('--url','http://127.0.0.1:5174/components?walkthrough');
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
 const clips=[];

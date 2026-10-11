@@ -40,6 +40,6 @@ Visually inspected all three full workflow sections at 320 px, both hero widths,
 
 `node scripts/check-figma-fidelity.mjs` passed for the existing React gallery: 21 source dimensions; action geometry/typography/states; select/dialog keyboard and focus; 96 exact SVGs; native SVG geometry across 12 theme/material/frost settings. This regression check does not validate the unimplemented mobile Home. The initial attempt failed because the local gallery server was stopped; restarting it resolved that check.
 
-Gallery preview verified HTTP 200: http://100.114.150.83:5174/components. The revised Home is in Figma.
+Gallery preview verified HTTP 200: http://127.0.0.1:5174/components. The revised Home is in Figma.
 
 Captures: [hero 390](hero-390.png), [hero 320](hero-320.png), [open sheet](stage-sheet.png), [three scenes and sheet at 320](scenes-320.png), full sections [Partners](workflow-320.png), [Relationships](relationships-320.png), [Opportunities](opportunities-320.png), [Dark Solid](hero-solid-dark.png), [Light glass](hero-glass-light.png), [Dark glass](hero-glass-dark.png), full Home [390](home-390.png) / [320](home-320.png).

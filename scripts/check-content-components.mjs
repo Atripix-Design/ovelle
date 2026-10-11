@@ -9,7 +9,7 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = []; page.on('pageerror', error => errors.push(error.message));
 try {
-  await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://100.114.150.83:5174/components');
+  await page.goto(process.env.OVELLE_PREVIEW_URL || 'http://127.0.0.1:5174/components');
   const interactive = page.locator('.preview-interactive');
   const trigger = interactive.getByRole('button', { name: /Report date/ });
   await trigger.click();
