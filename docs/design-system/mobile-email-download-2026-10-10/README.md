@@ -1,5 +1,7 @@
 # Mobile email download — Figma first
 
+Updated October 11, 2026 to match the user’s removal of the routine helper text beneath the email input. All seven states in both materials and their linked mobile Home/review instances now omit that hint. Validation and send-failure messages remain. Captures below reflect this revision.
+
 The mobile download section now asks for an email address instead of offering operating-system choices. It uses linked public Ovelle Field and Button instances inside a native Ovelle / Email download link component.
 
 - [Component family on 05 Components](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=246-8205)

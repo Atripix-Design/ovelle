@@ -8,10 +8,9 @@
       "missingSources": [],
       "texts": [
         "Get Ovelle on\nyour computer.",
-        "We’ll email you a download link to open on your computer.",
+        "We\u2019ll email you a download link to open on your computer.",
         "Email address",
         "you@example.com",
-        "We’ll only email you this download link.",
         "Email me the link"
       ]
     },
@@ -23,14 +22,14 @@
       "missingSources": [],
       "texts": [
         "Get Ovelle on\nyour computer.",
-        "We’ll email you a download link to open on your computer.",
+        "We\u2019ll email you a download link to open on your computer.",
         "Email address",
         "you@example.com",
-        "We’ll only email you this download link.",
         "Email me the link"
       ]
     }
   ],
   "componentSet": "246:8205",
-  "stateReview": "248:4129"
+  "stateReview": "248:4129",
+  "helperRevision": "October 11, 2026: routine helper hidden and cleared throughout all email-download variants; validation feedback retained."
 }
