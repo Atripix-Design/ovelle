@@ -2,14 +2,13 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { execFileSync, spawnSync } from 'node:child_process'
 import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '../..')
 const node = process.execPath
 
 test('delivery accepts only the exact current SHA of an application-branch push', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ovelle-source-test-'))
+  const dir = mkdtempSync(join(root, '.ci-source-test-'))
   try {
     const sha = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()
     const gh = join(dir, 'gh')
@@ -18,7 +17,8 @@ test('delivery accepts only the exact current SHA of an application-branch push'
       GITHUB_OUTPUT: join(dir, 'output'), TEST_BRANCH_SHA: sha, DELIVERY_SOURCE_EVENT: 'push',
       DELIVERY_SOURCE_REF: 'refs/heads/development', DELIVERY_SOURCE_SHA: sha }
     const run = changes => spawnSync(node, ['scripts/ci/verify-delivery-source.mjs'], { cwd: root, env: { ...env, ...changes }, encoding: 'utf8' })
-    assert.equal(run({}).status, 0)
+    const successful = run({})
+    assert.equal(successful.status, 0, successful.stderr)
     assert.equal(readFileSync(env.GITHUB_OUTPUT, 'utf8'), 'environment=development\n')
     assert.equal(run({ DELIVERY_SOURCE_REF: 'refs/heads/main' }).status, 0)
     for (const changes of [
@@ -30,7 +30,7 @@ test('delivery accepts only the exact current SHA of an application-branch push'
 })
 
 test('publishing uploads all packages before deployment and injects account configuration', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ovelle-publish-test-'))
+  const dir = mkdtempSync(join(root, '.ci-publish-test-'))
   try {
     for (const path of ['scripts/ci', 'apps/desktop', 'node_modules/.bin']) mkdirSync(join(dir, path), { recursive: true })
     for (const file of ['deliver.mjs', 'deploy-worker.mjs']) copyFileSync(join(root, 'scripts/ci', file), join(dir, 'scripts/ci', file))
@@ -40,7 +40,8 @@ test('publishing uploads all packages before deployment and injects account conf
     const log = join(dir, 'commands')
     const run = changes => spawnSync(node, [join(dir, 'scripts/ci/deliver.mjs'), 'development'], { env: {
       ...process.env, CLOUDFLARE_ACCOUNT_ID: 'a'.repeat(32), CLOUDFLARE_API_TOKEN: 'test-only', TEST_COMMAND_LOG: log, ...changes }, encoding: 'utf8' })
-    assert.equal(run({}).status, 0)
+    const successful = run({})
+    assert.equal(successful.status, 0, successful.stderr)
     const commands = readFileSync(log, 'utf8').trim().split('\n')
     assert.equal(commands.length, 4)
     assert.ok(commands.slice(0, 3).every(command => command.startsWith('r2 object put ovelle-storage-development/releases/desktop/Ovelle-1.2.3-') && command.includes('--cache-control no-store')))
@@ -55,7 +56,7 @@ test('publishing uploads all packages before deployment and injects account conf
 })
 
 test('public selector fails hosted unless repository and runner group explicitly permit local work', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'ovelle-routing-test-'))
+  const dir = mkdtempSync(join(root, '.ci-routing-test-'))
   try {
     const workflow = readFileSync(join(root, '.github/workflows/select-runners.yml'), 'utf8')
     const script = workflow.split('        run: |\n')[1].split('\n').map(line => line.replace(/^          /, '')).join('\n')
@@ -85,7 +86,8 @@ esac
       assert.equal(result.status, 0, result.stderr)
       return Object.fromEntries(readFileSync(env.GITHUB_OUTPUT, 'utf8').trim().split('\n').map(line => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]))
     }
-    assert.equal(run({}).local_slot_count, '3')
+    const allocated = run({})
+    assert.equal(allocated.local_slot_count, '3', allocated.allocation_summary)
     for (const changes of [
       { TRUSTED: 'false' }, { FORCE_HOSTED: 'true' }, { TEST_GROUP_FAILURE: '1' },
       { TEST_REPOSITORIES: '{"repositories":[{"id":8}]}' }, { TEST_RUNNERS: '{"runners":[]}' },
