@@ -1,6 +1,6 @@
 # Mobile email download — Figma first
 
-Updated October 11, 2026 to match the user’s removal of the routine helper text beneath the email input. All seven states in both materials and their linked mobile Home/review instances now omit that hint. Validation and send-failure messages remain. Captures below reflect this revision.
+Updated October 11, 2026 to match the user’s removal of the routine helper text beneath the email input. All seven states in both materials and their linked mobile Home/review instances now omit that hint. Validation and send-failure messages remain. Captures below reflect this revision and the subsequent spacing correction. The email form uses native Supporting text=Hidden Text input variants: the field hugs to 68 px instead of reserving 96 px, or 90 px when validation is shown. All 14 email variants use a 12 px field-to-button gap. Layout wrappers are transparent and do not clip focus effects; Field and Button remain linked. Existing Visible input variants retain their geometry. Search does not gain the helper-free variant because it is not used in this flow. See spacing-audit.json for source IDs and measured variant bounds. The new nested Figma property still needs a React API/manifest mapping during implementation.
 
 The mobile download section now asks for an email address instead of offering operating-system choices. It uses linked public Ovelle Field and Button instances inside a native Ovelle / Email download link component.
 

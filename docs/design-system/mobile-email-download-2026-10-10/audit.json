@@ -3,7 +3,7 @@
     {
       "id": "182:2490",
       "w": 390,
-      "h": 440,
+      "h": 408,
       "platformLabels": [],
       "missingSources": [],
       "texts": [
@@ -17,7 +17,7 @@
     {
       "id": "185:9192",
       "w": 320,
-      "h": 440,
+      "h": 408,
       "platformLabels": [],
       "missingSources": [],
       "texts": [
@@ -31,5 +31,6 @@
   ],
   "componentSet": "246:8205",
   "stateReview": "248:4129",
-  "helperRevision": "October 11, 2026: routine helper hidden and cleared throughout all email-download variants; validation feedback retained."
+  "helperRevision": "October 11, 2026: routine helper hidden and cleared throughout all email-download variants; validation feedback retained.",
+  "spacingRevision": "October 11, 2026: helper-free native Text input variants remove the 96 px minimum; fields hug to 68 px (90 px with validation). All 14 email variants use a 12 px field-to-button gap and transparent, unclipped auto-layout wrappers."
 }
