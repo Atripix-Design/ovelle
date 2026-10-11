@@ -16,7 +16,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 concurrency:
   group: ci-${{ inputs.source_event || github.event_name }}-${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
@@ -42,7 +41,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
@@ -60,7 +59,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
@@ -82,7 +81,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
@@ -100,9 +99,12 @@ jobs:
         (contains(fromJSON(needs.route.outputs.local_slots_json), 3) && needs.lint.result == 'failure')
       ) }}
     needs: [route, build, typecheck, lint]
+    permissions:
+      contents: read
+      actions: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/dispatch-hosted-fallback
@@ -135,10 +137,10 @@ jobs:
       group: delivery-${{ inputs.source_ref || github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ${{ inputs.source_sha || github.sha }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22
           cache: npm

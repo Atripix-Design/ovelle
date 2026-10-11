@@ -57,3 +57,9 @@ Use `node scripts/verify-ci-live.mjs main` after source is promoted to productio
 Inspect the failed workflow job in GitHub Actions. Rerun it if the source still matches the branch head, or push a corrective commit. Upload failures stop delivery before Worker deployment. A Worker deployment failure can leave the previous application version active; R2 downloads retain their existing versioned names. D1 databases are not recreated or migrated by delivery. Apply reviewed migrations separately before deploying source that requires them.
 
 For local/manual tooling, provide credentials through environment variables. Set `TF_VAR_cloudflare_account_id` for Terraform; do not commit account identifiers or tokens in variable files. Terraform adoption still requires the import-first checks above.
+
+## Public repository controls
+
+Keep the repository's default workflow token read-only and disable workflow approval of pull requests. Fork workflows require approval from all external contributors. Allow only organization actions plus the pinned `actions/checkout` and `actions/setup-node` commits used here; require full-length SHA pins for external actions. The failure-replay job alone requests Actions write permission.
+
+Collaborators-only interaction limits block new outside pull requests, issues and comments while active. GitHub limits this setting to six months; the current restriction expires April 11, 2027 and must be renewed if still needed. Runner-group workflow restrictions remain the execution boundary regardless of that temporary interaction setting.
