@@ -4,6 +4,8 @@ Current mobile hero: [direct reference match and alignment correction](reference
 
 Created October 10, 2026 using the approved three-section scroll plan. This is a native, editable Figma design; application implementation remains pending.
 
+The workflow and Connected layout are superseded by the [October 11 compact mobile revision](../migration/mobile-scroll-2026-10-11/README.md): one workflow panel, one merged program panel, and approximately 40% less vertical page length. The content and captures below describe the historical three-section layout.
+
 **Current revision:** the hero now uses a compact stage selector and focused scene, with all original workflow detail preserved below. See [Compact mobile hero revision](hero-revision/README.md) for current captures, native sources and verification. The captures and dimensions below document the initial composition before that revision.
 
 ## Review links
