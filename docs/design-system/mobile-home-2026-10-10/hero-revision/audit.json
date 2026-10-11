@@ -1,0 +1,746 @@
+{
+  "date": "2026-10-10",
+  "scope": "Figma-only compact mobile hero revision",
+  "fileKey": "6jsC9SLa0LYsZKjJXxlY1K",
+  "results": [
+    {
+      "id": "182:2114",
+      "width": 390,
+      "height": 7622,
+      "instances": 95,
+      "unlinked": [],
+      "overflow": []
+    },
+    {
+      "id": "185:9144",
+      "width": 320,
+      "height": 7876,
+      "instances": 95,
+      "unlinked": [],
+      "overflow": []
+    }
+  ],
+  "heroControls": [
+    {
+      "id": "182:2115",
+      "labels": 5,
+      "wrapped": []
+    },
+    {
+      "id": "185:9145",
+      "labels": 5,
+      "wrapped": []
+    },
+    {
+      "id": "202:4285",
+      "labels": 22,
+      "wrapped": []
+    }
+  ],
+  "workflowPreservation": [
+    {
+      "id": "182:2188",
+      "missing": [],
+      "visibleStrings": [
+        "01 \u00b7 Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams \u00b7 Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment \u00b7 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring \u00b7 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community \u00b7 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "182:2244",
+      "missing": [],
+      "visibleStrings": [
+        "02 \u00b7 Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer \u00b7 Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday \u00b7 9:00\u201312:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "182:2300",
+      "missing": [],
+      "visibleStrings": [
+        "03 \u00b7 Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up \u00b7 Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday \u00b7 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    },
+    {
+      "id": "185:9163",
+      "missing": [],
+      "visibleStrings": [
+        "01 \u00b7 Find partners",
+        "Find the right volunteer partners.",
+        "Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.",
+        "Explore partners",
+        "Find partners for your next opportunity",
+        "Search volunteer partners",
+        "Local teams \u00b7 Community projects",
+        "Match companies to volunteering interests.",
+        "Northlight Labs",
+        "Match",
+        "Environment \u00b7 24 volunteers",
+        "Helix Studio",
+        "Match",
+        "Mentoring \u00b7 12 volunteers",
+        "Tideway",
+        "Review",
+        "Community \u00b7 40 volunteers",
+        "3 partners match this opportunity"
+      ]
+    },
+    {
+      "id": "185:9164",
+      "missing": [],
+      "visibleStrings": [
+        "02 \u00b7 Build relationships",
+        "Know the people behind every partnership.",
+        "Bring company contacts, volunteer interests, conversations, and past activity together. Give your team the context to build lasting relationships.",
+        "Explore relationships",
+        "Keep every relationship in context",
+        "Company and volunteer context",
+        "Northlight Labs",
+        "Contacts, interests, and activity together.",
+        "Maya Chen",
+        "Active",
+        "Volunteer \u00b7 Outdoor projects",
+        "Availability",
+        "Match",
+        "Friday \u00b7 9:00\u201312:00",
+        "Participation",
+        "Verified",
+        "12 verified service hours",
+        "Volunteer profile, availability, and participation together"
+      ]
+    },
+    {
+      "id": "185:9165",
+      "missing": [],
+      "visibleStrings": [
+        "03 \u00b7 Coordinate opportunities",
+        "Turn shared interest into volunteering.",
+        "Bring the right team to the right opportunity. Keep invitations, commitments, and next steps connected so everyone knows what happens next.",
+        "Explore opportunities",
+        "Coordinate the next opportunity",
+        "Next volunteering opportunity",
+        "Riverside clean-up \u00b7 Friday",
+        "Invite the team and track commitments.",
+        "Northlight Labs",
+        "Confirmed",
+        "12 volunteers confirmed",
+        "Team briefing",
+        "Planned",
+        "Thursday \u00b7 10:00",
+        "Volunteer invitation",
+        "Draft",
+        "Ready for review",
+        "The team is ready for its next opportunity"
+      ]
+    }
+  ],
+  "prototype": {
+    "closed": [
+      {
+        "id": "188:9676",
+        "scene": "188:9689",
+        "content": "188:9677"
+      },
+      {
+        "id": "202:3149",
+        "scene": "202:3166",
+        "content": "202:3150"
+      },
+      {
+        "id": "202:3549",
+        "scene": "202:3566",
+        "content": "202:3550"
+      }
+    ],
+    "open": [
+      {
+        "id": "202:3949",
+        "name": "Prototype / Hero stage sheet / Partners"
+      },
+      {
+        "id": "202:4057",
+        "name": "Prototype / Hero stage sheet / Relationships"
+      },
+      {
+        "id": "202:4165",
+        "name": "Prototype / Hero stage sheet / Opportunities"
+      }
+    ],
+    "qa": "202:4285"
+  },
+  "sources": {
+    "heroSet": "199:7256",
+    "heroVariants": [
+      {
+        "id": "199:6980",
+        "name": "Stage=Partners, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7010",
+        "action": "199:7020"
+      },
+      {
+        "id": "199:7026",
+        "name": "Stage=Relationships, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7056",
+        "action": "199:7066"
+      },
+      {
+        "id": "199:7072",
+        "name": "Stage=Opportunities, Material=Solid",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7102",
+        "action": "199:7112"
+      },
+      {
+        "id": "199:7118",
+        "name": "Stage=Partners, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7148",
+        "action": "199:7158"
+      },
+      {
+        "id": "199:7164",
+        "name": "Stage=Relationships, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7194",
+        "action": "199:7204"
+      },
+      {
+        "id": "199:7210",
+        "name": "Stage=Opportunities, Material=Liquid Glass",
+        "width": 342,
+        "height": 260,
+        "selector": "199:7240",
+        "action": "199:7250"
+      }
+    ],
+    "sheetSet": "201:6782",
+    "sheetVariants": [
+      {
+        "id": "201:6722",
+        "name": "Stage=Partners",
+        "height": 292
+      },
+      {
+        "id": "201:6742",
+        "name": "Stage=Relationships",
+        "height": 292
+      },
+      {
+        "id": "201:6762",
+        "name": "Stage=Opportunities",
+        "height": 292
+      }
+    ]
+  },
+  "limitations": [
+    "Screen-state navigation simulates the sheet; no real browser focus or gesture verification.",
+    "No new React implementation or parity claim."
+  ],
+  "heroReferenceRevision": [
+    {
+      "id": "182:2115",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4180",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "182:2131",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "182:2132",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "185:9145",
+      "width": 320,
+      "height": 732,
+      "sceneY": 422,
+      "background": {
+        "id": "211:4181",
+        "y": 161.0399932861328,
+        "height": 570.9600219726562,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "185:9151",
+            "x": 0,
+            "width": 136,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "185:9152",
+            "x": 152,
+            "width": 136,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "188:9678",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4182",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "188:9684",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "188:9685",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3151",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4183",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3157",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3158",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3551",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4184",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3557",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3558",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:3950",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4185",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:3956",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:3957",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:4058",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4186",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:4064",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:4065",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    },
+    {
+      "id": "202:4166",
+      "width": 390,
+      "height": 740,
+      "sceneY": 430,
+      "background": {
+        "id": "211:4187",
+        "y": 162.8000030517578,
+        "height": 577.2000122070312,
+        "imageHash": "40d65ec964339382d647f6706c372ab46c01562c",
+        "horizonRatio": 0.54448
+      },
+      "actions": {
+        "direction": "HORIZONTAL",
+        "wrap": "NO_WRAP",
+        "gap": 16,
+        "buttons": [
+          {
+            "id": "202:4172",
+            "x": 0,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Get Ovelle",
+                "width": 70,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "202:4173",
+            "x": 179,
+            "width": 163,
+            "height": 52,
+            "labels": [
+              {
+                "text": "Learn more",
+                "width": 76,
+                "height": 20
+              }
+            ]
+          }
+        ],
+        "hitAreasAligned": true
+      },
+      "demoRemoved": true,
+      "stageHitAligned": true,
+      "exploreHitAligned": true
+    }
+  ],
+  "sourceReference": {
+    "path": "reference-generated.png",
+    "authorization": "User selected generated image as direct source for CTA layout and background positioning",
+    "backgroundAsset": "coastal-source.png",
+    "horizon": "Approximately 54.4% of hero height",
+    "cta": "Two equal linked Regular buttons, horizontal NO_WRAP, 16px gap; 163px at390, 136px at320",
+    "removed": "See Ovelle in action mobile row"
+  },
+  "recordAlignment": {
+    "sourceVariants": [
+      "199:6980",
+      "199:7026",
+      "199:7072",
+      "199:7118",
+      "199:7164",
+      "199:7210"
+    ],
+    "newTextGroups": [
+      "213:7498",
+      "213:7499",
+      "213:7500",
+      "213:7501",
+      "213:7502",
+      "213:7503"
+    ],
+    "checkedInstances": [
+      "182:2136",
+      "185:9156",
+      "188:9689",
+      "202:3166",
+      "202:3566",
+      "202:4286",
+      "202:4310",
+      "202:4334",
+      "206:4099",
+      "206:4124",
+      "206:4162"
+    ],
+    "selectorTextAndFooterLeftInset": 17,
+    "textAndStatusCenterDifference": 0,
+    "nameLineHeight": 20,
+    "detailLineHeight": 18,
+    "textGroupHeight": 42,
+    "statusHeight": 44,
+    "sceneHeight": 260,
+    "footerY": 187,
+    "summaryTextVerticalAlign": "CENTER",
+    "linkedStatusAndButtonSourcesPreserved": true
+  }
+}

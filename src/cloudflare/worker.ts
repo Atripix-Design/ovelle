@@ -1,4 +1,5 @@
-import type { D1Database, ExportedHandler, Fetcher, R2Bucket } from '@cloudflare/workers-types'
+import type { D1Database, ExportedHandler, Fetcher, R2Bucket, SendEmail } from '@cloudflare/workers-types'
+import { sendDownloadEmail } from './download-email'
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
@@ -11,6 +12,9 @@ interface Env {
   R2_BUCKET_NAME: string
   R2_ACCESS_KEY_ID: string
   R2_SECRET_ACCESS_KEY: string
+  EMAIL?: SendEmail
+  DOWNLOAD_EMAIL_FROM?: string
+  RELEASE_VERSION: string
 }
 
 const releasePath = /^\/downloads\/(Ovelle-[A-Za-z0-9._-]+\.(?:zip|exe))$/
@@ -18,6 +22,24 @@ const releasePath = /^\/downloads\/(Ovelle-[A-Za-z0-9._-]+\.(?:zip|exe))$/
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
+
+    if (url.pathname === '/api/download-email') return sendDownloadEmail(request, env)
+    if (url.pathname === '/api/releases') {
+      if (request.method !== 'GET') return new Response('Method not allowed', { status: 405 })
+      const version = env.RELEASE_VERSION || '0.1.0'
+      const cdn = env.APP_ENV === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
+      const catalog = [
+        { platform: 'macOS', title: 'Mac · Apple silicon', description: 'For Macs with an Apple silicon chip.', label: 'Download for Apple silicon', file: `Ovelle-${version}-mac-arm64.zip` },
+        { platform: 'macOS', title: 'Mac · Intel', description: 'For Macs with an Intel processor.', label: 'Download for Intel', file: `Ovelle-${version}-mac-x64.zip` },
+        { platform: 'Windows', title: 'Windows · x64', description: 'Install Ovelle on your Windows computer.', label: 'Download for Windows', file: `Ovelle-${version}-win-x64.exe` },
+      ]
+      const releases = await Promise.all(catalog.map(async release => {
+        const object = await env.STORAGE.head(`releases/desktop/${release.file}`)
+        return { ...release, available: !!object, href: `https://${cdn}/releases/desktop/${release.file}?v=${object?.etag || version}`, requirements: release.platform === 'macOS' ? 'ZIP archive · Preview build' : 'EXE installer · Preview build' }
+      }))
+      return Response.json({ releases }, { headers: { 'Cache-Control': 'no-store' } })
+    }
+    if (url.pathname.startsWith('/api/')) return new Response('Not found', { status: 404 })
 
     if (url.pathname === '/health') {
       if (request.method !== 'GET') return new Response('Method not allowed', { status: 405 })

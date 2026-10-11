@@ -1,0 +1,180 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgMarker = `${assetPathPrefix}/275c6.svg`;
+
+type OvelleWorkflowPreviewProps = {
+  className?: string;
+  layout?: "Mobile";
+  material?: "Solid";
+  stage?: "Find";
+  state?: "Default";
+};
+
+function OvelleWorkflowPreview({ className, layout = "Mobile", material = "Solid", stage = "Find", state = "Default" }: OvelleWorkflowPreviewProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] items-start px-[var(--ovelle-space-16,16px)] py-[20px] relative rounded-[var(--ovelle-radius-card,20px)] w-[342px]"} data-node-id="180:4710">
+      <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-full" data-node-id="180:4715">
+        Find partners for your next opportunity
+      </p>
+      <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] h-[76px] items-start not-italic overflow-clip relative shrink-0 w-full" data-node-id="201:6674" data-name="Context / Read-only demonstration">
+        <p className="font-['Inter:Medium'] font-medium leading-[20px] relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="201:6675">
+          Search volunteer partners
+        </p>
+        <p className="flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-h-px relative text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="201:6676">
+          Local teams · Community projects
+        </p>
+        <p className="font-['Inter:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="201:6677">
+          Match companies to volunteering interests.
+        </p>
+      </div>
+      <div className="content-stretch flex flex-col gap-[12px] items-start p-[12px] relative shrink-0 w-full" data-node-id="180:4717" data-name="Record results">
+        <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="180:4718" data-name="Result row 0">
+          <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="180:4747" data-name="Record / Name and status">
+            <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="180:4719">
+              Northlight Labs
+            </p>
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="180:4721" data-name="Ovelle / Filter chip">
+              <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I180:4721;54:1264" data-name="Appearance">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I180:4721;54:1264;7:681">
+                  Match
+                </p>
+              </button>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="180:4720">
+            Environment · 24 volunteers
+          </p>
+        </div>
+        <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="180:4722" data-name="Result row 1">
+          <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="180:4750" data-name="Record / Name and status">
+            <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="180:4723">
+              Helix Studio
+            </p>
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="180:4725" data-name="Ovelle / Filter chip">
+              <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I180:4725;54:1264" data-name="Appearance">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I180:4725;54:1264;7:681">
+                  Match
+                </p>
+              </button>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="180:4724">
+            Mentoring · 12 volunteers
+          </p>
+        </div>
+        <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="180:4726" data-name="Result row 2">
+          <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="180:4753" data-name="Record / Name and status">
+            <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="180:4727">
+              Tideway
+            </p>
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="180:4729" data-name="Ovelle / Filter chip">
+              <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I180:4729;54:1264" data-name="Appearance">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I180:4729;54:1264;7:681">
+                  Review
+                </p>
+              </button>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="180:4728">
+            Community · 40 volunteers
+          </p>
+        </div>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] tracking-[0.1px] w-full" data-node-id="180:4730">
+        3 partners match this opportunity
+      </p>
+    </div>
+  );
+}
+
+type OvelleWorkflowSectionProps = {
+  className?: string;
+  layout?: "Mobile";
+  material?: "Solid";
+  stage?: "Find";
+};
+
+function OvelleWorkflowSection({ className, layout = "Mobile", material = "Solid", stage = "Find" }: OvelleWorkflowSectionProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex flex-col gap-[24px] items-start px-[var(--ovelle-space-24,24px)] py-[32px] relative rounded-[var(--ovelle-radius-card,20px)] w-[390px]"} data-node-id="180:5238">
+      <div className="content-stretch flex flex-col gap-[16px] items-start overflow-clip relative shrink-0 w-full" data-node-id="180:5239" data-name="Workflow copy">
+        <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="180:5240" data-name="Ovelle / Section label">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I180:5240;54:1298" data-name="Appearance">
+            <div className="relative shrink-0 size-[6px]" data-node-id="I180:5240;54:1298;9:169" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I180:5240;54:1298;9:170">
+              01 · Find partners
+            </p>
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[34px] min-w-full not-italic relative shrink-0 text-[28px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[min-content]" data-node-id="180:5241">
+          Find the right volunteer partners.
+        </p>
+        <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[26px] min-w-full not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="180:5242">
+          Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.
+        </p>
+        <div className="content-stretch flex items-start relative shrink-0 w-[224px]" data-node-id="180:5243" data-name="Ovelle / Button">
+          <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I180:5243;52:1517" data-name="Button appearance">
+            <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I180:5243;52:1517;7:93" data-name="Surface">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I180:5243;52:1517;7:94">
+                Explore partners
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <OvelleWorkflowPreview className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] items-start px-[var(--ovelle-space-16,16px)] py-[20px] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612), Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Workflow section
+**Node ID:** 138:3092
+
+React export: import { WorkflowSection } from "@ovelle/ui"; import "@ovelle/ui/styles.css". Stage → stage; Layout → layout; action → onExplore. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed.
+
+## Ovelle / Section label
+**Node ID:** 54:1305
+
+React export: import { SectionLabel } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Section label / Solid
+**Node ID:** 9:168
+
+Mochi-style section marker, scaled down. A dot and short editable label organize reading; this is not a button.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Primary / Solid
+**Node ID:** 7:92
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Workflow preview
+**Node ID:** 135:3508
+
+React export: import { WorkflowPreview } from "@ovelle/ui"; import "@ovelle/ui/styles.css". Stage → stage (find|enrich|follow-up), State → pointer/focus context, Layout → layout (desktop|mobile). Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

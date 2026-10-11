@@ -1,0 +1,38 @@
+<!doctype html><html><head><style>
+html,body{margin:0;padding:0;color:var(--figma-color-text);font-family:var(--font-family,Inter,sans-serif)}
+p{font-size:12px;line-height:1.5;margin:8px 0;color:var(--figma-color-text-secondary)}
+#status{font-size:12px;line-height:1.5;display:block;padding:8px}
+</style></head><body><div id="plugin-root"><fig-content>
+<fig-group name="Glass frost">
+<fig-field><label>Frost</label><fig-slider id="slider" text min="0" max="100" step="0.1" value="35"></fig-slider></fig-field>
+<fig-field><label>Exact value</label><fig-input-number id="number" min="0" max="100" step="0.1" value="35"></fig-input-number></fig-field>
+<p>0 = clear liquid glass. 100 = frosted glass. Decimal values are supported.</p>
+</fig-group>
+<fig-field><label>Apply to</label><fig-options id="scope" options="Selection, Library" value="Selection"></fig-options></fig-field>
+<p>Library updates every glass state on 05 Components, including hidden menus, dialogs and interactive states.</p>
+<fig-field><label>Reduce transparency</label><fig-switch id="reduce" value="false"></fig-switch></fig-field>
+<fig-field><label>Live preview</label><fig-switch id="live" value="true"></fig-switch></fig-field>
+<fig-field><label>Follow glass/intensity variable</label><fig-switch id="follow" value="false"></fig-switch></fig-field>
+<p>While this panel is open, following the variable applies its numeric value across the library. The material reacts to colors and components behind it. Reduce transparency is a separate opaque fallback.</p>
+</fig-content><fig-footer><label id="status" role="status" aria-live="polite">Choose Liquid Glass, then select a component or use Library.</label>
+<fig-button id="apply" type="submit">Apply intensity</fig-button>
+<fig-button id="export">Copy settings JSON</fig-button></fig-footer></div>
+<script>
+const byId=id=>document.getElementById(id);
+const post=message=>parent.postMessage({pluginMessage:message},'*');
+const isOn=id=>byId(id).value===true||byId(id).value==='true';
+let config={schemaVersion:2,glassFrost:35,normalizedFrost:0.35,reduceTransparency:false},timer=0;
+function apply(){const value=Number(byId('number').value);if(!Number.isFinite(value)||value<0||value>100){byId('status').textContent='Enter a number between 0 and 100.';return;}post({type:'apply',intensity:value,scope:byId('scope').value,reduceTransparency:isOn('reduce')});}
+for(const id of ['slider','number']){
+ const sync=()=>{byId(id==='slider'?'number':'slider').value=byId(id).value;if(isOn('live')){clearTimeout(timer);timer=setTimeout(apply,100);}};
+ byId(id).addEventListener('input',sync);
+ byId(id).addEventListener('change',()=>{sync();if(isOn('live')){clearTimeout(timer);apply();}});
+}
+byId('reduce').addEventListener('change',()=>{if(isOn('live'))apply();});
+byId('follow').addEventListener('change',()=>post({type:'follow',enabled:isOn('follow')}));
+byId('apply').addEventListener('click',()=>{clearTimeout(timer);apply();});
+byId('export').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(JSON.stringify(config,null,2));byId('status').textContent='Settings JSON copied.';}catch{byId('status').textContent=JSON.stringify(config);}});
+onmessage=event=>{const m=event.data.pluginMessage;if(!m)return;if(m.type==='status')byId('status').textContent=m.text;if(m.type==='initial-value'){byId('number').value=m.value;byId('slider').value=m.value;byId('reduce').value=m.reduceTransparency===true;config={schemaVersion:2,glassFrost:m.value,normalizedFrost:m.value/100,reduceTransparency:m.reduceTransparency===true};}if(m.type==='config'){config=m.config;if(m.source==='variable'){byId('number').value=config.glassFrost;byId('slider').value=config.glassFrost;byId('reduce').value=config.reduceTransparency;}}};
+new ResizeObserver(()=>post({type:'resize',height:Math.ceil(byId('plugin-root').getBoundingClientRect().height)})).observe(byId('plugin-root'));
+post({type:'initialize'});
+</script></body></html>

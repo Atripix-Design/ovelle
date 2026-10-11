@@ -1,0 +1,51 @@
+const assetPathPrefix = "[exact downloaded Figma source asset]";
+const imgFrame = `${assetPathPrefix}/f1718.svg`;
+
+export default function SiteNavigationMobile() {
+  return (
+    <div className="content-stretch flex flex-col items-start relative size-full" data-node-id="182:2116" data-name="Site navigation / Mobile">
+      <div className="content-stretch flex flex-col items-start relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I182:2116;225:7925" data-name="Appearance">
+        <div className="border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[54px] items-center justify-between overflow-clip pl-[20px] pr-[10px] relative rounded-[var(--ovelle-radius-pill,999px)] shadow-[0px_3px_10px_0px_rgba(5,31,48,0.12)] shrink-0 w-full" data-node-id="I182:2116;225:7925;225:7919" style={{ backgroundImage: "linear-gradient(180deg, rgba(255, 255, 255, 0.258) 0%, rgba(255, 255, 255, 0.017) 30%, rgba(181, 232, 255, 0.12) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.739) 0%, rgba(255, 255, 255, 0.739) 100%)" }} data-name="Header">
+          <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[28px] not-italic relative shrink-0 text-[24px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] whitespace-nowrap" data-node-id="I182:2116;225:7925;225:7920">
+            ovelle
+          </p>
+          <div className="bg-[var(--ovelle-surface-selected,#eaf7fd)] content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center overflow-clip relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-[92px]" data-node-id="I182:2116;225:7925;225:7921" data-name="Menu action">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I182:2116;225:7925;225:7922">
+              Menu
+            </p>
+            <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I182:2116;225:7925;225:7923" data-name="Icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I182:2116;225:7925;225:7923;7:64" data-name="Frame">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Site navigation / Mobile
+**Node ID:** 54:1492
+
+React export: import { SiteNavigationMobile } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Brand → brand; Current → links\[\].current; Links → links; CTA → action; Menu → native details open. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. GitHub link: githubHref defaults to https://github.com/Atripix-Design/ovelle; null opts out. Desktop replaces Download item; mobile retains Download and adds GitHub inside Menu. Nested public Ovelle / GitHub link instances reuse Ovelle / Navigation item. External link opens a new tab. Get Ovelle remains the download action.
+
+## Internal / Site navigation / Mobile / Liquid Glass
+**Node ID:** 14:3302
+
+Mobile navigation has a 44px menu target and a persistent brand. Menu opens below its trigger and closes along the same path; selecting a destination updates Current and closes it. Implement focus management, Escape dismissal and keyboard navigation in code. Liquid Glass material: native refraction, frosted tint, specular rim. Use Solid counterpart for reduced transparency. Same shared states and editable properties on web and desktop.
+
+## Ovelle / Icons / menu
+**Node ID:** 7:63
+
+Lucide menu icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

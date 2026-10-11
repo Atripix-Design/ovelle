@@ -1,0 +1,16 @@
+{
+  "email": [
+    {"id":"246:7945","state":"default","width":342,"height":312},
+    {"id":"246:7958","state":"focused","width":342,"height":312},
+    {"id":"246:7976","state":"sending","width":342,"height":312},
+    {"id":"246:7998","state":"sent","width":342,"height":316},
+    {"id":"246:8016","state":"invalid","width":342,"height":334},
+    {"id":"246:8038","state":"error","width":342,"height":346},
+    {"id":"246:8056","state":"disabled","width":342,"height":312}
+  ],
+  "workflow": [
+    {"id":"253:12470","stage":"find","height":834,"sectionId":"180:5238","sectionHeight":882},
+    {"id":"253:12527","stage":"enrich","height":828,"sectionId":"180:5334","sectionHeight":876},
+    {"id":"253:12584","stage":"follow-up","height":810,"sectionId":"180:5430","sectionHeight":858}
+  ]
+}

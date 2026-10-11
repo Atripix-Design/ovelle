@@ -8,8 +8,7 @@ fi
 
 task_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$task_root"
-export XDG_CONFIG_HOME="$HOME/.config/ovelle-auth-flow"
-export CLOUDFLARE_ACCOUNT_ID=83952a1be987e4a12647732861a60925
+: "${CLOUDFLARE_ACCOUNT_ID:?Set CLOUDFLARE_ACCOUNT_ID before installing secrets}"
 read -r -p 'R2 Access Key ID: ' r2_access_key_id
 read -r -s -p 'R2 Secret Access Key: ' r2_secret_access_key
 echo

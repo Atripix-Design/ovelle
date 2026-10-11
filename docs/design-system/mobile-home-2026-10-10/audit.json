@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-10",
+  "fileKey": "6jsC9SLa0LYsZKjJXxlY1K",
+  "scope": "Figma design only; no React parity claim",
+  "results": [
+    {
+      "id": "182:2114",
+      "width": 390,
+      "height": 8368,
+      "missing": [],
+      "horizontalOverflow": [],
+      "unlinkedInstances": [],
+      "instances": 135
+    },
+    {
+      "id": "185:9144",
+      "width": 320,
+      "height": 8772,
+      "missing": [],
+      "horizontalOverflow": [],
+      "unlinkedInstances": [],
+      "instances": 135
+    }
+  ]
+}

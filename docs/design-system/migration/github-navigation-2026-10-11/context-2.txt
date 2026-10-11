@@ -1,0 +1,88 @@
+const assetPathPrefix = "https://www.figma.com/api/mcp/asset/e80c0078-ce82-41e7-941b-76ad0098fd00";
+const imgOvelleIconsGitHubMark = `${assetPathPrefix}/6dc77.svg`;
+const imgFrame = `${assetPathPrefix}/698d1.svg`;
+
+function OvelleIconsGitHubMark({ className }: { className?: string }) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="264:7991" data-name="Ovelle / Icons / GitHub mark">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOvelleIconsGitHubMark} />
+    </div>
+  );
+}
+
+type OvelleGitHubLinkProps = {
+  className?: string;
+  layout?: "Menu";
+  material?: "Solid";
+  state?: "Default";
+  theme?: "Light";
+};
+
+function OvelleGitHubLink({ className, layout = "Menu", material = "Solid", state = "Default", theme = "Light" }: OvelleGitHubLinkProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[12px] h-[64px] items-center justify-center px-[12px] relative w-[317px]"} data-node-id="264:8031">
+      <div className="absolute content-stretch flex flex-col h-[64px] items-start left-0 top-0 w-[317px]" data-node-id="264:8032" data-name="Ovelle / Navigation item / Linked surface">
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col items-center justify-center min-h-px px-[16px] py-[8px] relative rounded-[var(--ovelle-radius-control,12px)] w-full" data-node-id="I264:8032;54:1291" data-name="Appearance">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I264:8032;54:1291;7:811">
+            ​
+          </p>
+        </button>
+      </div>
+      <OvelleIconsGitHubMark className="relative shrink-0 size-[16px]" />
+      <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start min-w-px not-italic overflow-clip relative text-[color:var(--ovelle-text-primary,#172b3d)] whitespace-nowrap" data-node-id="264:8037" data-name="Link content">
+        <p className="font-['Inter:Medium'] font-medium leading-[20px] relative shrink-0 text-[16px]" data-node-id="264:8038">
+          GitHub
+        </p>
+        <p className="font-['Inter:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px]" data-node-id="264:8039">
+          View source on GitHub
+        </p>
+      </div>
+      <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="264:8040" data-name="Destination arrow">
+        <div className="relative shrink-0 size-[20px]" data-node-id="I264:8040;7:30" data-name="Frame">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Theme=Light, Material=Solid, Layout=Menu, State=Default
+**Node ID:** 264:8031
+
+React: import { GitHubLink } from "@ovelle/ui"; layout="compact" | "menu"; href defaults to https://github.com/Atripix-Design/ovelle. Reuses NavigationItem. Theme from OvelleProvider. Material, glassFrost 0–100, reduceTransparency, className, disabled and anchor props supported. Default/hover/pressed/focus browser states; pressed retains hover surface. Current/selected, loading, success/error/open inapplicable to external repository links. target=\_blank, rel=noopener noreferrer.
+
+## Ovelle / GitHub link
+**Node ID:** 264:8424
+
+React: import { GitHubLink } from &quot;@ovelle/ui&quot;; layout=&quot;compact&quot; | &quot;menu&quot;; href defaults to https://github.com/Atripix-Design/ovelle. Reuses NavigationItem. Theme from OvelleProvider. Material, glassFrost 0–100, reduceTransparency, className, disabled and anchor props supported. Default/hover/pressed/focus browser states; pressed retains hover surface. Current/selected, loading, success/error/open inapplicable to external repository links. target=\_blank, rel=noopener noreferrer.
+
+## Ovelle / Navigation item
+**Node ID:** 54:1296
+
+React export: import { NavigationItem } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; State → current / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Navigation item / Solid
+**Node ID:** 7:810
+
+Text navigation for the compact site bar and desktop sidebar. Current state includes an underline. The family demonstrates selection; page routing belongs to each page prototype.
+
+## Ovelle / Icons / GitHub mark
+**Node ID:** 264:7991
+
+Official GitHub mark from primer/octicons icons/mark-github-16.svg. Native 16×16; no altered paths. Text-primary color follows theme.
+
+## Ovelle / Icons / arrow-up-right
+**Node ID:** 7:29
+
+Lucide arrow-up-right icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

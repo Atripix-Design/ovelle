@@ -1,0 +1,154 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/b3140.svg`;
+
+type OvelleWorkflowPreviewProps = {
+  className?: string;
+  layout?: "Desktop";
+  material?: "Solid";
+  stage?: "Enrich";
+  state?: "Default";
+};
+
+function OvelleWorkflowPreview({ className, layout = "Desktop", material = "Solid", stage = "Enrich", state = "Default" }: OvelleWorkflowPreviewProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] h-[452px] items-start overflow-clip p-[24px] relative rounded-[var(--ovelle-radius-card,20px)] w-[660px]"} data-node-id="135:3088">
+      <div className="content-stretch flex gap-[16px] h-[44px] items-center justify-center relative shrink-0 w-[612px]" data-node-id="135:3089" data-name="Stage controls">
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" data-node-id="135:3090" data-name="Stage / Find">
+          <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3090;54:1264" data-name="Appearance">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I135:3090;54:1264;7:681">
+              Partners
+            </p>
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" data-node-id="135:3093" data-name="Stage / Enrich">
+          <button className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3093;54:1264" data-name="Appearance">
+            <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I135:3093;54:1264;7:683" data-name="Icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I135:3093;54:1264;7:683;7:58" data-name="Frame">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I135:3093;54:1264;7:686">
+              Relationships
+            </p>
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" data-node-id="135:3100" data-name="Stage / Follow up">
+          <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3100;54:1264" data-name="Appearance">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I135:3100;54:1264;7:681">
+              Opportunities
+            </p>
+          </button>
+        </div>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[612px]" data-node-id="135:3103">
+        Keep every relationship in context
+      </p>
+      <div className="content-stretch flex flex-col items-start relative shrink-0 w-[612px]" data-node-id="135:3104" data-name="Context field">
+        <button className="content-stretch cursor-pointer flex flex-col gap-[var(--ovelle-space-4,4px)] items-start min-h-[96px] relative shrink-0 w-full" data-node-id="I135:3104;54:1232" data-name="Appearance">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left w-full" data-node-id="I135:3104;54:1232;7:393">
+            Company and volunteer context
+          </p>
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I135:3104;54:1232;7:394" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-w-px not-italic relative text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-left" data-node-id="I135:3104;54:1232;7:395">
+              Northlight Labs
+            </p>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-left tracking-[0.1px] w-full" data-node-id="I135:3104;54:1232;7:396">
+            Contacts, interests, and activity together.
+          </p>
+        </button>
+      </div>
+      <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[612px]" data-node-id="135:3110" data-name="Record results">
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" data-node-id="135:3111" data-name="Result row 0">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" data-node-id="135:3112">
+            Maya Chen
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" data-node-id="135:3113">
+            Volunteer · Outdoor projects
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="135:3114" data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3114;54:1264" data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I135:3114;54:1264;7:681">
+                Active
+              </p>
+            </button>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" data-node-id="135:3117" data-name="Result row 1">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" data-node-id="135:3118">
+            Availability
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" data-node-id="135:3119">
+            Friday · 9:00–12:00
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="135:3120" data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3120;54:1264" data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I135:3120;54:1264;7:681">
+                Match
+              </p>
+            </button>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" data-node-id="135:3123" data-name="Result row 2">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" data-node-id="135:3124">
+            Participation
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" data-node-id="135:3125">
+            12 verified service hours
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="135:3126" data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I135:3126;54:1264" data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I135:3126;54:1264;7:681">
+                Verified
+              </p>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] tracking-[0.1px] w-[612px]" data-node-id="135:3129">
+        Volunteer profile, availability, and participation together
+      </p>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Workflow preview
+**Node ID:** 135:3508
+
+Volunteer-company CRM product demonstration. Find partners → Build relationships → Coordinate opportunities. Stage axes retain legacy Find / Enrich / Follow up mapping. All controls are linked Ovelle components. Light/Dark inherit Color. Solid/Liquid Glass inherit tokens and glass intensity. Marketing example data; no real search or submission. Layout=Mobile adds wrapping stage controls and grouped vertical records, preserving every field/status/summary. Desktop remains the default. Mobile design is Figma-only; React implementation and mapping remain pending. Theme and continuous material settings inherit existing tokens. No required hover/drag progression.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+
+## Ovelle / Icons / check
+**Node ID:** 7:57
+
+Lucide check icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Field
+**Node ID:** 54:1243
+
+React export: import { Field } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Kind → kind; Label → label; Value → value / defaultValue; Placeholder → placeholder; Hint → hint; Error → error; Success → success; State → disabled / validation / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Field / Solid
+**Node ID:** 7:392
+
+Persistent label, 44px input and helper text. Focus has a 2px border and caret. Error and success use an icon plus text. The prototype uses a fixed sample value, not live typing. Code must preserve native input semantics, labels and inline validation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

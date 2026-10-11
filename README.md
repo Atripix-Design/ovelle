@@ -11,7 +11,7 @@ Ovelle is the 2026–2027 FBLA Coding & Programming project. The competition bri
 | R2 | `ovelle-storage-development` | `ovelle-storage-production` |
 | Source branch | `development` | `main` |
 
-Cloudflare resources live in the personal `jeremymathew100` account (`83952a1be987e4a12647732861a60925`). `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. Public desktop downloads use the environment's R2 custom domain: `cdn.dev.ovelle.org` or `cdn.ovelle.org`. The Worker also retains its legacy `/downloads/` route. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
+Cloudflare account configuration is supplied through deployment settings. `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. Public desktop downloads use the environment's R2 custom domain: `cdn.dev.ovelle.org` or `cdn.ovelle.org`. The Worker also retains its legacy `/downloads/` route. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
 
 ## Local development
 
@@ -41,11 +41,12 @@ The website uses plain React, TypeScript, and Vite. Electron has a separate Type
 
 ## Desktop downloads
 
-The ubuntu-box pipeline produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. They are stored on ubuntu-box under `~/.local/state/ovelle-ci/releases/<branch>/` and uploaded to the branch's R2 bucket with attachment and `Cache-Control: no-store` metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA as a query value to bypass older cached copies. Each R2 custom domain supports ranged downloads from its own bucket.
+The CI/CD workflow produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. Packages are uploaded directly to each environment's R2 bucket with attachment and `Cache-Control: no-store` metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA to bypass older cached copies. Both CDN domains support ranged downloads.
 
-Packaging manually on ubuntu-box:
+Package locally after building the shared UI:
 
 ```bash
+npm run build -w @ovelle/ui
 npm run package:all -w @ovelle/desktop
 ```
 
@@ -53,6 +54,8 @@ The macOS archives are repacked with symlink preservation so each stays below Wr
 
 ## CI/CD
 
-Ubuntu-box runs the application checks, Electron cross-platform packages, R2 uploads, and Cloudflare Worker deployments. A user systemd timer polls `development` and `main` every three minutes. For a new branch commit, it checks out the exact SHA in a temporary directory, builds in an unprivileged Docker container without host credentials or a Docker socket, then deploys from the authenticated host to the personal Cloudflare account. It posts the `ovelle/ubuntu-box` commit status back to GitHub. `main` requires a pull request and that status before promotion.
+[The CI/CD workflow](.github/workflows/ci.yml) uses Atripix's custom self-hosted runner platform for three unprivileged lanes: build, typecheck and lint. The reviewed platform components are vendored with source commits and checksums because this public repository cannot call private reusable workflows. The selector fails closed to hosted capacity, keeps all pull requests and Dependabot hosted, and replays a failed self-hosted run once on hosted capacity at the original source SHA. It assigns local capacity only when the selected runner group explicitly permits this public repository. Node setup uses the platform’s adaptive action.
 
-See [infra/README.md](infra/README.md) for installation, credentials, recovery, and live verification. The GitHub Actions workflow routes its unprivileged build, typecheck, and lint jobs through Atripix's shared runner selector, with hosted fallback. The ubuntu-box delivery job handles Electron packages, R2 uploads, and Cloudflare deployments.
+After checks succeed on a push to `development` or `main`, a hosted delivery job packages the desktop apps, uploads to R2 and deploys the corresponding Cloudflare Worker. Packaging and secret-bearing publishing remain hosted under the platform contract. Pull requests run checks without deploying. Delivery checks that its source is still the branch head before publishing.
+
+Configure `CLOUDFLARE_ACCOUNT_ID` as a GitHub Actions variable and `CLOUDFLARE_API_TOKEN` as an Actions secret. The runner platform also requires the `ATRIPIX_RUNNER_APP_ID` variable and `ATRIPIX_RUNNER_APP_PRIVATE_KEY` secret. No deployment credentials enter self-hosted jobs. See [infrastructure operations](infra/README.md) for setup, recovery and verification.

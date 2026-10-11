@@ -1,0 +1,1530 @@
+{
+  "schemaVersion": 1,
+  "fileKey": "6jsC9SLa0LYsZKjJXxlY1K",
+  "package": "@ovelle/ui",
+  "framework": "React 19 + TypeScript + Tailwind CSS 4",
+  "materialMapping": {
+    "Solid": "solid",
+    "Liquid Glass": "liquid-glass",
+    "Soft Glass": "soft-glass"
+  },
+  "glass": {
+    "variable": "glass/intensity",
+    "prop": "glassFrost",
+    "min": 0,
+    "max": 100,
+    "default": 35,
+    "direction": "liquid to frosted",
+    "accessibility": "reduceTransparency"
+  },
+  "components": [
+    {
+      "id": "52:1552",
+      "name": "Ovelle / Button",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Style": {
+          "type": "VARIANT",
+          "defaultValue": "Primary",
+          "variantOptions": [
+            "Primary",
+            "Secondary",
+            "Quiet"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass",
+            "Soft Glass"
+          ]
+        },
+        "Size": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Compact"
+          ]
+        }
+      },
+      "variants": 18,
+      "export": "Button",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Style": "variant",
+        "Tone": "tone",
+        "State": "disabled / state / browser pseudo classes",
+        "Label": "children",
+        "Loading label": "loadingLabel",
+        "Success label": "successLabel",
+        "Size": "size"
+      },
+      "sourceProperties": {
+        "id": "52:1552",
+        "properties": [
+          "Style",
+          "Material",
+          "Size"
+        ],
+        "nested": [
+          {
+            "name": "Button appearance",
+            "id": "52:1517",
+            "exposed": true,
+            "properties": [
+              "Loading label#7:22",
+              "Success label#7:44",
+              "Label#7:0",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1230",
+      "name": "Ovelle / Icon action",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "IconAction",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Icon": "icon",
+        "Tone": "tone",
+        "State": "disabled / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1230",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1217",
+            "exposed": true,
+            "properties": [
+              "Icon#7:198",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Label": "label"
+      }
+    },
+    {
+      "id": "54:1243",
+      "name": "Ovelle / Field",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Field",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Kind": "kind",
+        "Label": "label",
+        "Value": "value / defaultValue",
+        "Placeholder": "placeholder",
+        "Hint": "hint",
+        "State": "disabled / validation / browser pseudo classes",
+        "Supporting text": "supportingText (visible|hidden); validation feedback retained"
+      },
+      "sourceProperties": {
+        "id": "54:1243",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1232",
+            "exposed": true,
+            "properties": [
+              "Success message#7:284",
+              "Error message#7:269",
+              "Placeholder#7:239",
+              "Hint#7:254",
+              "Value#7:224",
+              "Label#7:209",
+              "Kind",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Error": "error",
+        "Success": "success"
+      }
+    },
+    {
+      "id": "54:1262",
+      "name": "Ovelle / Select",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Select",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Value": "value / defaultValue",
+        "State": "disabled / error / internal listbox open"
+      },
+      "sourceProperties": {
+        "id": "54:1262",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1245",
+            "exposed": true,
+            "properties": [
+              "Label#7:299",
+              "Value",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Options": "options"
+      }
+    },
+    {
+      "id": "54:1269",
+      "name": "Ovelle / Filter chip",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "FilterChip",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "Tone": "tone",
+        "State": "selected / disabled / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1269",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1264",
+            "exposed": true,
+            "properties": [
+              "Label#7:318",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1278",
+      "name": "Ovelle / Checkbox",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Checkbox",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "label",
+        "Value": "checked / defaultChecked / mixed",
+        "State": "disabled / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1278",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1271",
+            "exposed": true,
+            "properties": [
+              "Label#7:327",
+              "Value",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1289",
+      "name": "Ovelle / Switch",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "Switch",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "label",
+        "Value": "checked / defaultChecked",
+        "State": "disabled / browser pseudo classes",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1289",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1280",
+            "exposed": true,
+            "properties": [
+              "Label#7:340",
+              "Value",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1296",
+      "name": "Ovelle / Navigation item",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "NavigationItem",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "State": "current / disabled / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1296",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1291",
+            "exposed": true,
+            "properties": [
+              "Label#7:353",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1305",
+      "name": "Ovelle / Section label",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SectionLabel",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Label": "children",
+        "Tone": "tone"
+      },
+      "sourceProperties": {
+        "id": "54:1305",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1298",
+            "exposed": true,
+            "properties": [
+              "Label#9:0",
+              "Tone"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1326",
+      "name": "Ovelle / Status message",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "StatusMessage",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Tone": "tone",
+        "Title": "title",
+        "Body": "children"
+      },
+      "sourceProperties": {
+        "id": "54:1326",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1307",
+            "exposed": true,
+            "properties": [
+              "Body#9:9",
+              "Title#9:4",
+              "Tone"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1345",
+      "name": "Ovelle / FAQ row",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "FAQRow",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Number": "number",
+        "Question": "question",
+        "Answer": "answer",
+        "State": "open / native disclosure",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1345",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1328",
+            "exposed": true,
+            "properties": [
+              "Answer#9:21",
+              "Number#9:28",
+              "Question#9:14",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "54:1378",
+      "name": "Ovelle / Feature card",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Density": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Summary"
+          ]
+        }
+      },
+      "variants": 4,
+      "export": "FeatureCard",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Icon": "icon",
+        "Title": "title",
+        "Body": "children",
+        "State": "browser hover / focus-within",
+        "Density": "density (regular|summary)"
+      },
+      "sourceProperties": {
+        "id": "54:1378",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1347",
+            "exposed": true,
+            "properties": [
+              "Icon#9:65",
+              "Link label#9:55",
+              "Body#9:45",
+              "Title#9:35",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Surface": "surface",
+        "Link": "link"
+      }
+    },
+    {
+      "id": "54:1415",
+      "name": "Ovelle / Download card",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "DownloadCard",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Platform": "platform",
+        "State": "unavailable / browser hover"
+      },
+      "sourceProperties": {
+        "id": "54:1415",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1380",
+            "exposed": true,
+            "properties": [
+              "Platform",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Title": "title",
+        "Body": "children",
+        "Action": "action"
+      }
+    },
+    {
+      "id": "54:1434",
+      "name": "Ovelle / Download action",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "DownloadAction",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Tone": "tone",
+        "Label": "label",
+        "State": "unavailable / state / browser pseudo classes"
+      },
+      "sourceProperties": {
+        "id": "54:1434",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1417",
+            "exposed": true,
+            "properties": [
+              "Loading label#7:22",
+              "Success label#7:44",
+              "Label#7:0",
+              "Tone",
+              "State"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {},
+      "reactOnlyProps": {
+        "detail": "Legacy optional caller content; absent from the source default and not a Figma property."
+      }
+    },
+    {
+      "id": "54:1469",
+      "name": "Ovelle / Site navigation / Desktop",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SiteNavigationDesktop",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Current": "links[].current"
+      },
+      "sourceProperties": {
+        "id": "54:1469",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1436",
+            "exposed": true,
+            "properties": [
+              "Current"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Brand": "brand",
+        "Links": "links",
+        "CTA": "action",
+        "GitHub": "githubHref (default Ovelle repository; null opts out)",
+        "Stars": "githubStarCount / githubStarsLoading"
+      }
+    },
+    {
+      "id": "54:1492",
+      "name": "Ovelle / Site navigation / Mobile",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SiteNavigationMobile",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Current": "links[].current",
+        "Menu": "native details open"
+      },
+      "sourceProperties": {
+        "id": "54:1492",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1471",
+            "exposed": true,
+            "properties": [
+              "Current",
+              "Menu"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Brand": "brand",
+        "Links": "links",
+        "CTA": "action",
+        "Menu": "menuOpen / defaultMenuOpen / onMenuOpenChange",
+        "GitHub": "githubHref (default Ovelle repository; null opts out)",
+        "Stars": "githubStarCount / githubStarsLoading"
+      }
+    },
+    {
+      "id": "54:1509",
+      "name": "Ovelle / Segmented control",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "SegmentedControl",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Value": "value / defaultValue",
+        "State": "disabled / browser pseudo classes",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1509",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1494",
+            "exposed": true,
+            "properties": [
+              "Label / Companies#23:25",
+              "Label / Campaigns#23:50",
+              "Label / Contacts#23:0",
+              "Value",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Labels": "options"
+      }
+    },
+    {
+      "id": "54:1520",
+      "name": "Ovelle / Confirmation dialog",
+      "type": "COMPONENT_SET",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "export": "ConfirmationDialog",
+      "source": "src/index.tsx",
+      "propertyMapping": {
+        "Material": "material",
+        "Title": "title",
+        "Body": "children",
+        "State": "open / state / error",
+        "Motion": "OvelleProvider.reduceMotion / OS preference"
+      },
+      "sourceProperties": {
+        "id": "54:1520",
+        "properties": [
+          "Material"
+        ],
+        "nested": [
+          {
+            "name": "Appearance",
+            "id": "54:1511",
+            "exposed": true,
+            "properties": [
+              "Body#22:21",
+              "Title#22:0",
+              "Purpose",
+              "State",
+              "Motion"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Action": "confirmLabel / onConfirm"
+      }
+    },
+    {
+      "id": "80:2385",
+      "name": "Ovelle / Date picker",
+      "type": "COMPONENT_SET",
+      "variants": 28,
+      "export": "DatePicker",
+      "source": "src/date-picker.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "State": "value / disabled / error / internal open",
+        "Label": "label",
+        "Value": "value / defaultValue"
+      },
+      "sourceProperties": {
+        "id": "80:2385",
+        "properties": [
+          "Label#86:0",
+          "Value#86:21",
+          "Material",
+          "Theme",
+          "State"
+        ],
+        "nested": []
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "80:2992",
+      "name": "Ovelle / Pagination",
+      "type": "COMPONENT_SET",
+      "variants": 24,
+      "export": "Pagination",
+      "source": "src/pagination.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "State": "page / pageCount / disabled / size"
+      },
+      "sourceProperties": {
+        "id": "80:2992",
+        "properties": [
+          "Material",
+          "Theme",
+          "State"
+        ],
+        "nested": [
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2389",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3082",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3086",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "90:3091",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          },
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2411",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {
+        "Page": "page",
+        "Count": "pageCount"
+      }
+    },
+    {
+      "id": "80:3107",
+      "name": "Ovelle / Empty state",
+      "type": "COMPONENT_SET",
+      "variants": 16,
+      "export": "EmptyState",
+      "source": "src/empty-state.tsx",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Theme": {
+          "type": "VARIANT",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        }
+      },
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme",
+        "Size": "size",
+        "Align": "align",
+        "Title": "title",
+        "Description": "children",
+        "Action": "action",
+        "Show action": "action presence"
+      },
+      "sourceProperties": {
+        "id": "80:3107",
+        "properties": [
+          "Title#80:0",
+          "Description#80:17",
+          "Show action#86:42",
+          "Action#86:59",
+          "Material",
+          "Theme",
+          "Size",
+          "Align"
+        ],
+        "nested": [
+          {
+            "name": "Ovelle / Button",
+            "id": "80:2998",
+            "exposed": true,
+            "properties": [
+              "Style",
+              "Material",
+              "Size"
+            ]
+          }
+        ]
+      },
+      "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
+      "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "264:8424",
+      "name": "Ovelle / GitHub link",
+      "type": "COMPONENT_SET",
+      "variants": 40,
+      "export": "GitHubLink",
+      "source": "src/github-link.tsx",
+      "propertyMapping": {
+        "Theme": "OvelleProvider.theme",
+        "Material": "material",
+        "Layout": "layout",
+        "State": "disabled / browser hover, active, focus-visible",
+        "Show stars#283:82": "starCount !== undefined || starsLoading",
+        "Star count#283:123": "starCount (formatted; null \u2192 \u2014)"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Destination": "href",
+        "Content styling": "contentClassName",
+        "Count loading": "starsLoading \u2192 dynamic LoadingBoundary around badge"
+      },
+      "mappingKind": "Linked NavigationItem composition; independently maintained Figma and React.",
+      "properties": {
+        "Theme": {
+          "type": "VARIANT",
+          "defaultValue": "Light",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Compact",
+          "variantOptions": [
+            "Compact",
+            "Menu"
+          ]
+        },
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Hover",
+            "Pressed",
+            "Focused",
+            "Disabled"
+          ]
+        },
+        "Show stars#283:82": {
+          "type": "BOOLEAN",
+          "defaultValue": false
+        },
+        "Star count#283:123": {
+          "type": "TEXT",
+          "defaultValue": "0"
+        }
+      }
+    },
+    {
+      "id": "135:3508",
+      "name": "Ovelle / Workflow preview",
+      "export": "WorkflowPreview",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Hover"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 24,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "State": "state / native hover, focus and validation",
+        "Material": "material",
+        "Layout": "layout",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "138:3092",
+      "name": "Ovelle / Workflow section",
+      "export": "WorkflowSection",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 12,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Layout": "layout",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "145:4284",
+      "name": "Ovelle / Pinned workflow",
+      "export": "PinnedWorkflow",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Motion": {
+          "type": "VARIANT",
+          "defaultValue": "Standard",
+          "variantOptions": [
+            "Standard",
+            "Reduced"
+          ]
+        },
+        "Progress": {
+          "type": "VARIANT",
+          "defaultValue": "Complete",
+          "variantOptions": [
+            "Complete",
+            "Start",
+            "Mid"
+          ]
+        }
+      },
+      "variants": 24,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Motion": "motion / provider and OS reduced motion",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)",
+        "Progress": "progress (0\u20131 overall; Start=phase/3, Mid=(phase+0.5)/3, Complete=(phase+1)/3); Reduced uses Complete only"
+      }
+    },
+    {
+      "id": "199:7256",
+      "name": "Ovelle / Hero workflow scene",
+      "export": "HeroWorkflowScene",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Size": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Compact"
+          ]
+        }
+      },
+      "variants": 12,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Size": "size",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "201:6782",
+      "name": "Ovelle / Hero stage sheet",
+      "export": "HeroStageSheet",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        }
+      },
+      "variants": 3,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Open": "open",
+        "Dismiss": "onClose",
+        "Selection": "onStageChange",
+        "Inline preview": "presentation (React-only)"
+      }
+    },
+    {
+      "id": "246:8205",
+      "name": "Ovelle / Email download link",
+      "export": "EmailDownloadLink",
+      "properties": {
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Focused",
+            "Sending",
+            "Sent",
+            "Invalid",
+            "Error",
+            "Disabled"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 14,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "State": "state / native hover, focus and validation",
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "253:12812",
+      "name": "Ovelle / Mobile workflow",
+      "export": "MobileWorkflow",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 6,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "253:13087",
+      "name": "Ovelle / Program overview",
+      "export": "ProgramOverview",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "165:5351",
+      "name": "Ovelle / Device-aware download CTA",
+      "export": "DeviceAwareDownloadCTA",
+      "properties": {
+        "Device": {
+          "type": "VARIANT",
+          "defaultValue": "macOS",
+          "variantOptions": [
+            "macOS",
+            "Windows",
+            "Other",
+            "Mobile"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 7,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Device": "device (macOS|Windows|Other); Mobile handoff is EmailDownloadLink",
+        "Layout": "Desktop website uses this component; Mobile Home uses EmailDownloadLink",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Catalog": "releases",
+        "Manual override": "onDeviceChange"
+      }
+    }
+  ],
+  "limitations": [
+    "Figma Code Connect publishing requires an eligible plan; manifest is explicit mapping, not published Code Connect.",
+    "CSS backdrop filtering approximates native Figma refraction; optical parity is not guaranteed.",
+    "Native select option popups use the platform renderer rather than custom glass menus."
+  ],
+  "tokens": "tokens.json",
+  "fidelity": {
+    "sourceFile": "6jsC9SLa0LYsZKjJXxlY1K",
+    "referenceInventory": "../../docs/design-system/migration/sources.json",
+    "variantInventory": "../../docs/design-system/migration/variants.json",
+    "workflow": "../../docs/design-system/skeleton-workflow.md",
+    "verification": "node scripts/check-figma-fidelity.mjs",
+    "synchronization": "Figma and React are separately maintained; source context, exact assets and screenshot comparisons are required."
+  },
+  "dynamicLoading": {
+    "export": "LoadingBoundary",
+    "measurement": "Actual mounted DOM; no Figma sheet or component registry",
+    "workflow": "docs/design-system/skeleton-workflow.md"
+  }
+}

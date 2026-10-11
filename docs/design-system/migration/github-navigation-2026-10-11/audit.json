@@ -1,0 +1,30 @@
+[
+  {
+    "consumer": "web",
+    "keyboard": true,
+    "externalLink": true,
+    "nativeMark": true,
+    "themes": 2,
+    "materials": 2,
+    "frostLevels": 3,
+    "mobileWidths": [
+      390,
+      320
+    ],
+    "skeletonInert": true
+  },
+  {
+    "consumer": "desktop",
+    "keyboard": true,
+    "externalLink": true,
+    "nativeMark": true,
+    "themes": 2,
+    "materials": 2,
+    "frostLevels": 3,
+    "mobileWidths": [
+      390,
+      320
+    ],
+    "skeletonInert": true
+  }
+]

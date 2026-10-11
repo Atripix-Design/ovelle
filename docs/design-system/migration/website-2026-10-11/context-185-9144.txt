@@ -1,0 +1,770 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/ae16d.svg`;
+const imgNorthlightExactReferenceAvatar = `${assetPathPrefix}/db6ec.png`;
+const imgFrame1 = `${assetPathPrefix}/689eb.svg`;
+const imgCoastalBackgroundReferenceHorizonPosition = `${assetPathPrefix}/956aa.png`;
+const imgExactSourcePhotoCoastMiddle = `${assetPathPrefix}/7a573.png`;
+const imgExactSourcePhotoCoastBottom = `${assetPathPrefix}/e5825.png`;
+const imgExactSourcePhotoCoastCardLeft = `${assetPathPrefix}/c7db6.png`;
+const imgExactSourcePhotoCoastCardRight = `${assetPathPrefix}/53ed2.png`;
+const imgExactSourcePhotoCoastRight2 = `${assetPathPrefix}/6dec4.png`;
+const imgPhotoRiversideVolunteersMobileCrop = `${assetPathPrefix}/4ef5b.png`;
+const imgPhotoReviewingSuggestionMobileLandscape = `${assetPathPrefix}/c25dc.png`;
+const imgExactSourcePhotoCoastRight = `${assetPathPrefix}/f0041.svg`;
+const imgExactSourcePhotoCoastRight1 = `${assetPathPrefix}/c7cb7.svg`;
+const imgFrame2 = `${assetPathPrefix}/f1718.svg`;
+const imgMarker = `${assetPathPrefix}/275c6.svg`;
+const imgFrame3 = `${assetPathPrefix}/b8015.svg`;
+const imgFrame4 = `${assetPathPrefix}/1a5bd.svg`;
+const imgFrame5 = `${assetPathPrefix}/6ff1c.svg`;
+
+type OvelleEmailDownloadLinkProps = {
+  className?: string;
+  material?: "Solid";
+  state?: "Default";
+};
+
+function OvelleEmailDownloadLink({ className, material = "Solid", state = "Default" }: OvelleEmailDownloadLinkProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[16px] items-start px-[20px] py-[24px] relative rounded-[24px] w-[342px]"} data-node-id="246:7945">
+      <div className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[0] not-italic relative shrink-0 text-[24px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="246:7946">
+        <p className="leading-[30px] mb-0">Get Ovelle on</p>
+        <p className="leading-[30px]">your computer.</p>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="246:7947">
+        We’ll email you a download link to open on your computer.
+      </p>
+      <div className="content-stretch flex flex-col gap-[12px] items-start overflow-clip relative shrink-0 w-full" data-node-id="253:8206" data-name="Email field and submit">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:8207" data-name="Email field / Content height">
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="246:7948" data-name="Ovelle / Field">
+            <div className="content-stretch flex flex-col gap-[var(--ovelle-space-4,4px)] items-start relative shrink-0 w-full" data-node-id="I246:7948;54:1232" data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="I246:7948;54:1232;255:11374">
+                Email address
+              </p>
+              <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I246:7948;54:1232;255:11375" data-name="Input">
+                <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-w-px not-italic relative text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)]" data-node-id="I246:7948;54:1232;255:11376">
+                  you@example.com
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="246:7954" data-name="Ovelle / Button">
+          <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I246:7954;52:1517" data-name="Button appearance">
+            <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I246:7954;52:1517;7:93" data-name="Surface">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I246:7954;52:1517;7:94">
+                Email me the link
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type OvelleProgramOverviewProps = {
+  className?: string;
+  material?: "Solid";
+};
+
+function OvelleProgramOverview({ className, material = "Solid" }: OvelleProgramOverviewProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col items-start overflow-clip relative rounded-[20px] w-[342px]"} data-node-id="253:12987">
+      <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12900" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12900;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12900;253:12439;9:276">
+            Riverside clean-up
+          </p>
+          <div className="font-['Inter:Regular'] font-normal leading-[0] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12900;253:12439;9:277">
+            <p className="leading-[22px] mb-0">Friday · 9:00–12:00</p>
+            <p className="leading-[22px] mb-0">8 of 20 places open</p>
+            <p className="leading-[22px]">Example opportunity</p>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="253:12916" data-name="Ovelle / Button">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I253:12916;52:1541" data-name="Button appearance">
+          <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I253:12916;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I253:12916;52:1541;7:258">
+              View opportunity
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12920" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12920;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12920;253:12439;9:276">
+            Volunteer records
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12920;253:12439;9:277">
+            Keep contacts, interests, skills, and availability together for each volunteer.
+          </p>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12941" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12941;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12941;253:12439;9:276">
+            Opportunities and schedules
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12941;253:12439;9:277">
+            Coordinate service activities, capacity, assignments, and upcoming shifts.
+          </p>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12962" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12962;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12962;253:12439;9:276">
+            Participation and reports
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12962;253:12439;9:277">
+            Track attendance and service hours. Filter reports by volunteer, opportunity, and date.
+          </p>
+        </div>
+      </div>
+      <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="253:12983" data-name="Ovelle / Button">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I253:12983;52:1541" data-name="Button appearance">
+          <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I253:12983;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I253:12983;52:1541;7:258">
+              Explore volunteer program
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OvelleIconsChevronDown({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex h-[20px] items-center justify-center relative"} data-node-id="7:68" data-name="Ovelle / Icons / chevron-down">
+      <div className="relative shrink-0 size-[20px]" data-node-id="7:69" data-name="Frame">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+      </div>
+    </div>
+  );
+}
+
+type OvelleHeroWorkflowSceneProps = {
+  className?: string;
+  material?: "Solid";
+  size?: "Compact";
+  stage?: "Partners";
+};
+
+function OvelleHeroWorkflowScene({ className, material = "Solid", size = "Compact", stage = "Partners" }: OvelleHeroWorkflowSceneProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[8px] h-[142px] items-start pt-[3px] px-[15px] relative rounded-[16px] w-[298px]"} data-node-id="221:7792">
+      <div className="content-stretch flex gap-[8px] h-[36px] items-center overflow-clip relative shrink-0 w-full" data-node-id="221:7793" data-name="Stage selector / One line">
+        <OvelleIconsChevronDown className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" />
+        <div className="content-stretch flex flex-col h-[36px] items-start relative shrink-0 w-[72px]" data-node-id="221:7795" data-name="Ovelle / Select / Hero stage">
+          <div className="content-stretch flex flex-col gap-[var(--ovelle-space-4,4px)] items-start relative shrink-0 w-full" data-node-id="I221:7795;54:1245" data-name="Appearance">
+            <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I221:7795;54:1245;7:517" data-name="Trigger">
+              <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Semi_Bold'] font-semibold leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="I221:7795;54:1245;7:518">
+                Partners
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal h-full justify-center leading-[0] not-italic relative shrink-0 text-[10px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-right tracking-[0.1px] w-[80px]" data-node-id="221:7796">
+          <p className="leading-[18px]">3 matches</p>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col h-[36px] items-start justify-center relative shrink-0 w-full" data-node-id="221:7797" data-name="Record results">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="221:7798" data-name="Result row 0">
+          <div className="content-stretch flex gap-[6px] items-center relative shrink-0 w-full" data-node-id="221:7799" data-name="Record / Name and status">
+            <div className="relative rounded-[6px] shrink-0 size-[32px]" data-node-id="221:7800" data-name="Northlight / Exact reference avatar">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[6px] size-full" src={imgNorthlightExactReferenceAvatar} />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start min-w-px not-italic overflow-clip relative" data-node-id="221:7801" data-name="Record / Name and context">
+              <p className="font-['Inter:Semi_Bold'] font-semibold leading-[14px] relative shrink-0 text-[10px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.3px] w-full" data-node-id="221:7802">
+                Northlight Labs
+              </p>
+              <p className="font-['Inter:Regular'] font-normal leading-[13px] relative shrink-0 text-[9.5px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="221:7803">
+                Environment
+              </p>
+            </div>
+            <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] not-italic relative shrink-0 text-[10px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-center w-[76px]" data-node-id="221:7804">
+              <p className="leading-[18px]">24 volunteers</p>
+            </div>
+            <div className="content-stretch flex flex-col h-[44px] items-start justify-center relative shrink-0 w-[52px]" data-node-id="221:7805" data-name="Ovelle / Filter chip">
+              <div className="bg-[#def4ff] content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[38px] items-center justify-center px-[8px] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I221:7805;225:7951" data-name="Appearance">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[18px] not-italic relative shrink-0 text-[#00598a] text-[10px] whitespace-nowrap" data-node-id="I221:7805;225:7951;225:7949">
+                  Match
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[#e2e9ee] h-px left-[15px] top-[100px] w-[268px]" data-node-id="221:7806" data-name="Record / Footer divider" />
+      <div className="content-stretch flex h-[44px] items-start relative shrink-0 w-full" data-node-id="221:7807" data-name="Ovelle / Button / Explore full stage">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I221:7807;52:1541" data-name="Button appearance">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center min-w-px overflow-clip relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I221:7807;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I221:7807;52:1541;7:258">
+              View all 3 partners
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex h-[20px] items-center justify-center right-[15px] top-[108px]" data-node-id="221:7808" data-name="Ovelle / Icons / arrow-right / Footer">
+        <div className="relative shrink-0 size-[20px]" data-node-id="I221:7808;7:3" data-name="Frame">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+        </div>
+      </div>
+      <div className="absolute bg-[#dee5ed] h-[30px] left-[146px] top-[50px] w-px" data-node-id="226:7920" data-name="Record / Column divider" />
+      <div className="absolute bg-[#dee5ed] h-[30px] left-[228px] top-[50px] w-px" data-node-id="226:7921" data-name="Record / Column divider" />
+    </div>
+  );
+}
+
+export default function HomeMobileOvelle320() {
+  return (
+    <div className="bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex flex-col items-start relative size-full" data-node-id="185:9144" data-name="Home / Mobile / Ovelle / 320">
+      <div className="bg-[#f0faff] content-stretch flex flex-col gap-[26.256px] h-[573.538px] items-center overflow-clip pb-[88.615px] pt-[13.949px] px-[10.667px] relative rounded-bl-[32px] rounded-br-[32px] rounded-tl-[26.256px] rounded-tr-[26.256px] shrink-0 w-[320px]" data-node-id="185:9145" data-name="Hero / Coastal mobile introduction">
+        <div className="absolute h-[521.846px] left-0 top-[51.69px] w-[320px]" data-node-id="211:4181" data-name="Coastal background / Reference horizon position">
+          <div aria-hidden className="absolute inset-0 pointer-events-none">
+            <img alt="" className="absolute max-w-none object-cover size-full" src={imgCoastalBackgroundReferenceHorizonPosition} />
+            <div className="absolute inset-0" style={{ backgroundImage: "linear-gradient(180deg, rgb(240, 250, 255) 0%, rgba(255, 255, 255, 0.3) 12%, rgba(255, 255, 255, 0.15) 45%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0) 100%)" }} />
+          </div>
+        </div>
+        <div className="absolute h-[90.667px] left-0 top-[253.33px] w-[320px]" data-node-id="233:4487" data-name="Exact source photo / coast-middle">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgExactSourcePhotoCoastMiddle} />
+        </div>
+        <div className="absolute h-[85.333px] left-0 top-[488px] w-[320px]" data-node-id="233:4486" data-name="Exact source photo / coast-bottom">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgExactSourcePhotoCoastBottom} />
+        </div>
+        <div className="absolute h-[144px] left-0 top-[344px] w-[9.333px]" data-node-id="233:4485" data-name="Exact source photo / coast-card-left">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgExactSourcePhotoCoastCardLeft} />
+        </div>
+        <div className="absolute h-[144px] left-[310.67px] top-[344px] w-[9.333px]" data-node-id="233:4484" data-name="Exact source photo / coast-card-right">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgExactSourcePhotoCoastCardRight} />
+        </div>
+        <div className="absolute contents left-[273.33px] top-[197.33px]" data-node-id="233:4479" data-name="Exact source photo / coast-right">
+          <div className="absolute contents left-[273.33px] top-[197.33px]" data-node-id="233:4481" data-name="Exact source photo / coast-right">
+            <div className="absolute h-[146.667px] left-0 mask-position-[0px_0px,_0px_0px] mask-size-[46.667px_146.667px,_46.667px_146.667px] top-0 w-[46.667px]" data-node-id="233:4483" style={{ maskImage: `url("${imgExactSourcePhotoCoastRight}"), url("${imgExactSourcePhotoCoastRight1}")` }} data-name="Exact source photo / coast-right">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgExactSourcePhotoCoastRight2} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col h-[44.308px] items-start relative shrink-0 w-[295.385px]" data-node-id="185:9146" data-name="Site navigation / Mobile">
+          <div className="content-stretch flex flex-col items-start relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I185:9146;225:7925" data-name="Appearance">
+            <div className="border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[54px] items-center justify-between overflow-clip pl-[20px] pr-[10px] relative rounded-[var(--ovelle-radius-pill,999px)] shadow-[0px_3px_10px_0px_rgba(5,31,48,0.12)] shrink-0 w-full" data-node-id="I185:9146;225:7925;225:7919" style={{ backgroundImage: "linear-gradient(180deg, rgba(255, 255, 255, 0.258) 0%, rgba(255, 255, 255, 0.017) 30%, rgba(181, 232, 255, 0.12) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.739) 0%, rgba(255, 255, 255, 0.739) 100%)" }} data-name="Header">
+              <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[28px] not-italic relative shrink-0 text-[19.692px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] whitespace-nowrap" data-node-id="I185:9146;225:7925;225:7920">
+                ovelle
+              </p>
+              <div className="bg-[var(--ovelle-surface-selected,#eaf7fd)] content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center overflow-clip relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-[92px]" data-node-id="I185:9146;225:7925;225:7921" data-name="Menu action">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I185:9146;225:7925;225:7922">
+                  Menu
+                </p>
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9146;225:7925;225:7923" data-name="Icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I185:9146;225:7925;225:7923;7:64" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[11.487px] h-[233.026px] items-start overflow-clip pb-[68.103px] relative shrink-0 w-[280.615px]" data-node-id="185:9147" data-name="Hero copy">
+          <div className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[0] min-w-full not-italic relative shrink-0 text-[29.538px] text-[color:var(--ovelle-raw-ink,#172b3d)] tracking-[-1.641px] w-[min-content]" data-node-id="185:9148">
+            <p className="leading-[32.821px] mb-0">Better relationships.</p>
+            <p className="leading-[32.821px]">Less busywork.</p>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18.051px] min-w-full not-italic relative shrink-0 text-[13.128px] text-[color:var(--ovelle-raw-ink,#172b3d)] w-[min-content]" data-node-id="185:9149">
+            Bring your contacts, conversations, and next steps together with Ovelle.
+          </p>
+          <div className="content-stretch cursor-pointer flex gap-[11.487px] h-[48.103px] items-start overflow-clip pt-[4.103px] relative shrink-0 w-[249.436px]" data-node-id="185:9150" data-name="Hero actions">
+            <button className="content-stretch flex flex-[1_0_0] h-[44px] items-start min-w-px relative" data-node-id="185:9151" data-name="Ovelle / Button">
+              <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I185:9151;52:1517" data-name="Button appearance">
+                <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I185:9151;52:1517;7:93" data-name="Surface">
+                  <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I185:9151;52:1517;7:94">
+                    Get Ovelle
+                  </p>
+                </div>
+              </div>
+            </button>
+            <button className="content-stretch flex flex-[1_0_0] h-[44px] items-start min-w-px relative" data-node-id="185:9152" data-name="Watch demo">
+              <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I185:9152;52:1533" data-name="Button appearance">
+                <div className="border border-[rgba(255,255,255,0.95)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)] shadow-[0px_3px_10px_0px_rgba(5,31,48,0.12)]" data-node-id="I185:9152;52:1533;14:2287" style={{ backgroundImage: "linear-gradient(180deg, rgba(255, 255, 255, 0.258) 0%, rgba(255, 255, 255, 0.017) 30%, rgba(181, 232, 255, 0.12) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.739) 0%, rgba(255, 255, 255, 0.739) 100%)" }} data-name="Surface">
+                  <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] text-left whitespace-nowrap" data-node-id="I185:9152;52:1533;14:2288">
+                    Learn more
+                  </p>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+        <OvelleHeroWorkflowScene className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[8px] h-[142px] items-start pt-[3px] px-[15px] relative rounded-[16px] shrink-0 w-full" />
+      </div>
+      <div className="content-stretch flex flex-col items-start overflow-clip relative shrink-0 w-full" data-node-id="253:14684" data-name="Anchor / Mobile workflow">
+        <div className="bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex flex-col gap-[12px] items-start px-[16px] py-[24px] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="253:14685" data-name="Ovelle / Mobile workflow">
+          <div className="content-stretch flex flex-col gap-[12px] items-start overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12471" data-name="Workflow copy">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I253:14685;253:12472" data-name="Ovelle / Section label">
+              <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I253:14685;253:12472;54:1298" data-name="Appearance">
+                <div className="relative shrink-0 size-[6px]" data-node-id="I253:14685;253:12472;54:1298;9:169" data-name="Marker">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I253:14685;253:12472;54:1298;9:170">
+                  How it works
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[8px] items-start overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12512" data-name="Workflow stage controls">
+              <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I253:14685;253:12513" data-name="Stage / Find">
+                <button className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I253:14685;253:12513;54:1264" data-name="Appearance">
+                  <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12513;54:1264;7:686">
+                    Partners
+                  </p>
+                </button>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I253:14685;253:12520" data-name="Stage / Enrich">
+                <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I253:14685;253:12520;54:1264" data-name="Appearance">
+                  <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12520;54:1264;7:681">
+                    People
+                  </p>
+                </button>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I253:14685;253:12523" data-name="Stage / Follow up">
+                <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I253:14685;253:12523;54:1264" data-name="Appearance">
+                  <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12523;54:1264;7:681">
+                    Events
+                  </p>
+                </button>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[30px] min-w-full not-italic relative shrink-0 text-[24px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[min-content]" data-node-id="I253:14685;253:12473">
+              Find the right volunteer partners.
+            </p>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] min-w-full not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:14685;253:12474">
+              Match companies and teams to your volunteering opportunities.
+            </p>
+          </div>
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] items-start px-[var(--ovelle-space-16,16px)] py-[20px] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I253:14685;253:12476" data-name="Workflow stage preview">
+            <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-full" data-node-id="I253:14685;253:12476;180:4715">
+              Find partners for your next opportunity
+            </p>
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] h-[76px] items-start not-italic overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12476;201:6674" data-name="Context / Read-only demonstration">
+              <p className="font-['Inter:Medium'] font-medium leading-[20px] relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="I253:14685;253:12476;7:393">
+                Search volunteer partners
+              </p>
+              <p className="flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-h-px relative text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="I253:14685;253:12476;7:395">
+                Local teams · Community projects
+              </p>
+              <p className="font-['Inter:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="I253:14685;253:12476;7:396">
+                Match companies to volunteering interests.
+              </p>
+            </div>
+            <div className="content-stretch flex flex-col gap-[12px] items-start p-[12px] relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4717" data-name="Record results">
+              <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4718" data-name="Result row 0">
+                <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4747" data-name="Record / Name and status">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="I253:14685;253:12476;180:4719">
+                    Northlight Labs
+                  </p>
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I253:14685;253:12476;180:4721" data-name="Ovelle / Filter chip">
+                    <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I253:14685;253:12476;180:4721;54:1264" data-name="Appearance">
+                      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12476;180:4721;54:1264;7:681">
+                        Match
+                      </p>
+                    </button>
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="I253:14685;253:12476;180:4720">
+                  Environment · 24 volunteers
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4722" data-name="Result row 1">
+                <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4750" data-name="Record / Name and status">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="I253:14685;253:12476;180:4723">
+                    Helix Studio
+                  </p>
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I253:14685;253:12476;180:4725" data-name="Ovelle / Filter chip">
+                    <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I253:14685;253:12476;180:4725;54:1264" data-name="Appearance">
+                      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12476;180:4725;54:1264;7:681">
+                        Match
+                      </p>
+                    </button>
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="I253:14685;253:12476;180:4724">
+                  Mentoring · 12 volunteers
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[4px] items-center relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4726" data-name="Result row 2">
+                <div className="content-stretch flex gap-[8px] items-center overflow-clip relative shrink-0 w-full" data-node-id="I253:14685;253:12476;180:4753" data-name="Record / Name and status">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="I253:14685;253:12476;180:4727">
+                    Tideway
+                  </p>
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I253:14685;253:12476;180:4729" data-name="Ovelle / Filter chip">
+                    <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I253:14685;253:12476;180:4729;54:1264" data-name="Appearance">
+                      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I253:14685;253:12476;180:4729;54:1264;7:681">
+                        Review
+                      </p>
+                    </button>
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-full" data-node-id="I253:14685;253:12476;180:4728">
+                  Community · 40 volunteers
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] tracking-[0.1px] w-full" data-node-id="I253:14685;253:12476;180:4730">
+              3 partners match this opportunity
+            </p>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 w-[224px]" data-node-id="I253:14685;253:12526" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I253:14685;253:12526;52:1517" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I253:14685;253:12526;52:1517;7:93" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I253:14685;253:12526;52:1517;7:94">
+                  Explore partners
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col gap-[16px] items-start overflow-clip py-[24px] relative shrink-0 w-[320px]" data-node-id="185:9166" data-name="Connected / Mobile volunteer program">
+        <div className="content-stretch flex flex-col gap-[12px] items-start overflow-clip px-[16px] relative shrink-0 w-[320px]" data-node-id="185:9167" data-name="Connected / Introduction">
+          <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="185:9168" data-name="Ovelle / Section label">
+            <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I185:9168;54:1298" data-name="Appearance">
+              <div className="relative shrink-0 size-[6px]" data-node-id="I185:9168;54:1298;9:169" data-name="Marker">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+              </div>
+              <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9168;54:1298;9:170">
+                Connected
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[34px] min-w-full not-italic relative shrink-0 text-[28px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[min-content]" data-node-id="185:9169">
+            Your volunteer program, in one place.
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] min-w-full not-italic relative shrink-0 text-[16px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="185:9170">
+            Profiles, service opportunities, schedules, and participation records—connected.
+          </p>
+        </div>
+        <div className="h-[160px] relative shrink-0 w-[320px]" data-node-id="185:9171" data-name="Photo / Riverside volunteers / Mobile crop">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgPhotoRiversideVolunteersMobileCrop} />
+        </div>
+        <div className="content-stretch flex flex-col items-start overflow-clip px-[16px] relative shrink-0 w-[320px]" data-node-id="185:9172" data-name="Connected / Opportunity and capabilities">
+          <OvelleProgramOverview className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col items-start overflow-clip relative rounded-[20px] shrink-0 w-full" />
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col gap-[var(--ovelle-space-24,24px)] items-start overflow-clip pb-[40px] pt-[24px] relative shrink-0 w-[320px]" data-node-id="185:9177" data-name="Companion / Mobile evidence story">
+        <div className="content-stretch flex flex-col gap-[var(--ovelle-space-16,16px)] items-start overflow-clip px-[16px] py-[var(--ovelle-space-24,24px)] relative shrink-0 w-[320px]" data-node-id="185:9178" data-name="Companion / Introduction">
+          <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="185:9179" data-name="Ovelle / Section label">
+            <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I185:9179;54:1298" data-name="Appearance">
+              <div className="relative shrink-0 size-[6px]" data-node-id="I185:9179;54:1298;9:169" data-name="Marker">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+              </div>
+              <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9179;54:1298;9:170">
+                Desktop companion
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[34px] min-w-full not-italic relative shrink-0 text-[28px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[min-content]" data-node-id="185:9180">
+            A helpful companion. A reason for every suggestion.
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] min-w-full not-italic relative shrink-0 text-[16px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="185:9181">
+            Review the evidence before assigning. Every suggestion connects back to your records.
+          </p>
+        </div>
+        <div className="h-[260px] relative shrink-0 w-[320px]" data-node-id="185:9182" data-name="Photo / Reviewing suggestion / Mobile landscape">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgPhotoReviewingSuggestionMobileLandscape} />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--ovelle-space-12,12px)] items-start overflow-clip px-[16px] py-[var(--ovelle-space-24,24px)] relative shrink-0 w-[320px]" data-node-id="185:9183" data-name="Companion / Reasons and confirmation">
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="185:9184" data-name="Ovelle / Feature card">
+            <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[var(--ovelle-space-16,16px)] items-start min-h-[260px] p-[var(--ovelle-space-24,24px)] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I185:9184;54:1347" data-name="Appearance">
+              <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9184;54:1347;9:270" data-name="Icon">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I185:9184;54:1347;9:270;7:11" data-name="Frame">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame3} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I185:9184;54:1347;9:276">
+                Maya → Riverside clean-up
+              </p>
+              <div className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[0] min-w-full not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I185:9184;54:1347;9:277">
+                <p className="leading-[22px] mb-0">Interests: Outdoor projects</p>
+                <p className="leading-[22px] mb-0">Availability: Friday, 9:00–12:00</p>
+                <p className="leading-[22px]">Capacity: 8 of 20 places open</p>
+              </div>
+              <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip relative shrink-0 w-full" data-node-id="I185:9184;54:1347;9:278" data-name="Action">
+                <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-brand,#00598a)]" data-node-id="I185:9184;54:1347;9:279">
+                  Review suggested match
+                </p>
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9184;54:1347;9:280" data-name="Icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I185:9184;54:1347;9:280;7:30" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame4} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="185:9185">
+            Example suggestion. Confirm records are current before assigning.
+          </p>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col gap-[var(--ovelle-space-16,16px)] items-start overflow-clip pb-[48px] pt-[40px] px-[16px] relative shrink-0 w-[320px]" data-node-id="185:9186" data-name="Questions / Mobile disclosures">
+        <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="185:9187" data-name="Ovelle / Section label">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I185:9187;54:1298" data-name="Appearance">
+            <div className="relative shrink-0 size-[6px]" data-node-id="I185:9187;54:1298;9:169" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9187;54:1298;9:170">
+              Questions
+            </p>
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[34px] min-w-full not-italic relative shrink-0 text-[28px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[min-content]" data-node-id="185:9188">
+          A few things you might be wondering.
+        </p>
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="185:9189" data-name="Ovelle / FAQ row">
+          <button className="bg-[var(--ovelle-surface-default,white)] content-stretch cursor-pointer flex flex-col gap-[var(--ovelle-space-8,8px)] items-start px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I185:9189;54:1328" data-name="Appearance">
+            <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center min-h-[40px] overflow-clip relative shrink-0 w-full" data-node-id="I185:9189;54:1328;9:218" data-name="Header">
+              <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] text-left tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9189;54:1328;9:219">
+                01
+              </p>
+              <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left" data-node-id="I185:9189;54:1328;9:220">
+                How do I install Ovelle?
+              </p>
+              <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9189;54:1328;9:221" data-name="Icon">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I185:9189;54:1328;9:221;7:7" data-name="Frame">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame5} />
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="185:9190" data-name="Ovelle / FAQ row">
+          <button className="bg-[var(--ovelle-surface-default,white)] content-stretch cursor-pointer flex flex-col gap-[var(--ovelle-space-8,8px)] items-start px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I185:9190;54:1328" data-name="Appearance">
+            <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center min-h-[40px] overflow-clip relative shrink-0 w-full" data-node-id="I185:9190;54:1328;9:218" data-name="Header">
+              <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] text-left tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9190;54:1328;9:219">
+                02
+              </p>
+              <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left" data-node-id="I185:9190;54:1328;9:220">
+                Can I explore Ovelle on the web?
+              </p>
+              <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9190;54:1328;9:221" data-name="Icon">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I185:9190;54:1328;9:221;7:7" data-name="Frame">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame5} />
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="185:9191" data-name="Ovelle / FAQ row">
+          <button className="bg-[var(--ovelle-surface-default,white)] content-stretch cursor-pointer flex flex-col gap-[var(--ovelle-space-8,8px)] items-start px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I185:9191;54:1328" data-name="Appearance">
+            <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center min-h-[40px] overflow-clip relative shrink-0 w-full" data-node-id="I185:9191;54:1328;9:218" data-name="Header">
+              <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] text-left tracking-[0.1px] whitespace-nowrap" data-node-id="I185:9191;54:1328;9:219">
+                03
+              </p>
+              <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left" data-node-id="I185:9191;54:1328;9:220">
+                Why should I choose you?
+              </p>
+              <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I185:9191;54:1328;9:221" data-name="Icon">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I185:9191;54:1328;9:221;7:7" data-name="Frame">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame5} />
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col items-center px-[16px] py-[48px] relative shrink-0 w-full" data-node-id="185:9192" data-name="Get Ovelle / Email download link">
+        <OvelleEmailDownloadLink className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[16px] items-start px-[20px] py-[24px] relative rounded-[24px] shrink-0 w-full" />
+      </div>
+      <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--ovelle-space-12,12px)] items-start not-italic overflow-clip px-[16px] py-[32px] relative shrink-0 text-[color:var(--ovelle-text-primary,#172b3d)] w-[320px]" data-node-id="185:9193" data-name="Footer / Mobile">
+        <p className="font-['Inter:Semi_Bold'] font-semibold leading-[30px] relative shrink-0 text-[24px] tracking-[-0.4px] w-full" data-node-id="185:9194">
+          ovelle
+        </p>
+        <p className="font-['Inter:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] tracking-[0.1px] w-full" data-node-id="185:9195">
+          Contacts, conversations, and next steps.
+        </p>
+        <p className="font-['Inter:Regular'] font-normal leading-[18px] relative shrink-0 text-[12px] tracking-[0.1px] w-full" data-node-id="185:9196">
+          © 2026 Ovelle
+        </p>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612), Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), Ovelle / Heading: Font(family: "Inter", style: Semi Bold, size: 24, weight: 600, lineHeight: 30, letterSpacing: -0.4000000059604645).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Site navigation / Mobile
+**Node ID:** 54:1492
+
+React export: import { SiteNavigationMobile } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Brand → brand; Current → links\[\].current; Links → links; CTA → action; Menu → native details open. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Site navigation / Mobile / Liquid Glass
+**Node ID:** 14:3302
+
+Mobile navigation has a 44px menu target and a persistent brand. Menu opens below its trigger and closes along the same path; selecting a destination updates Current and closes it. Implement focus management, Escape dismissal and keyboard navigation in code. Liquid Glass material: native refraction, frosted tint, specular rim. Use Solid counterpart for reduced transparency. Same shared states and editable properties on web and desktop.
+
+## Ovelle / Icons / menu
+**Node ID:** 7:63
+
+Lucide menu icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Primary / Solid
+**Node ID:** 7:92
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Internal / Button / Secondary / Liquid Glass
+**Node ID:** 14:2285
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation. Liquid Glass material: native refraction, frosted tint, specular rim. Use Solid counterpart for reduced transparency. Same shared states and editable properties on web and desktop.
+
+## Stage=Partners, Material=Solid, Size=Compact
+**Node ID:** 221:7792
+
+Figma-only compact mobile hero scene. Stage → stage, Material → material, theme from Ovelle Color collection. Linked Select and Button states inherit their public source APIs. Default closed scenes are static/reduced-motion safe; prototype stage menu is a Home-page frame. Complete information lives in the three scroll sections. React export and typed API remain pending; do not claim automatic synchronization or source-to-render parity.
+
+## Ovelle / Hero workflow scene
+**Node ID:** 199:7256
+
+Compact mobile hero composition: linked public selector, one featured record and link to complete scroll section. Three stages × Solid/Liquid Glass. Light/Dark through Color modes; nested controls retain hover/pressed/focus/disabled semantics. Data loading is inapplicable to this static marketing example. New React API and mapping pending. No app implementation claimed.
+
+## Ovelle / Icons / chevron-down
+**Node ID:** 7:68
+
+Lucide chevron-down icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Select
+**Node ID:** 54:1262
+
+React export: import { Select } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Value → value / defaultValue; Options → options; State → disabled / error / native open. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Select / Solid
+**Node ID:** 7:515
+
+Contact-status selector. Click or Enter opens the anchored menu; select an option to change the Value variant; Escape closes. The menu is an overlay and does not move nearby content. Use a native select or accessible listbox in production.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+
+## Internal / Button / Quiet / Solid
+**Node ID:** 7:256
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Icons / arrow-right
+**Node ID:** 7:2
+
+Lucide arrow-right icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Mobile workflow
+**Node ID:** 253:12812
+
+One visible mobile workflow panel, Stage=Find|Enrich|Follow up, Material=Solid|Liquid Glass, inherited Light/Dark. Composes linked Ovelle Filter chip, Workflow preview and Button. Taps select stages; prototype uses explicit state navigation and horizontal drag simulation. Vertical body scrolling never captured. Browser: optional short sticky runway on tall screens, natural reverse/release; compact normal flow for short screens/reduced motion. Native Figma lacks scroll-position triggers. Static sample data: loading/success/error/open/disabled not applicable to panel; controls retain source state models. React MobileWorkflow(stage,onStageChange,material,glassFrost,reduceTransparency,className,slot classes) pending; source and code separately maintained.
+
+## Ovelle / Section label
+**Node ID:** 54:1305
+
+React export: import { SectionLabel } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Section label / Solid
+**Node ID:** 9:168
+
+Mochi-style section marker, scaled down. A dot and short editable label organize reading; this is not a button.
+
+## Ovelle / Workflow preview
+**Node ID:** 135:3508
+
+Volunteer-company CRM product demonstration. Find partners → Build relationships → Coordinate opportunities. Stage axes retain legacy Find / Enrich / Follow up mapping. All controls are linked Ovelle components. Light/Dark inherit Color. Solid/Liquid Glass inherit tokens and glass intensity. Marketing example data; no real search or submission. Layout=Mobile adds wrapping stage controls and grouped vertical records, preserving every field/status/summary. Desktop remains the default. Mobile design is Figma-only; React implementation and mapping remain pending. Theme and continuous material settings inherit existing tokens. No required hover/drag progression.
+
+## Ovelle / Program overview
+**Node ID:** 253:13087
+
+One mobile surface merges an example opportunity and three complete capability summaries. Four linked Ovelle Feature card Density=Summary instances and public Buttons. Material=Solid|Liquid Glass; Light/Dark inherited Color modes. Static content: loading/error/success/open/selected not applicable; action states inherited. React ProgramOverview and FeatureCard density API, className/slots/frost/transparency pending implementation. No production parity claim.
+
+## Ovelle / Feature card
+**Node ID:** 54:1378
+
+React export: import { FeatureCard } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Surface → surface; Icon → icon; Title → title; Body → children; Link → link; State → browser hover / focus-within. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. Density=Summary: informational mobile row with full title/body and no repeated icon/action; compose within one common surface. Regular unchanged. React density API pending.
+
+## Internal / Feature card / Solid
+**Node ID:** 9:269
+
+Product capability card adapted from Mochi’s cream/ice-blue content surfaces. Uses a real icon-library asset rather than stock healthcare imagery. Title, description and icon are editable. Hover is restrained; use a specific destination in each page prototype.
+
+## Ovelle / Icons / users
+**Node ID:** 7:10
+
+Lucide users icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Icons / arrow-up-right
+**Node ID:** 7:29
+
+Lucide arrow-up-right icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / FAQ row
+**Node ID:** 54:1345
+
+React export: import { FAQRow } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Number → number; Question → question; Answer → answer; State → open / native disclosure; Motion → OvelleProvider.reduceMotion / OS preference. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. Native Figma disclosure states include Open hover: the answer stays mounted and expanded while the hover surface changes. Header click toggles disclosure; answer clicks do not collapse it. Light/Dark, Solid/Liquid Glass and Standard/Reduced prototype paths are covered in FAQ / Expanded hover regression on 06 Examples, QA & icons. Figma and React remain separately maintained.
+
+## Internal / FAQ row / Solid
+**Node ID:** 9:217
+
+A quiet FAQ inspired by Mochi’s thin rows. Click the same header to expand or collapse. Answer appears directly below its question. Standard uses an anchored, critically damped transition; Reduced dissolves. Implement as a semantic disclosure with aria-expanded. Open hover keeps the answer expanded, applies the existing hover surface, and returns to Open on pointer exit. Only the header closes the disclosure.
+
+## Ovelle / Icons / plus
+**Node ID:** 7:6
+
+Lucide plus icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Device=Mobile, Layout=Mobile
+**Node ID:** 165:5322
+
+Mobile email download handoff. Linked Ovelle / Email download link; no operating-system chooser. Future Cloudflare sender downloads@mail.ovelle.com. Figma-only; does not send email.
+
+## Ovelle / Device-aware download CTA
+**Node ID:** 165:5351
+
+Figma-only composition with linked Ovelle / Download card and Filter chip components. macOS: Apple silicon and Intel ZIP; Windows: x64 EXE; Other: all builds; Mobile: desktop guidance. Implementation should detect OS, keep manual override, use Other for unknown or unsupported desktop OS, and avoid guessing Mac architecture. Figma cannot detect devices. Release catalog: apps/web/src/App.tsx. No Linux or mobile installer is advertised. Code and Figma are maintained separately. Layout=Mobile includes phone-width macOS, Windows and Other/all-download build lists. Mobile guidance routes to these layouts. All build titles, architecture labels, descriptions and requirements are retained. Device=Mobile has no Desktop layout. Figma-only composition; React implementation remains pending. Prototype: phone download outcomes are navigated through the dedicated 01 Home viewport. New CHANGE\_TO destinations were rejected by the tool; do not claim internal mobile variant switching is verified.
+
+## State=Default, Material=Solid
+**Node ID:** 246:7945
+
+Mobile download email handoff. Linked Ovelle Field and Button. Future Cloudflare sender downloads@mail.ovelle.com. Figma-only: no email sending. Inherits Light/Dark and native material settings. React/API/manifest implementation pending.
+
+## Ovelle / Email download link
+**Node ID:** 246:8205
+
+Mobile email download handoff. State: Default/Focused/Sending/Sent/Invalid/Error/Disabled; Material: Solid/Liquid Glass. Light/Dark inherit Color modes. Linked public Field and Button. Cloudflare sender downloads@mail.ovelle.com planned; no email sent in Figma. Hover/pressed controls inherit source state model. No OS choices on mobile.
+
+## Ovelle / Field
+**Node ID:** 54:1243
+
+React export: import { Field } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Kind → kind; Label → label; Value → value / defaultValue; Placeholder → placeholder; Hint → hint; Error → error; Success → success; State → disabled / validation / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Kind=Text, State=Default, Supporting text=Hidden
+**Node ID:** 255:11373
+
+Content-sized helper-free field. Error/Success feedback retained. Original callers use Visible mode. Figma-only capability; React mapping pending.
+
+## Internal / Field / Solid
+**Node ID:** 7:392
+
+Persistent label, 44px input and helper text. Focus has a 2px border and caret. Error and success use an icon plus text. The prototype uses a fixed sample value, not live typing. Code must preserve native input semantics, labels and inline validation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

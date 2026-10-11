@@ -3,6 +3,8 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
+const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
+if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID is required')
 const accessKeyId = process.env.R2_ACCESS_KEY_ID
 const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY
 if (!accessKeyId || !secretAccessKey) throw new Error('R2 signing key is missing')
@@ -10,7 +12,7 @@ if (!accessKeyId || !secretAccessKey) throw new Error('R2 signing key is missing
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
 const client = new S3Client({
   region: 'auto',
-  endpoint: 'https://83952a1be987e4a12647732861a60925.r2.cloudflarestorage.com',
+  endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
   forcePathStyle: true,
   credentials: { accessKeyId, secretAccessKey },
 })

@@ -1,0 +1,29 @@
+{
+  "components": [
+    {
+      "repository": "Atripix-Design/ci-infrastructure",
+      "commit": "57557facab9b8fa6404a874c122d39845f0cbd50",
+      "source": ".github/workflows/select-runners.yml",
+      "target": ".github/workflows/select-runners.yml",
+      "sourceSha256": "c78764c9201e624c91b689caca26420a71b3161117644ee86d85783b9f95fdc1",
+      "vendoredSha256": "2e59538c1f701d5cd55045aaa7cec4bee4ca816614fe2e42b1bee2409ca08034"
+    },
+    {
+      "repository": "Atripix-Design/ci-infrastructure",
+      "commit": "57557facab9b8fa6404a874c122d39845f0cbd50",
+      "source": "actions/dispatch-hosted-fallback/action.yml",
+      "target": ".github/actions/dispatch-hosted-fallback/action.yml",
+      "sourceSha256": "5cbfdb64bf1c43cd7176eb0a9a47ad8816693daeec636e21c5f4ae13fa57249f",
+      "vendoredSha256": "5cbfdb64bf1c43cd7176eb0a9a47ad8816693daeec636e21c5f4ae13fa57249f"
+    },
+    {
+      "repository": "Atripix-Design/ci-infrastructure",
+      "commit": "9d96739889abafddf80bb8a546df0da7568199c6",
+      "source": "actions/setup-node-adaptive/action.yml",
+      "target": ".github/actions/setup-node-adaptive/action.yml",
+      "sourceSha256": "64146eacaf609f3f961a1830c04edf32e7c6823b738e3d01c291b0ced1de1343",
+      "vendoredSha256": "d58be8d97b7251362e013c80e49808420a98e77a059c2eba51fe36e59ea961de"
+    }
+  ],
+  "adaptation": "Public consumer adapter: require selected repository access, public-repository enablement, and GitHub-enforced restriction to the current trusted branch workflow; all pull requests and manual dispatches stay hosted."
+}

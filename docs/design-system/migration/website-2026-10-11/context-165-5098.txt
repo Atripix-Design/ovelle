@@ -1,0 +1,172 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/b3140.svg`;
+const imgFrame1 = `${assetPathPrefix}/9043a.svg`;
+const imgFrame2 = `${assetPathPrefix}/1c893.svg`;
+
+type OvelleDeviceAwareDownloadCtaProps = {
+  className?: string;
+  device?: "macOS";
+  layout?: "Desktop";
+};
+
+function OvelleDeviceAwareDownloadCta({ className, device = "macOS", layout = "Desktop" }: OvelleDeviceAwareDownloadCtaProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[24px] items-center px-[32px] py-[48px] relative w-[1240px]"} data-node-id="165:5098">
+      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium h-[42px] leading-[42px] not-italic relative shrink-0 text-[36px] text-[color:var(--ovelle-text-primary,#172b3d)] text-center tracking-[-0.7px] w-[1176px]" data-node-id="165:5099">
+        Make room for better relationships.
+      </p>
+      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium h-[24px] leading-[24px] not-italic relative shrink-0 text-[16px] text-[color:var(--ovelle-text-primary,#172b3d)] text-center tracking-[-0.7px] w-[1176px]" data-node-id="165:5100">
+        Keep volunteer partners, opportunities, and next steps together.
+      </p>
+      <div className="content-stretch flex gap-[16px] items-start overflow-clip relative shrink-0" data-node-id="165:5101" data-name="Choose another platform">
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[116px]" data-node-id="165:5102" data-name="Stage / Find">
+          <button className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I165:5102;54:1264" data-name="Appearance">
+            <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I165:5102;54:1264;7:683" data-name="Icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I165:5102;54:1264;7:683;7:58" data-name="Frame">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I165:5102;54:1264;7:686">
+              macOS
+            </p>
+          </button>
+        </div>
+        <div className="absolute h-[44px] left-0 top-0 w-[116px]" data-node-id="165:5108" data-name="Platform action / macOS" />
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[116px]" data-node-id="165:5109" data-name="Stage / Find">
+          <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I165:5109;54:1264" data-name="Appearance">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I165:5109;54:1264;7:681">
+              Windows
+            </p>
+          </button>
+        </div>
+        <button className="absolute block cursor-pointer h-[44px] left-[132px] top-0 w-[116px]" data-node-id="165:5116" data-name="Platform action / Windows" />
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" data-node-id="165:5117" data-name="Stage / Find">
+          <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I165:5117;54:1264" data-name="Appearance">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I165:5117;54:1264;7:681">
+              All downloads
+            </p>
+          </button>
+        </div>
+        <button className="absolute block cursor-pointer h-[44px] left-[264px] top-0 w-[148px]" data-node-id="165:5124" data-name="Platform action / Other" />
+      </div>
+      <div className="content-stretch flex gap-[16px] items-start overflow-clip relative shrink-0" data-node-id="165:5125" data-name="Available desktop builds">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-[380px]" data-node-id="165:5126" data-name="Ovelle / Download card">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] items-start min-h-[292px] p-[var(--ovelle-space-24,24px)] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I165:5126;54:1380" data-name="Appearance">
+            <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I165:5126;54:1380;9:403" data-name="Icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I165:5126;54:1380;9:403;7:21" data-name="Frame">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I165:5126;54:1380;9:408">
+              Mac · Apple silicon
+            </p>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal h-[22px] leading-[22px] min-w-full not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I165:5126;54:1380;9:409">
+              For Macs with an Apple silicon chip.
+            </p>
+            <div className="content-stretch cursor-pointer flex h-[72px] items-center justify-center p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I165:5126;54:1380;9:410" data-name="Internal / Download action / Solid">
+              <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[16px] h-[64px] items-center justify-center min-w-px overflow-clip px-[24px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I165:5126;54:1380;9:410;14:2018" data-name="Surface">
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I165:5126;54:1380;9:410;14:2098" data-name="Download icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I165:5126;54:1380;9:410;14:2098;7:34" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-on-brand,white)]" data-node-id="I165:5126;54:1380;9:410;14:2019">
+                  Download for Apple silicon
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] min-w-full not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[min-content]" data-node-id="I165:5126;54:1380;9:413">
+              ZIP archive · Preview build
+            </p>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-[380px]" data-node-id="165:5144" data-name="Ovelle / Download card">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] items-start min-h-[292px] p-[var(--ovelle-space-24,24px)] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-full" data-node-id="I165:5144;54:1380" data-name="Appearance">
+            <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I165:5144;54:1380;9:403" data-name="Icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I165:5144;54:1380;9:403;7:21" data-name="Frame">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I165:5144;54:1380;9:408">
+              Mac · Intel
+            </p>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal h-[22px] leading-[22px] min-w-full not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I165:5144;54:1380;9:409">
+              For Macs with an Intel processor.
+            </p>
+            <div className="content-stretch cursor-pointer flex h-[72px] items-center justify-center p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I165:5144;54:1380;9:410" data-name="Internal / Download action / Solid">
+              <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[16px] h-[64px] items-center justify-center min-w-px overflow-clip px-[24px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I165:5144;54:1380;9:410;14:2018" data-name="Surface">
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I165:5144;54:1380;9:410;14:2098" data-name="Download icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I165:5144;54:1380;9:410;14:2098;7:34" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Medium'] font-medium leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-on-brand,white)]" data-node-id="I165:5144;54:1380;9:410;14:2019">
+                  Download for Intel
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] min-w-full not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[min-content]" data-node-id="I165:5144;54:1380;9:413">
+              ZIP archive · Preview build
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Device-aware download CTA
+**Node ID:** 165:5351
+
+Figma-only composition with linked Ovelle / Download card and Filter chip components. macOS: Apple silicon and Intel ZIP; Windows: x64 EXE; Other: all builds; Mobile: desktop guidance. Implementation should detect OS, keep manual override, use Other for unknown or unsupported desktop OS, and avoid guessing Mac architecture. Figma cannot detect devices. Release catalog: apps/web/src/App.tsx. No Linux or mobile installer is advertised. Code and Figma are maintained separately. Layout=Mobile includes phone-width macOS, Windows and Other/all-download build lists. Mobile guidance routes to these layouts. All build titles, architecture labels, descriptions and requirements are retained. Device=Mobile has no Desktop layout. Figma-only composition; React implementation remains pending. Prototype: phone download outcomes are navigated through the dedicated 01 Home viewport. New CHANGE\_TO destinations were rejected by the tool; do not claim internal mobile variant switching is verified.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+
+## Ovelle / Icons / check
+**Node ID:** 7:57
+
+Lucide check icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Download card
+**Node ID:** 54:1415
+
+React export: import { DownloadCard } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Platform → platform; Title → title; Body → children; Action → action; State → unavailable / browser hover. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Download card / Solid
+**Node ID:** 9:402
+
+One platform, one clear download action. No offer banner or pricing tricks. Button loading/ready feedback is simulated; page prototypes must point to the actual installer when available. Unavailable state disables the action and explains why.
+
+## Ovelle / Icons / monitor
+**Node ID:** 7:20
+
+Lucide monitor icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Internal / Download action / Solid
+**Node ID:** 14:2016
+
+Shared website and desktop download action. 64px surface, 24px horizontal inset, leading download icon. State timers simulate preparation, not a real download.
+
+## Ovelle / Icons / download
+**Node ID:** 7:33
+
+Lucide download icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

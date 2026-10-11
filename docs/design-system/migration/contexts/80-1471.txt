@@ -1,0 +1,505 @@
+const assetPathPrefix = "https://www.figma.com/api/mcp/asset/23e24c5d-1915-462f-ae12-d51d610d7946";
+type OvelleDatePickerProps = {
+  className?: string;
+  label?: string;
+  material?: "Solid";
+  state?: "Open";
+  theme?: "Light";
+  value?: string;
+};
+
+function OvelleDatePicker({ className, label = "Date", material = "Solid", state = "Open", theme = "Light", value = "Oct 8, 2026" }: OvelleDatePickerProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--ovelle-space-8,8px)] items-start relative w-[320px]"} data-node-id="80:1471">
+      <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] whitespace-nowrap" data-node-id="80:1472">
+        {label}
+      </p>
+      <div className="[word-break:break-word] bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex font-['Inter:Regular'] font-normal h-[44px] items-center justify-between leading-[22px] not-italic overflow-clip px-[16px] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 text-[15px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[320px] whitespace-nowrap" data-node-id="80:1473" data-name="Frame">
+        <p className="relative shrink-0" data-node-id="80:1474">
+          {value}
+        </p>
+        <p className="relative shrink-0" data-node-id="80:1475">
+          ▦
+        </p>
+      </div>
+      <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[4px] items-start overflow-clip p-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-[320px]" data-node-id="80:1476" data-name="Frame">
+        <div className="content-stretch flex items-center justify-between overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1477" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[44px]" data-node-id="80:1478" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1478;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1478;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1478;83:2977;117:2887">
+                  ‹
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] whitespace-nowrap" data-node-id="80:1482">
+            October 2026
+          </p>
+          <div className="content-stretch flex items-start relative shrink-0 size-[44px]" data-node-id="80:1483" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1483;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1483;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1483;83:2977;117:2887">
+                  ›
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="[word-break:break-word] content-stretch flex font-['Inter:Regular'] font-normal items-center leading-[18px] not-italic overflow-clip relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] text-center tracking-[0.1px] w-[294px]" data-node-id="80:1487" data-name="Frame">
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1488">
+            Su
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1489">
+            Mo
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1490">
+            Tu
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1491">
+            We
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1492">
+            Th
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1493">
+            Fr
+          </p>
+          <p className="relative shrink-0 w-[42px]" data-node-id="80:1494">
+            Sa
+          </p>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1495" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1496" data-name="Ovelle / Button">
+            <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1496;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1496;83:2977;117:2898" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-disabled,#788a98)] whitespace-nowrap" data-node-id="I80:1496;83:2977;117:2899">
+                  27
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1502" data-name="Ovelle / Button">
+            <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1502;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1502;83:2977;117:2898" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-disabled,#788a98)] whitespace-nowrap" data-node-id="I80:1502;83:2977;117:2899">
+                  28
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1508" data-name="Ovelle / Button">
+            <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1508;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1508;83:2977;117:2898" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-disabled,#788a98)] whitespace-nowrap" data-node-id="I80:1508;83:2977;117:2899">
+                  29
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1514" data-name="Ovelle / Button">
+            <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1514;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1514;83:2977;117:2898" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-disabled,#788a98)] whitespace-nowrap" data-node-id="I80:1514;83:2977;117:2899">
+                  30
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1520" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1520;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1520;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1520;83:2977;117:2887">
+                  1
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1524" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1524;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1524;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1524;83:2977;117:2887">
+                  2
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1528" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1528;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1528;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1528;83:2977;117:2887">
+                  3
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1532" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1533" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1533;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1533;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1533;83:2977;117:2887">
+                  4
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1537" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1537;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1537;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1537;83:2977;117:2887">
+                  5
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1541" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1541;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1541;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1541;83:2977;117:2887">
+                  6
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1545" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1545;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1545;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1545;83:2977;117:2887">
+                  7
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1549" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1549;83:2953" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1549;83:2953;117:2394" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I80:1549;83:2953;117:2395">
+                  8
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1553" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1553;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1553;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1553;83:2977;117:2887">
+                  9
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1557" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1557;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1557;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1557;83:2977;117:2887">
+                  10
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1561" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1562" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1562;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1562;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1562;83:2977;117:2887">
+                  11
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1566" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1566;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1566;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1566;83:2977;117:2887">
+                  12
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1570" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1570;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1570;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1570;83:2977;117:2887">
+                  13
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1574" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1574;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1574;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1574;83:2977;117:2887">
+                  14
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1578" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1578;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1578;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1578;83:2977;117:2887">
+                  15
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1582" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1582;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1582;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1582;83:2977;117:2887">
+                  16
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1586" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1586;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1586;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1586;83:2977;117:2887">
+                  17
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1590" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1591" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1591;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1591;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1591;83:2977;117:2887">
+                  18
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1595" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1595;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1595;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1595;83:2977;117:2887">
+                  19
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1599" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1599;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1599;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1599;83:2977;117:2887">
+                  20
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1603" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1603;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1603;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1603;83:2977;117:2887">
+                  21
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1607" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1607;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1607;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1607;83:2977;117:2887">
+                  22
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1611" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1611;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1611;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1611;83:2977;117:2887">
+                  23
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1615" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1615;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1615;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1615;83:2977;117:2887">
+                  24
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1619" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1620" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1620;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1620;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1620;83:2977;117:2887">
+                  25
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1624" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1624;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1624;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1624;83:2977;117:2887">
+                  26
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1628" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1628;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1628;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1628;83:2977;117:2887">
+                  27
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1632" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1632;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1632;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1632;83:2977;117:2887">
+                  28
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1636" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1636;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1636;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1636;83:2977;117:2887">
+                  29
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1640" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1640;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1640;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1640;83:2977;117:2887">
+                  30
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1644" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1644;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1644;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1644;83:2977;117:2887">
+                  31
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[42px] items-center overflow-clip relative shrink-0 w-[294px]" data-node-id="80:1648" data-name="Frame">
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1649" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1649;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1649;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1649;83:2977;117:2887">
+                  1
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1653" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1653;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1653;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1653;83:2977;117:2887">
+                  2
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1657" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1657;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1657;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1657;83:2977;117:2887">
+                  3
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1661" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1661;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1661;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1661;83:2977;117:2887">
+                  4
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1665" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1665;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1665;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1665;83:2977;117:2887">
+                  5
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1669" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1669;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1669;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1669;83:2977;117:2887">
+                  6
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 size-[42px]" data-node-id="80:1673" data-name="Ovelle / Button">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[3px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1673;83:2977" data-name="Button appearance">
+              <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[4px] relative rounded-[8px]" data-node-id="I80:1673;83:2977;117:2886" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1673;83:2977;117:2887">
+                  7
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex h-[44px] items-start relative shrink-0 w-[294px]" data-node-id="80:1677" data-name="Ovelle / Button">
+          <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1677;52:1541" data-name="Button appearance">
+            <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I80:1677;52:1541;117:2886" data-name="Surface">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I80:1677;52:1541;117:2887">
+                Clear date
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Date picker
+**Node ID:** 80:2385
+
+React: DatePicker. Single local calendar date (YYYY-MM-DD), controlled/uncontrolled, min/max, disabled, required, error/hint. Arrow keys move days; Home/End week; PageUp/Down month (Shift: year); Escape closes and restores focus. Trigger height is 52px; its source calendar expands inline. Theme inherits provider; glassFrost 0–100, reduceTransparency independent. Button hover/pressed/focus states inherited through linked instances; loading/success not applicable to date selection. Usage: &amp;lt;DatePicker label=&amp;quot;Date&amp;quot; value={date} onValueChange={setDate} /&amp;gt;. Hover and Focus are shown. Pressed shares the hover border treatment and has no separate state. No loading/success states apply. Source fidelity: retrieve high fidelity design context and screenshot for every meaningful variant before implementation; preserve exact geometry, Inter typography and original Light/Dark SVGs. Refresh source references and linked skeleton masks, run scripts/check-figma-fidelity.mjs and scripts/check-content-components.mjs in both apps, and inspect Figma/browser captures before parity claims. Workflow: docs/design-system/skeleton-workflow.md. Figma and React are separately maintained.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Source fidelity: retrieve high fidelity design context and screenshot for every meaningful variant before implementation; preserve exact geometry, Inter typography and original Light/Dark SVGs. Refresh source references and linked skeleton masks, run scripts/check-figma-fidelity.mjs and scripts/check-content-components.mjs in both apps, and inspect Figma/browser captures before parity claims. Workflow: docs/design-system/skeleton-workflow.md. Figma and React are separately maintained.
+
+## Internal / Button / Compact / Quiet / Solid
+**Node ID:** 117:2884
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Internal / Button / Compact / Primary / Solid
+**Node ID:** 117:2392
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

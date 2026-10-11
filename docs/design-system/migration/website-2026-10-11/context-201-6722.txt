@@ -1,0 +1,157 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/4916d.svg`;
+const imgFrame1 = `${assetPathPrefix}/848bb.svg`;
+const imgFrame2 = `${assetPathPrefix}/4802f.svg`;
+const imgOvelleIconsHeart = `${assetPathPrefix}/1f347.svg`;
+const imgOvelleIconsChevronRight = `${assetPathPrefix}/c052d.svg`;
+const imgOvelleIconsChartNoAxesColumnIncreasing = `${assetPathPrefix}/1983e.svg`;
+
+type OvelleHeroStageSheetProps = {
+  className?: string;
+  stage?: "Partners";
+};
+
+function OvelleHeroStageSheet({ className, stage = "Partners" }: OvelleHeroStageSheetProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[8px] h-[307px] items-start pb-[53px] pt-[30px] px-[18px] relative rounded-tl-[20px] rounded-tr-[20px] w-[390px]"} data-node-id="201:6722">
+      <div className="content-stretch flex gap-[12px] h-[44px] items-center overflow-clip relative shrink-0 w-full" data-node-id="201:6723" data-name="Sheet / Header">
+        <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Semi_Bold'] font-semibold h-full justify-center leading-[0] min-w-px not-italic relative text-[20px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px]" data-node-id="201:6724">
+          <p className="leading-[26px]">Explore Ovelle</p>
+        </div>
+        <div className="content-stretch flex items-start relative shrink-0 size-[44px]" data-node-id="201:6725" data-name="Ovelle / Button / Close stage sheet">
+          <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I201:6725;52:1541" data-name="Button appearance">
+            <div className="bg-[#f2f6f8] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[12px] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I201:6725;52:1541;7:257" data-name="Surface" />
+          </div>
+        </div>
+        <div className="absolute content-stretch flex h-[20px] items-center justify-center left-[322px] top-[12px]" data-node-id="219:7636" data-name="Ovelle / Icons / x">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I219:7636;7:44" data-name="Frame">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col gap-[8px] items-start overflow-clip relative shrink-0 w-full" data-node-id="201:6729" data-name="Stage choices / One line each">
+        <div className="bg-[#e8f6fd] content-stretch flex h-[52px] items-start overflow-clip relative rounded-[14px] shrink-0 w-full" data-node-id="219:7641" data-name="Sheet row / Partners">
+          <div className="content-stretch flex flex-[1_0_0] h-full items-start min-w-px relative" data-node-id="201:6730" data-name="Stage / Partners">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I201:6730;52:1517" data-name="Button appearance">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center min-w-px overflow-clip pl-[66px] pr-[40px] relative rounded-[14px]" data-node-id="I201:6730;52:1517;7:93" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] not-italic relative shrink-0 text-[#10273b] text-[18px] whitespace-nowrap" data-node-id="I201:6730;52:1517;7:94">
+                  Partners
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex h-[20px] items-center justify-center left-[20px] top-[14px]" data-node-id="219:7642" data-name="Ovelle / Icons / users">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I219:7642;7:11" data-name="Frame">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+            </div>
+          </div>
+          <div className="absolute content-stretch flex h-[20px] items-center justify-center left-[316px] top-[15px]" data-node-id="219:7648" data-name="Ovelle / Icons / check">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I219:7648;7:58" data-name="Frame">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame2} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-[#f2f5f7] content-stretch flex h-[52px] items-start overflow-clip relative rounded-[14px] shrink-0 w-full" data-node-id="219:7651" data-name="Sheet row / Relationships">
+          <div className="content-stretch flex flex-[1_0_0] h-full items-start min-w-px relative" data-node-id="201:6734" data-name="Stage / Relationships">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I201:6734;52:1541" data-name="Button appearance">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center min-w-px overflow-clip pl-[66px] pr-[40px] relative rounded-[14px]" data-node-id="I201:6734;52:1541;7:257" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] not-italic relative shrink-0 text-[#10273b] text-[18px] whitespace-nowrap" data-node-id="I201:6734;52:1541;7:258">
+                  Relationships
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute left-[20px] size-[24px] top-[14px]" data-node-id="219:7652" data-name="Ovelle / Icons / heart">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOvelleIconsHeart} />
+          </div>
+          <div className="absolute left-[316px] size-[24px] top-[15px]" data-node-id="219:7654" data-name="Ovelle / Icons / chevron-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOvelleIconsChevronRight} />
+          </div>
+        </div>
+        <div className="bg-[#f2f5f7] content-stretch flex h-[52px] items-start overflow-clip relative rounded-[14px] shrink-0 w-full" data-node-id="219:7656" data-name="Sheet row / Opportunities">
+          <div className="content-stretch flex flex-[1_0_0] h-full items-start min-w-px relative" data-node-id="201:6738" data-name="Stage / Opportunities">
+            <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I201:6738;52:1541" data-name="Button appearance">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center min-w-px overflow-clip pl-[66px] pr-[40px] relative rounded-[14px]" data-node-id="I201:6738;52:1541;7:257" data-name="Surface">
+                <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[24px] not-italic relative shrink-0 text-[#10273b] text-[18px] whitespace-nowrap" data-node-id="I201:6738;52:1541;7:258">
+                  Opportunities
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute left-[20px] size-[24px] top-[14px]" data-node-id="219:7657" data-name="Ovelle / Icons / chart-no-axes-column-increasing">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOvelleIconsChartNoAxesColumnIncreasing} />
+          </div>
+          <div className="absolute left-[316px] size-[24px] top-[15px]" data-node-id="219:7661" data-name="Ovelle / Icons / chevron-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOvelleIconsChevronRight} />
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[#d9e2e9] h-[5px] left-[169.5px] rounded-[3px] top-[14px] w-[51px]" data-node-id="219:7640" data-name="Sheet / Grabber" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Stage=Partners
+**Node ID:** 201:6722
+
+Figma-only stage choice sheet. Linked public buttons; current stage selected. Theme inherited. Prototype uses explicit screen-state navigation; browser focus trap/Escape behavior, gesture dismissal and React implementation pending.
+
+## Ovelle / Hero stage sheet
+**Node ID:** 201:6782
+
+Mobile hero stage choices, using linked public buttons. Three current-stage variants, stable Solid material, Light/Dark through Color tokens. Closed/open evidence on Home prototypes. Static marketing navigation: data-loading, success and error inapplicable. Native select UI and focus semantics must be implemented in code; Figma remains separately maintained.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Quiet / Solid
+**Node ID:** 7:256
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Icons / x
+**Node ID:** 7:43
+
+Lucide x icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Internal / Button / Primary / Solid
+**Node ID:** 7:92
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Icons / users
+**Node ID:** 7:10
+
+Lucide users icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Icons / check
+**Node ID:** 7:57
+
+Lucide check icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Icons / heart
+**Node ID:** 218:11178
+
+Exact Lucide SVG asset, 24×24 native dimensions. Reference mobile hero sheet icon; linked instances.
+
+## Ovelle / Icons / chevron-right
+**Node ID:** 218:11180
+
+Exact Lucide SVG asset, 24×24 native dimensions. Reference mobile hero sheet icon; linked instances.
+
+## Ovelle / Icons / chart-no-axes-column-increasing
+**Node ID:** 218:11179
+
+Exact Lucide SVG asset, 24×24 native dimensions. Reference mobile hero sheet icon; linked instances.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

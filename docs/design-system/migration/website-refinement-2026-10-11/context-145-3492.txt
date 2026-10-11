@@ -1,0 +1,325 @@
+const assetPathPrefix = "[exact downloaded Figma source asset]";
+const imgFrame = `${assetPathPrefix}/b3140.svg`;
+const imgMarker = `${assetPathPrefix}/275c6.svg`;
+
+type OvelleWorkflowPreviewProps = {
+  className?: string;
+  layout?: "Desktop";
+  material?: "Solid";
+  stage?: "Find" | "Enrich" | "Follow up";
+  state?: "Default";
+};
+
+function OvelleWorkflowPreview({ className, layout = "Desktop", material = "Solid", stage = "Find", state = "Default" }: OvelleWorkflowPreviewProps) {
+  const isDefaultAndSolidAndDesktopAndIsEnrichOrFollowUp = state === "Default" && material === "Solid" && layout === "Desktop" && ["Enrich", "Follow up"].includes(stage);
+  const isEnrichAndDefaultAndSolidAndDesktop = stage === "Enrich" && state === "Default" && material === "Solid" && layout === "Desktop";
+  const isFindAndDefaultAndSolidAndDesktop = stage === "Find" && state === "Default" && material === "Solid" && layout === "Desktop";
+  const isFollowUpAndDefaultAndSolidAndDesktop = stage === "Follow up" && state === "Default" && material === "Solid" && layout === "Desktop";
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] h-[452px] items-start overflow-clip p-[24px] relative rounded-[var(--ovelle-radius-card,20px)] w-[660px]"} id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3172" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3088" : "node-135_3004"}>
+      <div className="content-stretch flex gap-[16px] h-[44px] items-center justify-center relative shrink-0 w-[612px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3173" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3089" : "node-135_3005"} data-name="Stage controls">
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3174" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3090" : "node-135_3006"} data-name="Stage / Find">
+          <button className={`content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 ${isDefaultAndSolidAndDesktopAndIsEnrichOrFollowUp ? "bg-[var(--ovelle-surface-subtle,#eef2f5)]" : "bg-[var(--ovelle-action-brand,#00598a)]"}`} id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3174-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3090-54_1264" : "node-I135_3006-54_1264"} data-name="Appearance">
+            {isDefaultAndSolidAndDesktopAndIsEnrichOrFollowUp && (
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3174-54_1264-7_681" : "node-I135_3090-54_1264-7_681"}>
+                Partners
+              </p>
+            )}
+            {isFindAndDefaultAndSolidAndDesktop && (
+              <>
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I135:3006;54:1264;7:683" data-name="Icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I135:3006;54:1264;7:683;7:58" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I135:3006;54:1264;7:686">
+                  Partners
+                </p>
+              </>
+            )}
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3177" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3093" : "node-135_3013"} data-name="Stage / Enrich">
+          <button className={`content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 ${isEnrichAndDefaultAndSolidAndDesktop ? "bg-[var(--ovelle-action-brand,#00598a)]" : "bg-[var(--ovelle-surface-subtle,#eef2f5)]"}`} id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3177-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3093-54_1264" : "node-I135_3013-54_1264"} data-name="Appearance">
+            {state === "Default" && material === "Solid" && layout === "Desktop" && ["Find", "Follow up"].includes(stage) && (
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3177-54_1264-7_681" : "node-I135_3013-54_1264-7_681"}>
+                Relationships
+              </p>
+            )}
+            {isEnrichAndDefaultAndSolidAndDesktop && (
+              <>
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I135:3093;54:1264;7:683" data-name="Icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I135:3093;54:1264;7:683;7:58" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I135:3093;54:1264;7:686">
+                  Relationships
+                </p>
+              </>
+            )}
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col h-[44px] items-center justify-center relative shrink-0 w-[148px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3180" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3100" : "node-135_3016"} data-name="Stage / Follow up">
+          <button className={`content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 ${isFollowUpAndDefaultAndSolidAndDesktop ? "bg-[var(--ovelle-action-brand,#00598a)]" : "bg-[var(--ovelle-surface-subtle,#eef2f5)]"}`} id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3180-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3100-54_1264" : "node-I135_3016-54_1264"} data-name="Appearance">
+            {state === "Default" && material === "Solid" && layout === "Desktop" && ["Find", "Enrich"].includes(stage) && (
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3100-54_1264-7_681" : "node-I135_3016-54_1264-7_681"}>
+                Opportunities
+              </p>
+            )}
+            {isFollowUpAndDefaultAndSolidAndDesktop && (
+              <>
+                <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I135:3180;54:1264;7:683" data-name="Icon">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I135:3180;54:1264;7:683;7:58" data-name="Frame">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] text-left whitespace-nowrap" data-node-id="I135:3180;54:1264;7:686">
+                  Opportunities
+                </p>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[24px] not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[612px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3187" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3103" : "node-135_3019"}>
+        {isFollowUpAndDefaultAndSolidAndDesktop ? "Coordinate the next opportunity" : isEnrichAndDefaultAndSolidAndDesktop ? "Keep every relationship in context" : "Find partners for your next opportunity"}
+      </p>
+      <div className="content-stretch flex flex-col items-start relative shrink-0 w-[612px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3188" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3104" : "node-135_3020"} data-name="Context field">
+        <button className="content-stretch cursor-pointer flex flex-col gap-[var(--ovelle-space-4,4px)] items-start min-h-[96px] relative shrink-0 w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3188-54_1232" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3104-54_1232" : "node-I135_3020-54_1232"} data-name="Appearance">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3188-54_1232-7_393" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3104-54_1232-7_393" : "node-I135_3020-54_1232-7_393"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Next volunteering opportunity" : isEnrichAndDefaultAndSolidAndDesktop ? "Company and volunteer context" : "Search volunteer partners"}
+          </p>
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3188-54_1232-7_394" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3104-54_1232-7_394" : "node-I135_3020-54_1232-7_394"} data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-w-px not-italic relative text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-left" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3188-54_1232-7_395" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3104-54_1232-7_395" : "node-I135_3020-54_1232-7_395"}>
+              {isFollowUpAndDefaultAndSolidAndDesktop ? "Riverside clean-up · Friday" : isEnrichAndDefaultAndSolidAndDesktop ? "Northlight Labs" : "Local teams · Community projects"}
+            </p>
+          </div>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-left tracking-[0.1px] w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3188-54_1232-7_396" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3104-54_1232-7_396" : "node-I135_3020-54_1232-7_396"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Invite the team and track commitments." : isEnrichAndDefaultAndSolidAndDesktop ? "Contacts, interests, and activity together." : "Match companies to volunteering interests."}
+          </p>
+        </button>
+      </div>
+      <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-[612px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3194" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3110" : "node-135_3026"} data-name="Record results">
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3195" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3111" : "node-135_3027"} data-name="Result row 0">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3196" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3112" : "node-135_3028"}>
+            {isEnrichAndDefaultAndSolidAndDesktop ? "Maya Chen" : isFollowUpAndDefaultAndSolidAndDesktop ? "Northlight Labs" : "Northlight Labs"}
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3197" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3113" : "node-135_3029"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "12 volunteers confirmed" : isEnrichAndDefaultAndSolidAndDesktop ? "Volunteer · Outdoor projects" : "Environment · 24 volunteers"}
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3198" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3114" : "node-135_3030"} data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3198-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3114-54_1264" : "node-I135_3030-54_1264"} data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3198-54_1264-7_681" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3114-54_1264-7_681" : "node-I135_3030-54_1264-7_681"}>
+                {isFollowUpAndDefaultAndSolidAndDesktop ? "Confirmed" : isEnrichAndDefaultAndSolidAndDesktop ? "Active" : "Match"}
+              </p>
+            </button>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3201" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3117" : "node-135_3033"} data-name="Result row 1">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3202" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3118" : "node-135_3034"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Team briefing" : isEnrichAndDefaultAndSolidAndDesktop ? "Availability" : "Helix Studio"}
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3203" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3119" : "node-135_3035"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Thursday · 10:00" : isEnrichAndDefaultAndSolidAndDesktop ? "Friday · 9:00–12:00" : "Mentoring · 12 volunteers"}
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3204" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3120" : "node-135_3036"} data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3204-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3120-54_1264" : "node-I135_3036-54_1264"} data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3204-54_1264-7_681" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3120-54_1264-7_681" : "node-I135_3036-54_1264-7_681"}>
+                {isFollowUpAndDefaultAndSolidAndDesktop ? "Planned" : isEnrichAndDefaultAndSolidAndDesktop ? "Match" : "Match"}
+              </p>
+            </button>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[12px] h-[44px] items-center p-[4px] relative shrink-0 w-full" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3207" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3123" : "node-135_3039"} data-name="Result row 2">
+          <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-[176px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3208" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3124" : "node-135_3040"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Volunteer invitation" : isEnrichAndDefaultAndSolidAndDesktop ? "Participation" : "Tideway"}
+          </p>
+          <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] w-[240px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3209" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3125" : "node-135_3041"}>
+            {isFollowUpAndDefaultAndSolidAndDesktop ? "Ready for review" : isEnrichAndDefaultAndSolidAndDesktop ? "12 verified service hours" : "Community · 40 volunteers"}
+          </p>
+          <div className="content-stretch flex flex-col items-start relative shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3210" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3126" : "node-135_3042"} data-name="Ovelle / Filter chip">
+            <button className="bg-[var(--ovelle-surface-subtle,#eef2f5)] content-stretch cursor-pointer flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3210-54_1264" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3126-54_1264" : "node-I135_3042-54_1264"} data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-I135_3210-54_1264-7_681" : isEnrichAndDefaultAndSolidAndDesktop ? "node-I135_3126-54_1264-7_681" : "node-I135_3042-54_1264-7_681"}>
+                {isFollowUpAndDefaultAndSolidAndDesktop ? "Draft" : isEnrichAndDefaultAndSolidAndDesktop ? "Verified" : "Review"}
+              </p>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-brand,#00598a)] tracking-[0.1px] w-[612px]" id={isFollowUpAndDefaultAndSolidAndDesktop ? "node-135_3213" : isEnrichAndDefaultAndSolidAndDesktop ? "node-135_3129" : "node-135_3045"}>
+        {isFollowUpAndDefaultAndSolidAndDesktop ? "The team is ready for its next opportunity" : isEnrichAndDefaultAndSolidAndDesktop ? "Volunteer profile, availability, and participation together" : "3 partners match this opportunity"}
+      </p>
+    </div>
+  );
+}
+
+type OvelleWorkflowSectionProps = {
+  className?: string;
+  layout?: "Desktop";
+  material?: "Solid";
+  stage?: "Find";
+};
+
+function OvelleWorkflowSection({ className, layout = "Desktop", material = "Solid", stage = "Find" }: OvelleWorkflowSectionProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex gap-[48px] h-[516px] items-center p-[32px] relative rounded-[var(--ovelle-radius-card,20px)] w-[1240px]"} data-node-id="138:2774">
+      <div className="content-stretch flex flex-col gap-[24px] h-[356px] items-start overflow-clip relative shrink-0 w-[468px]" data-node-id="138:2775" data-name="Workflow copy">
+        <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="138:2776" data-name="Ovelle / Section label">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I138:2776;54:1298" data-name="Appearance">
+            <div className="relative shrink-0 size-[6px]" data-node-id="I138:2776;54:1298;9:169" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I138:2776;54:1298;9:170">
+              01 · Find partners
+            </p>
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium h-[84px] leading-[42px] not-italic relative shrink-0 text-[36px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.7px] w-[468px]" data-node-id="138:2780">
+          Find the right volunteer partners.
+        </p>
+        <p className="[word-break:break-word] font-['Inter:Regular'] font-normal h-[104px] leading-[26px] not-italic relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[440px]" data-node-id="138:2781">
+          Connect with companies and teams whose interests fit your opportunities. Keep partner contacts and volunteering preferences in one place.
+        </p>
+        <div className="content-stretch flex items-start relative shrink-0 w-[224px]" data-node-id="138:2782" data-name="Ovelle / Button">
+          <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I138:2782;52:1517" data-name="Button appearance">
+            <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I138:2782;52:1517;7:93" data-name="Surface">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I138:2782;52:1517;7:94">
+                Explore partners
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <OvelleWorkflowPreview className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col gap-[16px] h-[452px] items-start overflow-clip p-[24px] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-[660px]" />
+    </div>
+  );
+}
+
+type OvellePinnedWorkflowProps = {
+  className?: string;
+  material?: "Solid";
+  motion?: "Standard";
+  progress?: "Complete";
+  stage?: "Partners";
+};
+
+function OvellePinnedWorkflow({ className, material = "Solid", motion = "Standard", progress = "Complete", stage = "Partners" }: OvellePinnedWorkflowProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex flex-col gap-[var(--ovelle-space-16,16px)] h-[900px] items-center justify-center overflow-clip relative w-[1440px]"} data-node-id="145:3492">
+      <div className="content-stretch flex flex-col gap-[16px] h-[162px] items-center overflow-clip px-[48px] relative shrink-0 w-[1240px]" data-node-id="145:3493" data-name="Persistent section heading">
+        <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="145:3494" data-name="Ovelle / Section label">
+          <div className="bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] items-center justify-center min-h-[44px] px-[var(--ovelle-space-16,16px)] py-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0" data-node-id="I145:3494;54:1298" data-name="Appearance">
+            <div className="relative shrink-0 size-[6px]" data-node-id="I145:3494;54:1298;9:169" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+            </div>
+            <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[0.1px] whitespace-nowrap" data-node-id="I145:3494;54:1298;9:170">
+              How it works
+            </p>
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[54px] not-italic relative shrink-0 text-[44px] text-[color:var(--ovelle-text-primary,#172b3d)] text-center tracking-[-0.7px] w-[1144px]" data-node-id="145:3495">
+          From first connection to shared impact.
+        </p>
+        <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[28px] not-italic relative shrink-0 text-[18px] text-[color:var(--ovelle-text-secondary,#536a7a)] text-center w-[900px]" data-node-id="145:3496">
+          Find volunteer partners, build relationships, and coordinate opportunities together.
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[8px] h-[4px] items-start overflow-clip relative shrink-0 w-[864px]" data-node-id="145:3500" data-name="Scroll progress">
+        <div className="bg-[var(--ovelle-action-brand,#00598a)] h-[4px] relative rounded-[2px] shrink-0 w-[280px]" data-node-id="145:3501" data-name="Progress / 1" />
+        <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] h-[4px] relative rounded-[2px] shrink-0 w-[280px]" data-node-id="145:3502" data-name="Progress / 2" />
+        <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] h-[4px] relative rounded-[2px] shrink-0 w-[280px]" data-node-id="145:3503" data-name="Progress / 3" />
+      </div>
+      <OvelleWorkflowSection className="bg-[var(--ovelle-surface-canvas,#fafaf8)] content-stretch flex gap-[48px] h-[516px] items-center p-[32px] relative rounded-[var(--ovelle-radius-card,20px)] shrink-0 w-[1240px]" />
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[18px] not-italic relative shrink-0 text-[12px] text-[color:var(--ovelle-text-secondary,#536a7a)] tracking-[0.1px] whitespace-nowrap" data-node-id="145:3557">
+        Scroll to explore · 01 / 03 · 33%
+      </p>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Caption: Font(family: "Inter", style: Regular, size: 12, weight: 400, lineHeight: 18, letterSpacing: 0.10000000149011612), Ovelle / Display: Font(family: "Inter", style: Medium, size: 36, weight: 500, lineHeight: 42, letterSpacing: -0.699999988079071), Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Stage=Partners, Material=Solid, Motion=Standard, Progress=Complete
+**Node ID:** 145:3492
+
+React export: import { PinnedWorkflow } from &quot;@ovelle/ui&quot;; import &quot;@ovelle/ui/styles.css&quot;. Stage → stage; Motion → motion; Standard: 300svh natural scroll and 100svh sticky viewport; reduced motion and short desktop: three normal-flow sections. presentation=stage is a React-only static source comparison. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed. Progress → progress (continuous overall 0–1). Start: phase/3; Mid: (phase+.5)/3; Complete: (phase+1)/3. Standard scroll fills segments continuously, keeps completed segments filled, and crossfades outgoing/incoming phase content over the existing 400ms ease-out. Reduced motion has only Complete specimens and displays all stages in normal flow; partial progress is inapplicable.
+
+## Ovelle / Pinned workflow
+**Node ID:** 145:4284
+
+React export: import { PinnedWorkflow } from &quot;@ovelle/ui&quot;; import &quot;@ovelle/ui/styles.css&quot;. Stage → stage; Motion → motion; Standard: 300svh natural scroll and 100svh sticky viewport; reduced motion and short desktop: three normal-flow sections. presentation=stage is a React-only static source comparison. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed. Progress → progress: continuous overall 0–1; native Start/Mid/Complete evidence. Standard fills continuously and crossfades the phase content over 400ms ease-out without a blank frame. Reduced motion retains normal flow; partial progress variants are inapplicable. Source and React are separately maintained.
+
+## Ovelle / Section label
+**Node ID:** 54:1305
+
+React export: import { SectionLabel } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Section label / Solid
+**Node ID:** 9:168
+
+Mochi-style section marker, scaled down. A dot and short editable label organize reading; this is not a button.
+
+## Stage=Find, Material=Solid, Layout=Desktop
+**Node ID:** 138:2774
+
+React export: import { WorkflowSection } from &quot;@ovelle/ui&quot;; import &quot;@ovelle/ui/styles.css&quot;. Stage → stage; Layout → layout; action → onExplore. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed. Variant: Stage=Find, Material=Solid, Layout=Desktop
+
+## Ovelle / Workflow section
+**Node ID:** 138:3092
+
+React export: import { WorkflowSection } from "@ovelle/ui"; import "@ovelle/ui/styles.css". Stage → stage; Layout → layout; action → onExplore. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Primary / Solid
+**Node ID:** 7:92
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Stage=Find, State=Default, Material=Solid, Layout=Desktop
+**Node ID:** 135:3004
+
+React export: import { WorkflowPreview } from &quot;@ovelle/ui&quot;; import &quot;@ovelle/ui/styles.css&quot;. Stage → stage (find|enrich|follow-up), State → pointer/focus context, Layout → layout (desktop|mobile). Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed. Variant: Stage=Find, State=Default, Material=Solid, Layout=Desktop
+
+## Ovelle / Workflow preview
+**Node ID:** 135:3508
+
+React export: import { WorkflowPreview } from "@ovelle/ui"; import "@ovelle/ui/styles.css". Stage → stage (find|enrich|follow-up), State → pointer/focus context, Layout → layout (desktop|mobile). Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+
+## Ovelle / Icons / check
+**Node ID:** 7:57
+
+Lucide check icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Field
+**Node ID:** 54:1243
+
+React export: import { Field } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Kind → kind; Label → label; Value → value / defaultValue; Placeholder → placeholder; Hint → hint; Error → error; Success → success; State → disabled / validation / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. React Field: Supporting text → supportingText (visible|hidden); validation feedback is retained in hidden mode.
+
+## Internal / Field / Solid
+**Node ID:** 7:392
+
+Persistent label, 44px input and helper text. Focus has a 2px border and caret. Error and success use an icon plus text. The prototype uses a fixed sample value, not live typing. Code must preserve native input semantics, labels and inline validation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

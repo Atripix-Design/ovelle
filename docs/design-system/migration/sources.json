@@ -1,0 +1,587 @@
+[
+  {
+    "id": "52:1552",
+    "name": "Ovelle / Button",
+    "variantCount": 18,
+    "masters": [
+      {
+        "id": "52:1516",
+        "name": "Style=Primary, Material=Solid, Size=Regular"
+      },
+      {
+        "id": "52:1520",
+        "name": "Style=Primary, Material=Liquid Glass, Size=Regular"
+      },
+      {
+        "id": "52:1524",
+        "name": "Style=Primary, Material=Soft Glass, Size=Regular"
+      }
+    ],
+    "reference": "references/52-1516.png",
+    "width": 160,
+    "height": 52,
+    "contextSha256": "a3e39a67ac4d34a1235f2b68e0235828de33b5d10e4e62220161fa3b1f6a377f",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=52-1516"
+  },
+  {
+    "id": "54:1230",
+    "name": "Ovelle / Icon action",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1216",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1223",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1216.png",
+    "width": 44,
+    "height": 52,
+    "contextSha256": "6f177032c47c852666dfa542b8d4381390fe73fe46ac9bcaa9a79c0baaaf6a4d",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1216"
+  },
+  {
+    "id": "54:1243",
+    "name": "Ovelle / Field",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1231",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1237",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1231.png",
+    "width": 320,
+    "height": 96,
+    "contextSha256": "84d36aa6537721fd19b43ca621d2d708ebd462b94825b085dd86b0ac686fbc65",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1231"
+  },
+  {
+    "id": "54:1262",
+    "name": "Ovelle / Select",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1244",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1253",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1244.png",
+    "width": 320,
+    "height": 90,
+    "contextSha256": "be8e328349ef5608b5c9850057f687cb0120f9a463793ab25a13e85057fe918b",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1244"
+  },
+  {
+    "id": "54:1269",
+    "name": "Ovelle / Filter chip",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1263",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1266",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1263.png",
+    "width": 67,
+    "height": 44,
+    "contextSha256": "5049683c5553b72391b2a3d2a21901ba014f4609ce334aaf987a9958654d96af",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1263"
+  },
+  {
+    "id": "54:1278",
+    "name": "Ovelle / Checkbox",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1270",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1274",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1270.png",
+    "width": 149,
+    "height": 44,
+    "contextSha256": "e5472a3432aee0ba518681abfff6f9e92485656bcf0d240969916876dfb56b05",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1270"
+  },
+  {
+    "id": "54:1289",
+    "name": "Ovelle / Switch",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1279",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1284",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1279.png",
+    "width": 163,
+    "height": 44,
+    "contextSha256": "0092df79583a8e50136fff97334b4debaaa62695341830efc75122be51044411",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1279"
+  },
+  {
+    "id": "54:1296",
+    "name": "Ovelle / Navigation item",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1290",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1293",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1290.png",
+    "width": 144,
+    "height": 44,
+    "contextSha256": "0da5c22732fa7246f8b81cdae76ef3c4133da0fc268828c64e28fbe9cfeaaefc",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1290"
+  },
+  {
+    "id": "54:1305",
+    "name": "Ovelle / Section label",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1297",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1301",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1297.png",
+    "width": 123,
+    "height": 44,
+    "contextSha256": "9498532065f28777daaea8a357aa659d071106405433dd5faf46ab5ece3bc297",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1297"
+  },
+  {
+    "id": "54:1326",
+    "name": "Ovelle / Status message",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1306",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1316",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1306.png",
+    "width": 374,
+    "height": 92,
+    "contextSha256": "a06638ee448d3abedf14d70207c92b6dedccdb091ab5701545f94599bdad8e7b",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1306"
+  },
+  {
+    "id": "54:1345",
+    "name": "Ovelle / FAQ row",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1327",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1336",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1327.png",
+    "width": 640,
+    "height": 64,
+    "contextSha256": "7684324f13d1fc480e66a8444c2b384f2deb5bfbdc373f9871f0fb472c4a06f0",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1327"
+  },
+  {
+    "id": "54:1378",
+    "name": "Ovelle / Feature card",
+    "variantCount": 4,
+    "masters": [
+      {
+        "id": "54:1346",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1362",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1346.png",
+    "width": 360,
+    "height": 260,
+    "contextSha256": "daa17c0e1e2630bb077a5defea4c963c2893644c6df2d5106f6aced8bdc8c46d",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1346"
+  },
+  {
+    "id": "54:1415",
+    "name": "Ovelle / Download card",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1379",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1397",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1379.png",
+    "width": 380,
+    "height": 292,
+    "contextSha256": "2a99a76489d423c371381f6fca1bb5b7d703b036d925ecbb2fd89804bec50562",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1379"
+  },
+  {
+    "id": "54:1434",
+    "name": "Ovelle / Download action",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1416",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1425",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1416.png",
+    "width": 332,
+    "height": 72,
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1416"
+  },
+  {
+    "id": "54:1469",
+    "name": "Ovelle / Site navigation / Desktop",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1435",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1452",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1435.png",
+    "width": 889,
+    "height": 80,
+    "contextSha256": "3b3dd0bc72b7c39ca57175d890a0ecc56417ce1b66a315747824298271d621b0",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1435"
+  },
+  {
+    "id": "54:1492",
+    "name": "Ovelle / Site navigation / Mobile",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1470",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1481",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1470.png",
+    "width": 343,
+    "height": 64,
+    "contextSha256": "9486c7639b9f6771559339239d58594dc2f41e22ad4166374007620b48883f63",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1470"
+  },
+  {
+    "id": "54:1509",
+    "name": "Ovelle / Segmented control",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1493",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1501",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1493.png",
+    "width": 420,
+    "height": 52,
+    "contextSha256": "612e170b0bcb499dd0cc95d4462fe9d474aa1d77eee0b537fd5630ad16e51e85",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1493"
+  },
+  {
+    "id": "54:1520",
+    "name": "Ovelle / Confirmation dialog",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "54:1510",
+        "name": "Material=Solid"
+      },
+      {
+        "id": "54:1515",
+        "name": "Material=Liquid Glass"
+      }
+    ],
+    "reference": "references/54-1510.png",
+    "width": 480,
+    "height": 52,
+    "contextSha256": "6a0e6e28bd863ccadf22f8e38f0104dc2f1bcc54169316e8734ffd238a8498ea",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=54-1510"
+  },
+  {
+    "id": "80:2385",
+    "name": "Ovelle / Date picker",
+    "variantCount": 28,
+    "masters": [
+      {
+        "id": "80:1461",
+        "name": "Material=Solid, Theme=Light, State=Default"
+      },
+      {
+        "id": "80:1923",
+        "name": "Material=Liquid Glass, Theme=Light, State=Default"
+      }
+    ],
+    "reference": "references/80-1461.png",
+    "width": 320,
+    "height": 72,
+    "contextSha256": "3e9c2189df2727e64897c5525f6710b085eb6f3f3cf2abd2ca5ac7c8fdefa3d2",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-1461"
+  },
+  {
+    "id": "80:2992",
+    "name": "Ovelle / Pagination",
+    "variantCount": 24,
+    "masters": [
+      {
+        "id": "80:2388",
+        "name": "Material=Solid, Theme=Light, State=First"
+      },
+      {
+        "id": "80:2670",
+        "name": "Material=Liquid Glass, Theme=Light, State=First"
+      }
+    ],
+    "reference": "references/80-2388.png",
+    "width": 291,
+    "height": 62,
+    "contextSha256": "c26872500c8bb91f1ce94f16a0afeb0d9645884cab6d81a7099fad01e96cdbe2",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-2388"
+  },
+  {
+    "id": "80:3107",
+    "name": "Ovelle / Empty state",
+    "variantCount": 16,
+    "masters": [
+      {
+        "id": "80:2995",
+        "name": "Material=Solid, Theme=Light, Size=Regular, Align=Center"
+      },
+      {
+        "id": "80:3051",
+        "name": "Material=Liquid Glass, Theme=Light, Size=Regular, Align=Center"
+      }
+    ],
+    "reference": "references/80-2995.png",
+    "width": 476,
+    "height": 188,
+    "contextSha256": "e1788821923a82677eeee0dd16dd5a015e9cf6326c6fa0f992f02c449e5ee701",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-2995"
+  },
+  {
+    "id": "264:8424",
+    "name": "Ovelle / GitHub link",
+    "variantCount": 40,
+    "masters": [
+      {
+        "id": "264:7992",
+        "name": "Theme=Light, Material=Solid, Layout=Compact, State=Default"
+      }
+    ],
+    "reference": "github-navigation-2026-10-11/figma-compact.png",
+    "width": 104,
+    "height": 44,
+    "contextSha256": "f0232da67e8c0827d7668c2ae18b25a0571c79a6ced271fb82b72a19471e8939",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=264-7992"
+  },
+  {
+    "id": "135:3508",
+    "name": "Ovelle / Workflow preview",
+    "variantCount": 24,
+    "masters": [
+      {
+        "id": "135:3004",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-135-3004.png",
+    "width": 660,
+    "height": 452,
+    "contextSha256": "2d2ac9ec31f3b38843d995e80f8625a7aa4058cfff19b85493138b2ebe66c4cf",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=135-3004"
+  },
+  {
+    "id": "138:3092",
+    "name": "Ovelle / Workflow section",
+    "variantCount": 12,
+    "masters": [
+      {
+        "id": "138:2774",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-138-2774.png",
+    "width": 1240,
+    "height": 516,
+    "contextSha256": "7f25640fde40c24bf4779a4e3f23683b0d72398170726689bc6a8e83d213a1ae",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=138-2774"
+  },
+  {
+    "id": "145:4284",
+    "name": "Ovelle / Pinned workflow",
+    "variantCount": 24,
+    "masters": [
+      {
+        "id": "145:3492",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-refinement-2026-10-11/figma-145-3492.png",
+    "width": 1440,
+    "height": 900,
+    "contextSha256": "b447644393c58bc8864e6554997ab3920569f24a9c57a97db49d047898289732",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=145-3492"
+  },
+  {
+    "id": "199:7256",
+    "name": "Ovelle / Hero workflow scene",
+    "variantCount": 12,
+    "masters": [
+      {
+        "id": "199:6980",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-199-6980.png",
+    "width": 364,
+    "height": 172,
+    "contextSha256": "1a66b40df2a1a6da1316095b9769891f9a89daf37aa8d5a163549519bb3c0177",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=199-6980"
+  },
+  {
+    "id": "201:6782",
+    "name": "Ovelle / Hero stage sheet",
+    "variantCount": 3,
+    "masters": [
+      {
+        "id": "201:6722",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-201-6722.png",
+    "width": 390,
+    "height": 307,
+    "contextSha256": "108b2e7b17e45a61bba599a89932f99a66aeec36bcdfe5eb43ab03814aa6c38b",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=201-6722"
+  },
+  {
+    "id": "246:8205",
+    "name": "Ovelle / Email download link",
+    "variantCount": 14,
+    "masters": [
+      {
+        "id": "246:7945",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-246-7945.png",
+    "width": 342,
+    "height": 312,
+    "contextSha256": "6ba31f8a6df28597a68a4a8822fde22f500f99c4565e9b3cb283d6151a3196b9",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=246-7945"
+  },
+  {
+    "id": "253:12812",
+    "name": "Ovelle / Mobile workflow",
+    "variantCount": 6,
+    "masters": [
+      {
+        "id": "253:12470",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-253-12470.png",
+    "width": 390,
+    "height": 834,
+    "contextSha256": "1260cc2ace8a632ada4fed33fb4fc3e229ef22622b486775dffcb1d797cc359a",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=253-12470",
+    "sourceExportDiscrepancy": "Figma PNG export crops 24px from right edge (366px/318px); Plugin API and source context retain native 390px/342px. React uses native geometry."
+  },
+  {
+    "id": "253:13087",
+    "name": "Ovelle / Program overview",
+    "variantCount": 2,
+    "masters": [
+      {
+        "id": "253:12987",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-253-12987.png",
+    "width": 342,
+    "height": 553,
+    "contextSha256": "ea8e09403d86cfe2a56e1661e55126948524d4ecfb92bee134d6e145ca8f97bc",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=253-12987",
+    "sourceExportDiscrepancy": "Figma PNG export crops 24px from right edge (366px/318px); Plugin API and source context retain native 390px/342px. React uses native geometry."
+  },
+  {
+    "id": "165:5351",
+    "name": "Ovelle / Device-aware download CTA",
+    "variantCount": 7,
+    "masters": [
+      {
+        "id": "165:5098",
+        "name": "Default source variant"
+      }
+    ],
+    "reference": "website-2026-10-11/figma-165-5098.png",
+    "width": 1240,
+    "height": 570,
+    "contextSha256": "33816b795b712ccd954c48ab5d32479fb97621c01d4b97eebcb6af0424d93ef5",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=165-5098"
+  }
+]

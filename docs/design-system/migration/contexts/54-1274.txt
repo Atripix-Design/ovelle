@@ -1,0 +1,39 @@
+const assetPathPrefix = "https://www.figma.com/api/mcp/asset/c04bb433-722b-4ae0-97f6-f457ed557b46";
+type OvelleCheckboxProps = {
+  className?: string;
+  material?: "Liquid Glass";
+};
+
+function OvelleCheckbox({ className, material = "Liquid Glass" }: OvelleCheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="54:1274">
+      <button className="content-stretch cursor-pointer flex gap-[var(--ovelle-space-12,12px)] h-[44px] items-center relative shrink-0" data-node-id="54:1275" data-name="Appearance">
+        <div className="border border-[var(--ovelle-border-default,#cbd5de)] border-solid relative rounded-[5px] shadow-[0px_3px_10px_0px_rgba(5,31,48,0.12)] shrink-0 size-[20px]" data-node-id="I54:1275;14:2829" style={{ backgroundImage: "linear-gradient(180deg, rgba(255, 255, 255, 0.258) 0%, rgba(255, 255, 255, 0.017) 30%, rgba(181, 232, 255, 0.12) 100%), linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%)" }} data-name="Indicator" />
+        <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] text-left whitespace-nowrap" data-node-id="I54:1275;14:2830">
+          Include in reports
+        </p>
+      </button>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Checkbox
+**Node ID:** 54:1278
+
+React export: import { Checkbox } from &quot;@ovelle/ui&quot;. Styles: import &quot;@ovelle/ui/styles.css&quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → label; Value → checked / defaultChecked / mixed; State → disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Source fidelity: retrieve high fidelity design context and screenshot for every meaningful variant before implementation; preserve exact geometry, Inter typography and original Light/Dark SVGs. Refresh source references and linked skeleton masks, run scripts/check-figma-fidelity.mjs and scripts/check-content-components.mjs in both apps, and inspect Figma/browser captures before parity claims. Workflow: docs/design-system/skeleton-workflow.md. Figma and React are separately maintained.
+
+## Internal / Checkbox / Liquid Glass
+**Node ID:** 14:2827
+
+20px checkbox inside a 44px target. On and mixed are distinguishable without color. Space and click toggle. A disabled label retains contrast and the control ignores input. Liquid Glass material: native refraction, frosted tint, specular rim. Use Solid counterpart for reduced transparency. Same shared states and editable properties on web and desktop.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

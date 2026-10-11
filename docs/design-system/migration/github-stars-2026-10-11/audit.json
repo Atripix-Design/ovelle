@@ -1,0 +1,30 @@
+[
+  {
+    "consumer": "web",
+    "validZero": true,
+    "compactCount": "1.3k",
+    "singleRequest": true,
+    "cache": true,
+    "failureAndInvalid": "—",
+    "retainedBadge": true,
+    "stableWidth": 152,
+    "mobileWidths": [
+      390,
+      320
+    ]
+  },
+  {
+    "consumer": "desktop",
+    "validZero": true,
+    "compactCount": "1.3k",
+    "singleRequest": true,
+    "cache": true,
+    "failureAndInvalid": "—",
+    "retainedBadge": true,
+    "stableWidth": 152,
+    "mobileWidths": [
+      390,
+      320
+    ]
+  }
+]
