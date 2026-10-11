@@ -878,5 +878,17 @@
     "width": "20",
     "height": "20",
     "sha256": "d4aebbc28bc9f48adb5a4a806f7fe15ea7a1e7f2aba88af73c8f59de68e1a6f6"
+  },
+  "github-light.svg": {
+    "sha256": "c2aa54e6ef483a9a57fbb7f671163043bf656c85e37929fed6f1b5c0d4c013bf",
+    "width": "16",
+    "height": "16",
+    "source": "264:7991"
+  },
+  "github-dark.svg": {
+    "sha256": "f39aadfcf49945e3c2ec3eab1fe56667ce815c673ef72106042ac211109a6521",
+    "width": "16",
+    "height": "16",
+    "source": "264:7991"
   }
 }

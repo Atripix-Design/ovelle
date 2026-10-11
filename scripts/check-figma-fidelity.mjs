@@ -63,7 +63,7 @@ try {
   await page.keyboard.press('Escape'); assert.equal(await launcher.evaluate(n=>n===document.activeElement), true);
   const mobile = page.locator('[data-variant-case="Site navigation / Mobile"] .ov-site-navigation-mobile');
   if ((await mobile.boundingBox()).height === 64) await mobile.getByRole('button', {name: /Menu/}).click();
-  assert.equal((await mobile.boundingBox()).height, 336);
+  assert.equal((await mobile.boundingBox()).height, 408);
   for (const theme of [false, true]) for (const glass of [false, true]) {
     await page.getByRole('switch', { name: 'Dark theme', exact: true }).setChecked(theme);
     await page.getByRole('switch', { name: 'Liquid Glass', exact: true }).setChecked(glass);

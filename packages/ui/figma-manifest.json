@@ -731,7 +731,8 @@
       "reactContentAndBehaviorMapping": {
         "Brand": "brand",
         "Links": "links",
-        "CTA": "action"
+        "CTA": "action",
+        "GitHub": "githubHref (default Ovelle repository; null opts out)"
       }
     },
     {
@@ -778,7 +779,8 @@
         "Brand": "brand",
         "Links": "links",
         "CTA": "action",
-        "Menu": "menuOpen / defaultMenuOpen / onMenuOpenChange"
+        "Menu": "menuOpen / defaultMenuOpen / onMenuOpenChange",
+        "GitHub": "githubHref (default Ovelle repository; null opts out)"
       }
     },
     {
@@ -1077,6 +1079,62 @@
       },
       "mappingKind": "Explicit source property and content/state correspondence; not automatic Figma synchronization or published Code Connect.",
       "reactContentAndBehaviorMapping": {}
+    },
+    {
+      "id": "264:8424",
+      "name": "Ovelle / GitHub link",
+      "type": "COMPONENT_SET",
+      "variants": 40,
+      "export": "GitHubLink",
+      "source": "src/github-link.tsx",
+      "propertyMapping": {
+        "Theme": "OvelleProvider.theme",
+        "Material": "material",
+        "Layout": "layout",
+        "State": "disabled / browser hover, active, focus-visible"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Destination": "href",
+        "Content styling": "contentClassName"
+      },
+      "mappingKind": "Linked NavigationItem composition; independently maintained Figma and React.",
+      "properties": {
+        "Theme": {
+          "type": "VARIANT",
+          "defaultValue": "Light",
+          "variantOptions": [
+            "Light",
+            "Dark"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Compact",
+          "variantOptions": [
+            "Compact",
+            "Menu"
+          ]
+        },
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Hover",
+            "Pressed",
+            "Focused",
+            "Disabled"
+          ]
+        }
+      }
     }
   ],
   "limitations": [

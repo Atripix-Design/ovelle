@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Button, Checkbox, ConfirmationDialog, DatePicker, DownloadAction, DownloadCard, EmptyState, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, OvelleProvider, Pagination, SectionLabel, SegmentedControl, Select, SiteNavigationDesktop, SiteNavigationMobile, Skeleton, SkeletonRegion, StatusMessage, Switch } from '@ovelle/ui';
+import { GitHubLink, Button, Checkbox, ConfirmationDialog, DatePicker, DownloadAction, DownloadCard, EmptyState, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, OvelleProvider, Pagination, SectionLabel, SegmentedControl, Select, SiteNavigationDesktop, SiteNavigationMobile, Skeleton, SkeletonRegion, StatusMessage, Switch } from '@ovelle/ui';
 import './component-preview.css';
 import LoadingPreview from './LoadingPreview';
 import VideoWalkthrough from './VideoWalkthrough';
@@ -29,6 +29,7 @@ function ComponentGallery() {
     ['Feature card', <FeatureCard title="Keep people in context" href="#components">Contacts, notes, and follow-ups together, so your team knows what comes next.</FeatureCard>],
     ['Download card', <DownloadCard platform="macOS" href="#components"/>],
     ['Download action', <DownloadAction label="Download Ovelle" href="#components"/>],
+    ['GitHub link', <GitHubLink/>],
     ['Site navigation / Desktop', <SiteNavigationDesktop brand="ovelle" links={[{ label: 'Home', href: '#components', current: true }, { label: 'Features', href: '#features' }, { label: 'Download', href: '#download' }]} action={<Button>Get Ovelle</Button>}/>],
     ['Site navigation / Mobile', <SiteNavigationMobile brand="ovelle" links={[{ label: 'Home', href: '#components', current: true }]}/>],
     ['Segmented control', <SegmentedControl label="View" options={[{ value: 'contacts', label: 'Contacts' }, { value: 'companies', label: 'Companies' }, { value: 'campaigns', label: 'Campaigns' }]} defaultValue="contacts"/>],

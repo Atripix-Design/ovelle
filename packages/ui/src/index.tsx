@@ -46,6 +46,8 @@ export { Field, Select, FilterChip, Checkbox, Switch, NavigationItem, SectionLab
 export type { FieldProps, SelectProps, SelectOption, FilterChipProps, CheckboxProps, SwitchProps, NavigationItemProps, SectionLabelProps, SegmentedControlProps, SegmentOption } from './controls.js';
 export { StatusMessage, FAQRow, FeatureCard, DownloadCard, SiteNavigationDesktop, SiteNavigationMobile, ConfirmationDialog } from './composites.js';
 export type { StatusMessageProps, FAQRowProps, FeatureCardProps, DownloadCardProps, SiteNavigationProps, NavigationLink, ConfirmationDialogProps } from './composites.js';
+export { GitHubLink, ovelleRepositoryUrl } from './github-link.js';
+export type { GitHubLinkProps } from './github-link.js';
 export { DatePicker } from './date-picker.js';
 export type { DatePickerProps } from './date-picker.js';
 export { Pagination } from './pagination.js';

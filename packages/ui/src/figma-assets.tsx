@@ -1,6 +1,8 @@
 import type { ImgHTMLAttributes } from "react";
 
 const assets: Record<string, string> = {
+  "github-light.svg": new URL("../assets/github-light.svg", import.meta.url).href,
+  "github-dark.svg": new URL("../assets/github-dark.svg", import.meta.url).href,
   "005d6.svg": new URL("../assets/005d6.svg", import.meta.url).href,
   "05213.svg": new URL("../assets/05213.svg", import.meta.url).href,
   "06700.svg": new URL("../assets/06700.svg", import.meta.url).href,

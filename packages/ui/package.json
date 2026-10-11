@@ -14,7 +14,8 @@
     "src/base.css",
     "src/controls.css",
     "src/composites.css",
-    "src/content.css"
+    "src/content.css",
+    "src/github-link.css"
   ],
   "exports": {
     ".": {

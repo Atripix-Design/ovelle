@@ -1,0 +1,8 @@
+@layer components {
+  .ov-navigation-item.ov-github-link { flex-direction:row; gap:8px; width:104px; white-space:nowrap; }
+  .ov-navigation-item.ov-github-link[data-layout="menu"] { width:317px; max-width:100%; height:64px; justify-content:flex-start; gap:12px; padding:0 12px; }
+  .ov-mobile-menu > .ov-github-link[data-layout="menu"] { width:100%; }
+  .ov-github-mark { flex:none; }
+  .ov-github-link[aria-disabled="true"] .ov-github-mark { opacity:.45; }
+  .ov-github-link .ov-mobile-link-content > small { color:inherit; }
+}

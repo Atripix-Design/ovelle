@@ -6,6 +6,7 @@
 @import "./base.css";
 @import "./controls.css";
 @import "./composites.css";
+@import "./github-link.css";
 @import "./content.css";
 
 @layer components {

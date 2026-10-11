@@ -421,5 +421,21 @@
     "height": 188,
     "contextSha256": "e1788821923a82677eeee0dd16dd5a015e9cf6326c6fa0f992f02c449e5ee701",
     "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=80-2995"
+  },
+  {
+    "id": "264:8424",
+    "name": "Ovelle / GitHub link",
+    "variantCount": 40,
+    "masters": [
+      {
+        "id": "264:7992",
+        "name": "Theme=Light, Material=Solid, Layout=Compact, State=Default"
+      }
+    ],
+    "reference": "github-navigation-2026-10-11/figma-compact.png",
+    "width": 104,
+    "height": 44,
+    "contextSha256": "f0232da67e8c0827d7668c2ae18b25a0571c79a6ced271fb82b72a19471e8939",
+    "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=264-7992"
   }
 ]

@@ -60,6 +60,15 @@ The path is relative to that stylesheet; adjust it for your project. In this mon
 | `DownloadAction` | `href`, `download`, `label`, `detail`, `tone`, `unavailable`, `state` |
 | `SiteNavigationDesktop` | `brand`, `links`, `action` |
 | `SiteNavigationMobile` | `brand`, `links`, `action` |
+| `GitHubLink` | `href` (Ovelle repository by default), `layout="compact" \| "menu"`, `disabled`, `contentClassName` |
+
+The shared site header replaces the desktop Download navigation item with a GitHub mark and label. Mobile keeps Download and adds GitHub inside the dropdown. `githubHref` selects the repository; pass `null` to either navigation component to opt out. Get Ovelle continues to use the Download destination. `GitHubLink` composes `NavigationItem`, inherits material, frost, transparency and theme settings, supports `className` and anchor props, and opens the repository in a new tab with `noopener noreferrer`. Its exact Figma SVG is 16×16 in both themes. Hover, press, focus and disabled feedback come from the navigation control; selected, loading, success, error and open states are inapplicable to this external link.
+
+```tsx
+import { GitHubLink } from '@ovelle/ui';
+<GitHubLink material="liquid-glass" glassFrost={35} />
+<GitHubLink layout="menu" />
+```
 | `SegmentedControl` | `label`, `options`, `value`/`defaultValue`, `onValueChange` |
 | `ConfirmationDialog` | `open`, `onOpenChange`, `onConfirm`, `title`, children, `state`, `error`, `purpose`, `showTrigger` |
 | `DatePicker` | `label`, `value`/`defaultValue`, `onValueChange`, `min`, `max`, `disabled`, `required`, `error`, `hint` |
