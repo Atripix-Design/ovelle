@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { Button, Field, FilterChip, SectionLabel } from './index.js';
 import { FigmaAsset } from './figma-assets.js';
@@ -47,11 +47,15 @@ export function MobileWorkflow({ stage: given, onStageChange, onExplore, materia
   const visual = useMaterial({ material, glassFrost, reduceTransparency, className, style }, 'mobile-workflow');
   return <section {...rest} {...visual} data-stage={stage}><SectionLabel material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency}>How it works</SectionLabel><StageControls compact stage={stage} onChange={key => { setInternal(key); onStageChange?.(key); }} material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency}/><h2>{data.title}</h2><p>{data.mobileBody}</p><WorkflowPreview material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={stage} layout="mobile" showControls={false}/><Button material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} onClick={() => onExplore?.(stage)}>{data.action}</Button></section>;
 }
-export type PinnedWorkflowProps = WorkflowSectionProps & { motion?: 'standard' | 'reduced'; presentation?: 'scroll' | 'stage' };
-export function PinnedWorkflow({ stage: given, onStageChange, onExplore, motion, presentation = "scroll", material, glassFrost, reduceTransparency, className, style, layout: _layout, ...rest }: PinnedWorkflowProps) {
-  const [internal, setInternal] = useState<WorkflowStage>('find'), [pin, setPin] = useState(false); const ref = useRef<HTMLElement>(null), settings = useOvelleSettings();
-  const stage = given ?? internal;
+export type PinnedWorkflowProps = WorkflowSectionProps & { motion?: 'standard' | 'reduced'; presentation?: 'scroll' | 'stage'; /** Overall scroll progress, 0–1; omitted for a completed static source stage. */ progress?: number };
+export function PinnedWorkflow({ stage: given, onStageChange, onExplore, motion, presentation = "scroll", progress: givenProgress, material, glassFrost, reduceTransparency, className, style, layout: _layout, ...rest }: PinnedWorkflowProps) {
+  const [internal, setInternal] = useState<WorkflowStage>('find'), [pin, setPin] = useState(false), [scrollProgress, setScrollProgress] = useState(0), [outgoing, setOutgoing] = useState<WorkflowStage | null>(null);
+  const ref = useRef<HTMLElement>(null), settings = useOvelleSettings(), previousStage = useRef(given ?? internal);
+  const stage = given ?? internal, phase = stages.indexOf(stage);
+  const rawProgress = givenProgress ?? (pin ? scrollProgress : (phase + 1) / 3);
+  const progress = Math.max(0, Math.min(1, Number.isFinite(rawProgress) ? rawProgress : 0));
   const setStage = (key: WorkflowStage) => { setInternal(key); onStageChange?.(key); };
+  const jump = (key: WorkflowStage) => { setStage(key); if (pin && ref.current) { const top = ref.current.getBoundingClientRect().top + scrollY; window.scrollTo({ top: top + (ref.current.offsetHeight - innerHeight) * stages.indexOf(key) / 3 + 1, behavior:'instant' }); } };
   useEffect(() => {
     const query = matchMedia('(min-width: 1024px) and (min-height: 701px) and (prefers-reduced-motion: no-preference)');
     const update = () => setPin(query.matches && presentation === 'scroll' && motion !== 'reduced' && !settings.reduceMotion); update(); query.addEventListener('change', update); return () => query.removeEventListener('change', update);
@@ -59,20 +63,22 @@ export function PinnedWorkflow({ stage: given, onStageChange, onExplore, motion,
   useEffect(() => {
     if (!pin) return;
     let frame = 0;
-    const update = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { const box = ref.current?.getBoundingClientRect(); if (!box || box.top > 0 || box.bottom < innerHeight) return; const progress = Math.max(0, Math.min(1, -box.top / (box.height - innerHeight))); const key = stages[Math.min(2, Math.floor(progress * 3))]; setInternal(key); onStageChange?.(key); }); };
-    window.addEventListener('scroll', update, { passive: true }); window.addEventListener('resize', update); update(); return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
+    const update = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { const box = ref.current?.getBoundingClientRect(); if (!box) return; const value = Math.max(0, Math.min(1, -box.top / (box.height - innerHeight))); setScrollProgress(value); if (box.top > 0 || box.bottom < innerHeight) return; const key = stages[Math.min(2, Math.floor(value * 3))]; setInternal(key); onStageChange?.(key); }); };
+    window.addEventListener('scroll', update, { passive:true }); window.addEventListener('resize', update); update(); return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', update); window.removeEventListener('resize', update); };
   }, [pin, onStageChange]);
-  const previousStage = useRef(stage);
-  useEffect(() => {
-    const changed = previousStage.current !== stage; previousStage.current = stage;
-    if (!changed || !pin || settings.reduceMotion || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Source 145:3492: Smart Animate, 400ms Ease Out. Text substitutions use a browser dissolve.
-    const content = ref.current?.querySelector('.ov-workflow-section');
+  useLayoutEffect(() => {
+    const previous = previousStage.current; previousStage.current = stage;
+    if (!pin || settings.reduceMotion || matchMedia('(prefers-reduced-motion: reduce)').matches) { setOutgoing(null); return; }
+    if (previous === stage) return;
+    // Source Smart Animate/dissolve is 400ms ease-out. Preserve the outgoing layer
+    // while the incoming content appears, so the section never fades to blank.
+    setOutgoing(previous);
+    const content = ref.current?.querySelector('[data-workflow-active] > .ov-workflow-section');
     const animation = content?.animate([{ opacity:0 }, { opacity:1 }], { duration:400, easing:'cubic-bezier(0,0,.58,1)' });
     return () => animation?.cancel();
   }, [stage, pin, settings.reduceMotion]);
   const visual = useMaterial({ material, glassFrost, reduceTransparency, className, style }, 'pinned-workflow');
-  return <section {...rest} {...visual} ref={ref} data-pinned={pin || undefined} data-presentation={presentation} data-stage={stage}><div className="ov-pinned-viewport"><header className="ov-pinned-heading"><SectionLabel>How it works</SectionLabel><h2>From first connection to shared impact.</h2><p>Find volunteer partners, build relationships, and coordinate opportunities together.</p></header><div className="ov-workflow-progress" aria-label={`Step ${stages.indexOf(stage) + 1} of 3`}>{stages.map(key => <button key={key} type="button" aria-label={workflowContent[key].label} aria-pressed={stage === key} onClick={() => { setStage(key); if (pin && ref.current) { const top = ref.current.getBoundingClientRect().top + scrollY; window.scrollTo({ top: top + (ref.current.offsetHeight - innerHeight) * stages.indexOf(key) / 3 + 1, behavior: 'instant' }); } }}/>)}</div>{pin || presentation === 'stage' ? <WorkflowSection material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={stage} onStageChange={setStage} onExplore={onExplore}/> : stages.map(key => <WorkflowSection key={key} material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={key} onStageChange={next => { setStage(next); ref.current?.querySelector<HTMLElement>(`.ov-workflow-section[data-stage="${next}"]`)?.scrollIntoView({behavior:'instant',block:'start'}); }} onExplore={onExplore}/>)}<small className="ov-scroll-caption">Scroll to explore · 0{stages.indexOf(stage) + 1} / 03</small></div></section>;
+  return <section {...rest} {...visual} ref={ref} data-pinned={pin || undefined} data-presentation={presentation} data-stage={stage} data-progress={progress}><div className="ov-pinned-viewport"><header className="ov-pinned-heading"><SectionLabel>How it works</SectionLabel><h2>From first connection to shared impact.</h2><p>Find volunteer partners, build relationships, and coordinate opportunities together.</p></header><div className="ov-workflow-progress" role="group" aria-label={`Step ${phase + 1} of 3; scroll progress ${Math.round(progress * 100)}%`}>{stages.map((key,index) => <button key={key} type="button" aria-label={workflowContent[key].label} aria-pressed={stage === key} onClick={() => jump(key)}><span aria-hidden="true" style={{transform:`scaleX(${Math.max(0,Math.min(1,progress * 3 - index))})`}}/></button>)}</div>{pin || presentation === 'stage' ? <div className="ov-pinned-stage"><div data-workflow-active><WorkflowSection material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={stage} onStageChange={jump} onExplore={onExplore}/></div>{pin && outgoing && <div key={outgoing} className="ov-pinned-exiting" aria-hidden="true" inert onAnimationEnd={() => setOutgoing(null)}><WorkflowSection material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={outgoing}/></div>}</div> : stages.map(key => <WorkflowSection key={key} material={material} glassFrost={glassFrost} reduceTransparency={reduceTransparency} stage={key} onStageChange={next => { setStage(next); ref.current?.querySelector<HTMLElement>(`.ov-workflow-section[data-stage="${next}"]`)?.scrollIntoView({behavior:'instant',block:'start'}); }} onExplore={onExplore}/>)}<small className="ov-scroll-caption">Scroll to explore · 0{phase + 1} / 03 · {Math.round(progress * 100)}%</small></div></section>;
 }
 const avatar = new URL('../assets/website/db6ec.png', import.meta.url).href;
 export type HeroWorkflowSceneProps = Visual & { stage?: WorkflowStage; onStageChange?: (stage: WorkflowStage) => void; onExplore?: (stage: WorkflowStage) => void; size?: 'regular' | 'compact' };

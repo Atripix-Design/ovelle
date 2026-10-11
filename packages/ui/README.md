@@ -145,7 +145,7 @@ The website and Electron renderer share `apps/shared/Home.tsx`. Routing, HTTP re
 | `WorkflowPreview` | `stage` (`find`, `enrich`, `follow-up`), `onStageChange`, `layout`, `showControls`, `interactive`; hover/focus reveals source context. |
 | `WorkflowSection` | Same stage/layout API, `onExplore(stage)`; desktop and mobile source layouts. |
 | `MobileWorkflow` | `stage`, `onStageChange`, `onExplore(stage)`; source heights vary with stage. |
-| `PinnedWorkflow` | Stage API, `motion`, `presentation`; scroll advances the three stages, reduced motion/short viewports show all three in normal flow. `presentation="stage"` renders the static Figma specimen. |
+| `PinnedWorkflow` | Stage API, `motion`, `presentation`, optional overall `progress` (0–1); scroll fills each segment continuously and crossfades stages for 400 ms ease-out, reduced motion/short viewports show all three in normal flow. `presentation="stage"` renders the static Figma specimen. |
 | `HeroWorkflowScene` | Stage API, `size` (`regular`, `compact`), `onExplore(stage)`; selector opens the linked stage sheet. |
 | `HeroStageSheet` | `stage`, `onStageChange`, `open`, `onClose`, `presentation` (`modal`, `inline`), optional `titleId`/`refElement`; native modal keyboard/focus handling, solid material only. |
 | `ProgramOverview` | `onOpportunityClick`, `onProgramClick`; reuses summary-density `FeatureCard`. |

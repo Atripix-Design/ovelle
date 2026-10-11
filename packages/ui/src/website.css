@@ -1,6 +1,7 @@
 @layer components {
   .ov-workflow-preview { display:flex; flex-direction:column; gap:16px; width:660px; max-width:100%; height:452px; padding:24px; border-radius:20px; box-shadow:0 8px 24px -4px rgb(5 31 48 / .1); }
   .ov-workflow-preview[data-material="liquid-glass"] { --ov-effective-blur:var(--ov-panel-blur); }
+  .ov-workflow-preview[data-material="liquid-glass"][data-layout="desktop"]:not([data-reduce-transparency="true"]) { --ov-effective-alpha:calc(var(--ov-alpha) * .135318); background:rgb(var(--ov-tint) / var(--ov-effective-alpha)); }
   .ov-workflow-preview[data-material="solid"] { box-shadow:none; }
   .ov-workflow-controls { display:flex; align-items:center; justify-content:center; gap:16px; width:100%; min-height:44px; }
   .ov-workflow-controls > .ov-filter-chip { flex:none; }
@@ -50,8 +51,11 @@
   .ov-workflow-progress { display:flex; gap:8px; width:min(864px,80%); height:4px; }
   .ov-workflow-progress > button { flex:0 0 calc((100% - 24px) / 3); padding:0; border:0; border-radius:2px; background:var(--ov-surface-subtle); position:relative; cursor:pointer; }
   .ov-workflow-progress > button::before { content:''; position:absolute; inset:-12px 0; }
-  .ov-workflow-progress > button[aria-pressed="true"] { background:var(--ov-action-brand); }
-  .ov-scroll-caption { color:var(--ov-text-secondary); width:660px; max-width:100%; padding:0 4px; font:400 12px/18px Inter,sans-serif; align-self:center; margin-left:516px; }
+  .ov-workflow-progress > button > span { display:block; width:100%; height:100%; border-radius:inherit; background:var(--ov-action-brand); transform-origin:left; }
+  .ov-scroll-caption { color:var(--ov-text-secondary); max-width:100%; padding:0 4px; font:400 12px/18px Inter,sans-serif; letter-spacing:.1px; align-self:center; }
+  .ov-pinned-stage { position:relative; width:1240px; max-width:100%; flex:none; }
+  .ov-pinned-exiting { position:absolute; inset:0; pointer-events:none; animation:ov-workflow-out 400ms cubic-bezier(0,0,.58,1) both; }
+  @keyframes ov-workflow-out { to { opacity:0; } }
   .ov-hero-workflow-scene { width:364px; max-width:100%; min-height:172px; padding:4px 18px 8px; border:0; border-radius:16px; display:flex; flex-direction:column; gap:12px; }
   .ov-hero-workflow-scene > header { display:flex; align-items:center; justify-content:space-between; min-height:44px; }
   .ov-hero-workflow-scene > header > button { display:flex; gap:14px; align-items:center; min-height:44px; border:0; padding:0; background:transparent; color:inherit; font:600 12px/18px Inter,sans-serif; cursor:pointer; }
@@ -147,6 +151,8 @@
 .ov-workflow-field input { color:var(--ov-text-secondary); }
 .ov-workflow-records { display:flex; flex-direction:column; gap:4px; padding:0; background:transparent; border-radius:0; }
 .ov-workflow-preview[data-material="liquid-glass"] .ov-workflow-records { background:transparent; }
+.ov-workflow-preview[data-material="liquid-glass"][data-layout="desktop"] .ov-workflow-records { height:160px; padding:10px; border-radius:20px; background:rgb(243 239 239 / .2); box-shadow:inset 0 0 0 1px rgb(255 255 255 / .5); backdrop-filter:blur(calc(11px * var(--ov-frost) / .35)); }
+.ov-workflow-preview[data-material="liquid-glass"][data-layout="desktop"][data-reduce-transparency="true"] .ov-workflow-records { background:var(--ov-surface-subtle); backdrop-filter:none; }
 .ov-workflow-record { height:44px; min-height:44px; flex:none; }
 .ov-workflow-record > small { flex:none; width:240px; }
 .ov-workflow-record > .ov-filter-chip { flex:none; }

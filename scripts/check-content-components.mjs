@@ -37,9 +37,9 @@ try {
     await page.waitForFunction(() => [...document.querySelectorAll('[data-specimen]')].every(n => n.querySelectorAll('.ov-skeleton-map rect').length));
     const geometry = await page.locator('[data-specimen]').evaluateAll(items => items.map(item => {
       const source = item.querySelector('.preview-live > *');
-      const hidden = item.querySelector('.ov-skeleton-content > *');
+      const hidden = item.querySelector('.preview-skeleton > .ov-skeleton-content > *');
       const a = source.getBoundingClientRect(), b = hidden.getBoundingClientRect();
-      const skeleton = item.querySelector('.ov-skeleton');
+      const skeleton = item.querySelector('.preview-skeleton');
       hidden.querySelector('button,input,a,select')?.focus();
       return { name: item.dataset.specimen, width: Math.abs(a.width - b.width), height: Math.abs(a.height - b.height), inert: skeleton.inert && skeleton.getAttribute('aria-hidden') === 'true', focus: skeleton.contains(document.activeElement), count: item.querySelectorAll('.preview-pair > :last-child > [role="status"]').length };
     }));

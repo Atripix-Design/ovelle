@@ -473,17 +473,17 @@
   {
     "id": "145:4284",
     "name": "Ovelle / Pinned workflow",
-    "variantCount": 12,
+    "variantCount": 24,
     "masters": [
       {
         "id": "145:3492",
         "name": "Default source variant"
       }
     ],
-    "reference": "website-2026-10-11/figma-145-3492.png",
+    "reference": "website-refinement-2026-10-11/figma-145-3492.png",
     "width": 1440,
     "height": 900,
-    "contextSha256": "5fb02b593f33e3f87a832445b79116558203342634cc86442b043e86d3fcdd07",
+    "contextSha256": "b447644393c58bc8864e6554997ab3920569f24a9c57a97db49d047898289732",
     "url": "https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=145-3492"
   },
   {
