@@ -58,17 +58,10 @@ The path is relative to that stylesheet; adjust it for your project. In this mon
 | `FeatureCard` | `surface`, `icon`, `title`, children, `link` |
 | `DownloadCard` | `platform`, `title`, children, `action`, `unavailable` |
 | `DownloadAction` | `href`, `download`, `label`, `detail`, `tone`, `unavailable`, `state` |
-| `SiteNavigationDesktop` | `brand`, `links`, `action` |
-| `SiteNavigationMobile` | `brand`, `links`, `action` |
-| `GitHubLink` | `href` (Ovelle repository by default), `layout="compact" \| "menu"`, `disabled`, `contentClassName` |
+| `SiteNavigationDesktop` | `brand`, `links`, `action`, `githubStarCount`, `githubStarsLoading` |
+| `SiteNavigationMobile` | `brand`, `links`, `action`, `githubStarCount`, `githubStarsLoading` |
+| `GitHubLink` | `href` (Ovelle repository by default), `layout="compact" \| "menu"`, `disabled`, `contentClassName`, `starCount`, `starsLoading` |
 
-The shared site header replaces the desktop Download navigation item with a GitHub mark and label. Mobile keeps Download and adds GitHub inside the dropdown. `githubHref` selects the repository; pass `null` to either navigation component to opt out. Get Ovelle continues to use the Download destination. `GitHubLink` composes `NavigationItem`, inherits material, frost, transparency and theme settings, supports `className` and anchor props, and opens the repository in a new tab with `noopener noreferrer`. Its exact Figma SVG is 16×16 in both themes. Hover, press, focus and disabled feedback come from the navigation control; selected, loading, success, error and open states are inapplicable to this external link.
-
-```tsx
-import { GitHubLink } from '@ovelle/ui';
-<GitHubLink material="liquid-glass" glassFrost={35} />
-<GitHubLink layout="menu" />
-```
 | `SegmentedControl` | `label`, `options`, `value`/`defaultValue`, `onValueChange` |
 | `ConfirmationDialog` | `open`, `onOpenChange`, `onConfirm`, `title`, children, `state`, `error`, `purpose`, `showTrigger` |
 | `DatePicker` | `label`, `value`/`defaultValue`, `onValueChange`, `min`, `max`, `disabled`, `required`, `error`, `hint` |
@@ -76,6 +69,19 @@ import { GitHubLink } from '@ovelle/ui';
 | `EmptyState` | `title`, children, `icon`, `action`, `size`, `align`, content/action slot classes |
 | `Skeleton` | children (real layout), `shape`, `width`, `height`, `animated` |
 | `SkeletonRegion` | one accessible loading `label`, children |
+
+The shared site header replaces the desktop Download navigation item with a GitHub mark and label. Mobile keeps Download and adds GitHub inside the dropdown. `githubHref` selects the repository; pass `null` to either navigation component to opt out. Get Ovelle continues to use the Download destination. `GitHubLink` composes `NavigationItem`, inherits material, frost, transparency and theme settings, supports `className` and anchor props, and opens the repository in a new tab with `noopener noreferrer`. Its exact Figma SVG is 16×16 in both themes. Hover, press, focus and disabled feedback come from the navigation control; selected, success, error and open states are inapplicable to the external action; count loading is described below.
+
+```tsx
+import { GitHubLink } from '@ovelle/ui';
+<GitHubLink material="liquid-glass" glassFrost={35} />
+<GitHubLink layout="menu" />
+<GitHubLink starCount={0} />
+<GitHubLink starCount={1337} />
+<GitHubLink starCount={null} starsLoading />
+```
+
+Star counts are caller data: `starCount={undefined}` omits the badge, `null` displays an unavailable dash, and `0` is a valid count. Large values use compact notation with the exact count available to assistive technology and in the tooltip. `starsLoading` applies the dynamic `LoadingBoundary` to the badge while leaving the repository link usable. The badge reserves 40×24px and the compact control reserves 152×44px throughout loading. Both site navigation components accept `githubStarCount` and `githubStarsLoading`. Home reads the public repository API, shares the request through StrictMode, uses a five-second timeout, validates nonnegative integer counts and caches successful responses for 15 minutes. No authentication token is needed or shipped.
 
 [Dynamic loading workflow](../../docs/design-system/skeleton-workflow.md). `LoadingBoundary` measures the actual mounted page layout and accepts `loading`, `label`, `regionClassName`, material settings and Skeleton props. Loading controls are inert; finishing loading restores the same mounted content. Initial requests need representative content or an expected layout. There is no Figma Skeleton sheet. DatePicker and Pagination are reusable controls, previewed at website `/components` and desktop `?components`.
 

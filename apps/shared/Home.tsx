@@ -3,6 +3,7 @@ import { Button, DeviceAwareDownloadCTA, EmailDownloadLink, FAQRow, FeatureCard,
 import type { DesktopRelease, WorkflowStage } from '@ovelle/ui';
 import { version } from '../desktop/package.json';
 import './home.css';
+import { useGitHubStars } from './useGitHubStars';
 
 const environment = import.meta.env.VITE_APP_ENV === 'production' ? 'production' : 'development';
 const cdnHost = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org';
@@ -24,6 +25,7 @@ function scrollToSection(id: string) {
   const step = (now: number) => { const t = Math.min(1, (now - start) / 350); let a = 0, b = 1; for (let i = 0; i < 14; i++) { const u = (a + b) / 2; const x = 3 * (1 - u) * u * u * .58 + u * u * u; if (x < t) a = u; else b = u; } const u = (a + b) / 2, eased = 3 * (1 - u) * u * u + u * u * u; scrollTo(0, from + (to - from) * eased); if (t < 1) frame = requestAnimationFrame(step); else { cancel(); target.focus({ preventScroll: true }); } }; frame = requestAnimationFrame(step);
 }
 export default function Home({ desktop = false, emailSender, loadReleases }: { desktop?: boolean; emailSender?: (email: string) => Promise<void>; loadReleases?: () => Promise<DesktopRelease[]> }) {
+  const stars = useGitHubStars();
   const [compact, setCompact] = useState(() => matchMedia("(max-width:350px)").matches);
   useEffect(() => { const q=matchMedia("(max-width:350px)"); const change=()=>setCompact(q.matches); q.addEventListener("change",change); return ()=>q.removeEventListener("change",change); }, []);
   const [heroStage, setHeroStage] = useState<WorkflowStage>('find'), [workflowStage, setWorkflowStage] = useState<WorkflowStage>('find');
@@ -35,8 +37,8 @@ export default function Home({ desktop = false, emailSender, loadReleases }: { d
     <section className="home-hero" aria-label="Meet Ovelle">
       <img className="home-coast-desktop" src={websiteImages.coast} alt="" fetchPriority="high"/>
       <div className="home-coast-mobile" aria-hidden="true"><img className="home-coast-base" src={websiteImages.mobileCoast} alt=""/><div className="home-coast-wash"/><img className="home-coast-middle" src={websiteImages.coastMiddle} alt=""/><img className="home-coast-bottom" src={websiteImages.coastBottom} alt=""/><img className="home-coast-left" src={websiteImages.coastCardLeft} alt=""/><img className="home-coast-right" src={websiteImages.coastCardRight} alt=""/><div className="home-coast-edge" style={{ maskImage: `url(${compact ? websiteImages.compactCoastRightMask : websiteImages.coastRightMask}),url(${compact ? websiteImages.compactCoastRightFeather : websiteImages.coastRightFeather})` }}><img src={websiteImages.coastRight} alt=""/></div></div>
-      <SiteNavigationDesktop className="home-desktop-navigation" material="liquid-glass" brand="ovelle" links={links} action={<Button material="liquid-glass" onClick={() => scrollToSection("download")}>Get Ovelle</Button>}/>
-      <SiteNavigationMobile className="home-mobile-navigation" material="liquid-glass" brand="ovelle" links={links}/>
+      <SiteNavigationDesktop className="home-desktop-navigation" material="liquid-glass" brand="ovelle" links={links} githubStarCount={stars.count} githubStarsLoading={stars.loading} action={<Button material="liquid-glass" onClick={() => scrollToSection("download")}>Get Ovelle</Button>}/>
+      <SiteNavigationMobile className="home-mobile-navigation" material="liquid-glass" brand="ovelle" links={links} githubStarCount={stars.count} githubStarsLoading={stars.loading}/>
       <div className="home-hero-copy"><h1>Better relationships.<br/>Less busywork.</h1><p>Bring your contacts, conversations, and next steps together with Ovelle.</p><div className="home-hero-actions"><Button onClick={() => scrollToSection("download")}>Get Ovelle</Button><Button material="liquid-glass" variant="secondary" onClick={() => scrollToSection("workflow")}>Learn more</Button></div></div>
       <div className="home-hero-desktop-scene"><WorkflowPreview material="liquid-glass" stage={heroStage} onStageChange={setHeroStage}/><small>Hover to reveal volunteer partner context</small></div>
       <HeroWorkflowScene size={compact ? "compact" : "regular"} className="home-hero-mobile-scene" stage={heroStage} onStageChange={setHeroStage} onExplore={explore}/>

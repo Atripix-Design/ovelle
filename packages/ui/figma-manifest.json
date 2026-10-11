@@ -742,7 +742,8 @@
         "Brand": "brand",
         "Links": "links",
         "CTA": "action",
-        "GitHub": "githubHref (default Ovelle repository; null opts out)"
+        "GitHub": "githubHref (default Ovelle repository; null opts out)",
+        "Stars": "githubStarCount / githubStarsLoading"
       }
     },
     {
@@ -790,7 +791,8 @@
         "Links": "links",
         "CTA": "action",
         "Menu": "menuOpen / defaultMenuOpen / onMenuOpenChange",
-        "GitHub": "githubHref (default Ovelle repository; null opts out)"
+        "GitHub": "githubHref (default Ovelle repository; null opts out)",
+        "Stars": "githubStarCount / githubStarsLoading"
       }
     },
     {
@@ -1101,11 +1103,14 @@
         "Theme": "OvelleProvider.theme",
         "Material": "material",
         "Layout": "layout",
-        "State": "disabled / browser hover, active, focus-visible"
+        "State": "disabled / browser hover, active, focus-visible",
+        "Show stars#283:82": "starCount !== undefined || starsLoading",
+        "Star count#283:123": "starCount (formatted; null \u2192 \u2014)"
       },
       "reactContentAndBehaviorMapping": {
         "Destination": "href",
-        "Content styling": "contentClassName"
+        "Content styling": "contentClassName",
+        "Count loading": "starsLoading \u2192 dynamic LoadingBoundary around badge"
       },
       "mappingKind": "Linked NavigationItem composition; independently maintained Figma and React.",
       "properties": {
@@ -1143,6 +1148,14 @@
             "Focused",
             "Disabled"
           ]
+        },
+        "Show stars#283:82": {
+          "type": "BOOLEAN",
+          "defaultValue": false
+        },
+        "Star count#283:123": {
+          "type": "TEXT",
+          "defaultValue": "0"
         }
       }
     },

@@ -12,7 +12,7 @@ try {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     await page.goto(url); await page.evaluate(() => document.fonts.ready);
     const desktop = page.locator('[data-specimen="Site navigation / Desktop"] .preview-live nav');
-    const github = desktop.getByRole('link', { name: 'GitHub', exact: true });
+    const github = desktop.getByRole('link', { name: /^GitHub/ });
     assert.equal(await github.getAttribute('href'), 'https://github.com/Atripix-Design/ovelle');
     assert.equal(await github.getAttribute('target'), '_blank');
     assert.match(await github.getAttribute('rel'), /noopener/);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Checkbox, ConfirmationDialog, DownloadAction, DownloadCard, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, SectionLabel, SegmentedControl, Select, SiteNavigationMobile, StatusMessage, Switch } from '@ovelle/ui';
+import { GitHubLink, Button, Checkbox, ConfirmationDialog, DownloadAction, DownloadCard, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, SectionLabel, SegmentedControl, Select, SiteNavigationMobile, StatusMessage, Switch } from '@ovelle/ui';
 const links = [{ label: 'Home', href: '#components', current: true }, { label: 'Features', href: '#features' }, { label: 'Download', href: '#download' }];
 export default function FidelityVariants() {
   const [dialog, setDialog] = useState(false), [state, setState] = useState<'default' | 'loading' | 'success' | 'error'>('default');
@@ -18,6 +18,7 @@ export default function FidelityVariants() {
     <div data-variant-case="FAQ row"><FAQRow open question="How do I install Ovelle?" answer="Choose the installer for macOS or Windows, then follow the setup steps."/></div>
     <div data-variant-case="Feature card">{(['ice', 'cream'] as const).map(surface => <FeatureCard key={surface} surface={surface} href="#components" title="Keep people in context">Contacts, notes, and follow-ups together, so your team knows what comes next.</FeatureCard>)}</div>
     <div data-variant-case="Download card"><DownloadCard platform="Windows"/><DownloadCard platform="macOS" unavailable/><DownloadCard platform="Windows" unavailable/></div>
+    <div data-variant-case="GitHub stars"><GitHubLink starCount={0}/><GitHubLink starCount={1337}/><GitHubLink starCount={null}/><GitHubLink starCount={null} starsLoading/><GitHubLink starCount={0} disabled/></div>
     <div data-variant-case="Site navigation / Mobile"><SiteNavigationMobile brand="ovelle" links={links} defaultMenuOpen/></div>
     <div data-variant-case="Segmented control"><SegmentedControl label="View" options={['Contacts','Companies','Campaigns'].map(label=>({value:label,label}))} defaultValue="Companies"/><SegmentedControl label="Disabled view" options={['Contacts','Companies','Campaigns'].map(label=>({value:label,label}))} disabled/></div>
     <div data-variant-case="Confirmation dialog"><Select label="Dialog state" value={state} onValueChange={value=>setState(value as typeof state)} options={['default','loading','success','error'].map(value=>({value,label:value}))}/><ConfirmationDialog open={dialog} onOpenChange={setDialog} onConfirm={()=>setState('loading')} state={state} title="Review selected contacts">Check your selection before continuing.</ConfirmationDialog></div>
