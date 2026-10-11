@@ -54,7 +54,7 @@ The macOS archives are repacked with symlink preservation so each stays below Wr
 
 ## CI/CD
 
-[The CI/CD workflow](.github/workflows/ci.yml) uses Atripix's custom self-hosted runner platform for three unprivileged lanes: build, typecheck and lint. The selector fails closed to hosted capacity, excludes forks and Dependabot from the self-hosted pool, and replays a failed self-hosted run once on hosted capacity at the original source SHA. Node setup uses the shared adaptive action.
+[The CI/CD workflow](.github/workflows/ci.yml) uses Atripix's custom self-hosted runner platform for three unprivileged lanes: build, typecheck and lint. The reviewed platform components are vendored with source commits and checksums because this public repository cannot call private reusable workflows. The selector fails closed to hosted capacity, keeps all pull requests and Dependabot hosted, and replays a failed self-hosted run once on hosted capacity at the original source SHA. It assigns local capacity only when the selected runner group explicitly permits this public repository. Node setup uses the platform’s adaptive action.
 
 After checks succeed on a push to `development` or `main`, a hosted delivery job packages the desktop apps, uploads to R2 and deploys the corresponding Cloudflare Worker. Packaging and secret-bearing publishing remain hosted under the platform contract. Pull requests run checks without deploying. Delivery checks that its source is still the branch head before publishing.
 

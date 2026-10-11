@@ -1,0 +1,31 @@
+name: Adaptive Node setup
+description: Uses the self-hosted Node tool-cache locally and package caches on GitHub-hosted runners.
+
+inputs:
+  node-version:
+    description: Node.js version accepted by actions/setup-node.
+    required: true
+  cache:
+    description: Package-manager cache to use on GitHub-hosted runners.
+    required: false
+    default: npm
+  cache-dependency-path:
+    description: Optional package-manager dependency file path for hosted cache keys.
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node from the self-hosted tool-cache
+      if: runner.environment == 'self-hosted'
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Set up Node with the hosted package cache
+      if: runner.environment != 'self-hosted'
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}

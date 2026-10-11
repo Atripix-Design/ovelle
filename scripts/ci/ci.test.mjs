@@ -53,3 +53,53 @@ test('publishing uploads all packages before deployment and injects account conf
     assert.equal(readFileSync(log, 'utf8'), '')
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
+
+test('public selector fails hosted unless repository and runner group explicitly permit local work', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'ovelle-routing-test-'))
+  try {
+    const workflow = readFileSync(join(root, '.github/workflows/select-runners.yml'), 'utf8')
+    const script = workflow.split('        run: |\n')[1].split('\n').map(line => line.replace(/^          /, '')).join('\n')
+    writeFileSync(join(dir, 'select.sh'), script)
+    const curl = join(dir, 'curl')
+    writeFileSync(curl, `#!/bin/bash
+case "\${*: -1}" in
+  */installation) printf '%s' '{"id":1}' ;;
+  */access_tokens) printf '%s' '{"token":"test-only"}' ;;
+  *runner-groups\\?*) if [ "$TEST_GROUP_FAILURE" = 1 ]; then exit 1; fi; printf '%s' "$TEST_GROUPS" ;;
+  */repositories?*) printf '%s' "$TEST_REPOSITORIES" ;;
+  */runners?*) printf '%s' "$TEST_RUNNERS" ;;
+  *) exit 1 ;;
+esac
+`); chmodSync(curl, 0o755)
+    const key = execFileSync('openssl', ['genpkey', '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:2048'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
+    const group = { id: 1, name: 'atripix-private-builders', allows_public_repositories: true, visibility: 'selected', restricted_to_workflows: false }
+    const runners = Array.from({ length: 3 }, (_, index) => ({ name: `atripix-jit-${index + 1}`, status: 'online', busy: false, ephemeral: true,
+      labels: ['self-hosted', 'linux', 'x64', 'atripix-build', 'atripix-ephemeral'].map(name => ({ name })) }))
+    const env = { ...process.env, PATH: `${dir}:${process.env.PATH}`, APP_ID: '1', APP_PRIVATE_KEY: key,
+      DESIRED_SLOTS: '3', FORCE_HOSTED: 'false', TRUSTED: 'true', ORGANIZATION: 'example', REPOSITORY_ID: '7',
+      LANE_NAMES_JSON: '["build","typecheck","lint"]', GITHUB_OUTPUT: join(dir, 'output'),
+      TEST_GROUPS: JSON.stringify({ runner_groups: [group] }), TEST_REPOSITORIES: '{"repositories":[{"id":7}]}', TEST_RUNNERS: JSON.stringify({ runners }) }
+    const run = changes => {
+      writeFileSync(env.GITHUB_OUTPUT, '')
+      const result = spawnSync('bash', [join(dir, 'select.sh')], { env: { ...env, ...changes }, encoding: 'utf8' })
+      assert.equal(result.status, 0, result.stderr)
+      return Object.fromEntries(readFileSync(env.GITHUB_OUTPUT, 'utf8').trim().split('\n').map(line => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]))
+    }
+    assert.equal(run({}).local_slot_count, '3')
+    for (const changes of [
+      { TRUSTED: 'false' }, { FORCE_HOSTED: 'true' }, { TEST_GROUP_FAILURE: '1' },
+      { TEST_REPOSITORIES: '{"repositories":[{"id":8}]}' }, { TEST_RUNNERS: '{"runners":[]}' },
+      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, allows_public_repositories: false }] }) },
+      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, visibility: 'all' }] }) },
+    ]) { const result = run(changes); assert.equal(result.local_slot_count, '0'); assert.equal(result.slot_1, '"ubuntu-latest"') }
+  } finally { rmSync(dir, { recursive: true, force: true }) }
+})
+
+test('vendored CI components match their recorded reviewed source adaptations', async () => {
+  const { createHash } = await import('node:crypto')
+  const manifest = JSON.parse(readFileSync(join(root, '.github/ci-platform-source.json'), 'utf8'))
+  for (const component of manifest.components) {
+    assert.match(component.commit, /^[a-f0-9]{40}$/)
+    assert.equal(createHash('sha256').update(readFileSync(join(root, component.target))).digest('hex'), component.vendoredSha256)
+  }
+})
