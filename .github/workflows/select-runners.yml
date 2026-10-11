@@ -64,6 +64,7 @@ jobs:
           FORCE_HOSTED: ${{ inputs.force_hosted }}
           LANE_NAMES_JSON: ${{ inputs.lane_names_json }}
           ORGANIZATION: ${{ github.repository_owner }}
+          CALLER_WORKFLOW: ${{ github.repository }}/.github/workflows/ci.yml@${{ github.ref }}
           REPOSITORY_ID: ${{ github.repository_id }}
           TRUSTED: ${{ inputs.trusted }}
         run: |
@@ -140,8 +141,8 @@ jobs:
             emit_hosted "runner group access unavailable"
             exit 0
           }
-          group="$(jq -ec '[.runner_groups[] | select(.name == "atripix-private-builders" and .allows_public_repositories == true and .visibility == "selected" and .restricted_to_workflows != true)] | if length == 1 then .[0] else error("no eligible group") end' <<<"$groups" 2>/dev/null)" || {
-            emit_hosted "public repository not enabled for the selected runner group"
+          group="$(jq -ec --arg workflow "$CALLER_WORKFLOW" '[.runner_groups[] | select(.name == "atripix-private-builders" and .allows_public_repositories == true and .visibility == "selected" and .restricted_to_workflows == true and ((.selected_workflows // []) | index($workflow) != null))] | if length == 1 then .[0] else error("no eligible group") end' <<<"$groups" 2>/dev/null)" || {
+            emit_hosted "public repository or trusted workflow not enabled for the selected runner group"
             exit 0
           }
           group_id="$(jq -er '.id' <<<"$group")"

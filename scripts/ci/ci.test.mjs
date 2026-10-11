@@ -72,11 +72,11 @@ case "\${*: -1}" in
 esac
 `); chmodSync(curl, 0o755)
     const key = execFileSync('openssl', ['genpkey', '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:2048'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-    const group = { id: 1, name: 'atripix-private-builders', allows_public_repositories: true, visibility: 'selected', restricted_to_workflows: false }
+    const group = { id: 1, name: 'atripix-private-builders', allows_public_repositories: true, visibility: 'selected', restricted_to_workflows: true, selected_workflows: ['example/app/.github/workflows/ci.yml@refs/heads/development'] }
     const runners = Array.from({ length: 3 }, (_, index) => ({ name: `atripix-jit-${index + 1}`, status: 'online', busy: false, ephemeral: true,
       labels: ['self-hosted', 'linux', 'x64', 'atripix-build', 'atripix-ephemeral'].map(name => ({ name })) }))
     const env = { ...process.env, PATH: `${dir}:${process.env.PATH}`, APP_ID: '1', APP_PRIVATE_KEY: key,
-      DESIRED_SLOTS: '3', FORCE_HOSTED: 'false', TRUSTED: 'true', ORGANIZATION: 'example', REPOSITORY_ID: '7',
+      CALLER_WORKFLOW: 'example/app/.github/workflows/ci.yml@refs/heads/development', DESIRED_SLOTS: '3', FORCE_HOSTED: 'false', TRUSTED: 'true', ORGANIZATION: 'example', REPOSITORY_ID: '7',
       LANE_NAMES_JSON: '["build","typecheck","lint"]', GITHUB_OUTPUT: join(dir, 'output'),
       TEST_GROUPS: JSON.stringify({ runner_groups: [group] }), TEST_REPOSITORIES: '{"repositories":[{"id":7}]}', TEST_RUNNERS: JSON.stringify({ runners }) }
     const run = changes => {
@@ -91,6 +91,8 @@ esac
       { TEST_REPOSITORIES: '{"repositories":[{"id":8}]}' }, { TEST_RUNNERS: '{"runners":[]}' },
       { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, allows_public_repositories: false }] }) },
       { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, visibility: 'all' }] }) },
+      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, restricted_to_workflows: false }] }) },
+      { CALLER_WORKFLOW: 'example/app/.github/workflows/ci.yml@refs/pull/1/merge' },
     ]) { const result = run(changes); assert.equal(result.local_slot_count, '0'); assert.equal(result.slot_1, '"ubuntu-latest"') }
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })

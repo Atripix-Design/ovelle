@@ -6,7 +6,7 @@
       "source": ".github/workflows/select-runners.yml",
       "target": ".github/workflows/select-runners.yml",
       "sourceSha256": "c78764c9201e624c91b689caca26420a71b3161117644ee86d85783b9f95fdc1",
-      "vendoredSha256": "9533f9957007de028a31ad264a5edf0833f2c55b6c66748af7c4b8fed4b3969f"
+      "vendoredSha256": "2e59538c1f701d5cd55045aaa7cec4bee4ca816614fe2e42b1bee2409ca08034"
     },
     {
       "repository": "Atripix-Design/ci-infrastructure",
@@ -25,5 +25,5 @@
       "vendoredSha256": "d58be8d97b7251362e013c80e49808420a98e77a059c2eba51fe36e59ea961de"
     }
   ],
-  "adaptation": "Public consumer adapter: require selected runner-group access and explicit public-repository enablement; all pull requests and manual dispatches stay hosted."
+  "adaptation": "Public consumer adapter: require selected repository access, public-repository enablement, and GitHub-enforced restriction to the current trusted branch workflow; all pull requests and manual dispatches stay hosted."
 }

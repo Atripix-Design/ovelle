@@ -19,7 +19,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: ci-${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+  group: ci-${{ inputs.source_event || github.event_name }}-${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
   cancel-in-progress: true
 
 jobs:
