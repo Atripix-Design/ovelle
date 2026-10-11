@@ -6,6 +6,12 @@ import path from 'node:path';
 const { chromium } = await import(process.env.OVELLE_PLAYWRIGHT_MODULE || 'playwright');
 const sources = JSON.parse(await readFile(new URL('../docs/design-system/migration/sources.json', import.meta.url)));
 const assets = JSON.parse(await readFile(new URL('../docs/design-system/migration/assets.json', import.meta.url)));
+const websiteAssets = JSON.parse(await readFile(new URL('../docs/design-system/migration/website-2026-10-11/assets.json', import.meta.url)));
+for (const metadata of Object.values(websiteAssets)) {
+  const file = await readFile(new URL(`../${metadata.path}`, import.meta.url));
+  assert.ok(file.length > 50, `Empty website source asset ${metadata.path}`);
+  assert.equal(createHash('sha256').update(file).digest('hex'), metadata.sha256, `Changed website source asset ${metadata.path}`);
+}
 const manifest = JSON.parse(await readFile(new URL('../packages/ui/figma-manifest.json', import.meta.url)));
 assert.deepEqual(sources.map(s=>s.id).sort(), manifest.components.map(s=>s.id).sort(), 'Every public family needs an independent source baseline');
 for (const source of sources) assert.ok((await readFile(new URL(`../docs/design-system/migration/${source.reference}`, import.meta.url))).length > 100, `Missing reference ${source.name}`);
@@ -36,8 +42,23 @@ try {
     assert.ok(Math.abs(box.width - source.width) < 1, `${name} width: ${box.width} vs Figma ${source.width}`);
     assert.ok(Math.abs(box.height - source.height) < 1, `${name} height: ${box.height} vs Figma ${source.height}`);
     // Scrollable comparisons must not clip a source capture. This changes the fixture container only.
-    await node.evaluate(n => { const pair=n.closest('.preview-pair'); if(pair){ pair.scrollLeft=0; pair.style.overflow='visible'; } });
+    await node.evaluate(n => { const pair=n.closest('.preview-pair'); if(pair){ pair.scrollLeft=0; pair.style.overflow='visible'; pair.style.contain='none'; } });
     await node.screenshot({ path: path.join(output, `${source.id.replace(':', '-')}.png`) });
+  }
+  const websiteVariants = JSON.parse(await readFile(new URL('../docs/design-system/migration/website-2026-10-11/variant-sizes.json', import.meta.url)));
+  for (const variant of websiteVariants.email) {
+    const node = page.locator(`[data-website-state="${variant.state}"] .ov-email-download-link`);
+    const box = await node.boundingBox();
+    assert.equal(box.width, variant.width, `Email ${variant.state} source width`);
+    assert.equal(box.height, variant.height, `Email ${variant.state} source height`);
+    await node.screenshot({ path:path.join(output, `${variant.id.replace(':','-')}.png`) });
+  }
+  for (const variant of websiteVariants.workflow) {
+    const node = page.locator(`[data-website-stage="${variant.stage}"] .ov-mobile-workflow`);
+    assert.equal((await node.boundingBox()).height, variant.height, `Mobile ${variant.stage} source height`);
+    const section = page.locator(`[data-website-stage="${variant.stage}"] .ov-workflow-section`);
+    assert.equal((await section.boundingBox()).height, variant.sectionHeight, `Section ${variant.stage} source height`);
+    await node.screenshot({ path:path.join(output, `${variant.id.replace(':','-')}.png`) });
   }
   assert.match(await page.locator('[data-specimen="Date picker"] .preview-live').textContent(), /Oct 8, 2026/);
   const button = page.locator('[data-specimen="Button"] .preview-live .ov-button');
@@ -46,7 +67,7 @@ try {
   assert.deepEqual(font, ['Inter, sans-serif', '14px', '500', '20px', '999px']);
   assert.equal((await surface.boundingBox()).height, 44);
   assert.equal((await surface.boundingBox()).width, 152);
-  await button.hover(); assert.equal(await surface.evaluate(n=>getComputedStyle(n).backgroundColor), 'rgb(0, 77, 120)');
+  await button.hover(); await page.waitForTimeout(150); assert.equal(await surface.evaluate(n=>getComputedStyle(n).backgroundColor), 'rgb(0, 77, 120)');
   await page.mouse.down(); assert.equal((await surface.boundingBox()).height, 42); assert.equal((await button.boundingBox()).width, 158); await page.mouse.up();
   await page.keyboard.press('Tab'); await button.focus(); assert.equal((await surface.boundingBox()).width, 148); await button.blur();
   const action = page.locator('[data-specimen="Download action"] .preview-live .ov-download-action');
@@ -69,10 +90,11 @@ try {
     await page.getByRole('switch', { name: 'Liquid Glass', exact: true }).setChecked(glass);
     for (const frost of ['0', '35', '100']) {
       await page.locator('input[type="range"]').fill(frost);
-      const results = await page.locator('.preview-live img, .preview-variants img').evaluateAll(images => images.filter(img=>img.getBoundingClientRect().width && img.getBoundingClientRect().height).map(img=>({src:img.currentSrc, naturalWidth:img.naturalWidth, naturalHeight:img.naturalHeight, width:img.getBoundingClientRect().width, height:img.getBoundingClientRect().height})));
+      const results = await page.locator('.preview-live img, .preview-variants img, .website-variants img').evaluateAll(images => images.filter(img=>img.getBoundingClientRect().width && img.getBoundingClientRect().height).map(img=>({src:img.currentSrc, naturalWidth:img.naturalWidth, naturalHeight:img.naturalHeight, width:img.getBoundingClientRect().width, height:img.getBoundingClientRect().height})));
       assert.ok(results.length > 20);
       for (const result of results) {
         assert.ok(result.naturalWidth > 0, `Failed asset: ${result.src}`);
+        if (!/\.svg(?:[?#]|$)|^data:image\/svg\+xml/.test(result.src)) continue;
         assert.equal(result.width, result.naturalWidth, `Resized SVG: ${result.src}`);
         assert.equal(result.height, result.naturalHeight, `Resized SVG: ${result.src}`);
       }

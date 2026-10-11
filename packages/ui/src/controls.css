@@ -5,6 +5,8 @@
   [data-ovelle-theme="dark"] .ov-source-asset > .ov-source-dark { display: block; }
   .ov-field-group { position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 4px; width: 320px; max-width: 100%; color: var(--ov-text-primary); font-family: Inter, sans-serif; }
   .ov-field-source { min-height: 96px; }
+  .ov-field-source[data-supporting-text="hidden"] { min-height:68px; }
+  .ov-field-source[data-supporting-text="hidden"]:has(.ov-hint) { min-height:90px; }
   .ov-field-group > label { font-size: 14px; line-height: 20px; font-weight: 500; }
   .ov-field-group > .ov-hint { margin: 0; font-size: 12px; line-height: 18px; font-weight: 400; letter-spacing: .1px; color: var(--ov-text-secondary); }
   .ov-field-group:has(> .ov[data-material="liquid-glass"]):not(:has(> .ov[data-reduce-transparency="true"])) > .ov-hint { color: var(--ov-text-primary); }

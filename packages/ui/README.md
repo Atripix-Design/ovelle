@@ -1,6 +1,6 @@
 # @ovelle/ui
 
-Shared **React 19 + TypeScript** components for the Ovelle website and Electron renderer, with **Tailwind CSS 4** overrides. All 22 public Figma families have named exports and typed props. Default geometry and meaningful states are derived from their actual high fidelity source contexts; Inter and original Light/Dark assets are bundled.
+Shared **React 19 + TypeScript** components for the Ovelle website and Electron renderer, with **Tailwind CSS 4** overrides. All 31 public Figma families have named exports and typed props. Default geometry and meaningful states are derived from their actual high fidelity source contexts; Inter and original Light/Dark assets are bundled.
 
 [Figma components](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=4-2) · [Property mapping](./figma-manifest.json) · [Migration evidence](../../docs/design-system/migration/README.md) · [Glass audit](../../docs/design-system/glass-audit.md)
 
@@ -126,6 +126,36 @@ The repository's [AGENTS.md](../../AGENTS.md) records these requirements for fut
 
 ## Verification
 
-`npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Run `node scripts/check-figma-fidelity.mjs` and `node scripts/check-content-components.mjs` against the web preview and built desktop renderer. Set `OVELLE_PLAYWRIGHT_MODULE` if Playwright is installed elsewhere, and `OVELLE_PREVIEW_URL` for the desktop URL. Figma reference captures and source/variant inventories live in `docs/design-system/migration`. The fidelity check verifies native root dimensions for all 22 families, action child geometry/typography/states, keyboard/focus and exact SVG geometry; screenshots still require human inspection.
+`npm run test -w @ovelle/ui`, `npm run check`, `npm run lint`, `npm run build`. Tests cover export coverage, semantic markup, state/label forwarding and continuous material values. Run `node scripts/check-figma-fidelity.mjs` and `node scripts/check-content-components.mjs` against the web preview and built desktop renderer. Set `OVELLE_PLAYWRIGHT_MODULE` if Playwright is installed elsewhere, and `OVELLE_PREVIEW_URL` for the desktop URL. Figma reference captures and source/variant inventories live in `docs/design-system/migration`. The fidelity check verifies native root dimensions for all 31 families, action child geometry/typography/states, keyboard/focus and exact SVG geometry; screenshots still require human inspection.
 
 Compact Button loading/success states use icon-only content to preserve square geometry. Supply `aria-label` for a contextual accessible label.
+
+## Website compositions
+
+The website and Electron renderer share `apps/shared/Home.tsx`. Routing, HTTP requests and Electron's restricted native IPC stay in the apps. The following compositions reuse the public controls, cards, fields and labels; their native Figma component sets and nested property mappings are recorded in `figma-manifest.json`.
+
+| Export | Props and behavior |
+| --- | --- |
+| `WorkflowPreview` | `stage` (`find`, `enrich`, `follow-up`), `onStageChange`, `layout`, `showControls`, `interactive`; hover/focus reveals source context. |
+| `WorkflowSection` | Same stage/layout API, `onExplore(stage)`; desktop and mobile source layouts. |
+| `MobileWorkflow` | `stage`, `onStageChange`, `onExplore(stage)`; source heights vary with stage. |
+| `PinnedWorkflow` | Stage API, `motion`, `presentation`; scroll advances the three stages, reduced motion/short viewports show all three in normal flow. `presentation="stage"` renders the static Figma specimen. |
+| `HeroWorkflowScene` | Stage API, `size` (`regular`, `compact`), `onExplore(stage)`; selector opens the linked stage sheet. |
+| `HeroStageSheet` | `stage`, `onStageChange`, `open`, `onClose`, `presentation` (`modal`, `inline`), optional `titleId`/`refElement`; native modal keyboard/focus handling, solid material only. |
+| `ProgramOverview` | `onOpportunityClick`, `onProgramClick`; reuses summary-density `FeatureCard`. |
+| `EmailDownloadLink` | `onSend(email): Promise<void>`, optional controlled `state`; default/focused/sending/sent/invalid/error/disabled variants. Validation prevents sending, retries preserve the address, repeated submission cannot start duplicate requests. |
+| `DeviceAwareDownloadCTA` | `releases: DesktopRelease[]`, optional `device`; OS recommendations retain manual architecture choices and availability from real R2 metadata. Mobile Home uses `EmailDownloadLink`. |
+
+All visual compositions inherit Light/Dark and the provider's reduced-motion preference, accept `className`, and support material/frost/transparency overrides where the source has glass variants. Stage sheets have no glass variant; static compositions have no artificial loading/success states. Nested interactive components retain their own hover, pressed, focus and disabled behavior. `FeatureCard` adds `density="summary"`; `Field` adds `supportingText="hidden"` to preserve the email form's native field geometry without hiding validation semantics.
+
+```tsx
+<EmailDownloadLink onSend={async email => {
+  const response = await fetch('/api/download-email', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok || !(await response.json()).sent) throw new Error('Delivery unavailable');
+}} />
+```
+
+See [source captures and implementation evidence](../../docs/design-system/migration/website-2026-10-11/README.md). Source motion uses the authored 120/220/350/400ms transitions and FAQ spring; OS/provider reduced motion removes interpolation. Run `check:figma`, `check:loading` and `check:website` in both consumers, plus `check:electron-downloads` against the built native app. The fidelity inventory now checks 31 families and independent email/mobile state dimensions. Figma and React remain separately maintained; Code Connect publishing requires an eligible Figma plan/seat.

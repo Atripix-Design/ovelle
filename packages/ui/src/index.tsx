@@ -1,4 +1,4 @@
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, ReactNode, Ref } from 'react';
 import { useMaterial } from './material.js';
 import type { MaterialProps, Tone } from './material.js';
 import { FigmaAsset } from './figma-assets.js';
@@ -7,6 +7,7 @@ export type { Material, MaterialProps, MaterialSettings, Tone } from './material
 
 type Visual = MaterialProps & { className?: string; style?: CSSProperties };
 export type ButtonProps = Visual & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'style'> & {
+  ref?: Ref<HTMLButtonElement>;
   variant?: 'primary' | 'secondary' | 'quiet'; tone?: Tone; size?: 'regular' | 'compact';
   state?: 'default' | 'loading' | 'success'; loadingLabel?: ReactNode; successLabel?: ReactNode;
   surfaceClassName?: string;
@@ -56,3 +57,8 @@ export { EmptyState } from './empty-state.js';
 export type { EmptyStateProps } from './empty-state.js';
 export { Skeleton, SkeletonRegion, LoadingBoundary } from './skeleton.js';
 export type { SkeletonProps, SkeletonRegionProps, LoadingBoundaryProps } from './skeleton.js';
+export { WorkflowPreview, WorkflowSection, PinnedWorkflow, MobileWorkflow, HeroWorkflowScene, HeroStageSheet, workflowContent } from './workflow.js';
+export type { WorkflowStage, WorkflowPreviewProps, WorkflowSectionProps, PinnedWorkflowProps, MobileWorkflowProps, HeroWorkflowSceneProps, HeroStageSheetProps } from './workflow.js';
+export { ProgramOverview, EmailDownloadLink, DeviceAwareDownloadCTA, programFeatures } from './website.js';
+export type { ProgramOverviewProps, EmailDownloadLinkProps, EmailDownloadState, DeviceAwareDownloadCTAProps, DesktopRelease } from './website.js';
+export { websiteImages } from './website-assets.js';

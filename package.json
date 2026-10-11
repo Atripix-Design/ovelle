@@ -16,11 +16,14 @@
     "check": "npm run check --workspaces && npm run check:worker",
     "lint": "npm run lint --workspaces",
     "check:worker": "tsc -p tsconfig.worker.json",
-    "cf:deploy:dev": "npm run build:development -w @ovelle/web && wrangler deploy --env development",
+    "cf:deploy:dev": "npm run build -w @ovelle/ui && npm run build:development -w @ovelle/web && wrangler deploy --env development",
     "cf:deploy:prod": "npm run build -w @ovelle/web && wrangler deploy --env production",
     "check:figma": "node scripts/check-figma-fidelity.mjs",
     "check:components": "node scripts/check-content-components.mjs",
-    "check:loading": "node scripts/check-dynamic-loading.mjs"
+    "check:loading": "node scripts/check-dynamic-loading.mjs",
+    "check:website": "node scripts/check-website.mjs",
+    "check:download-email": "node --experimental-strip-types scripts/check-download-email.mjs",
+    "check:electron-downloads": "node scripts/check-electron-downloads.mjs"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261006.1",

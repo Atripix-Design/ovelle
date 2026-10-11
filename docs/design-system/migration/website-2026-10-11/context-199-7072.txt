@@ -1,0 +1,138 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/ae16d.svg`;
+const imgFrame1 = `${assetPathPrefix}/689eb.svg`;
+
+function OvelleIconsChevronDown({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex h-[20px] items-center justify-center relative"} data-node-id="7:68" data-name="Ovelle / Icons / chevron-down">
+      <div className="relative shrink-0 size-[20px]" data-node-id="7:69" data-name="Frame">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+      </div>
+    </div>
+  );
+}
+
+type OvelleHeroWorkflowSceneProps = {
+  className?: string;
+  material?: "Solid";
+  size?: "Regular";
+  stage?: "Opportunities";
+};
+
+function OvelleHeroWorkflowScene({ className, material = "Solid", size = "Regular", stage = "Opportunities" }: OvelleHeroWorkflowSceneProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[12px] h-[172px] items-start pt-[4px] px-[18px] relative rounded-[16px] w-[364px]"} data-node-id="199:7072">
+      <div className="content-stretch flex gap-[14px] items-center overflow-clip relative shrink-0 w-full" data-node-id="199:7101" data-name="Stage selector / One line">
+        <OvelleIconsChevronDown className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" />
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-[126px]" data-node-id="199:7102" data-name="Ovelle / Select / Hero stage">
+          <div className="content-stretch flex flex-col gap-[var(--ovelle-space-4,4px)] items-start relative shrink-0 w-full" data-node-id="I199:7102;54:1245" data-name="Appearance">
+            <div className="content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I199:7102;54:1245;7:517" data-name="Trigger">
+              <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Semi_Bold'] font-semibold leading-[20px] min-w-px not-italic relative text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)]" data-node-id="I199:7102;54:1245;7:518">
+                Opportunities
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="[word-break:break-word] flex flex-[1_0_0] flex-col font-['Inter:Regular'] font-normal h-full justify-center leading-[0] min-w-px not-italic relative text-[#536a7a] text-[12px] text-right tracking-[0.1px]">
+          <p className="leading-[18px]">Next step</p>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col h-[44px] items-start justify-center relative shrink-0 w-full" data-node-id="199:7079" data-name="Record results">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="199:7080" data-name="Result row 0">
+          <div className="content-stretch flex gap-[12px] items-center relative shrink-0 w-full" data-node-id="199:7081" data-name="Record / Name and status">
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start min-w-px not-italic overflow-clip relative" data-node-id="213:7500" data-name="Record / Name and context">
+              <p className="font-['Inter:Semi_Bold'] font-semibold leading-[16px] relative shrink-0 text-[12px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.3px] w-full" data-node-id="199:7082">
+                Northlight Labs
+              </p>
+              <p className="font-['Inter:Regular'] font-normal leading-[15px] relative shrink-0 text-[11px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="199:7084">
+                12 volunteers confirmed
+              </p>
+            </div>
+            <div className="content-stretch flex flex-col h-[44px] items-start justify-center relative shrink-0 w-[88px]" data-node-id="199:7083" data-name="Ovelle / Filter chip">
+              <div className="bg-[#def4ff] content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[38px] items-center justify-center px-[8px] relative rounded-[var(--ovelle-radius-pill,999px)] shrink-0 w-full" data-node-id="I199:7083;225:7951" data-name="Appearance">
+                <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[18px] not-italic relative shrink-0 text-[#00598a] text-[12px] whitespace-nowrap" data-node-id="I199:7083;225:7951;225:7949">
+                  Confirmed
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[#e2e9ee] h-px left-[18px] top-[122px] w-[328px]" data-node-id="216:11086" data-name="Record / Footer divider" />
+      <div className="content-stretch flex h-[52px] items-start relative shrink-0 w-full" data-node-id="199:7112" data-name="Ovelle / Button / Explore full stage">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] h-full items-center justify-center min-w-px relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I199:7112;52:1541" data-name="Button appearance">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center min-w-px overflow-clip relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I199:7112;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I199:7112;52:1541;7:258">
+              Explore opportunities
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex h-[20px] items-center justify-center right-[18px] top-[132px]" data-node-id="216:11087" data-name="Ovelle / Icons / arrow-right / Footer">
+        <div className="relative shrink-0 size-[20px]" data-node-id="I216:11087;7:3" data-name="Frame">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Stage=Opportunities, Material=Solid, Size=Regular
+**Node ID:** 199:7072
+
+Figma-only compact mobile hero scene. Stage → stage, Material → material, theme from Ovelle Color collection. Linked Select and Button states inherit their public source APIs. Default closed scenes are static/reduced-motion safe; prototype stage menu is a Home-page frame. Complete information lives in the three scroll sections. React export and typed API remain pending; do not claim automatic synchronization or source-to-render parity.
+
+## Ovelle / Hero workflow scene
+**Node ID:** 199:7256
+
+Compact mobile hero composition: linked public selector, one featured record and link to complete scroll section. Three stages × Solid/Liquid Glass. Light/Dark through Color modes; nested controls retain hover/pressed/focus/disabled semantics. Data loading is inapplicable to this static marketing example. New React API and mapping pending. No app implementation claimed.
+
+## Ovelle / Icons / chevron-down
+**Node ID:** 7:68
+
+Lucide chevron-down icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+
+## Ovelle / Select
+**Node ID:** 54:1262
+
+React export: import { Select } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Value → value / defaultValue; Options → options; State → disabled / error / native open. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Select / Solid
+**Node ID:** 7:515
+
+Contact-status selector. Click or Enter opens the anchored menu; select an option to change the Value variant; Escape closes. The menu is an overlay and does not move nearby content. Use a native select or accessible listbox in production.
+
+## Ovelle / Filter chip
+**Node ID:** 54:1269
+
+React export: import { FilterChip } from &amp;quot;@ovelle/ui&amp;quot;. Styles: import &amp;quot;@ovelle/ui/styles.css&amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Label → children; Tone → tone; State → selected / disabled / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Filter chip / Solid
+**Node ID:** 7:680
+
+Compact pill with a 44px hit target. Click to toggle selection. Selected state uses both a check mark and color. In a single-select group the code must clear the previous option.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Quiet / Solid
+**Node ID:** 7:256
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Icons / arrow-right
+**Node ID:** 7:2
+
+Lucide arrow-right icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

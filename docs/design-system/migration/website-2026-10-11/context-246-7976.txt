@@ -1,0 +1,103 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+const imgFrame = `${assetPathPrefix}/f37f0.svg`;
+
+type OvelleEmailDownloadLinkProps = {
+  className?: string;
+  material?: "Solid";
+  state?: "Sending";
+};
+
+function OvelleEmailDownloadLink({ className, material = "Solid", state = "Sending" }: OvelleEmailDownloadLinkProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-col gap-[16px] items-start px-[20px] py-[24px] relative rounded-[24px] w-[342px]"} data-node-id="246:7976">
+      <div className="[word-break:break-word] font-['Inter:Semi_Bold'] font-semibold leading-[0] not-italic relative shrink-0 text-[24px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="246:7977">
+        <p className="leading-[30px] mb-0">Get Ovelle on</p>
+        <p className="leading-[30px]">your computer.</p>
+      </div>
+      <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-full" data-node-id="246:7978">
+        We’ll email you a download link to open on your computer.
+      </p>
+      <div className="content-stretch flex flex-col gap-[12px] items-start overflow-clip relative shrink-0 w-full" data-node-id="253:8210" data-name="Email field and submit">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:8211" data-name="Email field / Content height">
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="246:7979" data-name="Ovelle / Field">
+            <div className="content-stretch flex flex-col gap-[var(--ovelle-space-4,4px)] items-start relative shrink-0 w-full" data-node-id="I246:7979;54:1232" data-name="Appearance">
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-primary,#172b3d)] w-full" data-node-id="I246:7979;54:1232;255:11414">
+                Email address
+              </p>
+              <div className="bg-[var(--ovelle-surface-subtle,#eef2f5)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex gap-[var(--ovelle-space-8,8px)] h-[44px] items-center overflow-clip px-[var(--ovelle-space-12,12px)] relative rounded-[var(--ovelle-radius-control,12px)] shrink-0 w-full" data-node-id="I246:7979;54:1232;255:11415" data-name="Input">
+                <p className="[word-break:break-word] flex-[1_0_0] font-['Inter:Regular'] font-normal leading-[22px] min-w-px not-italic relative text-[15px] text-[color:var(--ovelle-text-disabled,#788a98)]" data-node-id="I246:7979;54:1232;255:11416">
+                  alex@example.com
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="246:7989" data-name="Ovelle / Button">
+          <div className="content-stretch flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I246:7989;52:1517" data-name="Button appearance">
+            <div className="bg-[var(--ovelle-action-brand,#00598a)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I246:7989;52:1517;7:103" data-name="Surface">
+              <div className="content-stretch flex h-[20px] items-center justify-center relative shrink-0" data-node-id="I246:7989;52:1517;7:104" data-name="Icon">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I246:7989;52:1517;7:104;7:55" data-name="Frame">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-on-brand,white)] whitespace-nowrap" data-node-id="I246:7989;52:1517;7:107">
+                Sending link…
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## State=Sending, Material=Solid
+**Node ID:** 246:7976
+
+Mobile download email handoff. Linked Ovelle Field and Button. Future Cloudflare sender downloads@mail.ovelle.com. Figma-only: no email sending. Inherits Light/Dark and native material settings. React/API/manifest implementation pending.
+
+## Ovelle / Email download link
+**Node ID:** 246:8205
+
+React export: import { EmailDownloadLink } from "@ovelle/ui"; import "@ovelle/ui/styles.css". State → state; onSend(email) Promise, onStateChange, disabled. Native validation, retained email, duplicate-send prevention. Development Cloudflare sender downloads@dev.mail.ovelle.org. Figma never sends email. Material → material; Light/Dark inherited OvelleProvider.theme; glassFrost 0–100; independent reduceTransparency; reduced motion inherited provider/OS. className supports styling overrides. Static marketing content has no data-dependent loading state; real release catalog uses LoadingBoundary. Nested source controls retain their own keyboard, hover, pressed, focused, disabled and loading states. Source mappings: packages/ui/figma-manifest.json; implementation: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui. Figma and React remain separately maintained; no automatic synchronization or published Code Connect is claimed.
+
+## Ovelle / Field
+**Node ID:** 54:1243
+
+React export: import { Field } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Kind → kind; Label → label; Value → value / defaultValue; Placeholder → placeholder; Hint → hint; Error → error; Success → success; State → disabled / validation / browser pseudo classes. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. React Field: Supporting text → supportingText (visible|hidden); validation feedback is retained in hidden mode.
+
+## Kind=Text, State=Disabled, Supporting text=Hidden
+**Node ID:** 255:11413
+
+Content-sized helper-free field. Error/Success feedback retained. Original callers use Visible mode. Figma-only capability; React mapping pending.
+
+## Internal / Field / Solid
+**Node ID:** 7:392
+
+Persistent label, 44px input and helper text. Focus has a 2px border and caret. Error and success use an icon plus text. The prototype uses a fixed sample value, not live typing. Code must preserve native input semantics, labels and inline validation.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Primary / Solid
+**Node ID:** 7:92
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+
+## Ovelle / Icons / loader-circle
+**Node ID:** 7:54
+
+Lucide loader-circle icon. Source: https://github.com/lucide-icons/lucide. 20px, consistent stroke weight. Swap the instance rather than detach.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

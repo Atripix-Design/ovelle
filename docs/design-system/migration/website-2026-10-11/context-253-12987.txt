@@ -1,0 +1,108 @@
+const assetPathPrefix = "packages/ui/assets/website (downloaded exact source exports)";
+type OvelleProgramOverviewProps = {
+  className?: string;
+  material?: "Solid";
+};
+
+function OvelleProgramOverview({ className, material = "Solid" }: OvelleProgramOverviewProps) {
+  return (
+    <div className={className || "bg-[var(--ovelle-surface-default,white)] border border-[var(--ovelle-border-default,#cbd5de)] border-solid content-stretch flex flex-col items-start overflow-clip relative rounded-[20px] w-[342px]"} data-node-id="253:12987">
+      <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12900" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12900;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12900;253:12439;9:276">
+            Riverside clean-up
+          </p>
+          <div className="font-['Inter:Regular'] font-normal leading-[0] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12900;253:12439;9:277">
+            <p className="leading-[22px] mb-0">Friday · 9:00–12:00</p>
+            <p className="leading-[22px] mb-0">8 of 20 places open</p>
+            <p className="leading-[22px]">Example opportunity</p>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="253:12916" data-name="Ovelle / Button">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I253:12916;52:1541" data-name="Button appearance">
+          <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I253:12916;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I253:12916;52:1541;7:258">
+              View opportunity
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12920" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12920;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12920;253:12439;9:276">
+            Volunteer records
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12920;253:12439;9:277">
+            Keep contacts, interests, skills, and availability together for each volunteer.
+          </p>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12941" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12941;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12941;253:12439;9:276">
+            Opportunities and schedules
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12941;253:12439;9:277">
+            Coordinate service activities, capacity, assignments, and upcoming shifts.
+          </p>
+        </div>
+      </div>
+      <div className="border-[var(--ovelle-border-default,#cbd5de)] border-solid border-t content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="253:12962" data-name="Ovelle / Feature card">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic px-[16px] py-[12px] relative shrink-0 w-full" data-node-id="I253:12962;253:12439" data-name="Appearance">
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[24px] min-w-full relative shrink-0 text-[18px] text-[color:var(--ovelle-text-primary,#172b3d)] tracking-[-0.2px] w-[min-content]" data-node-id="I253:12962;253:12439;9:276">
+            Participation and reports
+          </p>
+          <p className="font-['Inter:Regular'] font-normal leading-[22px] min-w-full relative shrink-0 text-[15px] text-[color:var(--ovelle-text-secondary,#536a7a)] w-[min-content]" data-node-id="I253:12962;253:12439;9:277">
+            Track attendance and service hours. Filter reports by volunteer, opportunity, and date.
+          </p>
+        </div>
+      </div>
+      <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="253:12983" data-name="Ovelle / Button">
+        <div className="content-stretch cursor-pointer flex flex-[1_0_0] items-center justify-center min-w-px p-[4px] relative rounded-[var(--ovelle-radius-pill,999px)] self-stretch" data-node-id="I253:12983;52:1541" data-name="Button appearance">
+          <div className="bg-[var(--ovelle-surface-default,white)] content-stretch flex flex-[1_0_0] gap-[var(--ovelle-space-8,8px)] h-[44px] items-center justify-center min-w-px overflow-clip px-[var(--ovelle-space-16,16px)] relative rounded-[var(--ovelle-radius-pill,999px)]" data-node-id="I253:12983;52:1541;7:257" data-name="Surface">
+            <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[20px] not-italic relative shrink-0 text-[14px] text-[color:var(--ovelle-text-brand,#00598a)] whitespace-nowrap" data-node-id="I253:12983;52:1541;7:258">
+              Explore volunteer program
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Ovelle / Subheading: Font(family: "Inter", style: Semi Bold, size: 18, weight: 600, lineHeight: 24, letterSpacing: -0.20000000298023224), Ovelle / Body: Font(family: "Inter", style: Regular, size: 15, weight: 400, lineHeight: 22, letterSpacing: 0), Ovelle / Control: Font(family: "Inter", style: Medium, size: 14, weight: 500, lineHeight: 20, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## Ovelle / Program overview
+**Node ID:** 253:13087
+
+One mobile surface merges an example opportunity and three complete capability summaries. Four linked Ovelle Feature card Density=Summary instances and public Buttons. Material=Solid|Liquid Glass; Light/Dark inherited Color modes. Static content: loading/error/success/open/selected not applicable; action states inherited. React ProgramOverview and FeatureCard density API, className/slots/frost/transparency pending implementation. No production parity claim.
+
+## Ovelle / Feature card
+**Node ID:** 54:1378
+
+React export: import { FeatureCard } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Surface → surface; Icon → icon; Title → title; Body → children; Link → link; State → browser hover / focus-within. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md. Density=Summary: informational mobile row with full title/body and no repeated icon/action; compose within one common surface. Regular unchanged. React density API pending.
+
+## Internal / Feature card / Solid
+**Node ID:** 9:269
+
+Product capability card adapted from Mochi’s cream/ice-blue content surfaces. Uses a real icon-library asset rather than stock healthcare imagery. Title, description and icon are editable. Hover is restrained; use a specific destination in each page prototype.
+
+## Ovelle / Button
+**Node ID:** 52:1552
+
+React export: import { Button } from &amp;amp;quot;@ovelle/ui&amp;amp;quot;. Styles: import &amp;amp;quot;@ovelle/ui/styles.css&amp;amp;quot;. Tailwind utilities: className. Material: solid | liquid-glass. glassFrost: number 0 (liquid) to 100 (frosted), default 35. reduceTransparency: boolean. Figma → React: Material → material; Style → variant; Tone → tone; State → disabled / state / browser pseudo classes; Label → children; Loading label → loadingLabel; Success label → successLabel. Source and mapping: https://github.com/Atripix-Design/ovelle/tree/development/packages/ui Browser hover/focus/pressed states are automatic. Application state supplies loading/success. Native GLASS and CSS use different optical renderers. Size maps to size regular/compact. Compact is 44px, reusable in calendars and pagination. Existing Regular callers preserved. Loading: wrap the real mounted content in @ovelle/ui LoadingBoundary; no separate native Skeleton sheet. See docs/design-system/skeleton-workflow.md.
+
+## Internal / Button / Quiet / Solid
+**Node ID:** 7:256
+
+44px action with editable labels. Choose a specific verb. Default → hover → press → loading → success. Press feedback is immediate; pointer exit cancels. Disabled and loading prevent repeated action. Completion timing is a prototype simulation.
+Images and SVGs will be stored as constants, e.g. const image = `${assetPathPrefix}/<asset file name>`, where assetPathPrefix is declared once at the top of the code and every asset URL interpolates it. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

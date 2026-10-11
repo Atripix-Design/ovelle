@@ -158,7 +158,8 @@
         "Value": "value / defaultValue",
         "Placeholder": "placeholder",
         "Hint": "hint",
-        "State": "disabled / validation / browser pseudo classes"
+        "State": "disabled / validation / browser pseudo classes",
+        "Supporting text": "supportingText (visible|hidden); validation feedback retained"
       },
       "sourceProperties": {
         "id": "54:1243",
@@ -556,9 +557,17 @@
             "Solid",
             "Liquid Glass"
           ]
+        },
+        "Density": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Summary"
+          ]
         }
       },
-      "variants": 2,
+      "variants": 4,
       "export": "FeatureCard",
       "source": "src/index.tsx",
       "propertyMapping": {
@@ -566,7 +575,8 @@
         "Icon": "icon",
         "Title": "title",
         "Body": "children",
-        "State": "browser hover / focus-within"
+        "State": "browser hover / focus-within",
+        "Density": "density (regular|summary)"
       },
       "sourceProperties": {
         "id": "54:1378",
@@ -1134,6 +1144,344 @@
             "Disabled"
           ]
         }
+      }
+    },
+    {
+      "id": "135:3508",
+      "name": "Ovelle / Workflow preview",
+      "export": "WorkflowPreview",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Hover"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 24,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "State": "state / native hover, focus and validation",
+        "Material": "material",
+        "Layout": "layout",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "138:3092",
+      "name": "Ovelle / Workflow section",
+      "export": "WorkflowSection",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 12,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Layout": "layout",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "145:4284",
+      "name": "Ovelle / Pinned workflow",
+      "export": "PinnedWorkflow",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Motion": {
+          "type": "VARIANT",
+          "defaultValue": "Standard",
+          "variantOptions": [
+            "Standard",
+            "Reduced"
+          ]
+        }
+      },
+      "variants": 12,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Motion": "motion / provider and OS reduced motion",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "199:7256",
+      "name": "Ovelle / Hero workflow scene",
+      "export": "HeroWorkflowScene",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        },
+        "Size": {
+          "type": "VARIANT",
+          "defaultValue": "Regular",
+          "variantOptions": [
+            "Regular",
+            "Compact"
+          ]
+        }
+      },
+      "variants": 12,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Size": "size",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "201:6782",
+      "name": "Ovelle / Hero stage sheet",
+      "export": "HeroStageSheet",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Partners",
+          "variantOptions": [
+            "Partners",
+            "Relationships",
+            "Opportunities"
+          ]
+        }
+      },
+      "variants": 3,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Open": "open",
+        "Dismiss": "onClose",
+        "Selection": "onStageChange",
+        "Inline preview": "presentation (React-only)"
+      }
+    },
+    {
+      "id": "246:8205",
+      "name": "Ovelle / Email download link",
+      "export": "EmailDownloadLink",
+      "properties": {
+        "State": {
+          "type": "VARIANT",
+          "defaultValue": "Default",
+          "variantOptions": [
+            "Default",
+            "Focused",
+            "Sending",
+            "Sent",
+            "Invalid",
+            "Error",
+            "Disabled"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 14,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "State": "state / native hover, focus and validation",
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "253:12812",
+      "name": "Ovelle / Mobile workflow",
+      "export": "MobileWorkflow",
+      "properties": {
+        "Stage": {
+          "type": "VARIANT",
+          "defaultValue": "Find",
+          "variantOptions": [
+            "Find",
+            "Enrich",
+            "Follow up"
+          ]
+        },
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 6,
+      "source": "src/workflow.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Stage": "stage (Find/Partners \u2192 find, Enrich/Relationships \u2192 enrich, Follow up/Opportunities \u2192 follow-up)",
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "253:13087",
+      "name": "Ovelle / Program overview",
+      "export": "ProgramOverview",
+      "properties": {
+        "Material": {
+          "type": "VARIANT",
+          "defaultValue": "Solid",
+          "variantOptions": [
+            "Solid",
+            "Liquid Glass"
+          ]
+        }
+      },
+      "variants": 2,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Material": "material",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      }
+    },
+    {
+      "id": "165:5351",
+      "name": "Ovelle / Device-aware download CTA",
+      "export": "DeviceAwareDownloadCTA",
+      "properties": {
+        "Device": {
+          "type": "VARIANT",
+          "defaultValue": "macOS",
+          "variantOptions": [
+            "macOS",
+            "Windows",
+            "Other",
+            "Mobile"
+          ]
+        },
+        "Layout": {
+          "type": "VARIANT",
+          "defaultValue": "Desktop",
+          "variantOptions": [
+            "Desktop",
+            "Mobile"
+          ]
+        }
+      },
+      "variants": 7,
+      "source": "src/website.tsx",
+      "type": "COMPONENT_SET",
+      "mappingKind": "Explicit independently maintained Figma-to-React property mapping; Code Connect publishing is unavailable on this Figma plan/seat.",
+      "propertyMapping": {
+        "Device": "device (macOS|Windows|Other); Mobile handoff is EmailDownloadLink",
+        "Layout": "Desktop website uses this component; Mobile Home uses EmailDownloadLink",
+        "Theme": "OvelleProvider.theme (inherited source Color mode)"
+      },
+      "reactContentAndBehaviorMapping": {
+        "Catalog": "releases",
+        "Manual override": "onDeviceChange"
       }
     }
   ],

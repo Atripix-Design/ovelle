@@ -65,7 +65,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run build -w @ovelle/ui
       - run: npm run check
+      - run: npm run check:download-email
 
   lint:
     name: lint

@@ -1,6 +1,19 @@
 import type { ImgHTMLAttributes } from "react";
 
 const assets: Record<string, string> = {
+  "sheet-close-dark.svg": new URL("../assets/website/sheet-close-dark.svg", import.meta.url).href,
+  "sheet-users-dark.svg": new URL("../assets/website/sheet-users-dark.svg", import.meta.url).href,
+  "sheet-heart-dark.svg": new URL("../assets/website/sheet-heart-dark.svg", import.meta.url).href,
+  "sheet-chart-dark.svg": new URL("../assets/website/sheet-chart-dark.svg", import.meta.url).href,
+  "sheet-chevron-dark.svg": new URL("../assets/website/sheet-chevron-dark.svg", import.meta.url).href,
+  "sheet-check-dark.svg": new URL("../assets/website/sheet-check-dark.svg", import.meta.url).href,
+  "hero-selector-dark.svg": new URL("../assets/website/hero-selector-dark.svg", import.meta.url).href,
+  "4916d.svg": new URL("../assets/website/4916d.svg", import.meta.url).href,
+  "848bb.svg": new URL("../assets/website/848bb.svg", import.meta.url).href,
+  "1f347.svg": new URL("../assets/website/1f347.svg", import.meta.url).href,
+  "1983e.svg": new URL("../assets/website/1983e.svg", import.meta.url).href,
+  "c052d.svg": new URL("../assets/website/c052d.svg", import.meta.url).href,
+  "ae16d.svg": new URL("../assets/website/ae16d.svg", import.meta.url).href,
   "github-light.svg": new URL("../assets/github-light.svg", import.meta.url).href,
   "github-dark.svg": new URL("../assets/github-dark.svg", import.meta.url).href,
   "005d6.svg": new URL("../assets/005d6.svg", import.meta.url).href,

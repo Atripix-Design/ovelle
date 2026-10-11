@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { GitHubLink, Button, Checkbox, ConfirmationDialog, DatePicker, DownloadAction, DownloadCard, EmptyState, FAQRow, FeatureCard, Field, FilterChip, IconAction, NavigationItem, OvelleProvider, Pagination, SectionLabel, SegmentedControl, Select, SiteNavigationDesktop, SiteNavigationMobile, Skeleton, SkeletonRegion, StatusMessage, Switch } from '@ovelle/ui';
+import { websiteSpecimens } from './WebsiteSpecimens';
+import WebsiteVariants from './WebsiteVariants';
 import './component-preview.css';
 import LoadingPreview from './LoadingPreview';
 import VideoWalkthrough from './VideoWalkthrough';
@@ -15,6 +17,7 @@ function ComponentGallery() {
   const [glass, setGlass] = useState(false), [frost, setFrost] = useState(35), [opaque, setOpaque] = useState(false);
   const [date, setDate] = useState('2026-10-08'), [page, setPage] = useState(4);
   const specimens: [string, ReactNode][] = [
+    ...websiteSpecimens,
     ['Button', <Button>Save contact</Button>],
     ['Icon action', <IconAction label="Next"/>],
     ['Field', <Field label="Contact name" placeholder="Enter contact name" hint="Use the name your team will recognize."/>],
@@ -47,6 +50,7 @@ function ComponentGallery() {
       <section><h2>Contextual empty regions</h2><div className="preview-empty-grid"><div><h3>Search results</h3><Field label="Search" kind="search" defaultValue="Morgan"/><EmptyState size="compact" align="start" title="No matching contacts" action={<Button variant="secondary">Clear search</Button>}>Try a different name or clear your search.</EmptyState></div><div><h3>Desktop downloads</h3><EmptyState align="start" title="No builds available" action={<Button variant="secondary">Check again</Button>}>Mac and Windows builds will appear here when a release is ready.</EmptyState></div></div></section>
       <section><h2>Dynamic component layout checks</h2><p>Content stays in place as text wraps. Loading controls cannot receive focus.</p><div className="preview-specimens">{specimens.map(([name, component]) => <article className="preview-specimen" key={name} data-specimen={name}><h3>{name}</h3><div className="preview-pair"><div className="preview-live">{component}</div><SkeletonRegion label={`Loading ${name.toLowerCase()}…`}><Skeleton className="preview-skeleton">{component}</Skeleton></SkeletonRegion></div></article>)}</div></section>
     <FidelityVariants/>
+    <WebsiteVariants/>
     </main>
   </OvelleProvider>;
 }

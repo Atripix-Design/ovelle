@@ -14,6 +14,7 @@ export interface MaterialSettings extends MaterialProps {
   reduceMotion?: boolean;
 }
 const Settings = createContext<MaterialSettings>({});
+export function useOvelleSettings(): MaterialSettings { return useContext(Settings); }
 export function OvelleProvider({ children, className, style, ...settings }: MaterialSettings & Pick<HTMLAttributes<HTMLDivElement>, 'className' | 'style'> & { children: ReactNode }) {
   return <Settings.Provider value={settings}><div className={className} style={style} data-ovelle-theme={settings.theme} data-ovelle-reduced-motion={settings.reduceMotion || undefined}>{children}</div></Settings.Provider>;
 }

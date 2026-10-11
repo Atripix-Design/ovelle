@@ -1,6 +1,6 @@
 .component-preview { box-sizing: border-box; max-width: 1280px; margin: auto; padding: 64px 32px; color: var(--ov-text-primary); font-family: Inter, sans-serif; }
 .component-preview h1 { margin: 12px 0; font-size: clamp(36px, 6vw, 64px); letter-spacing: -.04em; }
-.component-preview h2 { font-size: 24px; letter-spacing: -.02em; }
+.component-preview > section > h2 { font-size: 24px; letter-spacing: -.02em; }
 .component-preview > header > p, .component-preview > section > p { color: var(--ov-text-secondary); }
 [data-ovelle-theme]:has(.component-preview) { min-height: 100vh; background: radial-gradient(ellipse at 15% 25%, rgb(83 164 222 / .18), transparent 35%), radial-gradient(ellipse at 85% 65%, rgb(222 174 83 / .18), transparent 40%), var(--ov-surface-canvas); }
 .preview-settings { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin: 32px 0; }
@@ -11,7 +11,7 @@
 .preview-specimens { display: grid; gap: 32px; }
 .preview-specimen { min-width: 0; padding-bottom: 32px; border-bottom: 1px solid var(--ov-border-default); }
 .preview-specimen > h3 { font-size: 16px; margin: 0 0 16px; }
-.preview-pair { display: grid; grid-template-columns: max-content max-content; gap: 32px; min-width: 0; overflow-x: auto; }
+.preview-pair { display: grid; grid-template-columns: max-content max-content; gap: 32px; min-width: 0; overflow-x: auto; contain:paint; }
 .preview-pair > *, .preview-live > * { max-width: 100%; min-width: 0; }
 
 
@@ -33,3 +33,13 @@
 .preview-dynamic-layout h3 { margin-top:0; }
 .preview-dynamic-layout .ov-field-group { margin:16px 0; }
 @media(max-width:680px) { .preview-dynamic-layout { grid-template-columns:1fr; } }
+
+.preview-specimen[data-specimen="Workflow section"] .preview-live > *, .preview-specimen[data-specimen="Workflow section"] .preview-skeleton { width:1240px; max-width:none; }
+.preview-specimen[data-specimen="Pinned workflow"] .preview-live > *, .preview-specimen[data-specimen="Pinned workflow"] .preview-skeleton { width:1440px; max-width:none; }
+.preview-specimen[data-specimen="Hero stage sheet"] .preview-live > *, .preview-specimen[data-specimen="Hero stage sheet"] .preview-skeleton { width:390px; max-width:none; }
+.preview-specimen[data-specimen="Device-aware download CTA"] .preview-live > *, .preview-specimen[data-specimen="Device-aware download CTA"] .preview-skeleton { width:1240px; max-width:none; }
+
+.website-variants { overflow-x:auto; contain:paint; }
+.website-variants .preview-state-grid { display:flex; flex-wrap:wrap; gap:32px; }
+.website-variants .preview-state-grid > div { width:390px; }
+.website-variants .ov-mobile-workflow,.website-variants .ov-workflow-section[data-layout="mobile"] { max-width:none; width:390px; }
