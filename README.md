@@ -52,6 +52,8 @@ npm run package:all -w @ovelle/desktop
 
 The macOS archives are repacked with symlink preservation so each stays below Wrangler's 300 MiB upload limit. No package is notarized or code signed; macOS Gatekeeper and Windows SmartScreen may display warnings.
 
+The repository Actions allowlist must include the exact checkout, setup-node, upload-artifact and download-artifact commit pins used in `.github/workflows/ci.yml`. Packaging tools are prepared without sudo in the disposable job workspace; the runner image does not need Electron-specific system packages.
+
 ## CI/CD
 
 [The CI/CD workflow](.github/workflows/ci.yml) uses Atripix's custom self-hosted runner platform for three unprivileged lanes: build, typecheck and lint. The reviewed platform components are vendored with source commits and checksums because this public repository cannot call private reusable workflows. The selector fails closed to hosted capacity, keeps all pull requests and Dependabot hosted, and replays a failed self-hosted run once on hosted capacity at the original source SHA. It assigns local capacity only when the selected runner group explicitly permits this public repository. Node setup uses the platform’s adaptive action.
