@@ -38,6 +38,8 @@ jobs:
     needs: route
     runs-on: ${{ fromJSON(needs.route.outputs.slot_1) }}
     timeout-minutes: 20
+    outputs:
+      package_artifact_id: ${{ steps.packages.outputs.artifact-id }}
     permissions:
       contents: read
     steps:
@@ -50,6 +52,44 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # Packaging is secret-free; keep it in the already allocated build slot.
+      - name: Prepare packaging tools without root
+        if: (inputs.source_event || github.event_name) == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v zip >/dev/null; then
+            tools_dir="$(mktemp -d "$RUNNER_TEMP/ovelle-package-tools.XXXXXX")"
+            cd "$tools_dir"
+            mkdir -p "$tools_dir/lists/partial"
+            apt_options=(-o "Dir::State::lists=$tools_dir/lists" -o "APT::Sandbox::User=$(id -un)")
+            apt-get "${apt_options[@]}" update
+            apt-get "${apt_options[@]}" download zip libbz2-1.0
+            for package in ./*.deb; do dpkg-deb -x "$package" "$tools_dir/root"; done
+            echo "$tools_dir/root/usr/bin" >> "$GITHUB_PATH"
+            echo "LD_LIBRARY_PATH=$tools_dir/root/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+          fi
+      - name: Package desktop applications
+        if: (inputs.source_event || github.event_name) == 'push'
+        env:
+          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
+        run: npm run package:all -w @ovelle/desktop
+      - name: Verify local packages
+        if: (inputs.source_event || github.event_name) == 'push'
+        run: node scripts/verify-desktop-releases.mjs local
+      - name: Transfer packages to hosted delivery
+        if: (inputs.source_event || github.event_name) == 'push'
+        id: packages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: desktop-packages-${{ github.run_attempt }}
+          path: |
+            release/desktop/Ovelle-*-mac-x64.zip
+            release/desktop/Ovelle-*-mac-arm64.zip
+            release/desktop/Ovelle-*-win-x64.exe
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
 
   typecheck:
     name: typecheck
@@ -154,10 +194,11 @@ jobs:
         run: node scripts/ci/verify-delivery-source.mjs
       - run: npm ci
       - run: npm run build -w @ovelle/ui
-      - name: Package desktop applications
-        env:
-          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
-        run: npm run package:all -w @ovelle/desktop
+      - name: Receive packages from the build job
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: desktop-packages-${{ github.run_attempt }}
+          path: release/desktop
       - name: Verify local packages
         env:
           OVELLE_RELEASE_DIR: release/desktop
@@ -191,3 +232,19 @@ jobs:
           APP_ENV: ${{ steps.source.outputs.environment }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: node scripts/verify-desktop-releases.mjs "$APP_ENV"
+
+  # Remove transfer storage even when a check or deployment fails. One-day
+  # retention bounds leftovers if a cancellation prevents cleanup from starting.
+  cleanup-packages:
+    needs: [build, typecheck, lint, deploy]
+    if: ${{ always() && needs.build.outputs.package_artifact_id != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Delete temporary package transfer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ needs.build.outputs.package_artifact_id }}
+        run: gh api --method DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID"

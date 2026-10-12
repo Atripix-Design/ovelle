@@ -41,7 +41,7 @@ The website uses plain React, TypeScript, and Vite. Electron has a separate Type
 
 ## Desktop downloads
 
-The CI/CD workflow produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. Packages are uploaded directly to each environment's R2 bucket with attachment and `Cache-Control: no-store` metadata. GitHub Actions artifacts and Releases are not used for these packages. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA to bypass older cached copies. Both CDN domains support ranged downloads.
+The CI/CD workflow produces unsigned macOS x64 and arm64 ZIPs containing `Ovelle.app`, plus an unsigned Windows x64 portable EXE. Packaging runs in the routed build job on a disposable self-runner when capacity is available, with hosted fallback. Only the finished installers are transferred through a temporary GitHub Actions artifact (no extra compression, one-day retention); a hosted cleanup job deletes it after delivery, including failed delivery. Cloudflare credentials and publishing remain exclusively hosted. Packages are uploaded to each environment's R2 bucket with attachment and `Cache-Control: no-store` metadata. R2 remains the permanent download store; GitHub Releases are not used. Production links use `https://cdn.ovelle.org/releases/desktop/`; development links use `https://cdn.dev.ovelle.org/releases/desktop/`. Each link includes the deployment SHA to bypass older cached copies. Both CDN domains support ranged downloads.
 
 Package locally after building the shared UI:
 

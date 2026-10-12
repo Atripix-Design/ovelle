@@ -7,6 +7,32 @@ import { join, resolve } from 'node:path'
 const root = resolve(import.meta.dirname, '../..')
 const node = process.execPath
 
+test('packaging uses the routed build slot while delivery and artifact cleanup stay hosted', async () => {
+  const { load } = await import('js-yaml')
+  const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  assert.equal(jobs.build['runs-on'], '${{ fromJSON(needs.route.outputs.slot_1) }}')
+  const packaging = jobs.build.steps.find(step => step.name === 'Package desktop applications')
+  assert.equal(packaging.run, 'npm run package:all -w @ovelle/desktop')
+  assert.equal(packaging.if, "(inputs.source_event || github.event_name) == 'push'")
+  assert.ok(!JSON.stringify(jobs.build).includes('secrets.'))
+  const transfer = jobs.build.steps.find(step => step.id === 'packages')
+  assert.match(transfer.uses, /^actions\/upload-artifact@[a-f0-9]{40}$/)
+  assert.equal(transfer.with['retention-days'], 1)
+  assert.equal(transfer.with['compression-level'], 0)
+  assert.equal(transfer.with['if-no-files-found'], 'error')
+  assert.equal(transfer.with.path.trim().split('\n').length, 3)
+  assert.equal(jobs.deploy['runs-on'], 'ubuntu-latest')
+  assert.ok(!jobs.deploy.steps.some(step => step.run?.includes('package:all')))
+  const download = jobs.deploy.steps.find(step => step.uses?.startsWith('actions/download-artifact@'))
+  assert.equal(download.with.name, transfer.with.name)
+  assert.equal(download.with.path, 'release/desktop')
+  assert.equal(jobs['cleanup-packages']['runs-on'], 'ubuntu-latest')
+  assert.ok(jobs['cleanup-packages'].if.includes('always()'))
+  assert.equal(jobs['cleanup-packages'].permissions.actions, 'write')
+  assert.ok(jobs['cleanup-packages'].needs.includes('deploy'))
+  assert.ok(jobs['cleanup-packages'].steps[0].run.includes('--method DELETE'))
+})
+
 test('delivery accepts only the exact current SHA of an application-branch push', () => {
   const dir = mkdtempSync(join(root, '.ci-source-test-'))
   try {

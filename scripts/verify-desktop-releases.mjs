@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { closeSync, existsSync, openSync, readFileSync, readSync, readdirSync, statSync } from 'node:fs'
+import { closeSync, openSync, readFileSync, readSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
@@ -8,14 +8,6 @@ const filenames = [
   `Ovelle-${version}-mac-x64.zip`,
   `Ovelle-${version}-win-x64.exe`,
 ]
-const forbiddenArtifactAction = /actions\/upload-artifact@/i
-if (!forbiddenArtifactAction.test('actions/upload-artifact@v4')) throw new Error('Artifact absence control is broken')
-const workflowDir = resolve(import.meta.dirname, '../.github/workflows')
-for (const name of existsSync(workflowDir) ? readdirSync(workflowDir) : []) {
-  if (forbiddenArtifactAction.test(readFileSync(join(workflowDir, name), 'utf8'))) {
-    throw new Error(`GitHub artifact upload remains in ${name}`)
-  }
-}
 
 const mode = process.argv[2]
 if (mode && !['local', 'development', 'production'].includes(mode)) throw new Error('Expected local, development or production')
