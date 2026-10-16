@@ -6,9 +6,38 @@ const root = resolve(import.meta.dirname, '..')
 const config = JSON.parse(readFileSync(resolve(root, 'wrangler.jsonc'), 'utf8'))
 const expected = ['development', 'production']
 const mode = process.argv[2]
-if (mode !== 'workers' && mode !== 'resources') throw new Error('Expected workers or resources')
+if (!['workers', 'resources', 'releases'].includes(mode)) throw new Error('Expected workers, resources or releases')
 
-if (mode === 'workers') {
+if (mode === 'releases') {
+  // Verify the deployed bytes without requiring local installers or downloading
+  // entire packages. The CDN must honor ranges and preserve release metadata.
+  const version = JSON.parse(readFileSync(resolve(root, 'apps/desktop/package.json'), 'utf8')).version
+  for (const environment of expected) {
+    const host = environment === 'production' ? 'cdn.ovelle.org' : 'cdn.dev.ovelle.org'
+    for (const suffix of ['mac-arm64.zip', 'mac-x64.zip', 'win-x64.exe']) {
+      const filename = `Ovelle-${version}-${suffix}`
+      const url = `https://${host}/releases/desktop/${filename}?v=${Date.now()}`
+      const metadata = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(15000) })
+      const size = Number(metadata.headers.get('content-length'))
+      if (!metadata.ok || !Number.isSafeInteger(size) || size < 1_000_000 ||
+          !metadata.headers.get('cache-control')?.includes('no-store') ||
+          !metadata.headers.get('content-disposition')?.includes(filename)) {
+        throw new Error(`${environment} release metadata failed: ${filename} (${metadata.status})`)
+      }
+      const sample = await fetch(url, { headers: { Range: 'bytes=0-1' }, signal: AbortSignal.timeout(15000) })
+      if (sample.status !== 206 || sample.headers.get('content-range') !== `bytes 0-1/${size}` ||
+          sample.headers.get('content-length') !== '2') {
+        await sample.body?.cancel()
+        throw new Error(`${environment} release range failed: ${filename} (${sample.status})`)
+      }
+      const magic = Buffer.from(await sample.arrayBuffer()).toString('ascii')
+      if (magic !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
+        throw new Error(`${environment} invalid release bytes: ${filename}`)
+      }
+    }
+  }
+  console.log('ovelle public releases verified: development, production')
+} else if (mode === 'workers') {
   for (const environment of expected) {
     const base = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
     const healthResponse = await fetch(`${base}/health`)

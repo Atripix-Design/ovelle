@@ -1,6 +1,6 @@
 # Ovelle
 
-Ovelle is the 2026–2027 FBLA Coding & Programming project. The competition brief has not been added yet, so the browser and desktop apps show a starter screen and desktop download links.
+Ovelle is the 2026–2027 FBLA Coding & Programming project. The marketing website, shared component system and Electron delivery foundation are implemented. The competition brief and rubric-driven feature documents have not been added yet; substantive desktop application features are the next planning phase.
 
 ## Applications and environments
 
@@ -11,7 +11,7 @@ Ovelle is the 2026–2027 FBLA Coding & Programming project. The competition bri
 | R2 | `ovelle-storage-development` | `ovelle-storage-production` |
 | Source branch | `development` | `main` |
 
-Cloudflare account configuration is supplied through deployment settings. `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. Public desktop downloads use the environment's R2 custom domain: `cdn.dev.ovelle.org` or `cdn.ovelle.org`. The Worker also retains its legacy `/downloads/` route. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
+Infrastructure is managed directly through Wrangler and Cloudflare; Terraform is not used. Cloudflare account configuration is supplied through deployment settings. `wrangler.jsonc` binds each Worker to its own D1 database, R2 bucket, and custom domain. The Worker serves the Vite site and checks its D1 binding at `/health`. Public desktop downloads use the environment's R2 custom domain: `cdn.dev.ovelle.org` or `cdn.ovelle.org`. The Worker also retains its legacy `/downloads/` route. The `VITE_` variables in the web and desktop apps are public build variables, never secrets.
 
 ## Local development
 
@@ -58,6 +58,6 @@ The repository Actions allowlist must include the exact checkout, setup-node, up
 
 [The CI/CD workflow](.github/workflows/ci.yml) uses Atripix's custom self-hosted runner platform for three unprivileged lanes: build, typecheck and lint. The reviewed platform components are vendored with source commits and checksums because this public repository cannot call private reusable workflows. The selector fails closed to hosted capacity, keeps all pull requests and Dependabot hosted, and replays a failed self-hosted run once on hosted capacity at the original source SHA. It assigns local capacity only when the selected runner group explicitly permits this public repository. Node setup uses the platform’s adaptive action.
 
-After checks succeed on a push to `development` or `main`, a hosted delivery job packages the desktop apps, uploads to R2 and deploys the corresponding Cloudflare Worker. Packaging and secret-bearing publishing remain hosted under the platform contract. Pull requests run checks without deploying. Delivery checks that its source is still the branch head before publishing.
+After checks succeed on a push to `development` or `main`, a routed build job packages the desktop apps, then a hosted delivery job uploads them to R2 and deploys the corresponding Cloudflare Worker. Secret-bearing publishing remains hosted under the platform contract. Pull requests run checks without deploying. Delivery checks that its source is still the branch head before publishing.
 
 Configure `CLOUDFLARE_ACCOUNT_ID` as a GitHub Actions variable and `CLOUDFLARE_API_TOKEN` as an Actions secret. The runner platform also requires the `ATRIPIX_RUNNER_APP_ID` variable and `ATRIPIX_RUNNER_APP_PRIVATE_KEY` secret. No deployment credentials enter self-hosted jobs. See [infrastructure operations](infra/README.md) for setup, recovery and verification.
