@@ -76,6 +76,85 @@ Proposed behavior:
 - Define ownership succession, final-admin protections and handling of unaccepted
   replacement invitations during detailed planning.
 
+### Volunteer record management
+
+Maintain volunteer records throughout their relationship with the nonprofit, beyond
+initial onboarding or an import.
+
+Proposed behavior:
+
+- Let authorized staff search/filter volunteers by relevant profile information,
+  skills, interests, status and program/group relationships.
+- Allow permitted contact/profile updates and maintain a history for material
+  staff changes without rewriting past attendance or approval authorship.
+- Identify potential duplicate records and support reviewed resolution; preserve
+  linked assignments, documents and service records without double-counting hours.
+- Distinguish active, inactive and archived records from account access and deletion;
+  retain history according to the organization's defined retention policy.
+- Keep volunteer records scoped to the organization; staff record maintenance does
+  not grant access to unrelated donor records or merge login identities automatically.
+- Define editable fields, merge safeguards, saved filters and archiving behavior
+  during detailed planning.
+
+### Configurable forms
+
+Let nonprofits collect information suited to their programs through configurable
+questions and fields rather than one fixed application.
+
+Proposed behavior:
+
+- Let authorized staff configure field labels, types, requiredness, instructions and
+  validation for volunteer applications and relevant onboarding forms.
+- Define who can see or edit responses, including private information; form fields
+  must not confer staff permissions or override capacity and eligibility rules.
+- Preserve which form version a response was submitted against when forms change.
+- Reference existing document/signature workflows for agreements rather than
+  treating an ordinary form response as equivalent signing evidence.
+- Forms collect information; role requirements define eligibility rules, and
+  readiness tracking evaluates completion/review against those rules.
+- Define supported field types, conditional questions, templates and response-editing
+  policies before implementation. Adding forms does not confirm surveys, program
+  outcome collection or a general-purpose workflow builder.
+
+### Availability and preferences
+
+Let volunteers state when and how they prefer to participate so coordinators can
+make suitable assignments.
+
+Proposed behavior:
+
+- Capture recurring availability, date-specific exceptions and planned breaks with
+  explicit time zones, plus preferred roles, programs and locations.
+- Distinguish preferences from qualifications, availability from a commitment, and
+  a planned absence from permanently ending participation.
+- Surface relevant availability/preferences when suggesting or confirming assignments
+  and replacement offers, alongside eligibility, capacity and conflict checks.
+- Flag effects on existing commitments for review; changing availability does not
+  silently cancel confirmed assignments or remove future recurring commitments.
+- Keep communication preferences aligned with email notification settings rather
+  than maintaining conflicting opt-out values in separate features.
+- Define matching/filtering rules and edit permissions before implementation; AI
+  scheduling and access to personal calendars are not included by this scope.
+
+### Simple recognition tools
+
+Help nonprofits acknowledge volunteer contributions through thank-you messages and
+service milestones.
+
+Proposed behavior:
+
+- Let authorized staff send individual or appropriately scoped group appreciation
+  messages through the existing email notification capability.
+- Recognize milestones based on approved service hours or clearly defined tenure;
+  do not treat pending or imported unverified hours as approved service.
+- Keep appreciation preferences and any public recognition consent explicit; avoid
+  exposing private participation details in group messages.
+- Track recognition sent and prevent duplicate milestone messages on retries;
+  define handling of later hour corrections and repeat milestones.
+- Decide milestone thresholds, templates and manual versus automatic recognition
+  during detailed planning. Public leaderboards, competitive rankings, rewards
+  programs and downloadable verification statements remain outside this addition.
+
 ### Volunteer onboarding
 
 Guide new volunteers from application to readiness for the roles they want to
@@ -515,7 +594,7 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
 | Shared inbox | Assign volunteer inquiries to coordinators and attach conversations to relevant records. |
 | Accounting connection | Export or synchronize appropriately mapped payments, refunds and fees with the nonprofit's accounting system. |
-| Surveys and outcome collection | Collect post-event feedback and additional program-specific outcomes. Reporting and exports are confirmed above; collection forms and surveys remain proposals. |
+| Surveys and outcome collection | Collect post-event feedback and additional program-specific outcomes. Reporting and configurable onboarding/application forms are confirmed above; survey workflows and outcome collection remain proposals. |
 | File-storage connections | Export authorized copies to the nonprofit's existing storage without treating editable copies as protected signed originals. |
 
 These ideas need separate scope decisions. No provider connection, implementation
