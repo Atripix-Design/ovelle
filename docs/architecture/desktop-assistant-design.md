@@ -24,11 +24,13 @@ public downloadable assets. Start without Durable Objects, queues, vector search
 GPU servers, or a general-purpose agent framework. Add services only against the
 specific triggers in this document.
 
-Use the OpenAI Responses API with strictly scoped Ovelle function tools. GPT-6
-Luna is the proposed evaluation baseline, with GPT-6.1 Sol and GPT-6 Astra as
-comparison candidates. These are documented model offerings, not verified account
-entitlements or measured Ovelle results. Production selection is conditional on
-the release evaluation, account access, and current commercial terms [S1–S4].
+Use a provider adapter with strictly scoped Ovelle function tools. The proposed
+first evaluation candidate is **GPT-OSS 20B hosted by Groq**, using its
+OpenAI-compatible Chat Completions interface. Compare against the previous GPT-6
+Luna baseline; consider Llama 3.1 8B only after an enterprise access/price quote; retain GPT-OSS 120B as a higher-cost
+quality control. These are documented offerings, not verified account entitlements
+or measured Ovelle results. Selection requires the release evaluation, account
+access, and current commercial/data terms [S1–S2, S18–S22].
 Do not ship Codex, a shell agent, or provider credentials to customers.
 
 This approach balances a simple installation experience, predictable application
@@ -137,7 +139,7 @@ flowchart TB
     end
     E <-->|Authenticated HTTPS and SSE| W
     E -->|Verified resumable model downloads| RM
-    W <-->|Server credential| AI[OpenAI Responses API]
+    W <-->|Server credential| AI[Groq hosted model API]
 ```
 
 Models are public assets only if redistribution is cleared. Never mix public
@@ -384,10 +386,11 @@ requirements.
 
 ### ADR-02 — Model API and domain tools rather than a coding-agent runtime
 
-**Decision:** a small Responses API adapter and bounded tool loop. Ovelle owns the
-conversation UX, context policy, action preparation, and confirmation. Strict JSON
-schemas constrain syntax; domain validation still constrains meaning. Disable all
-built-in web, shell, computer, file, and code-execution tools at launch.
+**Decision:** a provider-neutral adapter, initially Groq Chat Completions, and a
+bounded tool loop. Ovelle owns the conversation UX, context policy, action
+preparation, and confirmation. Server-side JSON-schema validation rejects malformed
+tool arguments; do not assume provider-constrained decoding for tool calls.
+Disable all built-in web, shell, computer, file, and code-execution tools at launch.
 
 Codex App Server is a documented embedding interface with authentication, history,
 approvals, and streamed events [S6]. It could be bundled without asking customers
@@ -464,33 +467,58 @@ retain an equivalent text/keyboard path.
 
 ### ADR-06 — Hosted model selection and bounded use
 
-The following models are listed in current official documentation with streaming,
-function calling, and structured output support [S1–S4]. Account access, quotas,
-actual tool behavior, and latency must be tested before selection. Rates below
-are standard short-context USD per million tokens, reviewed October 17, 2026;
-exclude cache savings, separately metered cache writes, batch/priority discounts,
-and regional premiums. The workload projection assumes no separately billed
-cache-write events; verify that assumption in actual billing before pilot.
+**Revised decision:** evaluate Groq-hosted `openai/gpt-oss-20b` first, rather
+than selecting a premium model or limiting the comparison to one provider.
+Its published uncached rates are lower than the previous Luna baseline on both
+input and output, and it documents reasoning and tool-use support [S18]. This is
+a cost/capability-fit hypothesis, not a claim that it outperforms Luna on Ovelle.
+The model's OpenAI authorship does not mean this API is hosted by OpenAI; Groq's
+service terms, retention controls, quotas, and billing govern this deployment.
 
-| Candidate | Input / output | Proposed evaluation role | Hypothesis and downside |
+Rates are standard USD per million tokens, reviewed October 17, 2026. Compare
+uncached prices without trial credits, free-tier capacity, batch discounts, or
+assumed cache hits. Account availability and workload results remain unverified.
+
+| Candidate / host | Input / output | Evaluation role | Capability rationale and limitation |
 | --- | ---: | --- | --- |
-| GPT-6 Luna | $0.10 / $0.50 | Default baseline | Lowest listed cost of these three; sufficient domain accuracy is unproved |
-| GPT-6.1 Sol | $2.00 / $10.00 | Quality comparison | May improve difficult requests; 20× baseline token rates, no proven Ovelle quality advantage |
-| GPT-6 Astra | $10.00 / $50.00 | Upper-cost comparison | Useful to test whether a larger budget changes outcomes; 100× baseline token rates, likely poor fit for an included allowance |
+| GPT-OSS 20B / Groq | $0.075 / $0.30 | Proposed first candidate | Documented reasoning and tool use; both rates lower than Luna; task accuracy and end-to-end latency unmeasured [S18] |
+| Llama 3.1 8B Instant / Groq | Quote required | Conditional small-model challenger | Current official model page marks it Enterprise and publishes no token rates; historical low prices are not a verified offer. Test tool quality only after access and price are confirmed [S20] |
+| GPT-6 Luna / OpenAI | $0.10 / $0.50 | Previous baseline / comparison | Keep as a control, not a default selected without cross-provider evidence [S1–S2] |
+| GPT-OSS 120B / Groq | $0.15 / $0.60 | Higher-cost quality control | Same model family with documented reasoning/tool support; twice 20B token rates, with no proven successful-task advantage [S21] |
 
-Use the same held-out tasks, context, tools, and output limits for all candidates.
+Gemini 3.1 Flash-Lite's published $0.25/$1.50 and DeepSeek Flash's peak uncached
+$0.30/$1.20 (off-peak $0.15/$0.60) do not beat 20B on these uncached token rates
+[S23–S24]. This does not rank their quality. Caching, fewer retries, and task success
+could change the economics; do not base an interactive service on off-peak-only
+prices. Free-model routing is excluded from production capacity planning because
+we need a named host, approved data handling, stable quotas, and a paid allowance.
+
+**Integration constraint:** use Groq's function-calling interface for tools
+executed by Ovelle application services, stream natural-language replies where supported, and validate completed tool
+calls on the server before preparation. Do not execute partial streamed arguments.
+Groq documents that strict Structured Outputs cannot currently be combined with
+streaming or tool use [S19]. Do not enable `response_format: json_schema` on those
+turns or describe tool arguments as guaranteed schema-compliant. Reject malformed
+calls; one explicit correction invocation may use the remaining normal turn budget,
+never an unbounded repair loop. The server builds the action preview from validated
+arguments and domain records. Any future schema-only extraction step is a separate
+non-streaming, no-tools request counted inside the same invocation/cost limits.
+
+Evaluate all candidates on the same held-out tasks, context, tools, and limits.
 Grade exact tool/argument correctness, justified abstention, grounded answer
-quality, latency, cost per successful task, and repeated-run variance. Do not infer
-quality ordering from model names or prices. Select Luna only if it passes all
-release gates; otherwise pause rollout, document measured alternatives, and
-reapprove the model/cost decision. No automatic model escalation in v1.
+quality, latency, successful-task cost, and repeated-run variance. The 20B candidate
+must pass every security and quality gate and match or improve Luna's held-out
+accuracy, at lower cost per successful task on the same corpus. Llama 8B can replace it only if it independently passes
+those gates at lower successful-task cost. Do not claim greater capability from
+parameter counts, vendor benchmark descriptions, or lower prices. A failure pauses
+rollout; no automatic provider/model escalation or disclosure to an unapproved host.
 
 Set at most four normal model invocations per turn, one additional eligible retry,
 12,000 input tokens per invocation including history/tool results, 2,000 output
 tokens including any billed reasoning, eight read tool calls, and one prepared
-write per turn. Use low reasoning effort initially where supported and verify
-actual token limits against provider behavior. Pagination and bounded field
-selection are required; never silently truncate action arguments. Refuse or narrow
+write per turn. Use low reasoning effort for GPT-OSS initially and verify provider
+token limits and reasoning accounting. Never forward hidden reasoning text to
+captions or TTS. Pagination and bounded field selection are required; never silently truncate action arguments. Refuse or narrow
 requests exceeding context limits.
 
 Maintain a versioned model/prompt/tool/price manifest. Pin immutable model snapshots
@@ -541,7 +569,7 @@ than promising to eliminate it.
 | Usage and reservation ledger | Private D1, 90 days | Retain token/cost totals and operational references, not transcript text |
 | Operational logs | Redacted, access-restricted, 14 days | No raw audio, prompts, answers, auth headers, tool payloads, or private document content |
 | Encrypted application backups | Private storage, maximum 30-day rotation | Restore runbook must reapply deletion tombstones before serving traffic; deletions are not instant removal from backups |
-| Provider requests | Minimized text and schemas; `store: false`; no hosted conversation/files/background mode initially | Provider's independently applicable retention controls and contract still govern |
+| Provider requests | Minimized text and schemas; stateless Groq Chat Completions, organization ZDR enabled and verified; no hosted files/batch/fine-tuning | Provider-specific controls and contract govern; OpenAI comparison calls separately use `store: false` and their own reviewed settings |
 
 These defaults are engineering proposals, not legal conclusions. Product/privacy
 owners must approve the schedule and notices before real customer data enters a
@@ -550,8 +578,16 @@ any unavoidable platform behavior. Organization deletion revokes sessions,
 invalidates pending proposals, and schedules content cleanup; it does not erase
 an independently required CRM record or instantly purge provider logs.
 
-OpenAI distinguishes abuse-monitoring logs from application state. API data is not
-used for training by default unless opted in; default abuse logs can retain content
+For Groq, enable and verify organization-level Zero Data Retention before customer
+pilot traffic; disable features requiring persisted state. Its documentation says
+normal inference content is not retained by default, but reliability/abuse logs can
+otherwise retain content for up to 30 days; ZDR is a separate setting. Usage metadata
+is still retained [S22]. Record account configuration and contractual review as
+release evidence; publishing this RFC does not establish that ZDR is enabled or
+remove our own database/backups from the data inventory.
+
+For any OpenAI-hosted comparison, OpenAI distinguishes abuse-monitoring logs from
+application state. API data is not used for training by default unless opted in; default abuse logs can retain content
 for up to 30 days, subject to stated exceptions. `store: false` does not establish
 Zero Data Retention. ZDR/modified monitoring require approval and have endpoint/model
 conditions [S5]. Recheck the actual account settings and contract; do not advertise
@@ -604,7 +640,7 @@ Rates are not a provider quote or a guarantee of free capacity.
 
 | Meter | Published rate / included capacity used here | Source |
 | --- | --- | --- |
-| Luna standard short-context tokens | $0.10 input / $0.50 output per million; no cache discount assumed | [S1–S2] |
+| Groq GPT-OSS 20B tokens | $0.075 input / $0.30 output per million; no cache discount assumed | [S18] |
 | Workers Standard paid | $5/month; 10 million requests and 30 million CPU-ms; overage $0.30/million requests, $0.02/million CPU-ms | [S7] |
 | D1 paid | 25 billion reads, 50 million writes, 5 GB included monthly; overage $0.001/million reads, $1/million writes, $0.75/GB-month | [S8] |
 | R2 Standard | $0.015/GB-month, $4.50/million Class A, $0.36/million Class B; free tier 10 GB-month, 1 million A, 10 million B; direct Internet egress free | [S17] |
@@ -657,14 +693,14 @@ support costs remain. Other metered services attached to R2 can add charges [S17
 
 | Monthly expense | Low pilot | Expected adoption | High stress case |
 | --- | ---: | ---: | ---: |
-| Hosted AI | $0.43 | $58.80 | $7,700.00 |
+| Hosted AI | $0.29 | $40.32 | $5,280.00 |
 | Workers including full $5 base | $5.00 | $5.00 | $9.40 |
 | D1 incremental within assumed capacity | $0.00 | $0.00 | $0.75 |
 | Public model R2 under stated free-tier assumption | $0.00 | $0.00 | $0.00 |
 | Private backup/log/monitoring operating contingency | $5.00 | $25.00 | $150.00 |
 | Assistant support labor | $80.00 | $400.00 | $3,200.00 |
-| **Planning total** | **$90.43** | **$488.80** | **$11,060.15** |
-| Total / organization | $9.04 | $4.89 | $11.06 |
+| **Planning total** | **$90.29** | **$470.32** | **$8,640.15** |
+| Total / organization | $9.03 | $4.70 | $8.64 |
 
 The contingency is an internal allowance, not priced procurement. These totals
 exclude implementation labor, signing certificates, security/legal review,
@@ -677,11 +713,13 @@ can make it materially wrong. The 6 GB stress estimate is below the proposed 7 G
 review threshold but is not evidence of acceptable throughput. A $10 provider-only
 allowance is not a $10 total cost ceiling.
 
-At identical token workloads, Sol would cost 20× the AI row and Astra 100×.
-This is a price sensitivity calculation, not evidence that their successful-task
-cost scales by those factors. Test repeat attempts and reasoning usage directly.
-Local STT/TTS have no per-request hosted speech fee, but still consume customer
-compute and Ovelle packaging/update/support effort.
+For the same token workload, the previous Luna baseline projected $0.43, $58.80,
+and $7,700.00 in monthly AI spend. GPT-OSS 20B projects 31.4% less across these
+mixes, before differences in retries, reasoning, and success rate. Expected total operating cost falls only from $488.80 to $470.32
+because support dominates that scenario. These are arithmetic projections, not
+benchmarks or proof of higher capability. GPT-OSS 120B costs twice 20B at identical
+token volumes; Llama 8B needs a current enterprise quote before cost comparison.
+Local STT/TTS still consume customer compute and Ovelle packaging/support effort.
 
 ### 7.3 Budget enforcement and abuse controls
 
@@ -696,17 +734,16 @@ proposal requires no further model call and remains available within its expiry
 even if the inference allowance is exhausted.
 
 Before dispatch, atomically reserve one turn, one concurrency lease, and the
-worst-case inference cost under the current price/limit manifest. At Luna rates,
-five invocations each limited to 12,000 input and 2,000 output tokens reserve
-`5 × (12,000 × (0.10 + 0.125) + 2,000 × 0.50) / 1,000,000 = $0.0185`.
-This deliberately reserves both uncached input and the published cache-write
-rate against every input token, so separately billed cache writes cannot bypass
-the cap; it is conservative when those meters do not both apply.
-Reconcile actual cost and release unused reservation after completion. If usage
-is unknown, retain the worst-case reservation pending reconciliation rather than
-resetting it to zero. Include any additional provider meter
-before enabling a configuration that incurs it. Price changes invalidate the
-reservation manifest until reviewed.
+worst-case inference cost under the current price/limit manifest. At Groq 20B rates,
+five invocations limited to 12,000 input and 2,000 output tokens each reserve
+`5 × (12,000 × 0.075 + 2,000 × 0.30) / 1,000,000 = $0.0075`.
+Use uncached rates for the reservation, including billed reasoning within output;
+do not spend projected cache savings in advance. Reconcile actual usage and release
+unused reservation after completion. If usage is unknown, retain the worst-case
+reservation pending reconciliation rather than resetting it to zero. Built-in tools
+and separately metered services stay disabled. Any new provider meter or model
+requires an updated worst-case reservation before activation. Price changes
+invalidate the reservation manifest until reviewed.
 
 Limit to one active turn per user, three per organization, ten starts/user/minute,
 and sixty/organization/minute. D1 reservation updates must condition on remaining
@@ -918,11 +955,11 @@ live user acceptance as separately recorded evidence.
 | Record | Proposed default | Evidence required before activation |
 | --- | --- | --- |
 | ADR-01 | Workers + D1 + separate public/private R2; no extra coordination service initially | Authorization/transaction/concurrency tests, routing verification, load and recovery results |
-| ADR-02 | Hosted Responses adapter and scoped domain tools | Provider project access, domain permission design, bounded loop and receipt tests |
+| ADR-02 | Provider adapter, initially Groq Chat Completions, and scoped domain tools | Provider project access, domain permission design, bounded loop and receipt tests |
 | ADR-03 | Packaged whisper.cpp `base.en`; optional validated `small.en` | Three-platform recognition/resource benchmark and exact artifact inventory |
 | ADR-04 | Local Kokoro ONNX, one English preset | Distribution clearance, pronunciation/listening review, native packaging evidence |
 | ADR-05 | Push-to-talk, transcript review, captions, text fallback | Accessibility, privacy and pilot usability results |
-| ADR-06 | Evaluate Luna first; compare Sol/Astra; no automatic escalation | Held-out model scores, measured cost/latency, selected model/version/rate manifest |
+| ADR-06 | Evaluate Groq GPT-OSS 20B first; compare Llama 8B, Luna and GPT-OSS 120B; no automatic escalation | Held-out model scores, measured cost/latency, selected model/version/rate manifest |
 
 The high-impact product choices are confirmed in section 2.1. Engineering defaults
 such as the tool allowlist, retention periods, pilot hardware, limits, and targets
@@ -940,8 +977,6 @@ documentation, not proof of Ovelle performance or deployed configuration.
 
 - **S1:** [OpenAI API pricing](https://developers.openai.com/api/docs/pricing) — standard token rates and pricing assumptions.
 - **S2:** [GPT-6 Luna model documentation](https://developers.openai.com/api/docs/models/gpt-6-luna) — baseline model, supported interfaces/features and model identifiers.
-- **S3:** [GPT-6.1 Sol model documentation](https://developers.openai.com/api/docs/models/gpt-6.1-sol) — comparison candidate and capabilities.
-- **S4:** [GPT-6 Astra model documentation](https://developers.openai.com/api/docs/models/gpt-6-astra) — upper-cost comparison candidate.
 - **S5:** [OpenAI API data controls](https://developers.openai.com/api/docs/guides/your-data) — application state, abuse monitoring and retention eligibility.
 - **S6:** [Codex App Server](https://learn.chatgpt.com/docs/app-server) — embedding interface and lifecycle alternatives.
 - **S7:** [Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/) and [Workers limits](https://developers.cloudflare.com/workers/platform/limits/) — hosting cost and runtime constraints.
@@ -955,6 +990,14 @@ documentation, not proof of Ovelle performance or deployed configuration.
 - **S15:** [Electron security guidance](https://www.electronjs.org/docs/latest/tutorial/security) — renderer isolation, permissions and IPC validation.
 - **S16:** [eSpeak NG](https://github.com/espeak-ng/espeak-ng) — phonemizer dependency and license inventory considerations.
 - **S17:** [R2 pricing](https://developers.cloudflare.com/r2/pricing/) — storage, operations, rounding and direct-egress assumptions.
+
+- **S18:** [Groq GPT-OSS 20B](https://console.groq.com/docs/model/openai/gpt-oss-20b) — hosted model ID, reasoning/tool capability and token prices.
+- **S19:** [Groq tool use](https://console.groq.com/docs/tool-use/overview) and [Structured Outputs](https://console.groq.com/docs/structured-outputs) — function calls and incompatibility of strict output mode with streaming/tools.
+- **S20:** [Groq Llama 3.1 8B](https://console.groq.com/docs/model/llama-3.1-8b-instant) — enterprise access designation and tool support; no current public token price on the reviewed page.
+- **S21:** [Groq GPT-OSS 120B](https://console.groq.com/docs/model/openai/gpt-oss-120b) — higher-cost same-family comparison and rates.
+- **S22:** [Groq data controls](https://console.groq.com/docs/your-data) — retention exceptions, ZDR settings and usage metadata.
+- **S23:** [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — Flash-Lite paid rates; no free-tier assumption.
+- **S24:** [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing/) — current Flash model mapping, peak/off-peak and uncached rates.
 
 Repository evidence: `AGENTS.md`, `wrangler.jsonc`, `apps/desktop/package.json`,
 `apps/desktop/src/main/index.ts`, `apps/desktop/src/preload/index.ts`,
