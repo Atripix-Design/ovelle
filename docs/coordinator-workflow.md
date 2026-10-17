@@ -19,8 +19,8 @@ uses. For example, packers need an orientation and waiver; drivers may need an
 additional organization-defined qualification. Do not impose screening on every
 role by default.
 
-Set up calendar invitation delivery. Email communications beyond calendar delivery
-remain a proposal. Payment account setup is optional and can happen separately.
+Set up calendar invitation delivery and operational email notifications. Providers,
+templates and schedules remain to be designed. Payment account setup is optional.
 
 ## 2. Create the activity and shifts
 
@@ -29,8 +29,8 @@ Create the weekly series and review its occurrences. Reserve six of the 12 packe
 places for the company, leaving six packer places available outside that group.
 Set a proposed reservation deadline and identify the group contact.
 
-Draft saving, templates and public signup pages are proposed conveniences, not
-separately confirmed features.
+Opportunity publishing is confirmed, including drafts and public/invitation-only
+visibility. Reusable templates and website embeds remain proposals.
 
 ## 3. Recruit and onboard
 
@@ -61,9 +61,9 @@ including unfilled roles, expiring requirements, incomplete group registrations,
 replacement offers and attendance awaiting review.
 
 Review the roster, release unused group reservations under the agreed policy,
-and share final instructions. Printable rosters and reminder email scheduling
-remain proposals. A staffing total must still reveal a missing required driver
-or team leader.
+and share final instructions. Printable rosters and email reminders are confirmed
+scope; their interfaces and delivery schedules remain open. A staffing total must
+still reveal a missing required driver or team leader.
 
 ## 6. Handle changes and replacement coverage
 

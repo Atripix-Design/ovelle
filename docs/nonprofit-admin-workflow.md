@@ -80,8 +80,8 @@ excluded.
 Proposed launch review: confirm that programs have responsible coordinators,
 required documents are available and staff permissions are appropriate. Walk
 through a sample volunteer journey before publishing opportunities through the
-chosen signup experience. Public pages/embeds and a dedicated launch checklist
-remain proposals.
+chosen signup experience. Opportunity publishing is confirmed; website embeds and
+a dedicated launch checklist remain proposals.
 
 ## 8. Oversee ongoing operations
 
@@ -107,7 +107,8 @@ and safeguards against leaving the organization without administrative access.
 Proposed reporting lets authorized staff review participation, approved service
 hours, program outcomes and financial activity with distinct definitions and units.
 Periodically review staff access, document requirements and service connections.
-Detailed reports, exports and review scheduling remain separately proposed.
+Reporting and exports are confirmed; report definitions, interfaces and review
+scheduling remain to be designed.
 
 ## Proposed admin home screen
 

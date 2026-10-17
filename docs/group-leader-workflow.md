@@ -53,8 +53,8 @@ even when presented together in a summary.
 
 Review arrival instructions, clothing/equipment expectations, the nonprofit contact
 and any supervision requirements. Confirmed participants receive their own
-calendar invitations. Group communications tools beyond calendar invitations
-remain separately proposed.
+calendar invitations. Operational email notifications are confirmed; additional
+group communication tools remain separately proposed.
 
 ## 6. Handle changes
 

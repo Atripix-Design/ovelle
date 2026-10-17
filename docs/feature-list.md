@@ -92,6 +92,120 @@ Proposed behavior, informed by [published organization workflows](research/volun
 - Determine guardian-consent and external screening needs during detailed planning;
   adding onboarding does not select or authorize a background-check integration.
 
+### Opportunity publishing
+
+Manage opportunities from preparation through publication and closure.
+
+Proposed behavior:
+
+- Draft, review where required, publish, close registration and cancel opportunities
+  with appropriate staff permissions and change history.
+- Show activity purpose, location, time zone, available roles, requirements and
+  instructions; distinguish public from invitation-only opportunities.
+- Keep publication status separate from staffing, registration and activity completion.
+- Reconcile cancellations and material changes with existing bookings, assignments
+  and notifications. Website embeds and custom-domain hosting remain separate ideas.
+
+### Waitlists and conflict checks
+
+Manage demand for full shifts and identify conflicting volunteer assignments.
+
+Proposed behavior:
+
+- Let volunteers join and leave a waitlist for a particular occurrence/role.
+- Offer available places to eligible people, with explicit acceptance and an expiry;
+  a waitlist entry or sent offer does not count as a confirmed assignment.
+- Check overlapping confirmed assignments when offering or confirming places,
+  including individual occurrences of recurring commitments.
+- Prevent duplicate registrations and overfilling the final place, accounting for
+  group reservations and replacements.
+- Define queue order, travel buffers, pending-request conflicts and warning versus
+  blocking behavior before implementation. Do not inspect private personal calendars
+  or reveal assignments belonging to another organization without authorization.
+
+### Day-of attendance
+
+Support staff in running an activity and recording actual participation.
+
+Proposed behavior:
+
+- Provide authorized staff a roster with roles, readiness and attendance, plus a
+  printable version for use on site.
+- Support staff-assisted check-in/out, late arrivals, early departures and no-shows.
+- Handle walk-ins through capacity and eligibility checks before assigning places;
+  record who authorized participation without bypassing required prerequisites.
+- Keep check-in evidence and actual time separate from approved service hours.
+- Define specific check-in interfaces, QR support and disconnected operation before
+  implementation; QR and automatic time tracking are not selected by this scope.
+
+### Email notifications
+
+Deliver operational information and actions by email alongside calendar invitations.
+
+Proposed behavior:
+
+- Send confirmations, reminders, cancellations, waitlist/replacement offers and
+  clarification or review updates to the appropriate recipients.
+- Distinguish queued, provider-accepted, delivered where reported, bounced and failed
+  messages; surface delivery problems without treating an email as read or acted on.
+- Prevent duplicate sends when actions retry and avoid sending obsolete reminders
+  for canceled or changed assignments.
+- Manage applicable preferences and opt-outs while distinguishing operational
+  messages from optional marketing; define delivery schedules and templates.
+- Select provider and sender verification separately. Custom-domain DNS automation,
+  shared inboxes and SMS are not included by adding email notifications.
+
+### Imports
+
+Help organizations bring existing volunteer and service records into Ovelle.
+
+Proposed behavior:
+
+- Preview spreadsheet imports, map columns and validate rows before applying them.
+- Identify possible duplicate people for staff review; do not merge identities
+  solely because names match or grant staff permissions through imported fields.
+- Preserve source and review status for historical hours; do not automatically
+  label imported hours as verified or send invitations without a deliberate action.
+- Record import batches, errors and outcomes; make retries avoid duplicate records.
+- Define supported formats, record types, conflict resolution and reversal behavior
+  before implementation. Imports are not a substitute for complete backup restores.
+
+### Reporting
+
+Let authorized users review and export operational records with clear definitions.
+
+Proposed behavior:
+
+- Filter participation, attendance and approved service hours by date, program,
+  location and group, within the user's access scope.
+- Keep scheduled time, submitted hours and approved hours separate; define unique
+  volunteer counts and no-show denominators explicitly.
+- Keep received donations, pledges, fees, refunds and program outcome units distinct.
+- Provide usable exports and show the filters, reporting period and generation time.
+- Reflect attendance/hour corrections consistently and restrict private information
+  in exports. Define report customization and metrics before implementation.
+- Surveys, new outcome-collection forms and service verification statements remain
+  separate proposals.
+
+### Backup and recovery
+
+Protect organization records and support recovery from data loss or mistakes.
+
+Proposed behavior:
+
+- Provide authorized organization backups/exports covering related records and
+  required private documents with format/version and integrity information.
+- Define protected storage, retention, access and a recovery process; keep secrets
+  out of portable backups and private exports out of public storage.
+- Preview restore scope and conflicts, preserve a recovery point before replacement,
+  and verify restored relationships and document references in recovery exercises.
+- Do not replay old emails, payments or invitations as side effects of a restore;
+  reconcile external provider state rather than treating a backup as authoritative
+  for subsequent payments or canceled recurring donations.
+- Define backup frequency, offline backup availability, recovery targets and handling
+  of retained/deleted records before implementation. Backup scope does not establish
+  offline app operation or bidirectional synchronization.
+
 ### Calendar invitations
 
 Help volunteers receive event and shift invitations in their phone's native
@@ -396,13 +510,12 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 
 | Service | Potential nonprofit workflow |
 | --- | --- |
-| Website and signup embeds | Publish opportunities and application forms on the nonprofit's existing website; offer a branded volunteer portal. |
-| Email communications | Send reminders, cancellation alerts and waitlist offers; retain communication preferences and opt-outs. Complement these with calendar invitations and updates. |
-| Check-in and service records | Support QR or staff-assisted check-in and coordinator-approved service-hour statements. Attendance corrections are confirmed above; specific check-in methods and statements remain proposals. |
+| Website and signup embeds | Embed opportunities and application forms on the nonprofit's existing website; offer a branded portal. Opportunity publishing is confirmed above; embedding and custom-domain hosting remain proposals. |
+| Additional check-in and service records | Evaluate QR check-in and downloadable service verification statements. Staff-assisted day-of attendance and attendance corrections are confirmed above. |
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
 | Shared inbox | Assign volunteer inquiries to coordinators and attach conversations to relevant records. |
 | Accounting connection | Export or synchronize appropriately mapped payments, refunds and fees with the nonprofit's accounting system. |
-| Surveys and impact reporting | Collect post-event feedback and program-specific outcomes for board and funder reports. |
+| Surveys and outcome collection | Collect post-event feedback and additional program-specific outcomes. Reporting and exports are confirmed above; collection forms and surveys remain proposals. |
 | File-storage connections | Export authorized copies to the nonprofit's existing storage without treating editable copies as protected signed originals. |
 
 These ideas need separate scope decisions. No provider connection, implementation
