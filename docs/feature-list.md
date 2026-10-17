@@ -8,6 +8,22 @@ inventory of Ovelle requirements.
 
 ## Confirmed additions
 
+### Volunteer onboarding
+
+Guide new volunteers from application to readiness for the roles they want to
+perform. Confirmed for the feature list on October 17, 2026.
+
+Proposed behavior, informed by [published organization workflows](research/volunteer-operations.md):
+
+- Collect profile, skills, interests, availability and relevant emergency contacts.
+- Configure required orientation, training, documents and coordinator reviews by
+  program or role rather than imposing every requirement on every volunteer.
+- Show volunteers their next steps and coordinators incomplete requirements.
+- Track readiness separately from account creation, signup, assignment and attendance.
+- Reuse valid requirements and track renewals where a nonprofit requires them.
+- Determine guardian-consent and external screening needs during detailed planning;
+  adding onboarding does not select or authorize a background-check integration.
+
 ### Calendar invitations
 
 Help volunteers receive event and shift invitations in their phone's native
@@ -76,7 +92,6 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 | --- | --- |
 | Website and signup embeds | Publish opportunities and application forms on the nonprofit's existing website; offer a branded volunteer portal. |
 | Email communications | Send reminders, cancellation alerts and waitlist offers; retain communication preferences and opt-outs. Complement these with calendar invitations and updates. |
-| Volunteer onboarding | Coordinate applications, orientation, required documents, training and expiring qualifications. |
 | Check-in and service records | Support QR or staff-assisted check-in, attendance corrections and coordinator-approved service-hour statements. |
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
 | Shared inbox | Assign volunteer inquiries to coordinators and attach conversations to relevant records. |
