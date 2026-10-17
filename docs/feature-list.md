@@ -1,12 +1,49 @@
 # Ovelle feature list
 
-Ovelle is a nonprofit volunteer-management CRM. This document records feature
-planning, not implemented capabilities. Features below were confirmed for the
-list on October 17, 2026; detailed behavior, providers, implementation order and
-rubric mapping still require planning. This is an incremental list, not a complete
-inventory of Ovelle requirements.
+Ovelle is a nonprofit volunteer-management CRM. This document records confirmed
+feature scope, not implemented capabilities. All 35 previously confirmed feature
+areas are retained in eight modules. Detailed behavior below remains proposed;
+providers, implementation order and rubric mapping still require planning.
 
-## Confirmed additions
+Organized on October 17, 2026. This is the complete confirmed list from this
+planning discussion, not an exhaustive inventory of every future Ovelle requirement.
+
+Figma: [Features — module overview and detailed scope](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=350-4389).
+
+## Module map
+
+| Module | Confirmed feature areas | Responsibility |
+| --- | --- | --- |
+| [01 Organization and access](#01-organization-and-access) | 4 | Establish the organization, staff responsibilities and operating rules. |
+| [02 Volunteer records and readiness](#02-volunteer-records-and-readiness) | 6 | Maintain volunteer relationships and prepare people for eligible roles. |
+| [03 Opportunities and scheduling](#03-opportunities-and-scheduling) | 4 | Publish activities, schedule repeated service and fill available places. |
+| [04 Group coordination](#04-group-coordination) | 4 | Reserve group places and let leaders coordinate participants within scoped access. |
+| [05 Attendance and service hours](#05-attendance-and-service-hours) | 6 | Record participation, review submitted time and preserve approved service. |
+| [06 Communications and recognition](#06-communications-and-recognition) | 3 | Keep people informed and acknowledge their approved contributions. |
+| [07 Donations and donor service](#07-donations-and-donor-service) | 4 | Receive donations and let donors manage their giving. |
+| [08 Documents and data operations](#08-documents-and-data-operations) | 4 | Protect documents, bring in records, report results and recover data. |
+
+## Shared responsibilities and overlap cleanup
+
+Each feature has one home below. References from other modules describe how they
+work together, rather than establishing a second feature or separate record.
+
+| Shared concern | Canonical responsibility and boundary |
+| --- | --- |
+| Organization and access | Staff permissions own invitations and staff access. Group leader permissions reuse the same access principles within authorized groups and bookings. |
+| Volunteer records and readiness | Records own profiles; forms collect versioned responses; onboarding guides next steps; requirements define eligibility; readiness evaluates evidence for the service date. Availability informs assignments without creating commitments. |
+| Opportunities and scheduling | Publishing owns activity visibility. Scheduling checks eligibility, overlapping commitments and capacity for every occurrence; waitlist and replacement offers use these same checks before assignment. |
+| Group coordination | Bookings own reserved capacity. Signup links register people inside that reservation. Changes amend bookings through approval rules. Leader permissions govern which actions and readiness summaries leaders can access. |
+| Attendance and service hours | Attendance records actual participation; corrections amend that evidence. Volunteers submit hours or request changes; authorized reviewers approve totals. Service history displays the resulting records without counting them again. |
+| Communications and recognition | Email owns operational delivery and communication preferences. Calendar invitations reflect assignments and updates. Recognition uses email and approved service records; an RSVP never confirms attendance or approved hours. |
+| Donations and donor service | Payments own verified transactions. Donor self-service provides authorized account access; recurring controls manage future gifts; history displays financial events. Keep paid, pledged, refunded and recurring states distinct. |
+| Documents and data operations | Documents own signed versions and signing evidence. Imports validate incoming records; reporting reads authorized records; backup and recovery restore protected data. Reports and exported files are not recovery backups. |
+| Policies and access | Operating policies set scoped rules; the relevant feature applies them. Staff and leader permissions control access, including private documents and finance; forms and signup links never grant authority. |
+| Cross-module changes | A changed booking or assignment updates dependent readiness and notifications. It does not silently rewrite signed evidence, past attendance, review authorship or approved service totals. |
+
+## 01 Organization and access
+
+Establish the organization, staff responsibilities and operating rules.
 
 ### Organization setup
 
@@ -76,6 +113,10 @@ Proposed behavior:
 - Define ownership succession, final-admin protections and handling of unaccepted
   replacement invitations during detailed planning.
 
+## 02 Volunteer records and readiness
+
+Maintain volunteer relationships and prepare people for eligible roles.
+
 ### Volunteer record management
 
 Maintain volunteer records throughout their relationship with the nonprofit, beyond
@@ -116,6 +157,47 @@ Proposed behavior:
   policies before implementation. Adding forms does not confirm surveys, program
   outcome collection or a general-purpose workflow builder.
 
+### Volunteer onboarding
+
+Guide new volunteers from application to readiness for the roles they want to
+perform. Confirmed for the feature list on October 17, 2026.
+
+Proposed behavior, informed by [published organization workflows](research/volunteer-operations.md):
+
+- Collect profile, skills, interests, availability and relevant emergency contacts.
+- Configure required orientation, training, documents and coordinator reviews by
+  program or role rather than imposing every requirement on every volunteer.
+- Show volunteers their next steps and coordinators incomplete requirements.
+- Track readiness separately from account creation, signup, assignment and attendance.
+- Reuse valid requirements and track renewals where a nonprofit requires them.
+- Determine guardian-consent and external screening needs during detailed planning;
+  adding onboarding does not select or authorize a background-check integration.
+
+### Role requirements
+
+Define what a volunteer needs to perform a particular role.
+
+Proposed behavior:
+
+- Set role-specific skills, training, documents and coordinator approvals.
+- Evaluate requirements for the date of service, including applicable expirations.
+- Show missing requirements and distinguish pending review from approved readiness.
+- Keep requirement configuration separate from volunteer evidence and assignment.
+
+### Readiness tracking
+
+Show whether group participants have completed the requirements for their assigned
+roles and dates of service.
+
+Proposed behavior:
+
+- Distinguish reserved places, named participants, completed registrations, pending
+  requirements and confirmed assignments without summing overlapping counts.
+- Show coordinators actionable missing requirements and review status; show group
+  leaders only the participation/readiness information their permissions allow.
+- Keep readiness separate from booking confirmation, calendar RSVP and attendance.
+- Reflect requirement renewals and role/date changes in readiness status.
+
 ### Availability and preferences
 
 Let volunteers state when and how they prefer to participate so coordinators can
@@ -136,40 +218,9 @@ Proposed behavior:
 - Define matching/filtering rules and edit permissions before implementation; AI
   scheduling and access to personal calendars are not included by this scope.
 
-### Simple recognition tools
+## 03 Opportunities and scheduling
 
-Help nonprofits acknowledge volunteer contributions through thank-you messages and
-service milestones.
-
-Proposed behavior:
-
-- Let authorized staff send individual or appropriately scoped group appreciation
-  messages through the existing email notification capability.
-- Recognize milestones based on approved service hours or clearly defined tenure;
-  do not treat pending or imported unverified hours as approved service.
-- Keep appreciation preferences and any public recognition consent explicit; avoid
-  exposing private participation details in group messages.
-- Track recognition sent and prevent duplicate milestone messages on retries;
-  define handling of later hour corrections and repeat milestones.
-- Decide milestone thresholds, templates and manual versus automatic recognition
-  during detailed planning. Public leaderboards, competitive rankings, rewards
-  programs and downloadable verification statements remain outside this addition.
-
-### Volunteer onboarding
-
-Guide new volunteers from application to readiness for the roles they want to
-perform. Confirmed for the feature list on October 17, 2026.
-
-Proposed behavior, informed by [published organization workflows](research/volunteer-operations.md):
-
-- Collect profile, skills, interests, availability and relevant emergency contacts.
-- Configure required orientation, training, documents and coordinator reviews by
-  program or role rather than imposing every requirement on every volunteer.
-- Show volunteers their next steps and coordinators incomplete requirements.
-- Track readiness separately from account creation, signup, assignment and attendance.
-- Reuse valid requirements and track renewals where a nonprofit requires them.
-- Determine guardian-consent and external screening needs during detailed planning;
-  adding onboarding does not select or authorize a background-check integration.
+Publish activities, schedule repeated service and fill available places.
 
 ### Opportunity publishing
 
@@ -184,6 +235,19 @@ Proposed behavior:
 - Keep publication status separate from staffing, registration and activity completion.
 - Reconcile cancellations and material changes with existing bookings, assignments
   and notifications. Website embeds and custom-domain hosting remain separate ideas.
+
+### Recurring shifts
+
+Schedule repeated activities and ongoing volunteer commitments.
+
+Proposed behavior:
+
+- Define a series with a time zone, recurrence and role capacities.
+- Keep individual occurrences addressable for assignments, attendance and changes.
+- Support an absence, cancellation or time change for one occurrence without
+  removing the series or rewriting past attendance.
+- Clearly scope edits to one occurrence or future occurrences and handle calendar
+  updates consistently. Detailed recurrence rules remain to be designed.
 
 ### Waitlists and conflict checks
 
@@ -202,105 +266,23 @@ Proposed behavior:
   blocking behavior before implementation. Do not inspect private personal calendars
   or reveal assignments belonging to another organization without authorization.
 
-### Day-of attendance
+### Replacement coverage
 
-Support staff in running an activity and recording actual participation.
-
-Proposed behavior:
-
-- Provide authorized staff a roster with roles, readiness and attendance, plus a
-  printable version for use on site.
-- Support staff-assisted check-in/out, late arrivals, early departures and no-shows.
-- Handle walk-ins through capacity and eligibility checks before assigning places;
-  record who authorized participation without bypassing required prerequisites.
-- Keep check-in evidence and actual time separate from approved service hours.
-- Define specific check-in interfaces, QR support and disconnected operation before
-  implementation; QR and automatic time tracking are not selected by this scope.
-
-### Email notifications
-
-Deliver operational information and actions by email alongside calendar invitations.
+Help coordinators fill a vacancy when an assigned volunteer cannot attend.
 
 Proposed behavior:
 
-- Send confirmations, reminders, cancellations, waitlist/replacement offers and
-  clarification or review updates to the appropriate recipients.
-- Distinguish queued, provider-accepted, delivered where reported, bounced and failed
-  messages; surface delivery problems without treating an email as read or acted on.
-- Prevent duplicate sends when actions retry and avoid sending obsolete reminders
-  for canceled or changed assignments.
-- Manage applicable preferences and opt-outs while distinguishing operational
-  messages from optional marketing; define delivery schedules and templates.
-- Select provider and sender verification separately. Custom-domain DNS automation,
-  shared inboxes and SMS are not included by adding email notifications.
+- Reopen the affected occurrence and role while preserving the original cancellation.
+- Find eligible volunteers or waitlisted people with compatible availability.
+- Offer a place and track acceptance separately from sending an invitation.
+- Confirm only within capacity; prevent multiple people taking the same final slot.
+- Keep unresolved vacancies visible and update affected calendar invitations.
+- Decide offer expiry, selection order and manual versus automatic offers during
+  detailed planning. SMS remains excluded.
 
-### Imports
+## 04 Group coordination
 
-Help organizations bring existing volunteer and service records into Ovelle.
-
-Proposed behavior:
-
-- Preview spreadsheet imports, map columns and validate rows before applying them.
-- Identify possible duplicate people for staff review; do not merge identities
-  solely because names match or grant staff permissions through imported fields.
-- Preserve source and review status for historical hours; do not automatically
-  label imported hours as verified or send invitations without a deliberate action.
-- Record import batches, errors and outcomes; make retries avoid duplicate records.
-- Define supported formats, record types, conflict resolution and reversal behavior
-  before implementation. Imports are not a substitute for complete backup restores.
-
-### Reporting
-
-Let authorized users review and export operational records with clear definitions.
-
-Proposed behavior:
-
-- Filter participation, attendance and approved service hours by date, program,
-  location and group, within the user's access scope.
-- Keep scheduled time, submitted hours and approved hours separate; define unique
-  volunteer counts and no-show denominators explicitly.
-- Keep received donations, pledges, fees, refunds and program outcome units distinct.
-- Provide usable exports and show the filters, reporting period and generation time.
-- Reflect attendance/hour corrections consistently and restrict private information
-  in exports. Define report customization and metrics before implementation.
-- Surveys, new outcome-collection forms and service verification statements remain
-  separate proposals.
-
-### Backup and recovery
-
-Protect organization records and support recovery from data loss or mistakes.
-
-Proposed behavior:
-
-- Provide authorized organization backups/exports covering related records and
-  required private documents with format/version and integrity information.
-- Define protected storage, retention, access and a recovery process; keep secrets
-  out of portable backups and private exports out of public storage.
-- Preview restore scope and conflicts, preserve a recovery point before replacement,
-  and verify restored relationships and document references in recovery exercises.
-- Do not replay old emails, payments or invitations as side effects of a restore;
-  reconcile external provider state rather than treating a backup as authoritative
-  for subsequent payments or canceled recurring donations.
-- Define backup frequency, offline backup availability, recovery targets and handling
-  of retained/deleted records before implementation. Backup scope does not establish
-  offline app operation or bidirectional synchronization.
-
-### Calendar invitations
-
-Help volunteers receive event and shift invitations in their phone's native
-calendar through their calendar account.
-
-Proposed behavior:
-
-- Send calendar invitations for confirmed shifts with time zone, location,
-  instructions and an opportunity link.
-- Update or cancel the same calendar event without creating duplicates.
-- Keep calendar RSVP, Ovelle signup and verified attendance as separate records.
-- Offer a private subscription to a volunteer's shifts and a downloadable event
-  fallback. Calendar clients control subscription refresh and invitation display.
-- Avoid requiring access to the volunteer's full personal calendar for invitations.
-
-Reference: [Google Calendar invitations](https://developers.google.com/workspace/calendar/api/concepts/inviting-attendees-to-events).
+Reserve group places and let leaders coordinate participants within scoped access.
 
 ### Group bookings
 
@@ -332,20 +314,6 @@ Proposed behavior:
   roster visibility, management authority or access to private records.
 - Define link expiry, revocation and handling of full or canceled bookings during
   detailed planning.
-
-### Readiness tracking
-
-Show whether group participants have completed the requirements for their assigned
-roles and dates of service.
-
-Proposed behavior:
-
-- Distinguish reserved places, named participants, completed registrations, pending
-  requirements and confirmed assignments without summing overlapping counts.
-- Show coordinators actionable missing requirements and review status; show group
-  leaders only the participation/readiness information their permissions allow.
-- Keep readiness separate from booking confirmation, calendar RSVP and attendance.
-- Reflect requirement renewals and role/date changes in readiness status.
 
 ### Booking changes
 
@@ -382,43 +350,24 @@ Proposed behavior:
 - Define leader appointment, removal, delegation and audit behavior before
   implementation.
 
-### Role requirements
+## 05 Attendance and service hours
 
-Define what a volunteer needs to perform a particular role.
+Record participation, review submitted time and preserve approved service.
 
-Proposed behavior:
+### Day-of attendance
 
-- Set role-specific skills, training, documents and coordinator approvals.
-- Evaluate requirements for the date of service, including applicable expirations.
-- Show missing requirements and distinguish pending review from approved readiness.
-- Keep requirement configuration separate from volunteer evidence and assignment.
-
-### Recurring shifts
-
-Schedule repeated activities and ongoing volunteer commitments.
+Support staff in running an activity and recording actual participation.
 
 Proposed behavior:
 
-- Define a series with a time zone, recurrence and role capacities.
-- Keep individual occurrences addressable for assignments, attendance and changes.
-- Support an absence, cancellation or time change for one occurrence without
-  removing the series or rewriting past attendance.
-- Clearly scope edits to one occurrence or future occurrences and handle calendar
-  updates consistently. Detailed recurrence rules remain to be designed.
-
-### Replacement coverage
-
-Help coordinators fill a vacancy when an assigned volunteer cannot attend.
-
-Proposed behavior:
-
-- Reopen the affected occurrence and role while preserving the original cancellation.
-- Find eligible volunteers or waitlisted people with compatible availability.
-- Offer a place and track acceptance separately from sending an invitation.
-- Confirm only within capacity; prevent multiple people taking the same final slot.
-- Keep unresolved vacancies visible and update affected calendar invitations.
-- Decide offer expiry, selection order and manual versus automatic offers during
-  detailed planning. SMS remains excluded.
+- Provide authorized staff a roster with roles, readiness and attendance, plus a
+  printable version for use on site.
+- Support staff-assisted check-in/out, late arrivals, early departures and no-shows.
+- Handle walk-ins through capacity and eligibility checks before assigning places;
+  record who authorized participation without bypassing required prerequisites.
+- Keep check-in evidence and actual time separate from approved service hours.
+- Define specific check-in interfaces, QR support and disconnected operation before
+  implementation; QR and automatic time tracking are not selected by this scope.
 
 ### Attendance corrections
 
@@ -488,6 +437,67 @@ Proposed behavior:
 - Keep upcoming commitments distinct from completed service and restrict access
   to the relevant volunteer and authorized organization staff.
 - Downloadable service verification statements remain a separate proposal.
+
+## 06 Communications and recognition
+
+Keep people informed and acknowledge their approved contributions.
+
+### Email notifications
+
+Deliver operational information and actions by email alongside calendar invitations.
+
+Proposed behavior:
+
+- Send confirmations, reminders, cancellations, waitlist/replacement offers and
+  clarification or review updates to the appropriate recipients.
+- Distinguish queued, provider-accepted, delivered where reported, bounced and failed
+  messages; surface delivery problems without treating an email as read or acted on.
+- Prevent duplicate sends when actions retry and avoid sending obsolete reminders
+  for canceled or changed assignments.
+- Manage applicable preferences and opt-outs while distinguishing operational
+  messages from optional marketing; define delivery schedules and templates.
+- Select provider and sender verification separately. Custom-domain DNS automation,
+  shared inboxes and SMS are not included by adding email notifications.
+
+### Calendar invitations
+
+Help volunteers receive event and shift invitations in their phone's native
+calendar through their calendar account.
+
+Proposed behavior:
+
+- Send calendar invitations for confirmed shifts with time zone, location,
+  instructions and an opportunity link.
+- Update or cancel the same calendar event without creating duplicates.
+- Keep calendar RSVP, Ovelle signup and verified attendance as separate records.
+- Offer a private subscription to a volunteer's shifts and a downloadable event
+  fallback. Calendar clients control subscription refresh and invitation display.
+- Avoid requiring access to the volunteer's full personal calendar for invitations.
+
+Reference: [Google Calendar invitations](https://developers.google.com/workspace/calendar/api/concepts/inviting-attendees-to-events).
+
+### Simple recognition tools
+
+Help nonprofits acknowledge volunteer contributions through thank-you messages and
+service milestones.
+
+Proposed behavior:
+
+- Let authorized staff send individual or appropriately scoped group appreciation
+  messages through the existing email notification capability.
+- Recognize milestones based on approved service hours or clearly defined tenure;
+  do not treat pending or imported unverified hours as approved service.
+- Keep appreciation preferences and any public recognition consent explicit; avoid
+  exposing private participation details in group messages.
+- Track recognition sent and prevent duplicate milestone messages on retries;
+  define handling of later hour corrections and repeat milestones.
+- Decide milestone thresholds, templates and manual versus automatic recognition
+  during detailed planning. Public leaderboards, competitive rankings, rewards
+  programs and downloadable verification statements remain outside this addition.
+
+## 07 Donations and donor service
+
+Receive donations and let donors manage their giving.
 
 ### Donations and payments
 
@@ -563,6 +573,10 @@ Proposed behavior:
   charitable acknowledgments require separate scope, wording and eligibility
   decisions; do not describe every payment confirmation as a tax receipt.
 
+## 08 Documents and data operations
+
+Protect documents, bring in records, report results and recover data.
+
 ### Document storage and signatures
 
 Store nonprofit documents and collect signed authorizations, waivers and consent
@@ -584,6 +598,57 @@ Proposed behavior:
   does not establish signature validity.
 
 Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buckets/bucket-locks/).
+
+### Imports
+
+Help organizations bring existing volunteer and service records into Ovelle.
+
+Proposed behavior:
+
+- Preview spreadsheet imports, map columns and validate rows before applying them.
+- Identify possible duplicate people for staff review; do not merge identities
+  solely because names match or grant staff permissions through imported fields.
+- Preserve source and review status for historical hours; do not automatically
+  label imported hours as verified or send invitations without a deliberate action.
+- Record import batches, errors and outcomes; make retries avoid duplicate records.
+- Define supported formats, record types, conflict resolution and reversal behavior
+  before implementation. Imports are not a substitute for complete backup restores.
+
+### Reporting
+
+Let authorized users review and export operational records with clear definitions.
+
+Proposed behavior:
+
+- Filter participation, attendance and approved service hours by date, program,
+  location and group, within the user's access scope.
+- Keep scheduled time, submitted hours and approved hours separate; define unique
+  volunteer counts and no-show denominators explicitly.
+- Keep received donations, pledges, fees, refunds and program outcome units distinct.
+- Provide usable exports and show the filters, reporting period and generation time.
+- Reflect attendance/hour corrections consistently and restrict private information
+  in exports. Define report customization and metrics before implementation.
+- Surveys, new outcome-collection forms and service verification statements remain
+  separate proposals.
+
+### Backup and recovery
+
+Protect organization records and support recovery from data loss or mistakes.
+
+Proposed behavior:
+
+- Provide authorized organization backups/exports covering related records and
+  required private documents with format/version and integrity information.
+- Define protected storage, retention, access and a recovery process; keep secrets
+  out of portable backups and private exports out of public storage.
+- Preview restore scope and conflicts, preserve a recovery point before replacement,
+  and verify restored relationships and document references in recovery exercises.
+- Do not replay old emails, payments or invitations as side effects of a restore;
+  reconcile external provider state rather than treating a backup as authoritative
+  for subsequent payments or canceled recurring donations.
+- Define backup frequency, offline backup availability, recovery targets and handling
+  of retained/deleted records before implementation. Backup scope does not establish
+  offline app operation or bidirectional synchronization.
 
 ## Additional service ideas — not approved
 
