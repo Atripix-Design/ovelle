@@ -34,7 +34,7 @@ separately confirmed features.
 
 ## 3. Recruit and onboard
 
-Individuals register for opportunities; the group contact shares the proposed
+Individuals register for opportunities; the group contact shares the
 group signup link with coworkers. Each participant completes their own applicable
 requirements. The coordinator can distinguish six reserved places from, for
 example, four named participants, three completed registrations and two confirmed

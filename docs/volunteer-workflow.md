@@ -12,7 +12,7 @@ assignment, attend, submit actual service time and receive a review decision.
 
 ## 1. Find an opportunity
 
-Open a proposed nonprofit volunteer page or group invitation link. Review the
+Open a group signup link or a proposed nonprofit volunteer page. Review the
 activity, location, schedule, available roles and requirements before registering.
 Example: join a Saturday food distribution as a packer. Public signup pages and
 embeds remain proposed delivery methods.

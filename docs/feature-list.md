@@ -56,6 +56,71 @@ Proposed behavior:
   than consuming an additional place.
 - Define reservation deadlines and how unused places return to availability.
 
+### Group signup links
+
+Let a group leader share a booking-specific link so participants register against
+the group's reserved places.
+
+Proposed behavior:
+
+- Associate each link with the organization, group and relevant booking.
+- Have participants use their own accounts and complete their own onboarding and
+  signatures; joining through a link does not bypass eligibility or capacity.
+- Count registrations within the existing reservation without creating extra places.
+- Keep signup links separate from leader access: possession of a link grants no
+  roster visibility, management authority or access to private records.
+- Define link expiry, revocation and handling of full or canceled bookings during
+  detailed planning.
+
+### Readiness tracking
+
+Show whether group participants have completed the requirements for their assigned
+roles and dates of service.
+
+Proposed behavior:
+
+- Distinguish reserved places, named participants, completed registrations, pending
+  requirements and confirmed assignments without summing overlapping counts.
+- Show coordinators actionable missing requirements and review status; show group
+  leaders only the participation/readiness information their permissions allow.
+- Keep readiness separate from booking confirmation, calendar RSVP and attendance.
+- Reflect requirement renewals and role/date changes in readiness status.
+
+### Booking changes
+
+Let group leaders manage participation changes and request changes to a booking.
+
+Proposed behavior:
+
+- Allow leaders to invite replacements into available group places, with each
+  replacement completing applicable registration and role requirements.
+- Route date, capacity and role changes for coordinator confirmation under the
+  organization's policy. A request does not change the confirmed booking.
+- For recurring bookings, distinguish one occurrence from future occurrences.
+- Preserve change history, reconcile affected assignments and calendar invitations,
+  and avoid exceeding capacity or silently removing other groups' places.
+- Define cancellation permissions, deadlines and release of unused places during
+  detailed planning.
+
+### Group leader permissions
+
+Give designated leaders scoped access to manage their group's bookings and
+participation without general coordinator authority.
+
+Proposed behavior:
+
+- Separate group membership, booking leadership and attendance; an organizer need
+  not attend, and group members need not join every booking.
+- Limit access to authorized groups/bookings and the information needed to manage
+  participation; private documents, screening results and unrelated volunteers'
+  information remain restricted.
+- Do not grant service-hour approval authority merely because someone leads a
+  group. Additional staff/reviewer authority requires separate authorization.
+- Allow attendance discrepancy reports; check-in assistance and visibility of
+  attendance or approved group totals require explicitly defined permissions.
+- Define leader appointment, removal, delegation and audit behavior before
+  implementation.
+
 ### Role requirements
 
 Define what a volunteer needs to perform a particular role.
@@ -224,10 +289,10 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 These ideas need separate scope decisions. No provider connection, implementation
 or deployment is authorized or completed by listing them here.
 
-See the [proposed coordinator workflow](coordinator-workflow.md) for how confirmed
-features could work together and the [volunteer workflow](volunteer-workflow.md)
-for the path from signup to approved hours. Their additional interface and automation details are
-proposals rather than newly approved scope.
+See the [coordinator workflow](coordinator-workflow.md),
+[volunteer workflow](volunteer-workflow.md) and
+[group leader workflow](group-leader-workflow.md) for how confirmed features could
+work together. Their additional interface and automation details remain proposals.
 
 ## Excluded services
 
