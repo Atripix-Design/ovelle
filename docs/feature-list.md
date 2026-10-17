@@ -319,6 +319,57 @@ References: [Stripe Connect direct charges](https://docs.stripe.com/connect/dire
 [Checkout](https://docs.stripe.com/payments/checkout),
 [webhooks](https://docs.stripe.com/webhooks).
 
+### Donor self-service
+
+Let donors securely access and manage their giving without requiring a volunteer
+profile or coordinator assistance for routine supported actions.
+
+Proposed behavior:
+
+- Authenticate access to the donor's own records through verified sign-in or a
+  secure management link; payment confirmation alone does not grant account access.
+- Show active recurring commitments, next scheduled payments and payment issues.
+- Provide secure payment-method management through the selected provider and a
+  way to contact the nonprofit about mistakes or refund requests.
+- Keep donor identity separate from volunteer participation, while permitting a
+  person to hold both relationships without exposing unrelated records.
+- Define account linking, recovery and initial donation without a password during
+  detailed planning. Access remains scoped to the appropriate nonprofit and donor.
+
+### Recurring donation controls
+
+Let donors manage future donations with clear terms and effective dates.
+
+Proposed behavior:
+
+- Show amount, currency, frequency, current status and next scheduled charge.
+- Support cancellation of future giving and evaluate amount changes, payment-method
+  updates and pause/resume controls against the chosen provider's capabilities.
+- Explain when changes take effect, which commitments they affect and any scheduled
+  retry. Cancellation does not automatically refund past payments.
+- Confirm provider-applied changes and reconcile verified events rather than
+  displaying a requested change as completed before confirmation.
+- Avoid duplicate commitments when a donor updates a failed payment method or
+  retries an action. Define cancellation/retry timing and pause behavior before
+  implementation.
+
+### Donation history
+
+Give donors a private history of their donations and payment outcomes.
+
+Proposed behavior:
+
+- Show individual transactions with date, amount, currency, nonprofit and applicable
+  campaign/program; distinguish pending, successful, failed, refunded and disputed
+  transactions.
+- Keep recurring commitments separate from their individual payments; do not count
+  future scheduled charges or pledges as received donations.
+- Reflect partial/full refunds and corrections without counting duplicate provider
+  events as additional donations.
+- Provide access to available payment confirmations. Downloadable documents and
+  charitable acknowledgments require separate scope, wording and eligibility
+  decisions; do not describe every payment confirmation as a tax receipt.
+
 ### Document storage and signatures
 
 Store nonprofit documents and collect signed authorizations, waivers and consent
@@ -359,10 +410,10 @@ or deployment is authorized or completed by listing them here.
 
 See the [coordinator workflow](coordinator-workflow.md),
 [volunteer workflow](volunteer-workflow.md),
-[group leader workflow](group-leader-workflow.md) and
-[nonprofit admin workflow](nonprofit-admin-workflow.md) for how confirmed features
-could work together. Their additional interface and automation details remain
-proposals.
+[group leader workflow](group-leader-workflow.md),
+[nonprofit admin workflow](nonprofit-admin-workflow.md) and
+[donor workflow](donor-workflow.md) for how confirmed features could work together.
+Their additional interface and automation details remain proposals.
 
 ## Excluded services
 
