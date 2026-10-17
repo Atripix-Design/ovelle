@@ -24,7 +24,8 @@ public downloadable assets. Start without Durable Objects, queues, vector search
 GPU servers, or a general-purpose agent framework. Add services only against the
 specific triggers in this document.
 
-Use a provider adapter with strictly scoped Ovelle function tools. The proposed
+Use a provider adapter with strictly scoped Ovelle function tools and a
+**read-only MCP connection**, mediated by the Ovelle backend. The proposed
 first evaluation candidate is **GPT-OSS 20B hosted by Groq**, using its
 OpenAI-compatible Chat Completions interface. Compare against the previous GPT-6
 Luna baseline; consider Llama 3.1 8B only after an enterprise access/price quote; retain GPT-OSS 120B as a higher-cost
@@ -67,6 +68,9 @@ residency, model quality, or service availability.
    changes only after explicit review and confirmation.
 5. Launch uses managed cloud hosting. Customer hosting, regional guarantees,
    certifications, and fully offline reasoning are outside this launch baseline.
+6. The bot also receives read-only access through MCP. The actual source systems
+   and endpoint are not specified; no third-party connection or credentials are
+   selected or provisioned by this document.
 
 ### 2.2 Repository baseline
 
@@ -108,7 +112,9 @@ flowchart LR
     D -->|TLS: reviewed text and selected context| B[Ovelle assistant API]
     B -->|Minimized text and tool schemas| M[Hosted model provider]
     M -->|Text or proposed tool calls| B
-    B --> A[Authorized Ovelle application services]
+    B -->|Approved reads| R[Read-only MCP adapter and server]
+    R --> A[Authorized Ovelle application services]
+    B -->|Confirmed writes| A
     A --> DB[(Organization-scoped CRM records)]
     B -->|Reply and verified action status| D
     D -->|Local synthesized speech| U
@@ -130,10 +136,16 @@ flowchart TB
         E <--> TTS
     end
     subgraph Cloud[Ovelle managed cloud - separate dev and prod]
-        W[Worker API and application services]
+        W[Worker assistant API]
+        DS[Authorized application services]
         D1[(D1: turns, proposals, usage, CRM)]
         RP[(Private R2: authorized application assets)]
         RM[(Public R2: signed model release artifacts)]
+        MCP[Read-only MCP endpoint and adapter]
+        W <--> MCP
+        MCP -->|Domain reads| DS
+        W -->|Confirmed domain writes| DS
+        DS <--> D1
         W <--> D1
         W --> RP
     end
@@ -194,6 +206,7 @@ against a fully compromised endpoint.
 | Electron main | Login lifecycle, OS-protected token storage, download verification, speech-process lifecycle, stream cancellation | Domain authorization or model-driven execution of native commands |
 | Speech processes | Bounded local inference and framed PCM/text messages over private pipes | Network access by design, application credentials, arbitrary user-supplied executable paths |
 | Assistant Worker | Request authentication, context selection, provider adapter, bounded tool loop, cost reservation | Native model inference, arbitrary background jobs, unsanitized provider proxy |
+| MCP adapter / server | Reviewed read-tool catalog, delegated identity, bounded retrieval and provenance | Write capabilities, arbitrary server discovery, model-selected URLs, provider-managed credentials |
 | Application services | Organization and field authorization, validation, transactional writes, audit and idempotency | Trust in model instructions or client-supplied membership |
 | Provider adapter | Normalized text/tool/usage events, timeouts and error classification | Permission policy or automatic cross-provider disclosure |
 
@@ -260,6 +273,7 @@ sequenceDiagram
     participant Speech as Local speech process
     participant API as Ovelle API
     participant Model as Hosted model
+    participant MCP as Read-only MCP
     participant Domain as Domain service / D1
     User->>Desktop: Hold microphone, speak, release
     Desktop->>Speech: Bounded local PCM
@@ -269,13 +283,24 @@ sequenceDiagram
     API->>Domain: Authenticate, authorize, reserve allowance
     API->>Model: Minimized context and allowlisted tools
     Model-->>API: Read call or proposed change
-    API->>Domain: Authorized lookup / prepare immutable proposal
+    alt Read tool
+        API->>MCP: Allowlisted call with delegated actor/org scope
+        MCP->>Domain: Authorized read
+        Domain-->>MCP: Scoped records and versions
+        MCP-->>API: Bounded result and provenance
+        API->>Model: Validated authorized tool result
+        Model-->>API: Grounded reply or next bounded tool call
+    else Proposed write
+        API->>Domain: Prepare immutable proposal
+    end
     API-->>Desktop: Text, citations, proposal and exact digest
-    User->>Desktop: Review and explicitly confirm
-    Desktop->>API: Confirm proposal and digest
-    API->>Domain: Recheck permission, versions, expiry; commit once
-    Domain-->>API: Stored operation receipt
-    API-->>Desktop: Verified outcome
+    opt A write proposal exists
+        User->>Desktop: Review and explicitly confirm
+        Desktop->>API: Confirm proposal and digest
+        API->>Domain: Recheck permission, versions, expiry; commit once
+        Domain-->>API: Stored operation receipt
+        API-->>Desktop: Verified outcome
+    end
     Desktop->>Speech: Final short reply text for synthesis
     Speech-->>Desktop: Local PCM playback
 ```
@@ -300,7 +325,63 @@ partial generated claims of successful actions before the receipt exists. Extern
 side effects are excluded until a transactional outbox, provider idempotency,
 and reconciliation path are implemented; there is no general exactly-once promise.
 
-### 4.4 Failure and recovery behavior
+### 4.4 Read-only MCP integration
+
+**Placement:** Ovelle's backend acts as the MCP client. Start with an
+Ovelle-managed read-only endpoint over HTTPS Streamable HTTP; reuse domain read
+services, not unrestricted database access. This is a deployment default, not a
+claim that the user's unspecified MCP server already exists. External sources
+require a separate endpoint, data classification, contract and permission review.
+Clients do not configure MCP or run a local server. Avoid a desktop relay unless
+a later requirement establishes device-only data.
+
+**Model bridge:** expose approved MCP reads as ordinary model function definitions.
+When the model requests one, the backend validates arguments, resolves scoped
+identity, invokes MCP, validates/minimizes the result, and sends authorized context
+back to the model. Groq need not host or natively execute MCP for this to work.
+Do not provide its hosted remote-MCP/browser/code tools for this connection.
+
+**Catalog and read enforcement:** register a reviewed server/tool/schema allowlist;
+use discovery only to verify that catalog. Newly advertised tools and changed
+schemas remain disabled pending review. Do not trust a name, description, or
+`readOnlyHint` annotation to prove absence of side effects. Enforce read-only
+behavior in the MCP implementation, domain authorization, and underlying resource
+permissions where supported. Refuse tools that mutate business data, send messages,
+run arbitrary SQL, expose unrestricted files, or change permissions. Logs and
+quota counters may change operationally; “read-only” concerns business data and
+external side effects. The protocol's tool metadata is not an authorization policy
+[S25]. Confirmed mutations remain outside MCP in the existing proposal/receipt path.
+
+**Identity:** bind each call to the current actor and organization; the server
+rechecks row/field permissions. For HTTP MCP use the protocol's authorization
+flow and audience-bound, least-privilege tokens issued for that MCP resource [S26].
+Do not pass the desktop access token or model-provider key through as an MCP token.
+Do not fall back to an unrestricted service credential when delegated authorization
+fails. Session IDs are not identity; any reuse must preserve organization and actor
+isolation. Endpoint URLs are deployment-controlled, HTTPS-only and allowlisted;
+validate redirects and reject model-selected/private-network destinations.
+
+**Retrieval defaults:** cap all reads, including MCP reads, at eight calls per turn,
+with a ten-second per-call timeout inside the existing 90-second turn deadline.
+Allow one retry for an idempotent transient read failure, counted inside that
+same eight-call budget. Return at most twenty records and 16 KiB per call, with
+an explicit continuation cursor. Bound the combined model input, including tool
+schemas and results, to the existing 12,000-token invocation limit. Reject oversized
+results before provider submission rather than silently dropping important fields.
+Return source/record references, relevant versions, and retrieval time for grounding;
+counts and totals require a dedicated scoped aggregate read, not inference from a
+single page. No whole-database or document dump.
+
+**Failure/privacy:** treat returned text and embedded instructions as untrusted.
+Do not automatically fetch resource links or forward content to a new host. Reads
+need no action-confirmation dialog within the user's authorized scope, but respect
+first-use cloud-processing disclosure. MCP cannot grant access to sensitive fields
+excluded elsewhere in this RFC. Keep results turn-scoped with the existing retention;
+no shared result cache initially. On denial, timeout, missing source, or truncated
+coverage, report the limitation and do not invent an answer or change. Do not replay
+MCP reads while recovering a completed turn just to reconstruct stored output.
+
+### 4.5 Failure and recovery behavior
 
 | Condition | Required behavior |
 | --- | --- |
@@ -656,12 +737,14 @@ D1 = max(0, reads - 25,000,000,000) × 0.001 / 1,000,000
      + max(0, writes - 50,000,000) × 1 / 1,000,000
      + max(0, stored_GB - 5) × 0.75
 Support = monthly_assistant_support_hours × loaded_hourly_rate
-Total = AI + Workers + D1 + R2 + operations_contingency + Support
+Total = AI + Workers + D1 + R2 + operations_contingency + Support + external_MCP_fees
 ```
 
 Count repeated context, schema tokens, tool results, and reasoning in actual
-provider usage; a user-visible reply is not the whole bill. The retry uplift is
-an expected-load assumption, not permission to exceed the hard invocation limit.
+provider usage; a user-visible reply is not the whole bill. MCP supplies context,
+not cheaper inference: its schemas/results add input tokens, and follow-up tool
+rounds add model calls. The existing invocation and context caps still apply.
+The retry uplift is an expected-load assumption, not permission to exceed the hard invocation limit.
 Apply R2 free capacity and round billable units according to provider rules, not
 fractional-request arithmetic. Model downloads use public R2 directly so they do
 not intentionally create a Worker invocation for every chunk.
@@ -701,6 +784,16 @@ support costs remain. Other metered services attached to R2 can add charges [S17
 | Assistant support labor | $80.00 | $400.00 | $3,200.00 |
 | **Planning total** | **$90.29** | **$470.32** | **$8,640.15** |
 | Total / organization | $9.03 | $4.70 | $8.64 |
+
+The scenario assumes an Ovelle-managed MCP endpoint in the existing Worker and
+read-service deployment: its read work must fit the stated effective D1 reads,
+CPU, and tool-round assumptions. These are not measurements of MCP overhead.
+Initialization/catalog requests and retrieval retries must be measured separately
+and added to the API/CPU meters if the eight-request estimate is exceeded.
+`external_MCP_fees = 0` only under this first-party assumption; external subscriptions,
+per-call charges, egress, or dedicated hosting are unpriced until a source is chosen
+and must be added before adoption. The inference reservation does not cap those
+charges; separately metered MCP sources require their own atomic budget reservation.
 
 The contingency is an internal allowance, not priced procurement. These totals
 exclude implementation labor, signing certificates, security/legal review,
@@ -759,7 +852,7 @@ Reserve fleet and organization cost in one authoritative ledger transaction.
 At a hard cap, refuse new inference with reset/help text and preserve normal CRM
 access, captions, existing receipts, and draft copy/export. Provider dashboards
 are secondary safeguards because reporting and enforcement can lag. Add request
-body limits, bounded tool results, concurrency controls, and actor/IP abuse
+body limits, bounded MCP/tool results, concurrency controls, and actor/IP abuse
 monitoring; no unauthenticated general-purpose inference endpoint.
 
 ## 8. Reliability, deployment, and operations
@@ -859,6 +952,7 @@ launch considerations even when tests pass.
 | Name/date/number transcription error | High | High | Transcript review, entity disambiguation, visible dates/time zones / desktop | Review friction and human oversight remain |
 | Duplicate action or stale confirmation | High | Medium | Atomic version checks, uniqueness, idempotent receipts / backend | Ambiguous failures require reconciliation; external exactly-once delivery is not promised |
 | Provider outage or rate limits | Medium | Medium | Deadlines, one eligible retry, text preservation, status recovery / operations | Hosted reasoning remains unavailable offline or during outages |
+| MCP data leakage or injected tool/result content | High | Medium | Reviewed catalogs, actor/org authorization, scoped credentials, result limits and untrusted-content handling / backend | Read-only access can still disclose sensitive data and influence answers |
 | Spend abuse / runaway tool loop | High | Medium | Atomic reservations, hard invocation/context caps, fleet/org caps / backend | Unknown billed usage can temporarily strand allowance |
 | Weak client hardware / battery drain | Medium | High | Small default model, process limits, hardware gates, text mode / desktop | Voice performance varies; local inference is not costless |
 | Native binary or model tampering | Critical | Medium | Signed app/manifest, hashes, staged activation, dependency inventory / desktop | Compromised signing infrastructure/endpoints remain threats |
@@ -903,6 +997,7 @@ report energy/thermal behavior even though no universal battery-life claim is ma
 | Silence / ambiguity | ≥50 silence/noise clips; ambiguous people, relative dates, time zones and daylight-saving transitions | No silence clip auto-submitted; all ambiguous action fixtures require disambiguation; visible resolved date/time zone before confirmation |
 | Grounded answers / tools | ≥150 held-out tasks including no-tool help, lookup, pagination, draft change, unavailable data, and adversarial records; three runs each | ≥95% exact correct allowed tool/arguments and ≥95% grounded answer correctness; 100% of write attempts follow confirmation; report uncertainty, failures and per-model successful-task cost |
 | Permissions | ≥100 negative tests spanning roles/orgs, foreign record IDs, caches, SSE, proposals, status endpoints and revoked sessions | Zero observed unauthorized reads/writes or private-field leaks; any failure blocks rollout; test success is not proof of universal security |
+| Read-only MCP | Catalog/schema change, advertised write tool, malicious annotation/result, wrong token audience, revoked membership, cross-org session reuse, paginated totals, oversized result and timeout | Unapproved tools never exposed; zero business mutations through MCP; server-side row/field permissions enforced; call/context limits hold; failures are visible and sourced answers are grounded |
 | Writes and races | Concurrent confirmations, duplicate keys, changed targets, expired proposals, actor switch, permission revocation, killed process at transaction boundaries | Zero duplicate mutations; stale/revoked proposals rejected; receipt matches committed record and audit in every fixture |
 | Cost control | Parallel starts at the last credit, fleet cap, abandoned leases, unknown usage, price update, provider reasoning tokens and retry exhaustion | No admitted request exceeds reserved budget under configured limits; uncertain usage retained; loops terminate within hard caps |
 | Resilience | Provider 429/5xx/timeout, disconnect before/after commit, dropped events, expired cursor, orphan Worker, speech crash, denied mic | Honest recoverable state; no hidden cloud audio fallback; no repeat mutation; text mode usable; no false success/cancellation claim |
@@ -930,8 +1025,8 @@ visual design or rendered parity.
    authentication/organizations and application services; validate D1 transactions,
    signed distribution, license inventory, and environment separation. No real
    customer voice pilot before these prerequisites pass.
-2. **Text-only internal evaluation:** synthetic data, read tools only, provider
-   adapter, streaming, receipts/status recovery, cost ledger, and held-out model
+2. **Text-only internal evaluation:** synthetic data, allowlisted read-only MCP tools, provider
+   adapter and MCP authorization/result-limit tests, streaming, receipts/status recovery, cost ledger, and held-out model
    comparison. Publish evaluation report and final model/rate manifest.
 3. **Local voice internal evaluation:** verified automatic packs and process
    isolation, microphone review, captions, TTS and hardware tests on all three
@@ -955,7 +1050,7 @@ live user acceptance as separately recorded evidence.
 | Record | Proposed default | Evidence required before activation |
 | --- | --- | --- |
 | ADR-01 | Workers + D1 + separate public/private R2; no extra coordination service initially | Authorization/transaction/concurrency tests, routing verification, load and recovery results |
-| ADR-02 | Provider adapter, initially Groq Chat Completions, and scoped domain tools | Provider project access, domain permission design, bounded loop and receipt tests |
+| ADR-02 | Provider adapter, initially Groq Chat Completions; backend-mediated read-only MCP; confirmed writes outside MCP | Provider access, reviewed MCP catalog/auth, domain permissions, bounded retrieval/loop and receipt tests |
 | ADR-03 | Packaged whisper.cpp `base.en`; optional validated `small.en` | Three-platform recognition/resource benchmark and exact artifact inventory |
 | ADR-04 | Local Kokoro ONNX, one English preset | Distribution clearance, pronunciation/listening review, native packaging evidence |
 | ADR-05 | Push-to-talk, transcript review, captions, text fallback | Accessibility, privacy and pilot usability results |
@@ -998,6 +1093,8 @@ documentation, not proof of Ovelle performance or deployed configuration.
 - **S22:** [Groq data controls](https://console.groq.com/docs/your-data) — retention exceptions, ZDR settings and usage metadata.
 - **S23:** [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing) — Flash-Lite paid rates; no free-tier assumption.
 - **S24:** [DeepSeek API pricing](https://api-docs.deepseek.com/quick_start/pricing/) — current Flash model mapping, peak/off-peak and uncached rates.
+- **S25:** [MCP tools specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) — tool discovery/calls, schemas and metadata trust boundary.
+- **S26:** [MCP authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization) and [transports](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports) — HTTP authorization and Streamable HTTP transport.
 
 Repository evidence: `AGENTS.md`, `wrangler.jsonc`, `apps/desktop/package.json`,
 `apps/desktop/src/main/index.ts`, `apps/desktop/src/preload/index.ts`,
