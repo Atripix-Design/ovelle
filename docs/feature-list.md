@@ -41,6 +41,73 @@ Proposed behavior:
 
 Reference: [Google Calendar invitations](https://developers.google.com/workspace/calendar/api/concepts/inviting-attendees-to-events).
 
+### Group bookings
+
+Reserve places for a school, company or community group while tracking each
+participant's registration and readiness separately.
+
+Proposed behavior:
+
+- Record the group contact, requested/reserved places and applicable roles.
+- Give leaders access limited to their group and the information needed to
+  coordinate participation; do not expose private documents or screening records.
+- Distinguish reserved capacity, named participants, completed registrations and
+  confirmed assignments. Count a named participant against the reservation rather
+  than consuming an additional place.
+- Define reservation deadlines and how unused places return to availability.
+
+### Role requirements
+
+Define what a volunteer needs to perform a particular role.
+
+Proposed behavior:
+
+- Set role-specific skills, training, documents and coordinator approvals.
+- Evaluate requirements for the date of service, including applicable expirations.
+- Show missing requirements and distinguish pending review from approved readiness.
+- Keep requirement configuration separate from volunteer evidence and assignment.
+
+### Recurring shifts
+
+Schedule repeated activities and ongoing volunteer commitments.
+
+Proposed behavior:
+
+- Define a series with a time zone, recurrence and role capacities.
+- Keep individual occurrences addressable for assignments, attendance and changes.
+- Support an absence, cancellation or time change for one occurrence without
+  removing the series or rewriting past attendance.
+- Clearly scope edits to one occurrence or future occurrences and handle calendar
+  updates consistently. Detailed recurrence rules remain to be designed.
+
+### Replacement coverage
+
+Help coordinators fill a vacancy when an assigned volunteer cannot attend.
+
+Proposed behavior:
+
+- Reopen the affected occurrence and role while preserving the original cancellation.
+- Find eligible volunteers or waitlisted people with compatible availability.
+- Offer a place and track acceptance separately from sending an invitation.
+- Confirm only within capacity; prevent multiple people taking the same final slot.
+- Keep unresolved vacancies visible and update affected calendar invitations.
+- Decide offer expiry, selection order and manual versus automatic offers during
+  detailed planning. SMS remains excluded.
+
+### Attendance corrections
+
+Allow authorized coordinators to correct attendance and actual service time.
+
+Proposed behavior:
+
+- Distinguish scheduled, attended, absent and canceled records; retain actual time
+  separately from planned shift duration.
+- Record the previous value, new value, reason, editor and time for corrections.
+- Recalculate affected totals and preserve the distinction between submitted and
+  approved service hours.
+- Define review/reopening behavior for already approved records and issued service
+  statements before implementation.
+
 ### Donations and payments
 
 Let nonprofits receive donations and other payments and associate them with their
@@ -92,7 +159,7 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 | --- | --- |
 | Website and signup embeds | Publish opportunities and application forms on the nonprofit's existing website; offer a branded volunteer portal. |
 | Email communications | Send reminders, cancellation alerts and waitlist offers; retain communication preferences and opt-outs. Complement these with calendar invitations and updates. |
-| Check-in and service records | Support QR or staff-assisted check-in, attendance corrections and coordinator-approved service-hour statements. |
+| Check-in and service records | Support QR or staff-assisted check-in and coordinator-approved service-hour statements. Attendance corrections are confirmed above; specific check-in methods and statements remain proposals. |
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
 | Shared inbox | Assign volunteer inquiries to coordinators and attach conversations to relevant records. |
 | Accounting connection | Export or synchronize appropriately mapped payments, refunds and fees with the nonprofit's accounting system. |
@@ -101,6 +168,10 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 
 These ideas need separate scope decisions. No provider connection, implementation
 or deployment is authorized or completed by listing them here.
+
+See the [proposed coordinator workflow](coordinator-workflow.md) for how confirmed
+features could work together. Its additional interface and automation details are
+proposals rather than newly approved scope.
 
 ## Excluded services
 
