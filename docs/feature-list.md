@@ -108,6 +108,61 @@ Proposed behavior:
 - Define review/reopening behavior for already approved records and issued service
   statements before implementation.
 
+### Hour submissions
+
+Let volunteers review and submit their actual service time for coordinator review.
+
+Proposed behavior:
+
+- Associate submissions with the relevant activity, shift occurrence and volunteer.
+- Show recorded time for review and accept an explanation for missing or incorrect
+  time; do not convert scheduled duration into approved hours automatically.
+- Distinguish draft, submitted and reviewed records and prevent duplicate counting
+  when a volunteer revises or resubmits a record.
+- Keep submitted hours separate from approved totals.
+
+### Coordinator approval
+
+Allow authorized coordinators to review service-hour submissions and approve the
+time that counts toward a volunteer's approved service record.
+
+Proposed behavior:
+
+- Provide a review queue with the submission and relevant attendance information.
+- Approve time, request clarification or record an explained adjustment.
+- Record who reviewed the submission, when and the decision; make the outcome and
+  any adjustment explanation visible to the volunteer.
+- Define reviewer permissions, rejection/withdrawal states and reopening rules
+  during detailed planning. Revised hours require a recorded review decision
+  before changing approved totals.
+
+### Correction requests
+
+Let volunteers request corrections to attendance or service time, including records
+that have already been reviewed.
+
+Proposed behavior:
+
+- Link a request to the existing record, with the requested change and explanation.
+- Show whether the request awaits review, needs clarification or has been resolved.
+- Allow authorized coordinators to accept or decline with an explanation; preserve
+  the request and resulting attendance correction or approval decision.
+- Do not let a pending request silently replace approved hours or create a second
+  counted service record.
+
+### Service history
+
+Give volunteers a personal history of activities, participation and service hours.
+
+Proposed behavior:
+
+- Show activities and dates with the recorded, submitted and approved time clearly
+  distinguished; show approved totals separately from pending submissions.
+- Provide access to review explanations, correction requests and amended records.
+- Keep upcoming commitments distinct from completed service and restrict access
+  to the relevant volunteer and authorized organization staff.
+- Downloadable service verification statements remain a separate proposal.
+
 ### Donations and payments
 
 Let nonprofits receive donations and other payments and associate them with their
@@ -170,7 +225,8 @@ These ideas need separate scope decisions. No provider connection, implementatio
 or deployment is authorized or completed by listing them here.
 
 See the [proposed coordinator workflow](coordinator-workflow.md) for how confirmed
-features could work together. Its additional interface and automation details are
+features could work together and the [volunteer workflow](volunteer-workflow.md)
+for the path from signup to approved hours. Their additional interface and automation details are
 proposals rather than newly approved scope.
 
 ## Excluded services
