@@ -75,7 +75,7 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 | Service | Potential nonprofit workflow |
 | --- | --- |
 | Website and signup embeds | Publish opportunities and application forms on the nonprofit's existing website; offer a branded volunteer portal. |
-| SMS and communications | Send opted-in reminders, cancellation alerts and waitlist offers; retain communication preferences and opt-outs. |
+| Email communications | Send reminders, cancellation alerts and waitlist offers; retain communication preferences and opt-outs. Complement these with calendar invitations and updates. |
 | Volunteer onboarding | Coordinate applications, orientation, required documents, training and expiring qualifications. |
 | Check-in and service records | Support QR or staff-assisted check-in, attendance corrections and coordinator-approved service-hour statements. |
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
@@ -86,3 +86,9 @@ Reference: [Cloudflare R2 bucket locks](https://developers.cloudflare.com/r2/buc
 
 These ideas need separate scope decisions. No provider connection, implementation
 or deployment is authorized or completed by listing them here.
+
+## Excluded services
+
+- SMS messaging is excluded from the current plan because of the production
+  restrictions and onboarding burden identified by the user on October 17, 2026.
+  Prefer email and calendar notifications; revisit SMS only if explicitly reopened.
