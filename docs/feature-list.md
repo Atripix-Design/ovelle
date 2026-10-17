@@ -8,6 +8,74 @@ inventory of Ovelle requirements.
 
 ## Confirmed additions
 
+### Organization setup
+
+Let a nonprofit establish its organization, programs, locations and administrative
+responsibilities in Ovelle.
+
+Proposed behavior:
+
+- Record organization identity, contact details, time zone and branding.
+- Establish an initial organization owner and a controlled process for assigning
+  additional administrators and transferring ownership.
+- Organize activities and staff responsibilities by program and location.
+- Configure applicable volunteer requirements and document templates while keeping
+  organization defaults distinct from program/role-specific requirements.
+- Define ownership verification and recovery during detailed planning; creating an
+  organization does not by itself verify nonprofit status or payment eligibility.
+
+### Coordinator invitations and permissions
+
+Invite staff and grant explicit responsibilities within the organization.
+
+Proposed behavior:
+
+- Track pending, accepted, expired and revoked invitations; an invitation alone
+  does not grant staff access before acceptance by the intended account.
+- Scope coordinator access to assigned programs/locations and responsibilities
+  such as scheduling, onboarding review, attendance, hour approval and group bookings.
+- Grant access to private documents, finance and service connections only through
+  relevant explicit permissions; coordinator status does not imply all access.
+- Allow authorized admins to review, change and revoke staff access with an audit
+  history. Prevent coordinators from granting themselves broader authority.
+- Define role presets, invitation expiry and revocation/session behavior before
+  implementation.
+
+### Operating policies
+
+Let admins establish consistent rules for volunteer operations, with appropriately
+scoped configuration for programs and roles.
+
+Proposed behavior:
+
+- Configure registration review and assignment rules, requirement renewals, group
+  reservation deadlines and booking-change approval responsibilities.
+- Define replacement-offer behavior, service-hour review and attendance-correction
+  rules, within the capabilities ultimately implemented.
+- Make applicable rules visible to coordinators and affected volunteers/leaders.
+- Record policy changes and define their effective scope; do not silently rewrite
+  past attendance, signed document versions or prior approval decisions.
+- Design defaults, permitted overrides and treatment of existing bookings before
+  implementation. SMS remains excluded.
+
+### Staff handoffs
+
+Transfer operational responsibility when staff change roles, leave or need
+temporary coverage, while keeping records owned by the organization.
+
+Proposed behavior:
+
+- Identify upcoming activities, pending onboarding/hour/correction reviews and
+  group contacts that need a responsible replacement.
+- Assign responsibility to an eligible staff member and make unresolved work
+  visible to an authorized admin; define temporary coverage and end dates.
+- Revoke departing staff access independently of handoff completion so unresolved
+  assignments do not require retaining former staff access.
+- Preserve historical authorship and review decisions rather than relabeling past
+  actions as performed by the replacement.
+- Define ownership succession, final-admin protections and handling of unaccepted
+  replacement invitations during detailed planning.
+
 ### Volunteer onboarding
 
 Guide new volunteers from application to readiness for the roles they want to
@@ -290,9 +358,11 @@ These ideas need separate scope decisions. No provider connection, implementatio
 or deployment is authorized or completed by listing them here.
 
 See the [coordinator workflow](coordinator-workflow.md),
-[volunteer workflow](volunteer-workflow.md) and
-[group leader workflow](group-leader-workflow.md) for how confirmed features could
-work together. Their additional interface and automation details remain proposals.
+[volunteer workflow](volunteer-workflow.md),
+[group leader workflow](group-leader-workflow.md) and
+[nonprofit admin workflow](nonprofit-admin-workflow.md) for how confirmed features
+could work together. Their additional interface and automation details remain
+proposals.
 
 ## Excluded services
 
