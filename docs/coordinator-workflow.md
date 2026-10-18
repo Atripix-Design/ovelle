@@ -1,6 +1,6 @@
 # Proposed coordinator workflow
 
-October 17, 2026. This walkthrough combines the [confirmed feature list](feature-list.md)
+October 17, 2026; expanded October 18, 2026. This walkthrough combines the [confirmed feature list](feature-list.md)
 with proposed interaction details informed by [organization examples](research/volunteer-operations.md).
 It describes intended product behavior, not an implemented application. Interface
 names, automation policies and reporting details remain open for design review.
@@ -40,8 +40,10 @@ requirements. The coordinator can distinguish six reserved places from, for
 example, four named participants, three completed registrations and two confirmed
 assignments. These counts overlap; they must not be summed as separate places.
 
-The coordinator reviews outstanding submissions and follows up with people who
-need help. A group leader sees the participation information needed for their
+The coordinator reviews outstanding submissions and records routine help as a
+support follow-up with an owner, next action and due date. Offer optional
+accommodation requests and agree practical arrangements with the volunteer; keep
+sensitive narratives separate from general readiness and support notes. A group leader sees the participation information needed for their
 group without access to private evidence or unrelated volunteers.
 
 ## 4. Confirm assignments
@@ -81,13 +83,25 @@ occurrences, then update the relevant assignments and calendar events.
 
 ## 7. Run the activity
 
-Proposed day-of view: assigned people, roles, readiness and attendance. Staff-assisted
-or QR check-in methods are not yet selected. Record attendance and actual service
-time, including late arrivals, early departures and no-shows. Define how approved
-walk-ins consume capacity and satisfy role requirements before supporting them.
+Follow the [expanded day-of workflow](day-of-workflow.md): prepare a phone-friendly
+roster and printable fallback, identify the on-site lead and check arrivals against
+assignments and readiness. Staff-assisted entry is the proposed baseline; QR entry
+and offline application operation remain unselected.
 
-Decide offline access and later synchronization explicitly before implementation;
-this walkthrough does not establish that capability.
+Check walk-ins and replacements against requirements and remaining capacity,
+including group reservations. Record actual arrival/departure, applicable breaks
+and role transfers without duplicate attendance or service time. Missing checkout
+needs clarification; a planned end time is not evidence of departure.
+
+Show only authorized practical accommodation instructions to relevant staff.
+Route routine help to support follow-ups and safety concerns to designated incident
+handlers, including an alternate recipient when the usual coordinator is involved.
+Keep confidential narratives off the general roster and out of ordinary emails.
+
+During a connectivity interruption, use the proposed controlled paper fallback
+and reconcile it after connection returns. Do not assume disconnected staff can
+independently confirm the same last place. Closeout retains owners for unresolved
+attendance, support and incident work; closing an event does not close every case.
 
 ## 8. Reconcile attendance and hours
 
@@ -101,9 +115,18 @@ new approval and how reports or previously issued statements reflect amendments.
 
 ## 9. Close out and prepare the next shift
 
-Proposed reporting shows filled/vacant roles, attendance, no-shows, approved hours
-and program-specific outcomes with separate units. Identify follow-up needs and
-prepare the next occurrence without duplicating completed onboarding.
+Proposed reporting shows filled/vacant roles, attendance, no-shows and approved
+hours. Use the [impact-data workflow](impact-data-workflow.md) to collect separate
+program results: define the measure and unit, assign a collector/reviewer, enter
+the result and evidence, resolve overlapping submissions and accept a current
+version for reporting. An event's distribution total is counted once rather than
+once per volunteer. Missing data is not zero; activity outputs do not by themselves
+prove longer-term outcomes.
+
+Assign follow-up for volunteer questions, difficulties or missed shifts without
+automatic discipline. Review agreed accommodation arrangements and keep incident
+work with its authorized owner. Prepare the next occurrence without duplicating
+completed onboarding, attendance or the previous event's results.
 
 Donations and payments run alongside this workflow: associate transactions with
 the relevant campaign/program, reconcile provider status, and track refunds and
@@ -116,5 +139,9 @@ money, pledges, service hours and program outcomes distinct.
 - Group reservation deadlines, leader permissions and release behavior.
 - Recurrence boundaries, time-zone changes and calendar-response reconciliation.
 - Replacement selection, availability conflicts and offer expiry.
-- Day-of entry methods, offline behavior and correction approval rules.
-- Reporting definitions and scope of email communications beyond invitations.
+- Day-of permissions, no-show thresholds, break rules, fallback authority and
+  correction approval rules; whether offline app operation is actually needed.
+- Support response targets, incident escalation/alternate recipients and restricted
+  access, plus accommodation sharing, review and retention policies.
+- Program measure definitions, collectors/reviewers, evidence, collection coverage
+  and aggregation rules, plus scope of email communications beyond invitations.

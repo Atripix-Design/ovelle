@@ -2,20 +2,27 @@
 
 Ovelle is a nonprofit volunteer-management CRM. This document records confirmed
 feature scope, not implemented capabilities. All 35 previously confirmed feature
-areas are retained in eight modules. Detailed behavior below remains proposed;
+areas are retained, with three additions approved October 18, 2026: volunteer support
+and follow-up, incident handling, and accommodations. The list now contains 38
+confirmed feature areas in eight modules. Detailed behavior below remains proposed;
 providers, implementation order and rubric mapping still require planning.
 
-Organized on October 17, 2026. This is the complete confirmed list from this
-planning discussion, not an exhaustive inventory of every future Ovelle requirement.
+Organized on October 17, 2026; expanded October 18, 2026. This is the complete
+confirmed list from this planning discussion, not an exhaustive inventory of every future Ovelle requirement.
 
 Figma: [Features — module overview and detailed scope](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=350-4389).
+
+The linked Figma overview predates the October 18 expansion; this document records
+the updated scope. Figma has not been synchronized by this documentation update.
+Day-of workflow and impact-data collection details are planning proposals, not
+implemented capabilities or approval of offline synchronization or beneficiary records.
 
 ## Module map
 
 | Module | Confirmed feature areas | Responsibility |
 | --- | --- | --- |
-| [01 Organization and access](#01-organization-and-access) | 4 | Establish the organization, staff responsibilities and operating rules. |
-| [02 Volunteer records and readiness](#02-volunteer-records-and-readiness) | 6 | Maintain volunteer relationships and prepare people for eligible roles. |
+| [01 Organization and access](#01-organization-and-access) | 5 | Establish the organization, staff responsibilities, operating rules and restricted incident handling. |
+| [02 Volunteer records and readiness](#02-volunteer-records-and-readiness) | 8 | Maintain volunteer relationships, support participation and prepare people for eligible roles. |
 | [03 Opportunities and scheduling](#03-opportunities-and-scheduling) | 4 | Publish activities, schedule repeated service and fill available places. |
 | [04 Group coordination](#04-group-coordination) | 4 | Reserve group places and let leaders coordinate participants within scoped access. |
 | [05 Attendance and service hours](#05-attendance-and-service-hours) | 6 | Record participation, review submitted time and preserve approved service. |
@@ -31,19 +38,22 @@ work together, rather than establishing a second feature or separate record.
 | Shared concern | Canonical responsibility and boundary |
 | --- | --- |
 | Organization and access | Staff permissions own invitations and staff access. Group leader permissions reuse the same access principles within authorized groups and bookings. |
+| Support, incidents and accommodations | Support owns routine help and follow-up; accommodations own participation adjustments; incidents own restricted concerns and escalation. Refer between them through authorized links without copying confidential narratives into ordinary notes or rosters. |
 | Volunteer records and readiness | Records own profiles; forms collect versioned responses; onboarding guides next steps; requirements define eligibility; readiness evaluates evidence for the service date. Availability informs assignments without creating commitments. |
 | Opportunities and scheduling | Publishing owns activity visibility. Scheduling checks eligibility, overlapping commitments and capacity for every occurrence; waitlist and replacement offers use these same checks before assignment. |
 | Group coordination | Bookings own reserved capacity. Signup links register people inside that reservation. Changes amend bookings through approval rules. Leader permissions govern which actions and readiness summaries leaders can access. |
 | Attendance and service hours | Attendance records actual participation; corrections amend that evidence. Volunteers submit hours or request changes; authorized reviewers approve totals. Service history displays the resulting records without counting them again. |
 | Communications and recognition | Email owns operational delivery and communication preferences. Calendar invitations reflect assignments and updates. Recognition uses email and approved service records; an RSVP never confirms attendance or approved hours. |
 | Donations and donor service | Payments own verified transactions. Donor self-service provides authorized account access; recurring controls manage future gifts; history displays financial events. Keep paid, pledged, refunded and recurring states distinct. |
+| Impact collection and reporting | Proposed collection records program results with definitions, evidence and review; reporting reads accepted results without multiplying them across volunteers or shifts. Aggregate activity outputs do not establish unique beneficiaries or longer-term outcomes. |
 | Documents and data operations | Documents own signed versions and signing evidence. Imports validate incoming records; reporting reads authorized records; backup and recovery restore protected data. Reports and exported files are not recovery backups. |
 | Policies and access | Operating policies set scoped rules; the relevant feature applies them. Staff and leader permissions control access, including private documents and finance; forms and signup links never grant authority. |
 | Cross-module changes | A changed booking or assignment updates dependent readiness and notifications. It does not silently rewrite signed evidence, past attendance, review authorship or approved service totals. |
 
 ## 01 Organization and access
 
-Establish the organization, staff responsibilities and operating rules.
+Establish the organization, staff responsibilities, operating rules and restricted
+incident handling.
 
 ### Organization setup
 
@@ -113,9 +123,38 @@ Proposed behavior:
 - Define ownership succession, final-admin protections and handling of unaccepted
   replacement invitations during detailed planning.
 
+### Incident handling
+
+Record and route safety concerns, inappropriate behavior and other incidents to
+explicitly authorized staff. Confirmed October 18, 2026.
+
+Proposed behavior:
+
+- Let volunteers and staff report a concern, optionally linked to an activity,
+  occurrence or participant; allow concerns unrelated to a scheduled shift.
+- Explain that the reporting form is not monitored emergency dispatch. Show the
+  organization's immediate on-site contact and emergency instructions separately.
+- Record the reported facts, occurrence time, reporting time and restricted evidence;
+  distinguish allegations, staff assessment and recorded decisions.
+- Assign an authorized owner, urgency and next action; propose received, triaged,
+  in progress, resolved and closed states, with explained reopening and an audit trail.
+- Define an alternate recipient when the concern involves the usual coordinator
+  or owner. Avoid notifying the subject or sharing reporter identity automatically.
+- Restrict narratives, attachments and identities independently of general staff,
+  group-leader and reporting access. Send neutral email notices linking to authorized
+  records rather than placing sensitive detail in notifications.
+- Record immediate protective actions and follow-up. Assignment restrictions need
+  explicit authorized decisions and effective scope; a report alone does not
+  automatically establish misconduct or suspend every assignment.
+- Define escalation deadlines, reporter status visibility, evidence access, retention,
+  review/appeal responsibilities and any required external reporting with the
+  organization before implementation. Anonymous reporting and external case-system
+  integrations are separate decisions; do not promise absolute confidentiality.
+
 ## 02 Volunteer records and readiness
 
-Maintain volunteer relationships and prepare people for eligible roles.
+Maintain volunteer relationships, support participation and prepare people for
+eligible roles.
 
 ### Volunteer record management
 
@@ -154,8 +193,9 @@ Proposed behavior:
 - Forms collect information; role requirements define eligibility rules, and
   readiness tracking evaluates completion/review against those rules.
 - Define supported field types, conditional questions, templates and response-editing
-  policies before implementation. Adding forms does not confirm surveys, program
-  outcome collection or a general-purpose workflow builder.
+  policies before implementation. Adding forms does not confirm surveys or a
+  general-purpose workflow builder. Proposed program-impact collection is described
+  under reporting; it does not reuse private application answers as outcomes.
 
 ### Volunteer onboarding
 
@@ -217,6 +257,59 @@ Proposed behavior:
   than maintaining conflicting opt-out values in separate features.
 - Define matching/filtering rules and edit permissions before implementation; AI
   scheduling and access to personal calendars are not included by this scope.
+
+### Volunteer support and follow-up
+
+Help staff respond to volunteer questions, difficulties and changes in engagement.
+Confirmed October 18, 2026.
+
+Proposed behavior:
+
+- Let volunteers request help and authorized staff record a phone or in-person
+  request on their behalf, preserving who entered it and how it was received.
+- Link routine support to the volunteer and, where relevant, a program or shift;
+  record a concise concern, responsible staff member, next action and due date.
+- Propose open, in progress, awaiting volunteer, resolved and closed states, with
+  a resolution summary, follow-up history and explained reopening.
+- Surface overdue or unassigned work to authorized staff; include open follow-ups
+  in staff handoffs without retaining a departing staff member's access.
+- Allow an explained follow-up after a missed shift, a planned break or a volunteer's
+  request. A no-show is a prompt to understand circumstances, not an automatic
+  disciplinary decision or a reason to cancel future commitments.
+- Let volunteers see and respond to their own request's appropriate updates; define
+  which internal notes are visible. Reuse operational email rather than introducing
+  a shared inbox, live chat or SMS.
+- Route accommodation requests and sensitive incidents to their own restricted
+  workflows without exposing their contents in ordinary support notes.
+- Define categories, response targets, notification preferences and closure rules
+  before implementation. Automated disengagement scoring and blanket re-engagement
+  campaigns are not included.
+
+### Accommodations
+
+Let volunteers request practical adjustments that enable participation.
+Confirmed October 18, 2026.
+
+Proposed behavior:
+
+- Offer an optional request during onboarding, booking preparation or later service;
+  allow authorized staff-assisted entry for people who cannot use the form.
+- Ask what adjustment is needed, such as step-free access, a seated task, language
+  assistance or transport coordination. Do not require a diagnosis or assume the
+  organization provides every requested service.
+- Record the applicable program, role or dates, an authorized reviewer and the
+  volunteer's sharing preferences. Separate requested, under review, agreed,
+  alternative offered, declined with explanation and ended states.
+- Agree the practical arrangement, responsible person and review date with the
+  volunteer. Notify them when arrangements change or cannot be provided.
+- Show day-of staff only the authorized practical instruction needed to deliver
+  the arrangement; restrict request narratives and supporting documents separately.
+  Group leaders receive no automatic access, including for group participants.
+- Keep accommodation information separate from general eligibility rules and public
+  profiles; a request alone does not mark a volunteer unready. Review role suitability
+  and alternatives with authorized staff without silently waiving required safeguards.
+- Define access, retention, renewal, sharing and handling of youth/guardian requests
+  before implementation. A form preference is not a substitute for an agreed arrangement.
 
 ## 03 Opportunities and scheduling
 
@@ -365,7 +458,17 @@ Proposed behavior:
 - Support staff-assisted check-in/out, late arrivals, early departures and no-shows.
 - Handle walk-ins through capacity and eligibility checks before assigning places;
   record who authorized participation without bypassing required prerequisites.
+- Provide a phone-friendly day-of view with occurrence time zone, on-site lead,
+  arrival instructions, role vacancies and restricted practical accommodation notes.
+- Keep not-yet-arrived, checked-in, checked-out, no-show and canceled states distinct;
+  missing checkout is unresolved evidence, not an automatic full-shift duration.
+- Record breaks and role transfers without duplicating attendance or exceeding role
+  capacity; review readiness for the new role before confirming a transfer.
+- Show unresolved issues and responsibility at closeout; route support and incidents
+  to their own records rather than placing confidential details on the roster.
 - Keep check-in evidence and actual time separate from approved service hours.
+- Follow the [proposed day-of workflow](day-of-workflow.md) for preparation, arrivals,
+  assisted entry, changes, connectivity interruptions and reconciliation.
 - Define specific check-in interfaces, QR support and disconnected operation before
   implementation; QR and automatic time tracking are not selected by this scope.
 
@@ -628,8 +731,12 @@ Proposed behavior:
 - Provide usable exports and show the filters, reporting period and generation time.
 - Reflect attendance/hour corrections consistently and restrict private information
   in exports. Define report customization and metrics before implementation.
-- Surveys, new outcome-collection forms and service verification statements remain
-  separate proposals.
+- Develop program-impact collection using the [proposed impact-data workflow](impact-data-workflow.md):
+  define measures, capture activity results, review evidence and aggregate accepted
+  records with explicit units, coverage and correction history.
+- Treat this collection design as proposed detail supporting reporting, not a fourth
+  newly confirmed feature area. Dedicated surveys, beneficiary case management and
+  service verification statements remain separate scope decisions.
 
 ### Backup and recovery
 
@@ -659,7 +766,7 @@ Proposed behavior:
 | Equipment and room scheduling | Reserve equipment, supplies and spaces alongside shifts; record checkout and return. |
 | Shared inbox | Assign volunteer inquiries to coordinators and attach conversations to relevant records. |
 | Accounting connection | Export or synchronize appropriately mapped payments, refunds and fees with the nonprofit's accounting system. |
-| Surveys and outcome collection | Collect post-event feedback and additional program-specific outcomes. Reporting and configurable onboarding/application forms are confirmed above; survey workflows and outcome collection remain proposals. |
+| Surveys and outcome collection | Program-impact collection now has a detailed proposal linked from reporting. Dedicated surveys, longitudinal outcome studies and beneficiary case management remain separately proposed; configurable onboarding forms do not establish these capabilities. |
 | File-storage connections | Export authorized copies to the nonprofit's existing storage without treating editable copies as protected signed originals. |
 
 These ideas need separate scope decisions. No provider connection, implementation
@@ -670,7 +777,9 @@ See the [coordinator workflow](coordinator-workflow.md),
 [group leader workflow](group-leader-workflow.md),
 [nonprofit admin workflow](nonprofit-admin-workflow.md) and
 [donor workflow](donor-workflow.md) for how confirmed features could work together.
-Their additional interface and automation details remain proposals.
+Their additional interface and automation details remain proposals. See also the
+[day-of workflow](day-of-workflow.md) and [impact-data workflow](impact-data-workflow.md)
+for the October 18 planning expansion.
 
 ## Excluded services
 

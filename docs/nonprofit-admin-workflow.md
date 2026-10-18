@@ -1,6 +1,6 @@
 # Proposed nonprofit admin workflow
 
-October 17, 2026. This walkthrough complements the [feature list](feature-list.md),
+October 17, 2026; expanded October 18, 2026. This walkthrough complements the [feature list](feature-list.md),
 [coordinator workflow](coordinator-workflow.md),
 [volunteer workflow](volunteer-workflow.md) and
 [group leader workflow](group-leader-workflow.md).
@@ -48,6 +48,10 @@ explicit responsibilities, for example:
 | Hour approval | Review submissions and approve service hours. |
 | Group management | Confirm bookings and appoint authorized group leaders. |
 | Finance | Manage donations, refunds and permitted financial records. |
+| Volunteer support | Own routine follow-ups and hand off unresolved requests. |
+| Accommodations | Review requests and share minimum practical instructions with relevant staff. |
+| Incidents | Triage restricted concerns, escalate and record resolution within explicit access. |
+| Program results | Collect or accept program measures under separately defined permissions. |
 
 These are proposed permission groupings, not a finalized role model. Access to
 private documents, finance or service connections requires relevant authorization.
@@ -58,8 +62,12 @@ coordinators cannot broaden their own permissions.
 
 Decide how registrations become confirmed assignments, when unused group places
 are released, who approves booking changes and how replacement offers work.
-Establish review and correction rules for service hours. Coordinators operate
-within these policies; program/role overrides must be explicitly defined.
+Establish review and correction rules for service hours. Define support ownership
+and response targets, an incident escalation contact and alternate recipient, and
+accommodation review/sharing rules. Define day-of critical-role decisions and
+controlled fallback authority without assuming offline synchronization.
+Coordinators operate within these policies; program/role overrides must be
+explicitly defined.
 
 Record policy changes, who made them and their effective scope. Define effects
 on existing bookings without silently changing historical approvals or signed
@@ -86,15 +94,19 @@ a dedicated launch checklist remain proposals.
 ## 8. Oversee ongoing operations
 
 A proposed overview surfaces unfilled critical roles, onboarding awaiting review,
-unreviewed hours and activities without a responsible coordinator. Investigate
+unreviewed hours and activities without a responsible coordinator. Include overdue
+support and unassigned follow-ups within the viewer's access; surface restricted incident or
+accommodation work only to explicitly authorized staff. Investigate
 or reassign work within the admin's authority. This view should support oversight
 without requiring admins to approve every routine coordinator action.
 
 ## 9. Manage staff changes and handoffs
 
 Change responsibilities, arrange temporary coverage or revoke access when someone
-leaves. Transfer upcoming activities, pending reviews and group contacts to an
-eligible replacement; show work awaiting assignment if no replacement is ready.
+leaves. Transfer upcoming activities, pending reviews, support follow-ups and group
+contacts to an eligible replacement. Reassign incident/accommodation work only to
+someone with the required restricted permissions; show work awaiting assignment
+if no replacement is ready.
 Revocation must not depend on completing the handoff. Define session invalidation
 and coverage end dates before implementation.
 
@@ -107,8 +119,13 @@ and safeguards against leaving the organization without administrative access.
 Proposed reporting lets authorized staff review participation, approved service
 hours, program outcomes and financial activity with distinct definitions and units.
 Periodically review staff access, document requirements and service connections.
-Reporting and exports are confirmed; report definitions, interfaces and review
-scheduling remain to be designed.
+Reporting and exports are confirmed. The proposed
+[impact-data workflow](impact-data-workflow.md) defines program measures, assigns
+collectors/reviewers and separates accepted results from missing, estimated or
+superseded values. Confirm definition versions, evidence, reporting coverage and
+aggregation before relying on totals. Incident counts and sensitive support data
+must not enter ordinary reporting simply because they exist in the organization.
+Interfaces and review scheduling remain to be designed.
 
 ## Proposed admin home screen
 

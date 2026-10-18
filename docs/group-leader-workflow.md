@@ -1,6 +1,6 @@
 # Proposed group leader workflow
 
-October 17, 2026. This walkthrough complements the
+October 17, 2026; expanded October 18, 2026. This walkthrough complements the
 [coordinator workflow](coordinator-workflow.md),
 [volunteer workflow](volunteer-workflow.md) and [feature list](feature-list.md).
 Group signup links, readiness tracking, booking changes and group leader permissions
@@ -72,7 +72,11 @@ Cancellation rights, deadlines and approval policies remain to be designed.
 Access the permitted group roster and report missing participants or changes.
 Check-in assistance is a proposed capability requiring a separately defined
 permission; no check-in method has been selected. Leader status alone does not
-grant access to private evidence or coordinator authority.
+grant access to private evidence or coordinator authority. Follow the
+[day-of workflow](day-of-workflow.md) within the leader's actual permission scope;
+each participant still has their own attendance record. Direct accommodation
+requests to authorized staff and sensitive concerns to the restricted incident
+route. Do not copy these narratives into a shared group roster or support note.
 
 ## 8. Review participation afterward
 

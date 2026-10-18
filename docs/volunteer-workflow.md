@@ -1,6 +1,6 @@
 # Proposed volunteer workflow
 
-October 17, 2026. This walkthrough complements the
+October 17, 2026; expanded October 18, 2026. This walkthrough complements the
 [coordinator workflow](coordinator-workflow.md) and [feature list](feature-list.md).
 It describes intended behavior, not implemented functionality. Hour submissions,
 coordinator approval, correction requests and service history are confirmed feature
@@ -49,10 +49,12 @@ before the role is assigned, subject to eligibility and available capacity.
 
 ## 7. Attend and record actual participation
 
-Follow the chosen check-in/out process and get staff assistance if needed. Record
-actual participation, including late arrivals or early departures. Check-in methods
-and offline behavior remain undecided; neither QR check-in nor automatic time
-tracking is established by this workflow.
+Follow arrival instructions and get staff-assisted check-in/out without requiring
+a personal phone. Record actual participation, including late arrivals, early
+departures and applicable breaks. Report a missing checkout for clarification
+rather than assuming the scheduled duration will be approved. The
+[day-of workflow](day-of-workflow.md) proposes a controlled paper fallback;
+QR entry, automatic tracking and offline app synchronization remain undecided.
 
 ## 8. Review and submit hours
 
@@ -80,6 +82,28 @@ clearly distinguished. Keep pending submissions separate from the approved total
 Show review explanations and resolved or outstanding correction requests.
 Downloadable verification statements remain proposed, not confirmed scope.
 
+## 11. Get support or request an accommodation
+
+Request help or ask staff to record a phone/in-person request. See appropriate
+updates, the responsible contact and whether a response is needed. Routine support
+has its own follow-up and resolution; confidential staff notes need separately
+defined visibility. A missed shift can prompt a conversation without automatically
+canceling future commitments.
+
+Optionally explain an adjustment needed for participation, without being required
+to provide a diagnosis. Review the agreed arrangement, dates and responsible
+contact; a submitted request is not confirmation it can be provided. Decide what
+practical information relevant staff may see. A group leader does not automatically
+receive the request or its supporting evidence.
+
+## 12. Report a concern
+
+Use a separate restricted incident route for unsafe situations or inappropriate
+behavior. Show immediate on-site/emergency instructions separately; an online
+report is not emergency dispatch. Define an alternate recipient if the concern
+involves the usual coordinator. Explain status visibility and limits of
+confidentiality without exposing other people's evidence or investigation notes.
+
 ## Proposed volunteer home screen
 
 | Area | Information |
@@ -88,6 +112,7 @@ Downloadable verification statements remain proposed, not confirmed scope.
 | Action needed | Incomplete onboarding, clarification requests and replacement offers. |
 | Upcoming commitments | Confirmed assignments and pending requests with distinct statuses. |
 | My hours | Approved total, pending submissions and service history. |
+| Support and arrangements | Own support requests, agreed accommodations and appropriate updates; a separate concern-reporting route. |
 
 Always distinguish signup, confirmed assignment, attendance and approved hours.
 Each stage should make the volunteer's next step clear.
