@@ -207,8 +207,10 @@ reasoning are different capabilities. Do not silently promise all of them.
 - Keep SMS excluded. Embeds, QR check-in, equipment scheduling, shared inboxes,
   accounting/file-storage connections, dedicated surveys and beneficiary case
   management still require their existing separate scope decisions.
-- The Figma feature map remains a scope reference. This proposed build sequence
-  is recorded here; it has not yet been added to the Figma overview.
+- The [Figma build-order section](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=360-4389)
+  was manually synchronized October 19, 2026 with all four stages, 38 feature
+  assignments and links to full feature scope. The sequence remains proposed;
+  source documents and Figma are maintained separately.
 
 ## Basis for this recommendation
 
