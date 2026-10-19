@@ -26,6 +26,11 @@ not sprints or promises that every feature costs the same effort.
 
 ## Stage 0 — Foundation
 
+Start with the [proposed identity/access design](superpowers/specs/2026-10-19-stage-0-identity-access-design.md)
+and [implementation plan](superpowers/plans/2026-10-19-stage-0-identity-access.md)
+for accounts, organization setup and permissions. These are review drafts; the
+remaining Stage 0 features below still require their own implementation work.
+
 Build these before using real volunteer records. Authentication, session recovery,
 organization isolation, authorization and audit behavior are dependencies across
 these areas, not additional counted feature areas.
