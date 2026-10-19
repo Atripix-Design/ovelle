@@ -5,7 +5,9 @@ feature scope, not implemented capabilities. All 35 previously confirmed feature
 areas are retained, with three additions approved October 18, 2026: volunteer support
 and follow-up, incident handling, and accommodations. The list now contains 38
 confirmed feature areas in eight modules. Detailed behavior below remains proposed;
-providers, implementation order and rubric mapping still require planning.
+providers and rubric mapping still require planning. See the
+[proposed build priorities](build-priorities.md) for dependency-based implementation
+order and the first useful slice of every confirmed feature area.
 
 Organized on October 17, 2026; expanded October 18, 2026. This is the complete
 confirmed list from this planning discussion, not an exhaustive inventory of every future Ovelle requirement.
