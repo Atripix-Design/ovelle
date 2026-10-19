@@ -12,8 +12,11 @@ confirmed list from this planning discussion, not an exhaustive inventory of eve
 
 Figma: [Features — module overview and detailed scope](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=350-4389).
 
-The linked Figma overview predates the October 18 expansion; this document records
-the updated scope. Figma has not been synchronized by this documentation update.
+The Figma overview and all eight module detail boards were manually synchronized
+on October 19, 2026 to the 38 confirmed feature areas. The overview also links to
+the full proposed [day-of workflow](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=358-4407)
+and [impact-data workflow](https://www.figma.com/design/6jsC9SLa0LYsZKjJXxlY1K?node-id=358-4448).
+Source documents and Figma remain separately maintained.
 Day-of workflow and impact-data collection details are planning proposals, not
 implemented capabilities or approval of offline synchronization or beneficiary records.
 
