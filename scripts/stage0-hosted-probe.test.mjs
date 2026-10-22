@@ -13,11 +13,14 @@ function exercise(rejectLimit = false) {
   writeFileSync(fixture, `
     import assert from 'node:assert/strict';
     const workers = new Set();
+    const healthChecks = new Map();
+    globalThis.setTimeout = (callback) => { queueMicrotask(callback); return 0; };
     const response = (status, result) => Response.json({success:status===200,result},{status});
     globalThis.fetch = async (input, options = {}) => {
       const url = new URL(input);
       if (url.hostname === 'api.cloudflare.com') {
         assert.equal(options.headers.Authorization, 'Bearer test-api-token');
+        if (url.pathname === '/client/v4/graphql') return Response.json({errors:[{message:'fixture: analytics not authorized'}]});
         if (url.pathname.endsWith('/workers/subdomain')) return response(200,{subdomain:'fixture'});
         const name = url.pathname.split('/workers/scripts/')[1]?.split('/')[0];
         assert.match(name, /^ovelle-kdf-123-(pbkdf2|argon2)-[a-f0-9]{12}$/);
@@ -39,7 +42,14 @@ function exercise(rejectLimit = false) {
       }
       assert.match(url.hostname,/^ovelle-kdf-123-(pbkdf2|argon2)-[a-f0-9]{12}\.fixture\.workers\.dev$/);
       if (!options.headers) return new Response(null,{status:404});
-      if (url.pathname === '/health') { assert.match(options.headers.Authorization,/^Bearer [a-f0-9]{64}$/); return Response.json({probe:'ovelle-stage0-v1'}); }
+      if (url.pathname === '/health') {
+        assert.match(options.headers.Authorization,/^Bearer [a-f0-9]{64}$/);
+        const count = (healthChecks.get(url.hostname) ?? 0) + 1;
+        healthChecks.set(url.hostname,count);
+        if (count === 1) return new Response(null,{status:404});
+        return Response.json({probe:'ovelle-stage0-v1'});
+      }
+      assert.equal(healthChecks.get(url.hostname),2,'Do not measure an unpropagated route');
       assert.equal(options.method,'POST');
       assert.match(options.headers.Authorization,/^Bearer [a-f0-9]{64}$/);
       assert.ok(!options.body);
@@ -69,4 +79,28 @@ test('unconfirmed free CPU limit aborts before KDF calls and still removes the W
   assert.notEqual(result.status, 0)
   assert.match(result.stderr,/Hosted CPU limit was not confirmed/)
   assert.equal(report.measurements.length, 0)
+})
+test('cleanup attempts later Workers when the first deletion persistently fails', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'ovelle-probe-cleanup-'))
+  const names = ['ovelle-kdf-123-pbkdf2-aaaaaaaaaaaa', 'ovelle-kdf-123-argon2-bbbbbbbbbbbb']
+  const fixture = join(dir, 'fetch-fixture.mjs')
+  writeFileSync(join(dir, '.stage0-probe-workers.json'), JSON.stringify(names))
+  writeFileSync(fixture, `
+    import {appendFileSync} from 'node:fs';
+    globalThis.fetch = async (input, options={}) => {
+      if (options.method === 'DELETE') {
+        appendFileSync('deletions.txt',new URL(input).pathname+'\\n');
+        return Response.json({success:!input.includes('pbkdf2')},{status:input.includes('pbkdf2')?500:200});
+      }
+      return Response.json({success:false},{status:404});
+    };
+  `)
+  try {
+    const result = spawnSync(process.execPath, ['--import', fixture, join(root, 'scripts/stage0-hosted-probe.mjs'), '--cleanup'], {
+      cwd: dir, encoding: 'utf8', env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: 'a'.repeat(32), CLOUDFLARE_API_TOKEN: 'test-api-token', GITHUB_RUN_ID: '123' },
+    })
+    assert.notEqual(result.status, 0)
+    assert.match(result.stderr,/Probe cleanup incomplete/)
+    assert.equal(readFileSync(join(dir,'deletions.txt'),'utf8').trim().split('\n').length,2)
+  } finally { rmSync(dir, { recursive: true, force: true }) }
 })

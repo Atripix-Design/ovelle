@@ -18,6 +18,31 @@ async function api(path, options = {}) {
   const body = await response.json()
   return { status: response.status, body }
 }
+async function cpuMetrics(name, start) {
+  // Optional read-only telemetry. A token without Analytics read permission does
+  // not justify broadening permissions or treating elapsed HTTP time as CPU time.
+  const query = `query($account: string!, $script: string!, $start: Time!, $end: Time!) {
+    viewer { accounts(filter: {accountTag: $account}) {
+      workersInvocationsAdaptive(limit: 1, filter: {scriptName: $script, datetime_geq: $start, datetime_leq: $end}) {
+        sum { requests errors } quantiles { cpuTimeP50 cpuTimeP99 }
+      }
+    }}
+  }`
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await new Promise(resolve => setTimeout(resolve, 15000))
+    try {
+      const response = await fetch('https://api.cloudflare.com/client/v4/graphql', {
+        method: 'POST', headers: { Authorization: `Bearer ${apiToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { account, script: name, start, end: new Date().toISOString() } }), signal: AbortSignal.timeout(10000),
+      })
+      const body = await response.json()
+      if (!response.ok || body.errors?.length) return { status: 'unavailable', httpStatus: response.status, errors: body.errors?.map(error => error.message) }
+      const rows = body.data?.viewer?.accounts?.[0]?.workersInvocationsAdaptive
+      if (rows?.length && rows[0].sum.requests > 0) return { status: 'available', raw: rows, includesAuthenticatedHealthRequests: true }
+    } catch (error) { return { status: 'unavailable', error: error.name } }
+  }
+  return { status: 'not-yet-available' }
+}
 async function cleanup() {
   let names
   try { names = JSON.parse(await readFile(manifest, 'utf8')) } catch (error) { if (error.code === 'ENOENT') return; throw error }
@@ -83,6 +108,7 @@ if (process.argv.includes('--cleanup')) {
         await new Promise(resolve => setTimeout(resolve, 3000))
       }
       if (!ready) throw new Error('Probe route did not become ready')
+      const started = new Date(Date.now() - 60000).toISOString()
       const measurement = { candidate, cpuLimitConfirmedMs: settings.body.result.limits.cpu_ms, samples: [] }
       report.measurements.push(measurement)
       for (const operation of ['match', 'match', 'mismatch']) {
@@ -93,6 +119,7 @@ if (process.argv.includes('--cleanup')) {
           measurement.samples.push({ operation, httpStatus: response.status, elapsedMs: Math.round(performance.now() - start), body: body.slice(0, 1500) })
         } catch (error) { measurement.samples.push({ operation, error: error.name }) }
       }
+      measurement.cpuMetrics = await cpuMetrics(name, started)
     }
   } finally {
     try { await cleanup(); report.cleanupConfirmed = true } finally { await writeFile(reportPath, JSON.stringify(report, null, 2) + '\n') }

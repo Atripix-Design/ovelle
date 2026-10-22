@@ -99,7 +99,7 @@ not represented as password/passkey authentication by the current principal type
    calls, restricted access, explicit CPU limit and cleanup. Collect actual hosted
    success/failure and CPU metrics for the exact version, then record memory and
    CPU headroom against the chosen plan/limit. Hosted CPU/headroom are currently
-   **not measured** until the workflow record below is populated.
+   **not measured**; initial hosted responses are recorded below.
 3. Prefer testing native PBKDF2 next because the local candidate works and avoids
    the observed Argon2 audit gap. This is a test-order recommendation, not a frozen
    KDF decision. If hosted Web Crypto rejects 600,000 iterations or lacks headroom,
@@ -139,8 +139,11 @@ requests per candidate. The API must report the configured 10 ms CPU limit befor
 measurement begins. No billing/plan/provider configuration changes are made.
 Cleanup runs in `finally` and an independent always-run step, with deletion
 readback. The one-day artifact records source SHA, responses and external HTTP
-elapsed times, without tokens. Mock tests cover the successful procedure and
-abort/cleanup when the free-budget CPU setting cannot be confirmed.
+elapsed times, without tokens. Three mock tests cover delayed route propagation, successful procedure,
+abort/cleanup when the free-budget CPU setting cannot be confirmed and continued
+cleanup after a persistent first-resource failure. The runner also attempts
+read-only GraphQL CPU telemetry; missing Analytics permission or delayed metrics
+are recorded as unavailable, without changing token permissions.
 
 Dispatch after publishing this workflow to development:
 
@@ -154,3 +157,29 @@ status or guarantee zero marginal costs on an existing paid account. A few
 successful calls do not establish sustainable headroom; external HTTP elapsed
 time must never be reported as CPU time. Keep passwords gated without an approved
 implementation and actual CPU/headroom evidence.
+
+## Initial hosted result — October 22
+
+[Workflow 39863874464](https://github.com/Atripix-Design/ovelle/actions/runs/39863874464)
+succeeded at source `3258bc6e4c80a5ea8a9228bf17e301b5d2104ebd`.
+The [retained raw report](stage0-runtime-hosted.json) records all six KDF responses
+and confirmed cleanup. Both Workers had a read-back CPU setting of 10 ms.
+
+- Hosted Web Crypto **rejects** the 600,000-iteration PBKDF2 profile with
+  `NotSupportedError`: iteration counts above 100000 are not supported. All three
+  requests failed before derivation. HTTP 200 carries the probe's error object;
+  it does not mean hashing succeeded. Local workerd acceptance did not transfer.
+- Noble Argon2id returned two correct independent-vector matches and one correct
+  mismatch at the full 19 MiB/two-pass profile. HTTP elapsed times were 821, 1908
+  and 1020 ms, including network overhead. Those are **not CPU measurements**.
+  Cloudflare documents [CPU rollover behavior](https://developers.cloudflare.com/workers/observability/metrics-and-analytics/),
+  so a successful request with a configured 10 ms limit does not demonstrate
+  sustainable free-tier operation. The implementation's audit-scope gap also
+  remains. This is hosted correctness evidence, not password-storage approval.
+- Both temporary Workers were deleted and checked absent; the always-run cleanup
+  step also succeeded. No application/provider/database or billing changes.
+
+**Decision:** reject hosted Web Crypto PBKDF2 for this profile; do not downgrade
+iterations. Keep the password gate closed pending an acceptable implementation
+and CPU headroom. Continue the selected direct OIDC design without a broker fee;
+no claim is made that all future hosting or identity-provider services are free.
