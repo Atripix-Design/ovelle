@@ -14,12 +14,12 @@
 
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests/evidence are implemented and verified; hosted CPU evidence,
-final password ownership/KDF and provider/recovery choices remain open. See
+the final password KDF and recovery choices remain open. See
 [runtime evidence](../../architecture/stage0-runtime-evidence.md) and the new
 [SSO exploration](../../architecture/stage0-federated-login.md).
-Google + Microsoft social login is confirmed; Entra ID is the likely enterprise
-target. Federation planning expands the original provider exclusion below, but no
-broker/provisioning is approved. Review the identity/session schema before Task 2.
+Direct OIDC for Google, Microsoft and tenant-specific Entra ID is approved, without
+a broker or paid authentication service. The isolated synthetic hosted probe is
+authorized; no plan upgrade or provider provisioning is approved. Review the identity/session schema before Task 2.
 The harness uses `vitest.stage0.config.mts` for ESM interoperability.
 
 ## Global Constraints
@@ -32,7 +32,7 @@ The harness uses `vitest.stage0.config.mts` for ESM interoperability.
 - Keep direct Wrangler ownership. Apply remote D1 migrations manually with an environment/account check and a captured Time Travel bookmark; delivery does not run migrations.
 - The complete source component/Figma/variant/skeleton/accessibility workflow in `AGENTS.md` applies to new or changed UI. Reuse existing public `Ovelle /` components and their React implementations.
 - No account cookie or desktop capability list is role authority. Every protected command resolves and rechecks current D1 authorization.
-- No third-party identity provider, SMS, donor workflow, guardian-consent implementation, assistant action or full offline CRM is introduced in this increment.
+- Direct OIDC for Google, Microsoft and Entra ID is approved; provider provisioning and live enablement remain separate gates. No broker, SMS, donor workflow, guardian-consent implementation, assistant action or full offline CRM is introduced in this increment.
 - Scope-based table/field access and destructive/private-domain permissions deny until explicitly implemented.
 
 ## Review Focus

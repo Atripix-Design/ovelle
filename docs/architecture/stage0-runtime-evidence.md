@@ -1,6 +1,6 @@
 # Stage 0 authentication runtime evidence
 
-October 22, 2026. Task 1 implementation and local research only. Live authentication
+October 22, 2026. Task 1 local implementation and hosted research harness. Live authentication
 remains disabled; no providers, application routes or remote migrations were added.
 The password KDF is **pending**, not approved for credential storage. Enterprise
 federation may change which password functionality Ovelle needs to own; see the
@@ -91,15 +91,15 @@ not represented as password/passkey authentication by the current principal type
 
 ## Gates before password account implementation
 
-1. Decide whether Ovelle owns password authentication or delegates it to a broker.
-   The user confirmed Google + Microsoft and identified Entra ID as the likely
-   first enterprise provider; no broker or federation implementation was selected.
-2. If Ovelle owns passwords, authorize a separate development-only hosted probe:
+1. Confirmed: direct OIDC for Google, Microsoft and tenant-specific Entra ID,
+   without a broker or new paid authentication service. Local passwords remain
+   optional and gated on runtime evidence.
+2. Authorized: a separate development-only hosted probe:
    fixed synthetic inputs, no app routes, no database, no user credentials, bounded
    calls, restricted access, explicit CPU limit and cleanup. Collect actual hosted
    success/failure and CPU metrics for the exact version, then record memory and
    CPU headroom against the chosen plan/limit. Hosted CPU/headroom are currently
-   **not measured**. No remote probe was deployed by this task.
+   **not measured** until the workflow record below is populated.
 3. Prefer testing native PBKDF2 next because the local candidate works and avoids
    the observed Argon2 audit gap. This is a test-order recommendation, not a frozen
    KDF decision. If hosted Web Crypto rejects 600,000 iterations or lacks headroom,
@@ -109,8 +109,8 @@ not represented as password/passkey authentication by the current principal type
    select an evidenced audited implementation and a bounded versioned hash format,
    and update the spec before Task 3. Local passing tests do not clear these gates.
 
-Task 1's local implementation is available; its hosted evidence and final identity
-architecture decisions remain open. Tasks 2–11 are not implemented by this change.
+Task 1's local implementation is available; its hosted evidence and final KDF
+decision remain open. Tasks 2–11 are not implemented by this change.
 
 ## Local validation record
 
@@ -127,3 +127,30 @@ architecture decisions remain open. Tasks 2–11 are not implemented by this cha
 - A separate read-only review found no important defects and independently reran
   the Stage 0 suite/typecheck. This is local evidence, not final-SHA hosted CI or
   development deployment evidence.
+
+## Hosted probe procedure
+
+The manual `Stage 0 hosted password runtime probe` workflow uses the existing
+repository deployment token on a hosted GitHub runner, restricted to development.
+It uploads randomly named run-owned temporary Workers, with no application/data
+bindings, a random bearer secret, ten-minute expiry and only fixed synthetic
+inputs. An authenticated health response confirms routing before the three KDF
+requests per candidate. The API must report the configured 10 ms CPU limit before
+measurement begins. No billing/plan/provider configuration changes are made.
+Cleanup runs in `finally` and an independent always-run step, with deletion
+readback. The one-day artifact records source SHA, responses and external HTTP
+elapsed times, without tokens. Mock tests cover the successful procedure and
+abort/cleanup when the free-budget CPU setting cannot be confirmed.
+
+Dispatch after publishing this workflow to development:
+
+```sh
+gh workflow run stage0-runtime-probe.yml --ref development
+```
+
+Cloudflare's [free Workers CPU allowance](https://developers.cloudflare.com/workers/platform/limits/)
+is 10 ms per invocation. Setting that budget does not verify account billing
+status or guarantee zero marginal costs on an existing paid account. A few
+successful calls do not establish sustainable headroom; external HTTP elapsed
+time must never be reported as CPU time. Keep passwords gated without an approved
+implementation and actual CPU/headroom evidence.

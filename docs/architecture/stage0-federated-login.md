@@ -1,9 +1,9 @@
 # Stage 0 social login and enterprise SSO exploration
 
-October 22, 2026. **Confirmed direction:** explore enterprise SSO; Google and
-Microsoft are the first two social connectors; Microsoft Entra ID is the likely
-first enterprise identity provider. The user asked for a universal approach.
-Everything below is a proposal, not provider configuration or a working login.
+October 22, 2026. **Confirmed direction:** direct OIDC without a broker for Google,
+Microsoft and Microsoft Entra ID, with no new paid authentication service. The
+contracts below guide implementation; they are not configured providers or working
+login routes.
 
 ## Universal boundary
 
@@ -20,40 +20,29 @@ not cover all enterprise installations. A broker can normalize both protocols
 into one Ovelle integration. Even a broker requires each customer's connection
 onboarding, policy review, certificate/key lifecycle and verified tenant binding.
 
-## Implementation options
+## Chosen implementation
 
-| Approach | What Ovelle owns | Benefit | Cost / limitation |
-| --- | --- | --- | --- |
-| Direct generic OIDC first | Credential/session lifecycle plus OIDC callback validation, linking, discovery/JWKS and per-organization connections | No required SSO broker; Entra and the two social connectors share a protocol implementation | We maintain protocol integration and operational edge cases; SAML still requires another integration |
-| Broker for federation only | Ovelle accounts/passwords/passkeys/sessions; broker adapter for social and enterprise assertions | Universal SAML/OIDC boundary without moving all account authentication | Additional service and per-connection costs; password runtime work remains necessary |
-| Broker for all authentication | Ovelle application accounts/memberships/grants; broker identity/session mapping | Passwords, social login, passkeys and enterprise federation can share a provider | Replaces significant parts of the current Stage 0 draft; pricing, recovery, session revocation, export and vendor dependency need review |
+**Confirmed October 22:** direct OIDC for Google, Microsoft personal accounts and
+organization-specific Microsoft Entra ID. No authentication broker, paid SSO
+connection subscription or plan upgrade. Use free protocol libraries and the
+existing Cloudflare infrastructure. This avoids broker fees; existing hosting,
+email, maintenance and a customer's optional identity-provider licensing still
+have their own costs. No provider application has been registered by this work.
 
-[WorkOS SSO](https://workos.com/docs/sso) supports SAML/OIDC connections and Google
-and Microsoft OAuth; [AuthKit](https://workos.com/docs) adds user-management
-features. Its [published pricing](https://workos.com/pricing), checked October 22,
-quotes $125/month per enterprise SSO connection at 1–15 connections, with directory
-sync priced separately and free staging. Do not mistake free social/user-management
-allowances for free production enterprise SSO. For example, one production
-connection is $125/month and ten are $1,250/month at that tier, before optional
-extras, taxes or negotiated terms. A connection is a customer's SSO relationship,
-not an individual login.
+Google uses its published discovery metadata. Microsoft personal login uses the
+`consumers` authority; enterprise connections use a reviewed tenant UUID and its
+exact tenant issuer. Keep these connection types distinct. An enterprise account
+must use its organization's configured connection, rather than treating a generic
+Microsoft login as proof of organizational admission. Supporting additional OIDC
+providers later requires reviewed configuration and interoperability tests.
+SAML and SCIM are deferred; do not advertise support for them.
 
-[Auth0 enterprise OIDC](https://support.auth0.com/center/s/article/Connect-to-Azure-AD-using-an-OIDC-Enterprise-connection)
-is another broker option. Its [pricing](https://auth0.com/pricing) includes plan,
-organization and enterprise-connection limits; verify the selected B2B tier and
-expected organizations before selecting it. No subscription or vendor is approved.
-
-**Recommendation for review:** adopt the provider-independent account/connection
-model now. If universal SAML support is needed in the first release, evaluate a
-broker before implementing our password lifecycle. If Entra OIDC plus Google and
-Microsoft meet the pilot requirements and broker fees are unsuitable, start with
-generic direct OIDC and leave SAML behind a separate adapter. Do not implement a
-handwritten SAML parser/signature verifier in the application Worker.
-
-For direct OIDC, [openid-client v6](https://github.com/panva/openid-client) documents
-Workers support and provides discovery and authorization-code handling. It is a
-candidate dependency, not installed or verified here. The broker adapter likewise
-requires runtime tests; a vendor feature page is not Workers integration evidence.
+Use a maintained OIDC implementation rather than handwritten token verification.
+[openid-client v6](https://github.com/panva/openid-client) documents Workers support;
+it remains a candidate until pinned and exercised in the Workers harness. Ovelle
+owns sessions, linking, recovery, current organization authorization and connection
+lifecycle. Provider secrets and tokens remain server-side. Provider onboarding and
+real callback validation are separate from the current runtime experiment.
 
 ## Proposed data and security contract
 
@@ -113,16 +102,17 @@ requires runtime tests; a vendor feature page is not Workers integration evidenc
   through the existing proposed loopback handoff. Provider tokens stay server-side;
   renderer code receives no provider secret, password or refresh token.
 
-## Decisions before the account schema is implemented
+## Remaining decisions before enforcement
 
-1. Direct federation, federation-only broker, or full managed authentication?
-2. Is SAML required for the first pilot, or is Entra OIDC sufficient?
-3. Expected enterprise connection count/budget and broker exit/export requirements?
-4. Who may configure/verify an enterprise connection, and when may SSO be enforced?
-5. How do step-up, identity linking, staff invitations, employee departure and
-   lost-access recovery work for each login method?
+Connection administrators, verification and enforcement must have explicit
+permissions and audit rules. Define invitation, identity linking, employee
+departure, step-up and lost-access recovery behavior before enabling login. The
+schema must support optional local credentials and external identities, rather
+than requiring every account to have a password. Password support remains gated
+on the [hosted runtime evidence](stage0-runtime-evidence.md); do not weaken a KDF
+to fit free hosting.
 
-Revise the Task 2 account/session schema and Tasks 3–4 authentication/recovery
-contracts after these decisions. The original design's exclusion of a third-party
-identity provider predates this request; it does not prohibit this exploration or
-authorize silently choosing and provisioning one.
+Revise the Task 2 account/session schema and Tasks 3–4 recovery contracts to match
+this direction before implementation. The original design's identity-provider
+exclusion is superseded for these three OIDC integrations. No provider settings,
+remote migrations or live authentication have been enabled by this decision.

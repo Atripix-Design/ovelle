@@ -11,12 +11,13 @@ Task 1 local runtime/configuration code and tests are implemented. See [runtime 
 for exact versions, measurements and remaining hosted/KDF gates. No production KDF
 has been frozen and live authentication remains disabled.
 
-The user added enterprise SSO exploration, confirmed Google + Microsoft social
-connectors and identified Microsoft Entra ID as the likely first enterprise target.
+The user approved direct OIDC for Google, Microsoft and tenant-specific Microsoft
+Entra ID, without a broker or new paid authentication service. A synthetic isolated
+hosted KDF probe is authorized, without a plan upgrade.
 See the [federated-login exploration](../../architecture/stage0-federated-login.md).
 The password-first recommendation and provider exclusion below are the original
-proposal, not a decision against federation. Decide direct/broker ownership and
-revise the identity/session schema before Task 2; do not implement the draft's
+proposal, superseded by this direct OIDC direction. Revise the identity/session
+schema before Task 2; do not implement the draft's
 password-only assumptions unchanged.
 
 ## Outcome and boundary

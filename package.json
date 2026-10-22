@@ -26,6 +26,7 @@
     "check:electron-downloads": "node scripts/check-electron-downloads.mjs",
     "check:privacy": "node scripts/check-repository-privacy.mjs",
     "check:ci": "node --test scripts/ci/ci.test.mjs",
+    "test:stage0-probe": "node --test scripts/stage0-hosted-probe.test.mjs",
     "test:stage0": "vitest run --config vitest.stage0.config.mts",
     "benchmark:stage0-password": "node --experimental-strip-types scripts/benchmark-stage0-password.ts",
     "check:stage0": "tsc -p tsconfig.stage0.json"
