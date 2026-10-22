@@ -1,6 +1,6 @@
 # Ovelle
 
-Ovelle is the 2026–2027 FBLA Coding & Programming project. The marketing website, shared component system and Electron delivery foundation are implemented. The competition brief and rubric-driven feature documents have not been added yet; substantive desktop application features are the next planning phase.
+Ovelle is the 2026–2027 FBLA Coding & Programming project. The marketing website, shared component system and Electron delivery foundation are implemented. The [confirmed CRM feature scope](docs/feature-list.md) and [proposed build order](docs/build-priorities.md) are documented; the competition brief/rubric mapping remains pending. Stage 0 has begun with an isolated authentication configuration/test harness and [local password-runtime evidence](docs/architecture/stage0-runtime-evidence.md). Live CRM authentication is not enabled. The [social-login and enterprise SSO exploration](docs/architecture/stage0-federated-login.md) records the Google/Microsoft direction and identity architecture decisions needed before the account schema.
 
 ## Applications and environments
 

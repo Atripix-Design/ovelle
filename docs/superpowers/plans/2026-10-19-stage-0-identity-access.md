@@ -10,6 +10,18 @@
 
 **Spec:** [Stage 0 identity/access design](../specs/2026-10-19-stage-0-identity-access-design.md).
 
+## October 22 execution status
+
+User authorized beginning implementation with authentication-runtime and KDF
+validation. Task 1 local code/tests/evidence are implemented and verified; hosted CPU evidence,
+final password ownership/KDF and provider/recovery choices remain open. See
+[runtime evidence](../../architecture/stage0-runtime-evidence.md) and the new
+[SSO exploration](../../architecture/stage0-federated-login.md).
+Google + Microsoft social login is confirmed; Entra ID is the likely enterprise
+target. Federation planning expands the original provider exclusion below, but no
+broker/provisioning is approved. Review the identity/session schema before Task 2.
+The harness uses `vitest.stage0.config.mts` for ESM interoperability.
+
 ## Global Constraints
 
 - This is a proposed plan dated October 19, 2026, based on local source `0146c02`. Review design choices before product implementation; this document is not approval to deploy or migrate.

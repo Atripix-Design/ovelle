@@ -13,7 +13,7 @@
     "dev:web": "npm run dev -w @ovelle/web",
     "dev:desktop": "npm run dev -w @ovelle/desktop",
     "build": "npm run build --workspaces",
-    "check": "npm run check --workspaces && npm run check:worker",
+    "check": "npm run check --workspaces && npm run check:worker && npm run check:stage0",
     "lint": "npm run lint --workspaces",
     "check:worker": "tsc -p tsconfig.worker.json",
     "cf:deploy:dev": "npm run build -w @ovelle/ui && npm run build:development -w @ovelle/web && node scripts/ci/deploy-worker.mjs development",
@@ -25,13 +25,21 @@
     "check:download-email": "node --experimental-strip-types scripts/check-download-email.mjs",
     "check:electron-downloads": "node scripts/check-electron-downloads.mjs",
     "check:privacy": "node scripts/check-repository-privacy.mjs",
-    "check:ci": "node --test scripts/ci/ci.test.mjs"
+    "check:ci": "node --test scripts/ci/ci.test.mjs",
+    "test:stage0": "vitest run --config vitest.stage0.config.mts",
+    "benchmark:stage0-password": "node --experimental-strip-types scripts/benchmark-stage0-password.ts",
+    "check:stage0": "tsc -p tsconfig.stage0.json"
   },
   "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.4.7",
     "@cloudflare/workers-types": "^5.20261006.1",
+    "@noble/hashes": "2.4.0",
+    "esbuild": "0.28.2",
     "js-yaml": "^4.3.2",
+    "miniflare": "5.20261019.2-beta",
     "playwright": "^1.64.0",
-    "wrangler": "^4.148.0"
+    "vitest": "4.1.12",
+    "wrangler": "4.152.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1147.0",
