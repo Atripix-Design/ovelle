@@ -99,7 +99,7 @@ not represented as password/passkey authentication by the current principal type
    calls, restricted access, explicit CPU limit and cleanup. Collect actual hosted
    success/failure and CPU metrics for the exact version, then record memory and
    CPU headroom against the chosen plan/limit. Hosted CPU/headroom are currently
-   **not measured**; initial hosted responses are recorded below.
+   recorded below; no candidate is approved for the free CPU budget.
 3. Prefer testing native PBKDF2 next because the local candidate works and avoids
    the observed Argon2 audit gap. This is a test-order recommendation, not a frozen
    KDF decision. If hosted Web Crypto rejects 600,000 iterations or lacks headroom,
@@ -109,8 +109,8 @@ not represented as password/passkey authentication by the current principal type
    select an evidenced audited implementation and a bounded versioned hash format,
    and update the spec before Task 3. Local passing tests do not clear these gates.
 
-Task 1's local implementation is available; its hosted evidence and final KDF
-decision remain open. Tasks 2–11 are not implemented by this change.
+Task 1's local implementation and hosted investigation are available. No tested
+KDF clears the free-runtime gate, so password implementation remains blocked. Tasks 2–11 are not implemented by this change.
 
 ## Local validation record
 
@@ -183,3 +183,33 @@ and confirmed cleanup. Both Workers had a read-back CPU setting of 10 ms.
 iterations. Keep the password gate closed pending an acceptable implementation
 and CPU headroom. Continue the selected direct OIDC design without a broker fee;
 no claim is made that all future hosting or identity-provider services are free.
+
+## Hosted CPU result and free-first decision
+
+[Telemetry run 39864098017](https://github.com/Atripix-Design/ovelle/actions/runs/39864098017)
+at source `d8bf684ff4081362797320c48232612dd681de8a` repeated both candidates,
+confirmed deletion and successfully read Cloudflare GraphQL CPU metrics. The
+[retained report](stage0-runtime-hosted-cpu.json) includes raw metrics and separately
+labelled unit confirmation. Live GraphQL schema introspection of
+`AccountWorkersInvocationsAdaptiveQuantiles` describes `cpuTimeP50` and
+`cpuTimeP99` in **microseconds**; divide by 1,000 for milliseconds.
+
+| Probe | Requests represented | CPU P50 | CPU P99 | Decision |
+| --- | ---: | ---: | ---: | --- |
+| PBKDF2 600k | 4 | 0.424 ms | 0.831 ms | Iteration-cap rejection only; no hash ran |
+| Argon2id 19 MiB / t2 / p1 | 4 | 350.472 ms | 1,257.565 ms | CPU exceeds free allowance; no free-runtime approval |
+
+These are small, potentially sampled aggregate observations across the three KDF
+attempts and authenticated health request, not per-operation benchmarks or a
+production latency promise. Even with that limitation, the observed Argon2 CPU
+cost is far above 10 ms. The runtime's rollover behavior explains why successful
+HTTP responses cannot be treated as evidence of fitting the allowance. No weaker
+parameters were tried; the audit-scope issue also remains unresolved.
+
+**Free-first ruling:** direct OIDC remains the selected login direction, without a
+broker subscription. Neither tested password profile is acceptable for the free
+Workers runtime. Keep local-password routes disabled and credentials optional in
+the account design. This does not prove every possible KDF/runtime combination is
+impossible; any future password candidate needs separate correctness, audit and
+CPU-headroom evidence. Do not claim that OIDC or passkey routes are implemented by
+this runtime investigation. No plan upgrade or new paid service was configured.

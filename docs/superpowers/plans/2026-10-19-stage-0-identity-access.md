@@ -13,8 +13,10 @@
 ## October 22 execution status
 
 User authorized beginning implementation with authentication-runtime and KDF
-validation. Task 1 local code/tests/evidence are implemented and verified; hosted CPU evidence,
-the final password KDF and recovery choices remain open. See
+validation. Task 1 local code/tests and hosted investigation are implemented.
+PBKDF2 600k is rejected by the hosted iteration cap; Argon2id exceeds the free CPU
+allowance. Neither is approved for password storage; live auth stays disabled.
+Recovery and account/schema revisions remain open. See
 [runtime evidence](../../architecture/stage0-runtime-evidence.md) and the new
 [SSO exploration](../../architecture/stage0-federated-login.md).
 Direct OIDC for Google, Microsoft and tenant-specific Entra ID is approved, without

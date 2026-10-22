@@ -8,8 +8,11 @@ defaults, provision providers or establish that Stage 0 is complete.
 ## October 22 execution update
 
 Task 1 local runtime/configuration code and tests are implemented. See [runtime evidence](../../architecture/stage0-runtime-evidence.md)
-for exact versions, measurements and remaining hosted/KDF gates. No production KDF
-has been frozen and live authentication remains disabled.
+for exact versions and hosted measurements. PBKDF2 600k is rejected by the hosted
+iteration cap; measured Argon2id CPU exceeds the free allowance. No production KDF
+has been frozen and live authentication remains disabled. Under the free-first
+constraint, continue with direct OIDC and optional local credentials; password
+routes remain gated.
 
 The user approved direct OIDC for Google, Microsoft and tenant-specific Microsoft
 Entra ID, without a broker or new paid authentication service. A synthetic isolated

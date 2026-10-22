@@ -97,7 +97,9 @@ if (process.argv.includes('--cleanup')) {
       if (settings.body.result?.limits?.cpu_ms !== 10) throw new Error('Hosted CPU limit was not confirmed')
       const enabled = await api(`/workers/scripts/${name}/subdomain`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ enabled: true, previews_enabled: false }) })
       if (!enabled.body.success) throw new Error(`Cannot enable isolated probe: ${enabled.status}`)
-      const base = `https://${name}.${subdomain.body.result.subdomain}.workers.dev`
+      const probeUrl = new URL('https://workers.dev')
+      probeUrl.hostname = [name, subdomain.body.result.subdomain, 'workers', 'dev'].join('.')
+      const base = probeUrl.origin
       // Let only routing propagate, without running any KDF during readiness checks.
       let ready = false
       for (let attempt = 0; attempt < 12; attempt++) {
