@@ -5,6 +5,17 @@ October 19, 2026. Draft for review, grounded in the [build priorities](../../bui
 This specifies the first Stage 0 increment. It does not approve its engineering
 defaults, provision providers or establish that Stage 0 is complete.
 
+## Shared backend implementation update
+
+The user approved a backend-only shared account/identity schema, sessions and
+organization permissions with enterprise security and RLS-style access. See the
+[scoped implementation plan](../plans/2026-10-22-shared-auth-backend.md) and
+[implemented boundary](../../architecture/stage0-shared-backend.md). This covers
+parts of Tasks 2, 3 and 5; it does not complete the original Stage 0 increment.
+The latest confirmed provider scope is Google/Microsoft consumer and business
+OIDC plus enterprise SAML, without a broker. Earlier enterprise-OIDC-only wording
+below is historical and superseded. No public login routes or remote migrations.
+
 ## October 22 execution update
 
 Task 1 local runtime/configuration code and tests are implemented. See [runtime evidence](../../architecture/stage0-runtime-evidence.md)

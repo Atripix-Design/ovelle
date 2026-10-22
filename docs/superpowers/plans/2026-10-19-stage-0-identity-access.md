@@ -10,6 +10,17 @@
 
 **Spec:** [Stage 0 identity/access design](../specs/2026-10-19-stage-0-identity-access-design.md).
 
+## Shared backend implementation update
+
+The user approved a backend-only shared account/identity schema, sessions and
+organization permissions with enterprise security and RLS-style access. See the
+[scoped implementation plan](../plans/2026-10-22-shared-auth-backend.md) and
+[implemented boundary](../../architecture/stage0-shared-backend.md). This covers
+parts of Tasks 2, 3 and 5; it does not complete the original Stage 0 increment.
+The latest confirmed provider scope is Google/Microsoft consumer and business
+OIDC plus enterprise SAML, without a broker. Earlier enterprise-OIDC-only wording
+below is historical and superseded. No public login routes or remote migrations.
+
 ## October 22 execution status
 
 User authorized beginning implementation with authentication-runtime and KDF

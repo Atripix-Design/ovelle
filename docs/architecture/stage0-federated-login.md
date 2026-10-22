@@ -1,9 +1,11 @@
 # Stage 0 social login and enterprise SSO exploration
 
-October 22, 2026. **Confirmed direction:** direct OIDC without a broker for Google,
-Microsoft and Microsoft Entra ID, with no new paid authentication service. The
-contracts below guide implementation; they are not configured providers or working
-login routes.
+October 22, 2026. **Latest confirmed direction:** email/password plus Google and
+Microsoft OIDC for both consumer and business accounts; direct SAML for enterprise
+SSO, without a broker. These supersede the earlier OIDC-only enterprise proposal.
+Provider integrations and password runtime approval remain pending. The
+[shared backend foundation](stage0-shared-backend.md) implements storage, sessions
+and organization access, not the provider login routes.
 
 ## Universal boundary
 
@@ -22,20 +24,22 @@ onboarding, policy review, certificate/key lifecycle and verified tenant binding
 
 ## Chosen implementation
 
-**Confirmed October 22:** direct OIDC for Google, Microsoft personal accounts and
-organization-specific Microsoft Entra ID. No authentication broker, paid SSO
-connection subscription or plan upgrade. Use free protocol libraries and the
-existing Cloudflare infrastructure. This avoids broker fees; existing hosting,
-email, maintenance and a customer's optional identity-provider licensing still
-have their own costs. No provider application has been registered by this work.
+**Confirmed October 22:** Google personal/Workspace and Microsoft personal/work/
+school OIDC, plus organization-specific SAML. No authentication broker, paid SSO
+connection subscription or plan upgrade. Libraries, hosting, runtime compatibility,
+maintenance and customers' identity-provider licensing have separate considerations.
+No provider application has been registered by this work.
 
-Google uses its published discovery metadata. Microsoft personal login uses the
-`consumers` authority; enterprise connections use a reviewed tenant UUID and its
-exact tenant issuer. Keep these connection types distinct. An enterprise account
-must use its organization's configured connection, rather than treating a generic
-Microsoft login as proof of organizational admission. Supporting additional OIDC
-providers later requires reviewed configuration and interoperability tests.
-SAML and SCIM are deferred; do not advertise support for them.
+Microsoft consumer/business login must support both account categories; a
+`consumers`-only authority would omit work/school users. Validate the actual tenant,
+issuer, audience and key scope with a maintained OIDC implementation. Login with a
+company account does not automatically establish an Ovelle organization membership.
+When an organization requires SAML, social/password sign-in cannot bypass it.
+
+SAML requires reviewed per-organization metadata, signed assertion validation,
+recipient/audience/request/expiry checks, replay prevention and certificate
+rotation. Validate a maintained library on the hosted runtime before enabling it;
+do not write a custom XML signature verifier. SCIM remains separate future work.
 
 Use a maintained OIDC implementation rather than handwritten token verification.
 [openid-client v6](https://github.com/panva/openid-client) documents Workers support;
@@ -114,5 +118,6 @@ to fit free hosting.
 
 Revise the Task 2 account/session schema and Tasks 3–4 recovery contracts to match
 this direction before implementation. The original design's identity-provider
-exclusion is superseded for these three OIDC integrations. No provider settings,
+exclusion and earlier enterprise-OIDC-only proposal are superseded by consumer/
+business OIDC plus enterprise SAML. No provider settings,
 remote migrations or live authentication have been enabled by this decision.

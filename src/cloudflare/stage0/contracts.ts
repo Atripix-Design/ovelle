@@ -35,20 +35,25 @@ export interface RequestContext {
   requestId: string
 }
 // These principals are produced by authentication, never deserialized from callers.
-// Federation assurance must be designed before introducing federated principals.
+// Authentication provenance is independent of assurance; federation never implies passkey UV.
 export interface Principal {
   accountId: string
   sessionId: string
   transport: 'browser' | 'desktop'
-  assurance: 'enrollment' | 'password' | 'passkey'
+  method: 'password' | 'passkey' | 'oidc' | 'saml'
+  connectionId: string | null
+  connectionVersion: number | null
+  assurance: 'enrollment' | 'authenticated' | 'passkey'
   authenticatedAt: number
+  passkeyVerifiedAt: number | null
 }
 export interface CommandContext extends RequestContext {
   principal: Principal
   idempotencyKey: string
   requestDigest: string
 }
-export interface AuthorizedContext extends CommandContext {
+export interface AuthorizedContext extends RequestContext {
+  principal: Principal
   organizationId: string
   membershipId: string
   membershipVersion: number
