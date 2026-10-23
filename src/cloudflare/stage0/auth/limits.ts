@@ -100,3 +100,11 @@ export async function consumePasskeyStartBudget(ctx: RequestContext, ip: string,
   const now = ctx.clock.now()
   await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
 }
+
+/** First-party native starts share the global per-IP challenge ceiling, with
+ * five requests per IP/window for this purpose. A browser body cannot set IP. */
+export async function consumeDesktopStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
+  const limits = await budgets({ email: 'desktop-request', ip }, keyMaterial, false)
+  const now = ctx.clock.now()
+  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+}

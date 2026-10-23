@@ -218,6 +218,11 @@ versions, an executable authorization/version guard and SQL/result mapping.
 **Files:** Task 5 map; `tests/worker/stage0/authorization.test.ts`.
 
 **Consumes:** Trusted live `Principal`, memberships/grants, current resource organization/scope.
+October 23 reconciliation: current live SQL policy, scoped reads/mutations and
+existing invitation/membership grant containment implement the authority checks.
+The planned advisory capability snapshot remains absent; do not infer full Task 5
+completion from those existing controls or duplicate them to match helper names.
+
 **Produces:** `authorizeOrganization(ctx, principal, organizationId, action, scope): Promise<AuthorizedContext>`,
 `assertGrantSubset(actor: AuthorizedContext, requested: Grant[]): void`,
 `getAdvisoryCapabilities(ctx, principal, organizationId): Promise<CapabilitySnapshot>`.
@@ -298,6 +303,12 @@ original whole-task acceptance contract.
 - [ ] Re-run command race tests and demonstrate recovery codes plus session revocation. Write the operator review runbook without executable bypass instructions; require approval of identity checks before the pilot. Run Task 8 to PASS; review and commit.
 
 ## Task 9: Connect Electron through the system browser and main-process session
+
+October 23 backend continuation: internal desktop request, explicit browser
+approval and one-time native exchange now reuse current sessions/SQL guards. See
+[backend protocol and evidence](../../architecture/stage0-desktop-handoff.md).
+Public routing is disconnected. Electron listener, protected storage, IPC, UI
+and packaged sign-in/restart acceptance remain unfinished; Task 9 is incomplete.
 
 **Files:** Task 9 map; modify `apps/desktop/src/main/index.ts`, `apps/desktop/src/preload/index.ts`;
 tests `tests/worker/stage0/desktop-auth.test.ts`, `tests/desktop/stage0/auth-handoff.test.ts`, `account-ipc.test.ts`.
