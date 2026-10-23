@@ -220,11 +220,15 @@ versions, an executable authorization/version guard and SQL/result mapping.
 **Consumes:** Trusted live `Principal`, memberships/grants, current resource organization/scope.
 October 23 reconciliation: current live SQL policy, scoped reads/mutations and
 existing invitation/membership grant containment implement the authority checks.
-The planned advisory capability snapshot remains absent; do not infer full Task 5
-completion from those existing controls or duplicate them to match helper names.
+The planned advisory capability snapshot now reuses that policy in a bounded,
+read-only final SELECT; see [snapshot contract](../../architecture/stage0-capabilities.md).
+Grant subset enforcement resides in invitation/membership preflight and final SQL
+guards, rather than a synchronous assertion over a cached AuthorizedContext.
+No duplicate authority helper or public routing is introduced. The original
+whole-plan acceptance obligations below remain separate from this internal work.
 
 **Produces:** `authorizeOrganization(ctx, principal, organizationId, action, scope): Promise<AuthorizedContext>`,
-`assertGrantSubset(actor: AuthorizedContext, requested: Grant[]): void`,
+complete-scope grant containment in invitation/membership service SQL guards,
 `getAdvisoryCapabilities(ctx, principal, organizationId): Promise<CapabilitySnapshot>`.
 
 - [ ] Write a matrix test from the spec for owner/admin/coordinator, membership revocation, unknown actions and future private-domain actions. Include the same account admin in A/coordinator in B, user-supplied owner flags and a client-selected foreign organization.

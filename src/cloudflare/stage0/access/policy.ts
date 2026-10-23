@@ -24,7 +24,7 @@ export function validateScope(scope: Scope): void {
  * allowArchived is only for replaying an already committed command receipt;
  * it preserves scope checks and does not permit new edits to archived rows.
  */
-export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location' | 'organization', allowArchived = false): string {
+export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location' | 'organization' | 'capability', allowArchived = false): string {
   parseAction(action)
   validateScope(scope)
   // Directory reads use this fixed outer alias; no caller supplies SQL names.
@@ -33,8 +33,9 @@ export function accessPredicate(b: Bindings, principal: Principal, organizationI
   const account = b.add(principal.accountId)
   const transport = b.add(principal.transport)
   const time = b.add(now)
-  const program = rowKind === 'program' ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
-  const location = rowKind === 'location' ? 'l.id' : scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
+  // Capability candidates keep each stored intersection intact in one SELECT.
+  const program = rowKind === 'capability' ? 'capability.program_id' : rowKind === 'program' ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
+  const location = rowKind === 'capability' ? 'capability.location_id' : rowKind === 'location' ? 'l.id' : scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
   const requestedAction = b.add(action)
   const reserved = action === 'staff.manage_admins' || action === 'ownership.transfer'
   const write = ['organization.update', 'program.manage', 'location.manage', 'staff.manage_coordinators', 'staff.manage_admins', 'ownership.transfer'].includes(action)

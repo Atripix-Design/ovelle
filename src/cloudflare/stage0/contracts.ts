@@ -2,14 +2,14 @@ import type { D1Database } from '@cloudflare/workers-types'
 import type { Stage0Config } from './config'
 import { Stage0Error } from './errors'
 
-const actions = [
+export const stage0Actions = [
   'organization.read', 'organization.update', 'program.read', 'program.manage',
   'location.read', 'location.manage', 'staff.read', 'staff.manage_coordinators',
   'staff.manage_admins', 'audit.read', 'ownership.transfer',
 ] as const
-export type Action = typeof actions[number]
+export type Action = typeof stage0Actions[number]
 export function parseAction(value: unknown): Action {
-  if (typeof value !== 'string' || !actions.includes(value as Action)) throw new Stage0Error('forbidden')
+  if (typeof value !== 'string' || !stage0Actions.includes(value as Action)) throw new Stage0Error('forbidden')
   return value as Action
 }
 
