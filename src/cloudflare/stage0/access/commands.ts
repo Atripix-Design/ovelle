@@ -1,9 +1,8 @@
-import type { D1PreparedStatement } from '@cloudflare/workers-types'
 import type { Action, CommandContext, OrganizationSnapshot, Scope } from '../contracts'
-import { auditStatement, guardedBatch } from '../db'
+import { auditStatement } from '../db'
 import { Stage0Error } from '../errors'
 import { loadLiveSession } from '../auth/sessions'
-import { secretDigest } from '../auth/secrets'
+import { withReceipt, commit } from '../commands'
 import { accessPredicate, Bindings } from './policy'
 import { authorizeOrganization, getOrganization } from './organizations'
 
@@ -12,8 +11,6 @@ export interface UpdateOrganizationInput { organizationId: string; expectedVersi
 export interface SaveProgramInput { organizationId: string; id?: string; expectedVersion?: number; name: string; archived?: boolean }
 export type SaveLocationInput = SaveProgramInput
 export interface StructureSnapshot { id: string; name: string; version: number; archivedAt: number | null }
-type Command = 'organization.create' | 'organization.update' | 'program.save' | 'location.save'
-type Policy = (b: Bindings, organizationId: string) => string
 const orgScope: Scope = { kind: 'organization' }
 const ordinaryActions: Action[] = ['organization.read','organization.update','program.read','program.manage','location.read','location.manage','staff.read','staff.manage_coordinators','audit.read']
 
@@ -47,45 +44,6 @@ function creationPolicy(ctx: CommandContext, b: Bindings): string {
     WHERE s.id=${b.add(ctx.principal.sessionId)} AND s.account_id=${b.add(ctx.principal.accountId)} AND s.transport=${b.add(ctx.principal.transport)}
     AND s.created_at<=${b.add(ctx.clock.now())} AND s.expires_at>${b.add(ctx.clock.now())} AND s.assurance='passkey'
     AND (s.connection_id IS NULL OR c.organization_id IS NULL))`
-}
-/** A receipt is a past result, not a capability. Each replay rechecks live SQL
- * authority, including grants and federation, before disclosing the result.
- */
-async function withReceipt<T>(ctx: CommandContext, command: Command, scopeKey: string, body: unknown, replayPolicy: Policy, apply: (digest: string) => Promise<T>): Promise<T> {
-  if (typeof ctx.idempotencyKey !== 'string' || !/^[A-Za-z0-9_-]{16,128}$/.test(ctx.idempotencyKey)) throw new Stage0Error('invalid_input')
-  await loadLiveSession(ctx, ctx.principal)
-  const digest = await secretDigest(JSON.stringify(['stage0-command-v1', command, scopeKey, body]))
-  const replay = async (): Promise<{ result: T } | null> => {
-    const row = await ctx.db.prepare('SELECT id,organization_id FROM command_receipts WHERE actor_account_id=? AND scope_key=? AND command=? AND idempotency_key=?')
-      .bind(ctx.principal.accountId, scopeKey, command, ctx.idempotencyKey).first<{ id: string; organization_id: string }>()
-    if (!row) return null
-    const b = new Bindings()
-    const allowed = replayPolicy(b, row.organization_id)
-    const receipt = await ctx.db.prepare(`SELECT request_digest,result FROM command_receipts WHERE id=${b.add(row.id)} AND (${allowed})`).bind(...b.values).first<{ request_digest: string; result: string }>()
-    if (!receipt) throw new Stage0Error('not_found')
-    if (receipt.request_digest !== digest) throw new Stage0Error('conflict')
-    return { result: JSON.parse(receipt.result) as T }
-  }
-  const existing = await replay()
-  if (existing) return existing.result
-  try { return await apply(digest) } catch (error) {
-    // Two concurrent same-key requests may both miss the first SELECT. Only one
-    // batch commits; the other may return that receipt after fresh authorization.
-    if (error instanceof Stage0Error && error.code === 'conflict') {
-      const committed = await replay()
-      if (committed) return committed.result
-    }
-    throw error
-  }
-}
-async function commit<T>(ctx: CommandContext, command: Command, organizationId: string, scopeKey: string, digest: string, b: Bindings, condition: string, statements: D1PreparedStatement[], result: T): Promise<T> {
-  const absent = `NOT EXISTS(SELECT 1 FROM command_receipts WHERE actor_account_id=${b.add(ctx.principal.accountId)} AND scope_key=${b.add(scopeKey)} AND command=${b.add(command)} AND idempotency_key=${b.add(ctx.idempotencyKey)})`
-  await guardedBatch(ctx, `(${condition}) AND ${absent}`, b.values, [
-    ...statements,
-    ctx.db.prepare('INSERT INTO command_receipts(id,actor_account_id,organization_id,scope_key,command,idempotency_key,request_digest,result,created_at) VALUES(?,?,?,?,?,?,?,?,?)')
-      .bind(ctx.ids.next(), ctx.principal.accountId, organizationId, scopeKey, command, ctx.idempotencyKey, digest, JSON.stringify(result), ctx.clock.now()),
-  ])
-  return result
 }
 export async function createOrganization(ctx: CommandContext, input: CreateOrganizationInput): Promise<OrganizationSnapshot> {
   const normalized = { ...settings(input), firstProgram: text(input.firstProgram), firstLocation: text(input.firstLocation) }

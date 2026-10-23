@@ -244,6 +244,12 @@ versions, an executable authorization/version guard and SQL/result mapping.
 
 ## Task 7: Invite staff and accept explicitly as the intended account
 
+**Internal service continuation (October 23):** create/accept/revoke/resend,
+sealed offers, current-authority transactional acceptance and staff-only read services
+are implemented with local Workers/D1 tests; see [invitation evidence](../../architecture/stage0-staff-invitations.md).
+Public HTTP/GET-preview composition remains open, so the original Task 7 checklist
+is retained until that boundary is verified. This does not clear recovery or live-rollout gates.
+
 **Files:** Task 7 map; `tests/worker/stage0/invitations.test.ts`.
 
 **Consumes:** Current actor authorization, grant-subset checks, verified accounts and `AuthMailer`.
