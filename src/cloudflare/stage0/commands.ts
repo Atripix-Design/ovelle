@@ -7,6 +7,7 @@ import { secretDigest } from './auth/secrets'
 import { Bindings } from './access/policy'
 
 type Command = 'organization.create' | 'organization.update' | 'program.save' | 'location.save'
+  | 'membership.grants' | 'membership.revoke' | 'ownership.request' | 'ownership.accept' | 'ownership.revoke'
   | 'invitation.create' | 'invitation.resend' | 'invitation.revoke' | 'invitation.accept'
 type Policy = (b: Bindings, organizationId: string) => string
 

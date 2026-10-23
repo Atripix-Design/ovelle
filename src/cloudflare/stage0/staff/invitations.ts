@@ -1,13 +1,13 @@
 import type { D1PreparedStatement } from '@cloudflare/workers-types'
 import type { CommandContext, Grant, Principal, RequestContext, Scope } from '../contracts'
-import { parseAction } from '../contracts'
 import { auditStatement } from '../db'
 import { withReceipt, commit } from '../commands'
 import { Stage0Error } from '../errors'
+import {identifier,version,normalizedGrants} from './validation'
 import { loadLiveSession } from '../auth/sessions'
 import { consumeAuthEmailBudget, reserveAuthAttempt, finishAuthAttempt } from '../auth/limits'
 import { randomSecret, secretDigest, secretPattern } from '../auth/secrets'
-import { accessPredicate, Bindings, validateScope } from '../access/policy'
+import { accessPredicate, Bindings } from '../access/policy'
 import { authorizeOrganization, getOrganization } from '../access/organizations'
 
 type Preset = 'admin' | 'coordinator'
@@ -22,25 +22,8 @@ interface InvitationRow { id: string; organization_id: string; email: string; pr
 interface GrantRow { action: Grant['action']; scope_kind: Scope['kind']; program_id: string | null; location_id: string | null }
 const lifetime = 259_200_000
 const orgScope: Scope = {kind:'organization'}
-const coordinatorActions = new Set(['program.read','program.manage','location.read','location.manage'])
 function invalid(): never { throw new Stage0Error('invalid_input') }
-function identifier(value: unknown): string { if(typeof value!=='string'||!value||value.length>256||/\p{Cc}/u.test(value))return invalid();return value }
-function version(value: unknown): number { if(!Number.isSafeInteger(value)||(value as number)<1||(value as number)>=Number.MAX_SAFE_INTEGER)return invalid();return value as number }
 function email(value: unknown): string { if(typeof value!=='string'||/\p{Cc}/u.test(value))return invalid();const address=value.trim().toLowerCase();if(address.length>254||!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(address))return invalid();return address }
-function normalizedGrants(value: unknown, preset: Preset): Grant[] {
-  if(!Array.isArray(value)||value.length>32)return invalid()
-  const grants=value.map((entry: Grant)=>{
-    if(!entry||typeof entry!=='object')return invalid()
-    let action: Grant['action']
-    try { action=parseAction(entry.action) } catch { return invalid() }
-    if(action==='staff.manage_admins'||action==='ownership.transfer'||(preset==='coordinator'&&!coordinatorActions.has(action)))return invalid()
-    validateScope(entry.scope)
-    const scope: Scope=entry.scope.kind==='organization'?orgScope:{kind:'program_location',...('programId' in entry.scope&&entry.scope.programId!==undefined?{programId:identifier(entry.scope.programId)}:{}),...('locationId' in entry.scope&&entry.scope.locationId!==undefined?{locationId:identifier(entry.scope.locationId)}:{})} as Scope
-    return {action,scope}
-  }).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)))
-  if(new Set(grants.map(grant=>JSON.stringify(grant))).size!==grants.length)return invalid()
-  return grants
-}
 function snapshot(row: InvitationRow, now: number): InvitationSnapshot { return {id:row.id,organizationId:row.organization_id,email:row.email,preset:row.preset,state:row.state==='pending'&&row.expires_at<=now?'expired':row.state,version:row.version,expiresAt:row.expires_at,delivery:row.delivery} }
 function request(input: InvitationCommandInput) { if(!input||typeof input!=='object')return invalid();return {organizationId:identifier(input.organizationId),invitationId:identifier(input.invitationId),expectedVersion:version(input.expectedVersion)} }
 async function offered(ctx: RequestContext,id: string): Promise<Grant[]> {

@@ -6,6 +6,7 @@ export type SqlValue = string | number | null
 export type AuditAction = 'account.create' | 'session.issue' | 'session.rotate' | 'session.revoke' | 'session.revoke_all' | 'program.update' | 'identity.link' | 'passkey.register' | 'passkey.authenticate'
   | 'organization.create' | 'organization.update' | 'program.create' | 'program.archive' | 'location.create' | 'location.update' | 'location.archive'
   | 'invitation.create' | 'invitation.resend' | 'invitation.revoke' | 'invitation.accept' | 'invitation.expire'
+  | 'membership.grants' | 'membership.revoke' | 'ownership.request' | 'ownership.accept' | 'ownership.revoke'
 export function auditStatement(ctx: RequestContext, action: AuditAction, resourceId: string, actor: Pick<Principal, 'accountId' | 'sessionId'>, organizationId: string | null = null): D1PreparedStatement {
   return ctx.db.prepare(`INSERT INTO audit_events(id,organization_id,actor_account_id,session_id,action,resource_id,request_id,created_at) VALUES(?,?,?,?,?,?,?,?)`)
     .bind(ctx.ids.next(), organizationId, actor.accountId, actor.sessionId, action, resourceId, ctx.requestId, ctx.clock.now())

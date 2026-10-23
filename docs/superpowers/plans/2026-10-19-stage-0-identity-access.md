@@ -266,6 +266,15 @@ Worker enabling remains controlled rollout work and recovery remains unfinished.
 
 ## Task 8: Revoke access and preserve ownership/recovery invariants
 
+October 23 internal service subset: versioned grant/role changes, revocation and
+owner request/accept/cancel are implemented with local Workers/D1 tests. See
+[staff-access evidence](../../architecture/stage0-staff-access.md) and the
+[operator review contract](../../architecture/stage0-recovery-review.md).
+Task 8 remains incomplete: recovery codes and the required recovery/session
+revocation demonstration are missing. Internal HTTP composition, native/UI and
+hosted rollout remain separate unfinished work; the checkboxes below retain the
+original whole-task acceptance contract.
+
 **Files:** Task 8 map; `tests/worker/stage0/memberships.test.ts`, `ownership.test.ts`.
 
 **Consumes:** Current action/grant bounds, recent passkey check, atomic command guards and audit.
