@@ -51,6 +51,11 @@ It does not complete product presentation, real-provider/mail, hosted execution
 or a physical-device/product browser support promise. Its engine matrix uses an
 isolated CONNECT proxy and the supported Node floor in hosted CI; real IdP/mail
 and deployed-edge acceptance remain separate.
+The [OIDC HTTPS browser fixture](../../architecture/stage0-oidc-http-enrollment.md)
+adds actual GET/Lax callback and Strict-cookie-absent linking evidence, both
+provider contact paths and rejection controls using the same isolated transport.
+Both protocol matrices run in the non-secret hosted browser gate; this does not
+prove real providers/mail, physical devices, native integration or rollout.
 The [authentication mail adapter](../../architecture/stage0-auth-mail.md) adds
 constrained contact-verification and staff-invitation message composition behind
 the existing AuthMailer using an injected Cloudflare email binding. Controlled

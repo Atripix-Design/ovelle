@@ -1,80 +1,20 @@
 import assert from 'node:assert/strict'
-import { createServer } from 'node:https'
-import { once } from 'node:events'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { execFileSync } from 'node:child_process'
-import { randomBytes, createHash } from 'node:crypto'
-import { build } from 'esbuild'
-import { Miniflare, convertV4MiniflareOptions } from 'miniflare'
-import { readD1Migrations } from '@cloudflare/vitest-plugin'
-import { chromium, firefox, webkit } from 'playwright'
-import { createFixtureProxy } from './stage0-browser-proxy.mjs'
+import { readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { browserEngines as engines, createBrowserHarness } from './stage0-browser-harness.mjs'
 
-const engines = { chromium, firefox, webkit }
 const requested = process.argv.slice(2)
 assert.ok(requested.length <= 1 && (!requested.length || Object.hasOwn(engines, requested[0])), 'Expected optional chromium, firefox or webkit')
 
 async function runBrowser(engine) {
-  // Actual loopback TLS receives browser headers before the Node/Miniflare
-  // transport. CONNECT routing is browser-local; no hosts/trust-store changes.
-  const dir = await mkdtemp(join(tmpdir(), 'ovelle-saml-browser-'))
-  let runtime, server, browser, proxy
-  let workerNetwork = 0
-  const received = [], denied = [], failures = []
+  const harness = await createBrowserHarness(engine, { worker: 'tests/worker/stage0/saml-browser-worker.ts', bindingCookie: '__Host-ovelle_saml' })
+  const { origin, idp, attacker, db, browser, received, denied, failures, controlRequest, newContext } = harness
   try {
-    execFileSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '1', '-subj', '/CN=isolated-fixture.test',
-      '-addext', 'subjectAltName=DNS:dev.ovelle.org,DNS:identity.example.test,DNS:attacker.example.test',
-      '-keyout', join(dir, 'key.pem'), '-out', join(dir, 'cert.pem')], { stdio: 'ignore' })
-    server = createServer({ key: await readFile(join(dir, 'key.pem')), cert: await readFile(join(dir, 'cert.pem')) }, async (request, response) => {
-      try {
-        const origin = 'https://' + request.headers.host
-        assert.ok(origins.includes(origin), 'Unexpected fixture host')
-        const chunks = []; let size = 0
-        for await (const chunk of request) { size += chunk.length; assert.ok(size <= 270_000); chunks.push(chunk) }
-        const observed = { path: request.url, method: request.method, origin: request.headers.origin,
-          mode: request.headers['sec-fetch-mode'], dest: request.headers['sec-fetch-dest'], site: request.headers['sec-fetch-site'],
-          binding: (request.headers.cookie ?? '').includes('__Host-ovelle_saml=') }
-        const headers = { ...request.headers, 'X-Fixture-Transport': control, 'X-Fixture-Observed': JSON.stringify(Object.fromEntries(
-          ['Sec-Fetch-Mode', 'Sec-Fetch-Dest', 'Sec-Fetch-Site'].map(name => [name, request.headers[name.toLowerCase()] ?? null]))) }
-        const result = await runtime.dispatchFetch(origin + request.url, { method: request.method, headers,
-          redirect: 'manual', ...(chunks.length ? { body: Buffer.concat(chunks) } : {}) })
-        received.push({ ...observed, status: result.status, location: result.headers.get('Location') })
-        response.statusCode = result.status
-        for (const [name, value] of result.headers) if (name !== 'set-cookie') response.setHeader(name, value)
-        if (result.headers.getSetCookie().length) response.setHeader('Set-Cookie', result.headers.getSetCookie())
-        response.end(Buffer.from(await result.arrayBuffer()))
-      } catch (error) { failures.push(error.message); response.statusCode = 500; response.end('Fixture transport failed') }
-    })
-    server.listen(0, '127.0.0.1'); await once(server, 'listening')
-    const port = server.address().port
-    const origin = `https://dev.ovelle.org:${port}`, idp = `https://identity.example.test:${port}`, attacker = `https://attacker.example.test:${port}`
-    const origins = [origin, idp, attacker], control = randomBytes(32).toString('hex')
-    const bundle = await build({ entryPoints: ['tests/worker/stage0/saml-browser-worker.ts'], bundle: true, format: 'esm', platform: 'node', write: false,
-      banner: { js: "import {createRequire} from 'node:module'; const require=createRequire('/script-0.mjs');" } })
-    runtime = new Miniflare(convertV4MiniflareOptions({ modules: true, script: bundle.outputFiles[0].text, compatibilityDate: '2026-10-06',
-      compatibilityFlags: ['nodejs_compat'], d1Databases: ['DB'], bindings: { ORIGIN: origin, IDP: idp, ATTACKER: attacker, CONTROL: control },
-      outboundService: () => { workerNetwork++; return new Response(null, { status: 503 }) } }))
-    const db = await runtime.getD1Database('DB')
-    for (const migration of await readD1Migrations('./migrations')) await db.batch(migration.queries.map(query => db.prepare(query)))
     const now = Date.now()
     await db.prepare("INSERT INTO accounts(id,email,display_name,email_verified_at,created_at) VALUES('d','fixture@example.test','Fixture',?,?)").bind(now, now).run()
     await db.prepare("INSERT INTO organizations(id,name,owner_account_id,created_by_account_id,created_at) VALUES('org-a','Fixture','d','d',?)").bind(now).run()
     await db.prepare("INSERT INTO identity_connections(id,organization_id,protocol,provider,issuer,created_at) VALUES('saml-a','org-a','saml','enterprise_saml','https://identity.example.test/saml',?)").bind(now).run()
     await db.prepare("INSERT INTO external_identities(id,account_id,connection_id,issuer,subject,saml_name_id_format,created_at) VALUES('linked','d','saml-a','https://identity.example.test/saml','stable-person-001','urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',?)").bind(now).run()
-    proxy = await createFixtureProxy({ port, hosts: origins.map(value => new URL(value).hostname) })
-    browser = await engines[engine].launch({ headless: true, proxy: { server: proxy.url } })
-    const controlRequest = (path, data) => runtime.dispatchFetch(origin + '/__fixture/' + path, { method: data ? 'POST' : 'GET',
-      headers: { 'X-Fixture-Control': control, 'Content-Type': 'application/json' }, ...(data ? { body: JSON.stringify(data) } : {}) })
-    const newContext = async () => {
-      const context = await browser.newContext({ ignoreHTTPSErrors: true, serviceWorkers: 'block' })
-      await context.route('**/*', route => {
-        if (origins.includes(new URL(route.request().url()).origin)) return route.continue()
-        denied.push(new URL(route.request().url()).origin); return route.abort()
-      })
-      return context
-    }
     const start = async (subject = 'stable-person-001', referrer = 'origin') => {
       assert.equal((await controlRequest('subject', { subject, referrer })).status, 204)
       const context = await newContext(), page = await context.newPage()
@@ -192,33 +132,21 @@ async function runBrowser(engine) {
     const finalCookies = await enrollment.context.cookies()
     assert.ok(finalCookies.some(cookie => cookie.name === '__Host-ovelle_session' && cookie.httpOnly && cookie.secure && cookie.sameSite === 'Strict'))
     assert.ok(!finalCookies.some(cookie => cookie.name === '__Host-ovelle_saml_enrollment'))
-    assert.ok(received.every(request => !request.path.includes(token)), 'Mail credential is never sent in a URL')
+    assert.ok(!harness.urlContains(token), 'Mail credential is never sent in a URL')
     const navigation = await (await controlRequest('navigation')).json()
     const callbacks = received.filter(request => request.path === '/api/v1/auth/saml/callback')
     assert.deepEqual(navigation.map(({ mode, dest, site }) => ({ mode, dest, site })), callbacks.map(({ mode, dest, site }) => ({ mode, dest, site })), 'Transport must preserve every actual browser metadata value')
-    assert.equal(workerNetwork, 0)
+    assert.equal(harness.workerNetwork(), 0)
     // Prove the browser's outbound guard actually blocks, with a negative control.
     assert.deepEqual(denied, [])
     await enrollment.page.evaluate(async () => { try { await fetch('https://outside.example.test/') } catch { /* blocked by the fixture */ } })
     assert.deepEqual(denied, ['https://outside.example.test'])
     assert.equal(failures.length, 0, failures.join('; '))
-    const sources = ['scripts/verify-stage0-saml-browser.mjs', 'scripts/stage0-browser-proxy.mjs', 'tests/worker/stage0/saml-browser-worker.ts', 'tests/worker/stage0/saml-fixture.ts', 'src/cloudflare/stage0/auth/saml/protocol.ts', 'src/cloudflare/stage0/auth/saml/authorization.ts', 'src/cloudflare/stage0/auth/saml/transactions.ts', 'src/cloudflare/stage0/auth/saml/routes.ts', 'src/cloudflare/stage0/auth/saml/enrollment.ts', 'src/cloudflare/stage0/auth/contact.ts', 'src/cloudflare/stage0/auth/web.ts', 'src/cloudflare/stage0/auth/http.ts', 'src/cloudflare/stage0/auth/sessions.ts', 'src/cloudflare/stage0/auth/limits.ts', 'src/cloudflare/stage0/db.ts', 'package-lock.json']
+    const sources = ['scripts/verify-stage0-saml-browser.mjs', 'scripts/stage0-browser-proxy.mjs', 'scripts/stage0-browser-harness.mjs', 'tests/worker/stage0/browser-transport.ts', 'tests/worker/stage0/saml-browser-worker.ts', 'tests/worker/stage0/saml-fixture.ts', 'src/cloudflare/stage0/auth/saml/protocol.ts', 'src/cloudflare/stage0/auth/saml/authorization.ts', 'src/cloudflare/stage0/auth/saml/transactions.ts', 'src/cloudflare/stage0/auth/saml/routes.ts', 'src/cloudflare/stage0/auth/saml/enrollment.ts', 'src/cloudflare/stage0/auth/contact.ts', 'src/cloudflare/stage0/auth/web.ts', 'src/cloudflare/stage0/auth/http.ts', 'src/cloudflare/stage0/auth/sessions.ts', 'src/cloudflare/stage0/auth/limits.ts', 'src/cloudflare/stage0/db.ts', 'package-lock.json']
     const sourceHashes = Object.fromEntries(await Promise.all(sources.map(async path => [path, createHash('sha256').update(await readFile(path)).digest('hex')])))
     console.log('SAML_BROWSER_VERIFIED ' + JSON.stringify({ engine, browser: browser.version(), scope: 'isolated loopback HTTPS + workerd + ephemeral D1',
       observed: { method: callback.method, mode: callback.mode, dest: callback.dest, site: callback.site, binding: callback.binding }, negativeControls: ['replay', 'foreign-browser', 'wrong-origin', 'null-origin', 'cors-fetch', 'contact-csrf', 'foreign-mail', 'mail-reuse', 'external-network'], enrollment: true, sourceHashes, realProvider: false, realMail: false, trustedPublicTls: false }))
-  } finally {
-    // Every resource gets a cleanup attempt even when another disposer rejects.
-    try {
-      const cleanup = await Promise.allSettled([
-        browser?.close(), proxy?.close(), runtime?.dispose(),
-        server?.listening ? new Promise((resolve, reject) => {
-          server.closeAllConnections(); server.close(error => error ? reject(error) : resolve())
-        }) : undefined,
-      ])
-      const errors = cleanup.filter(result => result.status === 'rejected').map(result => result.reason)
-      assert.deepEqual(errors, [], 'Browser fixture cleanup failed')
-    } finally { await rm(dir, { recursive: true, force: true }) }
-  }
+  } finally { await harness.close() }
 }
 
 for (const engine of requested.length ? requested : Object.keys(engines)) await runBrowser(engine)

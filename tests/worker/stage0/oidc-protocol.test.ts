@@ -134,3 +134,21 @@ it.each(['future_authentication', 'stale_authentication', 'future_issue'])('deni
   if (failure === 'future_issue') g.state.claims.iat = now + 60
   await expect(verifyOidcCode(ctx, settings('google'), { ...secrets, purpose: 'link' }, callback('google'), g.fetcher)).rejects.toMatchObject({ code: 'unauthenticated' })
 })
+
+
+it('supports a hosted fixture callback and validates the actual dynamic grant before signing', async () => {
+  const hosted = { ...ctx, config: { ...ctx.config, environment: 'development' as const, origin: 'https://dev.ovelle.org:45123', rpId: 'dev.ovelle.org' } }
+  const dynamic = newOidcSecrets(hosted, 'login')
+  let used = false
+  const fixture = await oidcProviderFixture('google', { origin: hosted.config.origin, validateGrant: async form => {
+    if (used || form.get('code') !== 'dynamic-code' || form.get('code_verifier') !== dynamic.verifier) return false
+    used = true; return true
+  } })
+  fixture.state.claims.nonce = dynamic.nonce
+  const url = new URL(hosted.config.origin + '/api/v1/auth/oidc/google/callback')
+  url.searchParams.set('state', dynamic.state); url.searchParams.set('code', 'dynamic-code')
+  await expect(verifyOidcCode(hosted, settings('google'), { ...dynamic, verifier: 'w'.repeat(43) }, url, fixture.fetcher)).rejects.toMatchObject({ code: 'unauthenticated' })
+  expect(used).toBe(false)
+  expect((await verifyOidcCode(hosted, settings('google'), dynamic, url, fixture.fetcher)).subject).toBe('exact-subject')
+  await expect(verifyOidcCode(hosted, settings('google'), dynamic, url, fixture.fetcher)).rejects.toMatchObject({ code: 'unauthenticated' })
+})

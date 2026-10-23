@@ -16,12 +16,12 @@ export const microsoftIssuer = (tid = tenant) => `https://login.microsoftonline.
 /** Only the provider network is replaced. Actual OIDC processing, JWT signatures,
  * claims, PKCE parameters and key selection run in Workers with real Web Crypto.
  */
-export async function oidcProviderFixture(provider: 'google' | 'microsoft') {
+export async function oidcProviderFixture(provider: 'google' | 'microsoft', options: { origin?: string; now?: () => number; validateGrant?: (form: URLSearchParams) => Promise<boolean> } = {}) {
   const keys = await generateKeyPair('RS256', { extractable: true })
   const other = await generateKeyPair('RS256', { extractable: true })
   const pssPrivate = await importJWK(await exportJWK(keys.privateKey), 'PS256')
   const jwk = { ...await exportJWK(keys.publicKey), kid: 'fixture-key', use: 'sig', alg: 'RS256', ...(provider === 'microsoft' ? { issuer: 'https://login.microsoftonline.com/{tenantid}/v2.0' } : {}) }
-  const now = Math.floor(oidcContext.clock.now() / 1000)
+  const now = Math.floor((options.now ?? oidcContext.clock.now)() / 1000)
   const endpoints = provider === 'google' ? {
     issuer: 'https://accounts.google.com', authorization_endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
     token_endpoint: 'https://oauth2.googleapis.com/token', jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
@@ -38,7 +38,7 @@ export async function oidcProviderFixture(provider: 'google' | 'microsoft') {
       : state.oversized ? new Response('x'.repeat(300_000), { headers: { 'content-type': 'application/json' } }) : Response.json(state.metadata)
     if (url === endpoints.token_endpoint) {
       const form = new URLSearchParams(String(init.body))
-      if (state.tokenError || init.method !== 'POST' || form.get('code') !== 'one-time-code' || form.get('code_verifier') !== secrets.verifier || form.get('client_id') !== 'fixture-client' || form.get('client_secret') !== 'fixture-client-secret' || form.get('redirect_uri') !== callback(provider).origin + callback(provider).pathname) return Response.json({ error: 'invalid_grant', error_description: 'private upstream detail' }, { status: 400 })
+      if (state.tokenError || init.method !== 'POST' || form.get('client_id') !== 'fixture-client' || form.get('client_secret') !== 'fixture-client-secret' || form.get('redirect_uri') !== (options.origin ?? callback(provider).origin) + callback(provider).pathname || !(options.validateGrant ? await options.validateGrant(form) : form.get('code') === 'one-time-code' && form.get('code_verifier') === secrets.verifier)) return Response.json({ error: 'invalid_grant', error_description: 'private upstream detail' }, { status: 400 })
       const id_token = await new SignJWT(state.claims).setProtectedHeader({ alg: state.badAlgorithm ? 'PS256' : 'RS256', kid: 'fixture-key' }).sign(state.badAlgorithm ? pssPrivate : state.badSignature ? other.privateKey : keys.privateKey)
       return Response.json({ access_token: 'provider-access-secret', token_type: 'Bearer', expires_in: 3600, ...(state.tokenOmitted ? {} : { id_token }), refresh_token: 'provider-refresh-secret' })
     }

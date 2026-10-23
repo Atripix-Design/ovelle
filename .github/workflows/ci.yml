@@ -133,7 +133,7 @@ jobs:
       - run: npm run lint
 
   saml-browser:
-    name: SAML browser acceptance
+    name: SAML and OIDC browser acceptance
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -151,6 +151,7 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
+      - run: npm run test:stage0-oidc-browser
 
   hosted-fallback-on-failure:
     if: >-

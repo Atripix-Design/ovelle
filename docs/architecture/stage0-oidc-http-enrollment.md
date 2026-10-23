@@ -97,7 +97,64 @@ callback, separate contact proof, replay/expiry, resend/delivery ordering, email
 claim races, configuration revocation and audit rollback. Only provider,
 Turnstile and mail delivery dependencies are fixtures. These results do not
 prove real provider acceptance, real mail delivery, hosted D1 concurrency or
-browser/UI acceptance.
+product UI acceptance. The separate browser fixture below adds engine evidence.
+
+### Actual HTTPS browser fixture
+
+`npm run test:stage0-oidc-browser` runs the existing internal HTTP/protocol/D1
+modules with Chromium, Firefox and WebKit. The shared
+`scripts/stage0-browser-harness.mjs` also serves the SAML suite; its authenticated
+TLS observation bridge preserves actual browser metadata, including absence.
+It does not infer navigation headers. Each engine gets a fresh ephemeral database,
+loopback TLS listener, one-day test certificate and isolated browser context.
+
+A browser-local CONNECT proxy permits the application/attacker authorities on the
+selected fixture port and exactly `accounts.google.com:443` and
+`login.microsoftonline.com:443`. All tunnels terminate at that loopback listener;
+the fixture sends no protocol request or credentials to a real provider. Application endpoint
+pinning stays unchanged. The browser route guard blocks other origins; Worker
+outbound requests are denied and zero attempts are required. The test context
+ignores its ephemeral certificate errors; public TLS trust is not established.
+
+Both provider fixtures issue a fresh authorization code bound to the actual
+nonce, S256 challenge and callback. Token exchange checks the actual verifier,
+client and redirect URI, consumes the code once, then signs with the maintained
+RSA fixture. Link tokens carry the fixture authentication time; tokens without
+that evidence are correctly rejected by the maintained verifier. The original
+protocol fixture defaults remain available to its existing rejection suites.
+
+The browser journey demonstrates:
+
+- Both exact linked identities sign in through cross-site GET navigation with
+  the Secure/HttpOnly/Lax transaction cookie. The observed callback omits the
+  Strict account cookie. A Strict session is issued and same-origin `/me` works;
+  JavaScript cannot read the bearer cookie. Callback replay issues no session.
+- A foreign browser cannot consume the response; the initiating browser still
+  can. Actual credentialed cross-site fetch, wrong state and provider failure
+  return only the fixed clean failure destination without account/session gain.
+- A recently authenticated ordinary account explicitly links an additional
+  Microsoft identity while its Strict account cookie is absent on the return.
+  Its original session stays unchanged. Logging out through the actual HTTP
+  adapter while another link is pending prevents that link from completing.
+  This is not browser evidence of elevated owner/admin passkey assurance.
+- An unlinked Google identity receives only pending enrollment until explicit
+  matching authoritative Gmail contact submission; no email is sent by that
+  path. An unlinked Microsoft identity with the same verified-email claim still
+  requires separate contact proof. CSRF is enforced; another browser cannot use
+  the mail token; confirmation succeeds once in its initiating browser.
+- Enrollment creates no organization membership. Email secrets remain in URL
+  fragments and never reach the TLS listener's URLs. TLS observations and
+  application callback metadata are reconciled for every callback.
+
+Success-only `OIDC_BROWSER_VERIFIED` output records engine/version, observed
+metadata, exercised behavior, rejection controls and source hashes without raw
+cookies, authorization codes, assertions or mail tokens. The matrix marker is
+emitted only after all three engines pass; an optional engine argument runs only
+a diagnostic case and emits no matrix marker. The hosted `SAML and OIDC browser
+acceptance` job runs both complete matrices on Node 22.12.0 and gates deployment.
+Fixture HTML remains test scaffolding, not product UI. This evidence does not
+establish real Google/Microsoft registrations/accounts, actual mail delivery,
+physical devices, packaged Electron, public edge admission or hosted Worker CPU.
 
 Future composition must supply trusted dependencies and preserve the fixed
 origin/transport contracts. The account/enrollment/verification pages above are

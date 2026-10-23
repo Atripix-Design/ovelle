@@ -1,3 +1,4 @@
+import { browserTransport } from './browser-transport'
 import { inflateRawSync } from 'node:zlib'
 import type { RequestContext } from '../../../src/cloudflare/stage0/contracts'
 import { handleSamlRequest } from '../../../src/cloudflare/stage0/auth/saml/routes'
@@ -35,19 +36,11 @@ export default { async fetch(request: Request, env: FixtureEnv): Promise<Respons
     if (url.pathname === '/__fixture/navigation') return Response.json(navigation)
     return new Response(null, { status: 404 })
   }
-  // Miniflare's Node fetch transport forces Sec-Fetch-Mode=cors. Only this
-  // authenticated test bridge can restore values actually received over TLS.
-  // An absent browser header stays absent; no navigation metadata is inferred.
-  if (request.headers.get('X-Fixture-Transport') !== env.CONTROL) return new Response(null, { status: 403 })
-  const observed = JSON.parse(request.headers.get('X-Fixture-Observed') ?? '{}') as Record<string, string | null>
-  const headers = new Headers(request.headers), modeBefore = headers.get('Sec-Fetch-Mode')
-  for (const name of ['Sec-Fetch-Mode', 'Sec-Fetch-Dest', 'Sec-Fetch-Site']) {
-    headers.delete(name)
-    if (observed[name] !== null && observed[name] !== undefined) headers.set(name, observed[name])
-  }
-  headers.delete('X-Fixture-Transport'); headers.delete('X-Fixture-Observed')
-  request = new Request(request, { headers })
-  if (url.pathname === '/api/v1/auth/saml/callback') navigation.push({ modeBefore, mode: headers.get('Sec-Fetch-Mode'), dest: headers.get('Sec-Fetch-Dest'), site: headers.get('Sec-Fetch-Site') })
+  const modeBefore = request.headers.get('Sec-Fetch-Mode')
+  const transported = browserTransport(request, env.CONTROL)
+  if (!transported) return new Response(null, { status: 403 })
+  request = transported
+  if (url.pathname === '/api/v1/auth/saml/callback') navigation.push({ modeBefore, mode: request.headers.get('Sec-Fetch-Mode'), dest: request.headers.get('Sec-Fetch-Dest'), site: request.headers.get('Sec-Fetch-Site') })
   const settings = { connectionId: 'saml-a', organizationId: 'org-a', connectionVersion: 1, issuer: samlIssuer,
     audience: 'https://ovelle.example.test/saml', nameIdFormat: persistent, signingKeys: [publicKey], entryPoint: env.IDP + '/sso' }
   if (url.origin === env.IDP && url.pathname === '/sso') {

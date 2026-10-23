@@ -8,7 +8,9 @@ The HTML documents are test scaffolding, not product presentation.
 
 ## Transport and evidence
 
-The runner generates a one-day self-signed TLS certificate/private key in a
+The runner reuses `scripts/stage0-browser-harness.mjs` and the authenticated
+`tests/worker/stage0/browser-transport.ts` bridge with the OIDC suite. It retains
+the SAML-specific assertions below. The shared harness generates a one-day self-signed TLS certificate/private key in a
 temporary directory, starts a loopback-only HTTPS listener on an ephemeral port,
 and uses a browser-configured HTTP CONNECT proxy to route the three exact
 fixture host/port authorities to that listener. It changes neither the
@@ -73,7 +75,7 @@ Worker/D1 tests cover quota enforcement. No application quota is weakened.
 The success-only `SAML_BROWSER_VERIFIED` output includes engine, browser version,
 observed metadata, negative-control names and exercised source/fixture hashes. It contains
 no cookies, assertions, contact tokens, control secrets or private keys. CI's
-hosted `SAML browser acceptance` job installs Chromium, Firefox, WebKit and OS
+hosted `SAML and OIDC browser acceptance` job installs Chromium, Firefox, WebKit and OS
 dependencies, checks the proxy boundary, and runs every engine on Node 22.12.0
 (the supported floor). It uses the exact checked-out source and gates deployment
 alongside existing validation. No engine is optional or allowed to fail.

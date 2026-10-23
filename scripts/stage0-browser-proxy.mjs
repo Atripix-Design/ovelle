@@ -4,8 +4,8 @@ import { once } from 'node:events'
 
 // Test-only CONNECT transport: preserve end-to-end browser TLS/Host/Origin while
 // resolving exactly the fixture authorities to one loopback listener.
-export async function createFixtureProxy({ port, hosts }) {
-  const allowed = new Set(hosts.map(host => `${host}:${port}`))
+export async function createFixtureProxy({ port, hosts = [], authorities }) {
+  const allowed = new Set(authorities ?? hosts.map(host => `${host}:${port}`))
   const sockets = new Set()
   const track = socket => {
     sockets.add(socket)
