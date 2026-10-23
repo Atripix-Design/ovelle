@@ -3,7 +3,9 @@
 The backend is implemented as internal modules. Public authentication is still
 closed; the public Worker does not compose these handlers. This record describes
 local/CI evidence and the acceptance still needed before a separately authorized
-development rollout. It does not approve remote migrations, provider changes,
+development rollout. The [original-plan status](stage0-status.md) maps implemented
+internal behavior and remaining acceptance without treating this as a complete
+Stage 0 release. This record does not approve remote migrations, provider changes,
 sending mail, public signup or production rollout.
 
 ## Connected backend journey
@@ -65,9 +67,13 @@ Run the focused journey and `npm run test:stage0`, `npm run check`, `npm run lin
 `npm run build`, `npm run check:ci`, `npm run check:download-email`, and
 `npm run check:privacy`. New files must be included in the index before relying on
 the tracked-file privacy check. CI runs the full backend suite and the separate
-`SAML browser acceptance` job; deployment depends on that browser job. The
-[HTTPS browser evidence](../architecture/stage0-saml-browser-evidence.md) describes
-its isolated origins, observed metadata and explicit acceptance limits.
+`Identity browser acceptance` job; deployment depends on that browser job. On
+Node 22.12.0 it requires the SAML and OIDC journeys in Chromium, Firefox and WebKit,
+then the existing Chromium virtual-passkey registration/logout/login ceremony.
+The [SAML evidence](../architecture/stage0-saml-browser-evidence.md),
+[OIDC evidence](../architecture/stage0-oidc-http-enrollment.md) and
+[passkey evidence](../architecture/stage0-passkey-security.md) describe the isolated
+fixtures, observed behavior and explicit acceptance limits.
 
 For a published increment, record the full source SHA and its exact `ci.yml` run.
 Require every job terminal and successful or intentionally skipped, including

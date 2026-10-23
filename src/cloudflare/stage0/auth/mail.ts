@@ -34,7 +34,7 @@ function compose(origin: string, sender: string, input: AuthEmail): EmailMessage
   const subject = verification ? 'Verify your Ovelle contact email' : 'Your Ovelle staff invitation'
   const action = verification ? 'Review and confirm your contact email' : 'Review your staff invitation'
   const explanation = verification
-    ? 'This link expires after 15 minutes. Opening it does not confirm your email; confirmation requires an explicit action in Ovelle.'
+    ? 'This link expires within 15 minutes and may expire sooner when your sign-in attempt ends. Opening it does not confirm your email; confirmation requires an explicit action in Ovelle.'
     : 'This invitation expires after 72 hours. Opening it does not grant access; acceptance requires the intended verified account in Ovelle.'
   return {
     from: { email: sender, name: 'Ovelle' },

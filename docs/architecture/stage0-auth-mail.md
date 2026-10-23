@@ -39,7 +39,7 @@ headers, CC/BCC, reply addresses and attachments are not supported.
 
 | Purpose | Accepted destination | Credential/action lifetime owned by service |
 | --- | --- | --- |
-| `verification` | Exact origin + `/account/verify-contact#token=<43 base64url characters>`; optional final `&flow=saml` | 15 minutes, one-use explicit confirmation |
+| `verification` | Exact origin + `/account/verify-contact#token=<43 base64url characters>`; optional final `&flow=saml` | At most 15 minutes, capped by the enrollment deadline; one-use explicit confirmation |
 | `staff_invitation` | Exact origin + `/account/staff-invitation#token=<43 base64url characters>` | 72 hours, explicit acceptance by intended verified account |
 | `password_reset` | Rejected pending approved reset authority and URL contract | Password/KDF/reset work remains incomplete |
 
