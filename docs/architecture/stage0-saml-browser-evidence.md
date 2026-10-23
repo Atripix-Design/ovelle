@@ -2,23 +2,27 @@
 
 October 23, 2026. `npm run test:stage0-saml-browser` runs the actual internal
 SAML HTTP, maintained protocol, transaction, contact-enrollment and session
-services in workerd with ephemeral D1. Chromium performs real cross-site HTTPS
-form navigation. The public Worker does not import the fixture or auth handlers.
+services in workerd with ephemeral D1. Chromium, Firefox and WebKit perform real
+cross-site HTTPS form navigation. The public Worker does not import the fixture or auth handlers.
 The HTML documents are test scaffolding, not product presentation.
 
 ## Transport and evidence
 
 The runner generates a one-day self-signed TLS certificate/private key in a
 temporary directory, starts a loopback-only HTTPS listener on an ephemeral port,
-and maps DNS to loopback inside that browser process. It changes neither the
+and uses a browser-configured HTTP CONNECT proxy to route the three exact
+fixture host/port authorities to that listener. It changes neither the
 machine hosts file nor trust store. The isolated browser context ignores
 certificate errors. This verifies cookie/navigation behavior over TLS, not
 public certificate trust or production transport configuration.
 
 Three fixture hosts represent application, IdP and attacker sites. A request
 guard permits only their exact origins, including the chosen port. An intentional
-external-fetch control proves blocking. Browser DNS also maps any missed hostname
-to loopback. Worker outbound requests are denied and zero attempts are required.
+external-fetch control proves blocking. The proxy rejects other CONNECT
+authorities, ports and plaintext HTTP requests; it never resolves destinations
+or connects anywhere except the fixture listener. Socket tests prove binary
+tunnel preservation, destination denial and active-tunnel cleanup. Worker
+outbound requests are denied and zero attempts are required.
 No real provider, mail service, account data, development application endpoint or
 persistent database is used.
 
@@ -63,20 +67,26 @@ Worker/D1 tests cover quota enforcement. No application quota is weakened.
   state, and receives no organization membership.
 - Mail credentials never appear in URLs received by the HTTPS server. Browser
   and Worker external-network controls are checked. `finally` disposes resources,
-  including temporary TLS private keys.
+  including temporary TLS private keys. Cleanup attempts all disposers even when
+  one fails; proxy shutdown destroys active tunnels.
 
-The success-only `SAML_BROWSER_VERIFIED` output includes browser version, observed
-metadata, negative-control names and exercised source/fixture hashes. It contains
+The success-only `SAML_BROWSER_VERIFIED` output includes engine, browser version,
+observed metadata, negative-control names and exercised source/fixture hashes. It contains
 no cookies, assertions, contact tokens, control secrets or private keys. CI's
-hosted `SAML browser acceptance` job installs Chromium/OS dependencies, runs on
-the exact checked-out source, and gates deployment alongside existing validation.
+hosted `SAML browser acceptance` job installs Chromium, Firefox, WebKit and OS
+dependencies, checks the proxy boundary, and runs every engine on Node 22.12.0
+(the supported floor). It uses the exact checked-out source and gates deployment
+alongside existing validation. No engine is optional or allowed to fail.
+The runner prints `SAML_BROWSER_MATRIX_VERIFIED` only after all three engines
+pass. An optional `chromium`, `firefox` or `webkit` argument runs one engine for
+diagnosis and does not emit the matrix-success marker.
 It needs no application/provider secrets or privileged local-runner changes.
 
 ## Limits and remaining acceptance
 
-This is Chromium fixture evidence, not a supported-browser matrix, real IdP/mail
-acceptance, hosted Worker CPU/headroom, production TLS/metadata behavior, customer
-profile/certificate lifecycle or a complete sign-in interface. Test TLS is untrusted
+This is automated engine-fixture evidence, not a product/device support promise,
+physical Safari/iOS acceptance, real IdP/mail acceptance, hosted Worker CPU/headroom,
+production TLS/metadata behavior, customer profile/certificate lifecycle or a complete sign-in interface. Test TLS is untrusted
 outside the isolated context. Passkey browser tests provide separate evidence.
 
 Public routes, manual hosted identity migrations and rollout remain separately

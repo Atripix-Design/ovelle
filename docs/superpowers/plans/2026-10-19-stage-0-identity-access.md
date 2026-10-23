@@ -45,10 +45,12 @@ session ceilings. Migration 0015 is allocated. Actual browser/hosted/provider/ma
 acceptance and presentation remain required. These internal
 services do not complete SAML login readiness or any original whole-plan task.
 The [backend HTTPS browser fixture](../../architecture/stage0-saml-browser-evidence.md)
-adds real Chromium cross-site navigation/cookie evidence and rejection controls
+adds real Chromium/Firefox/WebKit cross-site navigation/cookie evidence and rejection controls
 using the existing internal services, with a non-secret CI job gating deployment.
 It does not complete product presentation, real-provider/mail, hosted execution
-or a supported-browser acceptance matrix.
+or a physical-device/product browser support promise. Its engine matrix uses an
+isolated CONNECT proxy and the supported Node floor in hosted CI; real IdP/mail
+and deployed-edge acceptance remain separate.
 The [authentication mail adapter](../../architecture/stage0-auth-mail.md) adds
 constrained contact-verification and staff-invitation message composition behind
 the existing AuthMailer using an injected Cloudflare email binding. Controlled

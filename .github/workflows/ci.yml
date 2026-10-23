@@ -144,10 +144,12 @@ jobs:
           ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: 22
+          node-version: 22.12.0
           cache: npm
+      - run: node --version
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
 
   hosted-fallback-on-failure:
