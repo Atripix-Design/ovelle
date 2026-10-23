@@ -55,6 +55,12 @@ the existing AuthMailer using an injected Cloudflare email binding. Controlled
 transport and D1 tests prove composition/failure behavior, not live delivery.
 Auth sender/binding provisioning, actual delivery and password-reset authority
 remain required; public auth remains closed and Task 3 remains incomplete.
+The [connected backend acceptance journey](../../operations/stage0-identity-access.md)
+now exercises newly created organizations, failed mail/resend, accepted scoped
+memberships, same-credential revocation, invited-administrator ownership and exact
+audit reconciliation through internal HTTP/D1 services. Identity establishment,
+real delivery/providers, browser/native presentation and controlled rollout remain
+separate; this does not complete original Task 11 or Stage 0.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser
 transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are
