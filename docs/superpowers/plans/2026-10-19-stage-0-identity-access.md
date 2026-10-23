@@ -45,6 +45,12 @@ provider-preserving assurance step-up and internal guarded HTTP routes. Migratio
 0008 is allocated to credentials/challenges and derived-session revocation. Local
 Workers/D1 tests and a Chromium virtual-authenticator ceremony provide evidence;
 Task 4 remains incomplete without recovery and the remaining acceptance work.
+The [organization-command continuation](../../architecture/stage0-organization-commands.md)
+implements the internal Task 6 service contract: atomic creator-limited setup,
+proposed baseline records, scoped program/location changes and guarded retry
+receipts. Migration 0009 is allocated to contact/policies/receipts and audit actions.
+These local services do not enable live organizations or complete Stage 0; recovery,
+invitations/ownership, native/UI composition and controlled rollout remain required.
 
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests and hosted investigation are implemented.
@@ -231,10 +237,10 @@ versions, an executable authorization/version guard and SQL/result mapping.
 `saveProgram(ctx, input: SaveProgramInput): Promise<ProgramSnapshot>`,
 `saveLocation(ctx, input: SaveLocationInput): Promise<LocationSnapshot>`.
 
-- [ ] Write failing creation tests for unverified/enrollment-only accounts, retry idempotency, concurrent one-organization-per-creator limit, missing owner membership and rollback if any initial row fails. Test that the creation limit is enforced in the same guarded operation, not a pre-count in JavaScript. Keep an immutable creating-account reference; ownership transfer does not replenish the creation allowance.
-- [ ] Run `npm run test:stage0 -- tests/worker/stage0/organizations.test.ts tests/worker/stage0/structure.test.ts`; expect missing services. Atomically create organization, owner admin membership/grants, initial program/location, baseline policy, audit and receipt. Return a safe snapshot without claims of nonprofit/payment verification.
-- [ ] Validate bounded names/contact email, IANA time zone and versions. Record staff-reviewed assignment/no eligibility bypass/no automatic-hour-approval defaults. Test org-qualified program/location listing, scope-limited updates, archives preserving references and stale version returning 409 without audit claiming a successful update.
-- [ ] Prove changing selected organization changes returned context but never grants a role. Run Task 6 and authorization tests to PASS; review and commit.
+- [x] Write failing creation tests for unverified/enrollment-only accounts, retry idempotency, concurrent one-organization-per-creator limit, missing owner membership and rollback if any initial row fails. Test that the creation limit is enforced in the same guarded operation, not a pre-count in JavaScript. Keep an immutable creating-account reference; ownership transfer does not replenish the creation allowance.
+- [x] Run `npm run test:stage0 -- tests/worker/stage0/organizations.test.ts tests/worker/stage0/structure.test.ts`; expect missing services. Atomically create organization, owner admin membership/grants, initial program/location, baseline policy, audit and receipt. Return a safe snapshot without claims of nonprofit/payment verification.
+- [x] Validate bounded names/contact email, IANA time zone and versions. Record staff-reviewed assignment/no eligibility bypass/no automatic-hour-approval defaults. Test org-qualified program/location listing, scope-limited updates, archives preserving references and stale version returning 409 without audit claiming a successful update.
+- [x] Prove changing selected organization changes returned context but never grants a role. Run Task 6 and authorization tests to PASS; review and commit.
 
 ## Task 7: Invite staff and accept explicitly as the intended account
 

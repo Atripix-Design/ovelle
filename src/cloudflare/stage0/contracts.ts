@@ -61,4 +61,4 @@ export interface AuthorizedContext extends RequestContext {
   scope: Scope
 }
 export interface AccountSnapshot { id: string; displayName: string; email: string; verifiedAt: number | null }
-export interface OrganizationSnapshot { id: string; name: string; timeZone: string; version: number }
+export interface OrganizationSnapshot { id: string; name: string; timeZone: string; version: number; contactEmail: string | null }

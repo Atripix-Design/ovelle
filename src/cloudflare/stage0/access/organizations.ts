@@ -1,6 +1,5 @@
 import type { Action, AuthorizedContext, OrganizationSnapshot, Principal, RequestContext, Scope } from '../contracts'
 import { parseAction } from '../contracts'
-import { auditStatement, guardedBatch } from '../db'
 import { Stage0Error } from '../errors'
 import { loadLiveSession, principalFromRow } from '../auth/sessions'
 import { accessPredicate, Bindings, validateScope } from './policy'
@@ -11,9 +10,9 @@ export async function getOrganization(ctx: RequestContext, principal: Principal,
   await loadLiveSession(ctx, principal)
   const b = new Bindings()
   const policy = accessPredicate(b, principal, organizationId, 'organization.read', organizationScope, ctx.clock.now())
-  const row = await ctx.db.prepare(`SELECT o.id,o.name,o.version,o.time_zone FROM organizations o WHERE o.id=${b.add(organizationId)} AND (${policy})`).bind(...b.values).first<{ id: string; name: string; version: number; time_zone: string }>()
+  const row = await ctx.db.prepare(`SELECT o.id,o.name,o.version,o.time_zone,o.contact_email FROM organizations o WHERE o.id=${b.add(organizationId)} AND (${policy})`).bind(...b.values).first<{ id: string; name: string; version: number; time_zone: string; contact_email: string | null }>()
   if (!row) throw new Stage0Error('not_found')
-  return { id: row.id, name: row.name, version: row.version, timeZone: row.time_zone }
+  return { id: row.id, name: row.name, version: row.version, timeZone: row.time_zone, contactEmail: row.contact_email }
 }
 export async function authorizeOrganization(ctx: RequestContext, principal: Principal, organizationId: string, action: Action, scope: Scope): Promise<AuthorizedContext> {
   parseAction(action)
@@ -39,30 +38,36 @@ function programScope(programId: string, locationId?: string): Scope {
 export async function listPrograms(ctx: RequestContext, principal: Principal, organizationId: string, filter: { locationId?: string } = {}): Promise<ProgramSnapshot[]> {
   await getOrganization(ctx, principal, organizationId)
   const b = new Bindings()
-  const policy = accessPredicate(b, principal, organizationId, 'program.read', programScope('row', filter.locationId), ctx.clock.now(), true)
+  const policy = accessPredicate(b, principal, organizationId, 'program.read', programScope('row', filter.locationId), ctx.clock.now(), 'program')
   const result = await ctx.db.prepare(`SELECT p.id,p.name,p.version FROM programs p WHERE p.organization_id=${b.add(organizationId)} AND p.archived_at IS NULL AND (${policy}) ORDER BY p.id LIMIT 100`).bind(...b.values).all<ProgramSnapshot>()
   return result.results
 }
 export async function getProgram(ctx: RequestContext, principal: Principal, organizationId: string, programId: string, filter: { locationId?: string } = {}): Promise<ProgramSnapshot> {
   await getOrganization(ctx, principal, organizationId)
   const b = new Bindings()
-  const policy = accessPredicate(b, principal, organizationId, 'program.read', programScope(programId, filter.locationId), ctx.clock.now(), true)
+  const policy = accessPredicate(b, principal, organizationId, 'program.read', programScope(programId, filter.locationId), ctx.clock.now(), 'program')
   const row = await ctx.db.prepare(`SELECT p.id,p.name,p.version FROM programs p WHERE p.organization_id=${b.add(organizationId)} AND p.id=${b.add(programId)} AND p.archived_at IS NULL AND (${policy})`).bind(...b.values).first<ProgramSnapshot>()
   if (!row) throw new Stage0Error('not_found')
   return row
 }
-export async function renameProgram(ctx: RequestContext, principal: Principal, organizationId: string, programId: string, input: { name: string; expectedVersion: number; locationId?: string }): Promise<ProgramSnapshot> {
-  if (typeof input.name !== 'string' || input.name.trim().length < 1 || input.name.trim().length > 120 || !Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 1) throw new Stage0Error('invalid_input')
-  // A program definition is shared across locations. A request-supplied location
-  // must never turn a location-scoped grant into authority over the whole row.
-  const scope = programScope(programId)
-  await authorizeOrganization(ctx, principal, organizationId, 'program.manage', scope)
+export interface LocationSnapshot { id: string; name: string; version: number }
+function locationScope(locationId: string, programId?: string): Scope {
+  const scope: Scope = { kind: 'program_location', locationId, ...(programId !== undefined ? { programId } : {}) }
+  validateScope(scope)
+  return scope
+}
+export async function listLocations(ctx: RequestContext, principal: Principal, organizationId: string, filter: { programId?: string } = {}): Promise<LocationSnapshot[]> {
+  await getOrganization(ctx, principal, organizationId)
   const b = new Bindings()
-  const policy = accessPredicate(b, principal, organizationId, 'program.manage', scope, ctx.clock.now())
-  const versionGuard = `EXISTS(SELECT 1 FROM programs WHERE id=${b.add(programId)} AND organization_id=${b.add(organizationId)} AND version=${b.add(input.expectedVersion)} AND archived_at IS NULL)`
-  await guardedBatch(ctx, `${policy} AND ${versionGuard}`, b.values, [
-    ctx.db.prepare('UPDATE programs SET name=?,version=version+1 WHERE id=? AND organization_id=? AND version=? AND archived_at IS NULL').bind(input.name.trim(), programId, organizationId, input.expectedVersion),
-    auditStatement(ctx, 'program.update', programId, principal, organizationId),
-  ])
-  return { id: programId, name: input.name.trim(), version: input.expectedVersion + 1 }
+  const policy = accessPredicate(b, principal, organizationId, 'location.read', locationScope('row', filter.programId), ctx.clock.now(), 'location')
+  const result = await ctx.db.prepare(`SELECT l.id,l.name,l.version FROM locations l WHERE l.organization_id=${b.add(organizationId)} AND l.archived_at IS NULL AND (${policy}) ORDER BY l.id LIMIT 100`).bind(...b.values).all<LocationSnapshot>()
+  return result.results
+}
+export async function getLocation(ctx: RequestContext, principal: Principal, organizationId: string, locationId: string, filter: { programId?: string } = {}): Promise<LocationSnapshot> {
+  await getOrganization(ctx, principal, organizationId)
+  const b = new Bindings()
+  const policy = accessPredicate(b, principal, organizationId, 'location.read', locationScope(locationId, filter.programId), ctx.clock.now(), 'location')
+  const row = await ctx.db.prepare(`SELECT l.id,l.name,l.version FROM locations l WHERE l.organization_id=${b.add(organizationId)} AND l.id=${b.add(locationId)} AND l.archived_at IS NULL AND (${policy})`).bind(...b.values).first<LocationSnapshot>()
+  if (!row) throw new Stage0Error('not_found')
+  return row
 }

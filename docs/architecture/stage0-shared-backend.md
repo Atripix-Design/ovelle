@@ -10,6 +10,10 @@ disconnected from the public Worker. The historical scope/evidence below describ
 the October 22 foundation; the continuation documents the subsequent work.
 [OIDC verification, linking and browser transactions](stage0-oidc-security.md)
 now add another internal layer, with [guarded browser routes and contact enrollment](stage0-oidc-http-enrollment.md) composing those services internally. The [passkey continuation](stage0-passkey-security.md) adds verified registration/login and provider-preserving step-up. Public routing, real provider/mail acceptance and hosted migrations remain gated.
+The [organization-command continuation](stage0-organization-commands.md) adds
+atomic organization setup, recorded proposed defaults, scoped structure changes
+and live-authorized retry receipts. The historical foundation notes below do not
+describe these later commands; invitations, recovery and ownership transfer remain open.
 
 ## Confirmed authentication direction
 

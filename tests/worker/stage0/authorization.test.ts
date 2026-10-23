@@ -1,13 +1,18 @@
 import { beforeEach, expect, it } from 'vitest'
 import { databaseFixture } from './database'
 import { issueSession } from '../../../src/cloudflare/stage0/auth/sessions'
-import { authorizeOrganization, getOrganization, listPrograms, getProgram, renameProgram } from '../../../src/cloudflare/stage0/access/organizations'
-import type { Principal } from '../../../src/cloudflare/stage0/contracts'
+import { authorizeOrganization, getOrganization, listPrograms, getProgram } from '../../../src/cloudflare/stage0/access/organizations'
+import { saveProgram } from '../../../src/cloudflare/stage0/access/commands'
+import type { Principal, RequestContext } from '../../../src/cloudflare/stage0/contracts'
 import { beginPasskeyRegistration, finishPasskeyRegistration } from '../../../src/cloudflare/stage0/auth/passkeys/service'
 import { passkeyFixture } from './passkey-fixture'
 
 let f: Awaited<ReturnType<typeof databaseFixture>>
 let a: Principal, c: Principal, d: Principal
+function renameProgram(ctx: RequestContext, principal: Principal, organizationId: string, programId: string, input: { name: string; expectedVersion: number; locationId?: string }) {
+  return saveProgram({ ...ctx, principal, idempotencyKey:`authorization-command-${ctx.ids.next()}`, requestDigest:'0'.repeat(64) },
+    { organizationId, id:programId, name:input.name, expectedVersion:input.expectedVersion })
+}
 beforeEach(async () => {
   f = await databaseFixture()
   a = (await issueSession(f.ctx, { accountId:'a', method:'passkey' }, 'browser')).principal

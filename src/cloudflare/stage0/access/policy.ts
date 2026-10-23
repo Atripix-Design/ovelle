@@ -21,8 +21,10 @@ export function validateScope(scope: Scope): void {
 }
 /** Central row policy used by SELECT predicates and transactional write guards.
  * A cached principal/capability is only a selector. All authority is read in SQL.
+ * allowArchived is only for replaying an already committed command receipt;
+ * it preserves scope checks and does not permit new edits to archived rows.
  */
-export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, programFromRow = false): string {
+export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location', allowArchived = false): string {
   parseAction(action)
   validateScope(scope)
   const org = b.add(organizationId)
@@ -30,8 +32,8 @@ export function accessPredicate(b: Bindings, principal: Principal, organizationI
   const account = b.add(principal.accountId)
   const transport = b.add(principal.transport)
   const time = b.add(now)
-  const program = programFromRow ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
-  const location = scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
+  const program = rowKind === 'program' ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
+  const location = rowKind === 'location' ? 'l.id' : scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
   const requestedAction = b.add(action)
   const reserved = action === 'staff.manage_admins' || action === 'ownership.transfer'
   const write = ['organization.update', 'program.manage', 'location.manage', 'staff.manage_coordinators', 'staff.manage_admins', 'ownership.transfer'].includes(action)
@@ -46,8 +48,8 @@ export function accessPredicate(b: Bindings, principal: Principal, organizationI
       AND s.expires_at>${time} AND s.created_at<=${time} AND s.assurance!='enrollment' AND m.state='active'
       AND (s.connection_id IS NULL OR c.organization_id IS NULL OR c.organization_id=o.id)
       AND (o.required_connection_id IS NULL OR (s.method='saml' AND s.connection_id=o.required_connection_id))
-      AND (${program} IS NULL OR EXISTS(SELECT 1 FROM programs sp WHERE sp.id=${program} AND sp.organization_id=o.id AND sp.archived_at IS NULL))
-      AND (${location} IS NULL OR EXISTS(SELECT 1 FROM locations sl WHERE sl.id=${location} AND sl.organization_id=o.id AND sl.archived_at IS NULL))
+      AND (${program} IS NULL OR EXISTS(SELECT 1 FROM programs sp WHERE sp.id=${program} AND sp.organization_id=o.id ${allowArchived ? '' : 'AND sp.archived_at IS NULL'}))
+      AND (${location} IS NULL OR EXISTS(SELECT 1 FROM locations sl WHERE sl.id=${location} AND sl.organization_id=o.id ${allowArchived ? '' : 'AND sl.archived_at IS NULL'}))
       AND (${write ? "m.preset!='admin' OR s.assurance='passkey'" : '1'})
       AND (${reserved ? `o.owner_account_id=s.account_id AND s.assurance='passkey' AND s.passkey_verified_at>=${b.add(now - 300_000)} AND s.passkey_verified_at<=${time}` : action === 'organization.read' ? '1' : `(o.owner_account_id=s.account_id OR (m.preset='admin' AND ${grant}) OR (${coordinatorAction ? '1' : '0'} AND m.preset='coordinator' AND ${grant}))`})
   )`
