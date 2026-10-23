@@ -5,7 +5,9 @@ request/verifier and durable transaction services into internal browser HTTP
 handlers. The public Worker does not import these handlers. This is local
 signed-message/Workers/D1 evidence, not enabled public login, hosted CPU evidence or real-provider/browser acceptance. The separate
 [contact enrollment continuation](stage0-saml-enrollment.md) adds the internal
-first-time pending/contact/confirmation contract.
+first-time pending/contact/confirmation contract. The [HTTPS browser fixture](stage0-saml-browser-evidence.md)
+adds actual Chromium form-navigation headers/cookies and negative controls against
+the same services. It does not establish real-provider or supported-browser acceptance.
 
 ## Starts and explicit links
 

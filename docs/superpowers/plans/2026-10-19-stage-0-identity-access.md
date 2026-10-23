@@ -44,6 +44,11 @@ new account/identity/session/audit and preserves original IdP authentication and
 session ceilings. Migration 0015 is allocated. Actual browser/hosted/provider/mail
 acceptance and presentation remain required. These internal
 services do not complete SAML login readiness or any original whole-plan task.
+The [backend HTTPS browser fixture](../../architecture/stage0-saml-browser-evidence.md)
+adds real Chromium cross-site navigation/cookie evidence and rejection controls
+using the existing internal services, with a non-secret CI job gating deployment.
+It does not complete product presentation, real-provider/mail, hosted execution
+or a supported-browser acceptance matrix.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser
 transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are

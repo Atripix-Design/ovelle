@@ -132,6 +132,24 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
+  saml-browser:
+    name: SAML browser acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:stage0-saml-browser
+
   hosted-fallback-on-failure:
     if: >-
       ${{ always() && inputs.force_hosted != true && (
@@ -163,7 +181,7 @@ jobs:
   # Publishing and secret-bearing work stay hosted under the platform contract.
   deploy:
     name: Deploy application
-    needs: [build, typecheck, lint]
+    needs: [build, typecheck, lint, saml-browser]
     if: >-
       ${{ github.actor != 'dependabot[bot]' &&
         (inputs.source_event || github.event_name) == 'push' &&
