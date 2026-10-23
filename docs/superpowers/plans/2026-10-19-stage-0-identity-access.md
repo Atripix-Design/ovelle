@@ -23,6 +23,14 @@ below is historical and superseded. No public login routes or remote migrations.
 
 ## October 22 execution status
 
+October 23 continuation adds internal HTTP session adapters, reload-safe CSRF
+bootstrap and durable authentication/email budgets. See
+[HTTP security implementation](../../architecture/stage0-http-security.md).
+These cover additional parts of Tasks 2–3; no original task or Stage 0 increment
+is thereby complete. Migration `0004_auth_limits.sql` is now allocated to quotas;
+assign the future desktop migration the next available number when implemented.
+The public Worker still does not import or enable these auth adapters.
+
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests and hosted investigation are implemented.
 PBKDF2 600k is rejected by the hosted iteration cap; Argon2id exceeds the free CPU

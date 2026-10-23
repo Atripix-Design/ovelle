@@ -18,6 +18,17 @@ const secretPattern = /^[A-Za-z0-9_-]{43}$/
 function secret(): string {
   return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
 }
+/** A domain-separated pseudorandom CSRF secret lets the server bootstrap the
+ * same value after a reload using the HttpOnly cookie, without storing plaintext
+ * secrets or rotating other tabs out of their sessions. It cannot recover the
+ * random bearer key. Its digest remains bound to the session in D1.
+ */
+export async function sessionCsrfSecret(token: string): Promise<string> {
+  if (!secretPattern.test(token)) throw new Stage0Error('unauthenticated')
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(token), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const bytes = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode('ovelle:browser-csrf:v1')))
+  return btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
+}
 async function digest(value: string): Promise<string> {
   return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))), byte => byte.toString(16).padStart(2, '0')).join('')
 }
@@ -43,7 +54,7 @@ export async function resolveSession(ctx: RequestContext, token: string, transpo
 }
 async function prepareIssuance(ctx: RequestContext, row: SessionRow) {
   const token = secret()
-  const csrfToken = row.transport === 'browser' ? secret() : null
+  const csrfToken = row.transport === 'browser' ? await sessionCsrfSecret(token) : null
   const insert = ctx.db.prepare(`INSERT INTO sessions(id,account_id,token_digest,csrf_digest,transport,method,assurance,account_security_version,external_identity_id,external_identity_version,connection_id,connection_version,created_at,authenticated_at,passkey_verified_at,expires_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
     .bind(row.id, row.account_id, await digest(token), csrfToken ? await digest(csrfToken) : null, row.transport, row.method, row.assurance, row.account_security_version, row.external_identity_id, row.external_identity_version, row.connection_id, row.connection_version, row.created_at, row.authenticated_at, row.passkey_verified_at, row.expires_at)
   return { insert, issued: { token, csrfToken, principal: principalFromRow(row) } }

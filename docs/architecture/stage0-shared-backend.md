@@ -4,6 +4,11 @@ October 22, 2026. Implemented as internal services with local Workers/D1 tests.
 No login routes, frontend, provider registrations or remote migrations are enabled.
 The runtime password gate remains closed. Existing public Worker behavior is unchanged.
 
+October 23 continuation: [HTTP session adapters and durable auth budgets](stage0-http-security.md)
+are implemented internally, including reload-safe CSRF bootstrap. They remain
+disconnected from the public Worker. The historical scope/evidence below describes
+the October 22 foundation; the continuation documents the subsequent work.
+
 ## Confirmed authentication direction
 
 One Ovelle account can eventually use optional email/password credentials, Google
