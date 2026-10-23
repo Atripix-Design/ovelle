@@ -13,7 +13,7 @@ now add another internal layer, with [guarded browser routes and contact enrollm
 The [organization-command continuation](stage0-organization-commands.md) adds
 atomic organization setup, recorded proposed defaults, scoped structure changes
 and live-authorized retry receipts. The historical foundation notes below do not
-describe these later commands. The [staff-invitation continuation](stage0-staff-invitations.md) adds internal pending offers, explicit acceptance and independent delivery. Internal invitation HTTP composition is implemented with public routing disconnected. The [staff-access continuation](stage0-staff-access.md) adds internal grant/role changes, revocation and two-party ownership transfer. [Recovery](stage0-recovery-review.md), public routing, native integration and controlled rollout remain open.
+describe these later commands. The [staff-invitation continuation](stage0-staff-invitations.md) adds internal pending offers, explicit acceptance and independent delivery. Internal invitation HTTP composition is implemented with public routing disconnected. The [staff-access continuation](stage0-staff-access.md) adds internal grant/role changes, revocation, two-party ownership transfer and guarded browser/native HTTP composition. [Recovery](stage0-recovery-review.md), public routing, native integration and controlled rollout remain open.
 
 ## Confirmed authentication direction
 

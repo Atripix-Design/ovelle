@@ -1,4 +1,5 @@
-import type {CommandContext, Grant, Principal, RequestContext} from '../contracts'
+import type {CommandContext, Principal, RequestContext} from '../contracts'
+import {segment,object,grants} from './http-input'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse, boundedJsonBody} from '../auth/web'
@@ -7,12 +8,6 @@ import {acceptStaffInvitation, createStaffInvitation, getStaffInvitation, listSt
 export interface StaffHttpDependencies {trustedIp:string;budgetKey:Uint8Array}
 type Route = {kind:'preview'} | {kind:'accept'} | {kind:'list';organizationId:string}
   | {kind:'detail'|'resend'|'revoke';organizationId:string;invitationId:string}
-function segment(value:string):string {
-  let decoded:string
-  try {decoded=decodeURIComponent(value)} catch {throw new Stage0Error('invalid_input')}
-  if(!decoded||decoded.length>256||/[\p{Cc}/?#]/u.test(decoded))throw new Stage0Error('invalid_input')
-  return decoded
-}
 function route(path:string):Route|null {
   if(path==='/api/v1/invitations/preview')return {kind:'preview'}
   if(path==='/api/v1/invitations/accept')return {kind:'accept'}
@@ -21,16 +16,6 @@ function route(path:string):Route|null {
   const organizationId=segment(match[1])
   if(!match[2])return {kind:'list',organizationId}
   return {kind:(match[3] as 'resend'|'revoke'|undefined)??'detail',organizationId,invitationId:segment(match[2])}
-}
-function object(value:unknown,fields:string[],required=false):Record<string,unknown> {
-  if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).some(key=>!fields.includes(key))||(required&&fields.some(key=>!Object.hasOwn(value,key))))throw new Stage0Error('invalid_input')
-  return value as Record<string,unknown>
-}
-function grants(value:unknown):Grant[] {
-  if(!Array.isArray(value)||value.length>32)throw new Stage0Error('invalid_input')
-  for(const grant of value){const parsed=object(grant,['action','scope'],true);object(parsed.scope,['kind','programId','locationId'])}
-  // Domain validation owns the closed action vocabulary and dimensional rules.
-  return value as Grant[]
 }
 /** Internal composition only. Transport, edge IP and quota key are selected by
  * a trusted server route; none can be overridden by a request DTO or header.

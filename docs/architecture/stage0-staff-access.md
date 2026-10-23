@@ -4,9 +4,9 @@ October 23, 2026. This backend increment implements staff grant/role changes,
 revocation and explicit ownership succession from Task 8 of the
 [identity/access plan](../superpowers/plans/2026-10-19-stage-0-identity-access.md).
 It follows [organization and access](../feature-list.md#01-organization-and-access).
-These are internal services exercised with local Workers/D1. No public routes,
-real mail/provider changes, native renderer work or remote identity migrations
-are enabled. Task 8 remains incomplete without its recovery-code demonstration;
+These are internal services exercised with local Workers/D1. Internal HTTP composition is implemented as described below. Public routing,
+real mail/provider changes, native renderer work and remote identity migrations
+remain disabled. Task 8 remains incomplete without its recovery-code demonstration;
 see the [operator recovery review](stage0-recovery-review.md).
 
 ## Staff authority
@@ -78,5 +78,48 @@ owner/target session invalidation, 15-minute expiry, competing accept/cancel and
 same-key races. Populated migration tests retain sessions, invitation offers,
 grants, audit and receipts and check foreign keys and immutable evidence.
 Synthetic session/key fixtures establish service behavior, not real login ceremony,
-provider acceptance or hosted D1 concurrency. HTTP composition, recovery, native
-sign-in, UI and controlled hosted rollout still need their own verification.
+provider acceptance or hosted D1 concurrency. Recovery, native sign-in, UI and controlled hosted rollout still need their own
+verification. The HTTP tests below cover internal transport composition only.
+
+## Internal HTTP contract
+
+`handleStaffAccessRequest` composes these services with a server-selected browser
+or desktop transport. It shares strict DTO/path parsing with invitation routes
+and uses the existing session/origin/CSRF adapter. No principal, transport,
+assurance, organization override or request digest is accepted from JSON.
+
+| Route | Method and behavior |
+| --- | --- |
+| `/api/v1/organizations/:orgId/memberships` | GET authorized list, bounded to 100. |
+| `/api/v1/organizations/:orgId/memberships/:membershipId` | GET authorized membership/grants. |
+| `/api/v1/organizations/:orgId/memberships/:membershipId/grants` | PATCH explicit `expectedVersion`, replacement `grants`, optional `preset`. |
+| `/api/v1/organizations/:orgId/memberships/:membershipId/revoke` | POST explicit `expectedVersion`. |
+| `/api/v1/organizations/:orgId/ownership-transfer` | POST `targetMembershipId`, `expectedOwnerVersion`, `expectedTargetVersion`; creates pending request (201). |
+| `/api/v1/organizations/:orgId/ownership-transfer/:transferId` | GET current owner/intended target detail. |
+| `/api/v1/organizations/:orgId/ownership-transfer/:transferId/accept` | POST intended target acceptance with `expectedVersion`. |
+| `/api/v1/organizations/:orgId/ownership-transfer/:transferId/revoke` | POST current owner cancellation with `expectedVersion`. |
+
+All mutations require `Idempotency-Key`, strict JSON within 16 KiB and exact
+allowed fields; nested grant/scope fields are checked before domain validation.
+IDs are decoded once and bounded; malformed encodings, control/path/query
+delimiters and query strings are rejected. Unsupported methods return 405 with
+an explicit Allow header. GET performs no transition. Required fields/types,
+role bounds and current versions remain authoritative in the domain services.
+
+Browser mutations require the exact configured Origin and session-bound CSRF.
+Desktop calls use bearer authentication and reject browser cookies, Origin and
+fetch metadata; a credential from the other transport fails. Enrollment-only
+sessions cannot access these organizations. Safe responses use no-store,
+no-referrer, nosniff, restrictive CSP and request-ID headers without CORS grants.
+Unexpected database failures become generic `unavailable` responses, never SQL
+or credential details. Transfer snapshots omit source-session proof fields.
+
+Local HTTP tests cover all route families, retries/version conflicts, explicit
+acceptance/cancellation, concurrent accept/cancel, cross-organization role
+confusion, existing-session revocation across both transports, strict DTOs and
+safe errors. A signed software WebAuthn fixture verifies OIDC-preserving owner
+step-up before source connection disabling invalidates acceptance; required SAML
+policy also blocks an existing non-SAML target session. Native acceptance retains
+the same passkey/recency requirements. These tests do not prove an Electron
+main-process callback, native credential storage, real provider login or hosted
+identity rollout. No public Worker import registers these routes.

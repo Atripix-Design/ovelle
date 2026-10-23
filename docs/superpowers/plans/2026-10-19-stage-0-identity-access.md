@@ -270,8 +270,10 @@ October 23 internal service subset: versioned grant/role changes, revocation and
 owner request/accept/cancel are implemented with local Workers/D1 tests. See
 [staff-access evidence](../../architecture/stage0-staff-access.md) and the
 [operator review contract](../../architecture/stage0-recovery-review.md).
+Guarded internal HTTP composition now exposes membership reads/changes and owner
+request/detail/accept/cancel; the public Worker remains disconnected.
 Task 8 remains incomplete: recovery codes and the required recovery/session
-revocation demonstration are missing. Internal HTTP composition, native/UI and
+revocation demonstration are missing. Native/UI and
 hosted rollout remain separate unfinished work; the checkboxes below retain the
 original whole-task acceptance contract.
 
