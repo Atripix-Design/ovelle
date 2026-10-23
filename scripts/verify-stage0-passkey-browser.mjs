@@ -11,7 +11,8 @@ import { chromium } from 'playwright'
 // Ephemeral localhost-only test harness, never a deployed application or a
 // credential bypass in the public Worker. All outbound Worker requests are denied.
 const bundle = await build({ entryPoints: ['tests/worker/stage0/passkey-browser-worker.ts'], bundle: true, format: 'esm', platform: 'browser', write: false })
-const runtime = new Miniflare(convertV4MiniflareOptions({ modules: true, script: bundle.outputFiles[0].text, compatibilityDate: '2026-10-06', d1Databases: ['DB'], outboundService: () => new Response(null, { status: 503 }) }))
+let externalWorkerRequests = 0
+const runtime = new Miniflare(convertV4MiniflareOptions({ modules: true, script: bundle.outputFiles[0].text, compatibilityDate: '2026-10-06', d1Databases: ['DB'], outboundService: () => { externalWorkerRequests++; return new Response(null, { status: 503 }) } }))
 let server
 let browser
 try {
@@ -33,7 +34,14 @@ try {
   server.listen(4173, '127.0.0.1')
   await once(server, 'listening')
   browser = await chromium.launch({ headless: true })
-  const context = await browser.newContext()
+  const context = await browser.newContext({ serviceWorkers: 'block' })
+  // A hosted browser must stay inside this isolated fixture, just like workerd.
+  let blockedBrowserRequests = 0
+  await context.route('**/*', route => {
+    if (new URL(route.request().url()).origin === 'http://localhost:4173') return route.continue()
+    blockedBrowserRequests++
+    return route.abort('blockedbyclient')
+  })
   const page = await context.newPage()
   const cdp = await context.newCDPSession(page)
   await cdp.send('WebAuthn.enable')
@@ -66,9 +74,14 @@ try {
   assert.ok(cookies.some(cookie => cookie.name === 'ovelle_local_session' && cookie.httpOnly && cookie.sameSite === 'Strict'))
   assert.ok(!cookies.some(cookie => cookie.name === 'ovelle_local_passkey' || cookie.name === 'ovelle_local_prelogin'))
   assert.equal((await db.prepare('SELECT count(*) AS n FROM passkey_credentials').first()).n, 1)
+  assert.equal(externalWorkerRequests, 0, 'Ceremony attempted external Worker traffic')
+  assert.equal(blockedBrowserRequests, 0, 'Ceremony attempted external browser traffic')
+  // Prove the absence check has an active browser boundary; do not contact it.
+  await page.evaluate(() => fetch('https://outside.example.test/fixture-network-control').catch(() => null))
+  assert.equal(blockedBrowserRequests, 1)
   const sources = ['src/cloudflare/stage0/auth/passkeys/protocol.ts', 'src/cloudflare/stage0/auth/passkeys/service.ts', 'src/cloudflare/stage0/auth/passkeys/routes.ts', 'src/cloudflare/stage0/auth/sessions.ts', 'src/cloudflare/stage0/auth/web.ts', 'src/cloudflare/stage0/auth/limits.ts', 'src/cloudflare/stage0/auth/turnstile.ts', 'migrations/0008_passkeys.sql', 'package-lock.json', 'tests/worker/stage0/passkey-browser-worker.ts', 'scripts/verify-stage0-passkey-browser.mjs']
   const sourceHashes = Object.fromEntries(await Promise.all(sources.map(async path => [path, createHash('sha256').update(await readFile(path)).digest('hex')])))
-  console.log(JSON.stringify({ ranAt: new Date().toISOString(), scope: 'local Chromium + workerd + ephemeral D1', authenticator: 'CDP virtual CTAP2, resident key and UV', browser: browser.version(), ...result, productionProvider: false, physicalAuthenticator: false, recoveryVerified: false, sourceHashes }, null, 2))
+  console.log('PASSKEY_BROWSER_VERIFIED ' + JSON.stringify({ ranAt: new Date().toISOString(), scope: 'local Chromium + workerd + ephemeral D1', authenticator: 'CDP virtual CTAP2, resident key and UV', browser: browser.version(), result, externalWorkerRequests, browserNetworkGuard: true, productionProvider: false, physicalAuthenticator: false, recoveryVerified: false, sourceHashes }))
 } finally {
   if (browser) await browser.close()
   if (server?.listening) await new Promise(resolve => server.close(resolve))

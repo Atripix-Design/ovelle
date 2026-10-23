@@ -133,7 +133,7 @@ jobs:
       - run: npm run lint
 
   saml-browser:
-    name: SAML and OIDC browser acceptance
+    name: Identity browser acceptance
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -152,6 +152,7 @@ jobs:
       - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
       - run: npm run test:stage0-oidc-browser
+      - run: npm run test:stage0-passkey-browser
 
   hosted-fallback-on-failure:
     if: >-

@@ -244,6 +244,12 @@ versions, an executable authorization/version guard and SQL/result mapping.
 
 ## Task 4: Add staff passkeys, assurance and recovery
 
+October 23 acceptance continuation: the existing Chromium virtual-UV WebAuthn
+registration/logout/discoverable-login fixture now runs in non-secret CI alongside
+the six SAML/OIDC browser journeys, with source hashes and network isolation.
+This does not establish physical-device acceptance, recovery, real primary-factor
+readiness or completion of the original Task 4.
+
 **Files:** Task 4 map; extend auth routes; tests `tests/worker/stage0/passkeys.test.ts`, `recovery.test.ts`.
 
 **Consumes:** `Principal`, enrollment sessions, account/challenge tables and SimpleWebAuthn adapters.

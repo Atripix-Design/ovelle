@@ -33,11 +33,11 @@ test('packaging uses the routed build slot while delivery and artifact cleanup s
   assert.ok(jobs['cleanup-packages'].steps[0].run.includes('--method DELETE'))
 })
 
-test('SAML deployment gate requires all three browser engines and proxy boundary checks', async () => {
+test('identity deployment gate requires protocol matrices and the existing passkey ceremony', async () => {
   const { load } = await import('js-yaml')
   const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
   const browser = jobs['saml-browser']
-  assert.equal(browser.name, 'SAML and OIDC browser acceptance')
+  assert.equal(browser.name, 'Identity browser acceptance')
   assert.equal(browser['runs-on'], 'ubuntu-latest')
   assert.ok(browser.steps.some(step => step.with?.['node-version'] === '22.12.0'))
   assert.deepEqual(browser.permissions, { contents: 'read' })
@@ -48,6 +48,7 @@ test('SAML deployment gate requires all three browser engines and proxy boundary
   assert.ok(browser.steps.some(step => step.run === 'node --test scripts/stage0-browser-proxy.test.mjs'))
   assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-saml-browser'))
   assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-oidc-browser'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-passkey-browser'))
 })
 
 test('delivery accepts only the exact current SHA of an application-branch push', () => {

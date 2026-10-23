@@ -109,8 +109,15 @@ with workerd, in-memory D1 and Chromium's virtual resident-key/UV authenticator.
 It performs real `navigator.credentials.create/get`, registration, logout and
 discoverable login through the HTTP adapters, checking cookie-only credentials
 and resulting account assurance. [Captured local evidence](stage0-passkey-browser-local.json)
-records Chromium version and tested source hashes. Primary authentication and
-Turnstile are explicit fixtures; all outbound Worker network requests are denied.
+records an earlier local Chromium version and tested source hashes. Current runs
+emit `PASSKEY_BROWSER_VERIFIED` with the actual ceremony result, browser version
+and tested source hashes. The non-secret **Identity browser acceptance** CI job
+requires this existing Chromium ceremony after both three-engine SAML/OIDC
+matrices, on Node 22.12.0, before deployment. This is one Chromium virtual-device
+journey; it does not add virtual authenticator coverage in Firefox or WebKit.
+Primary authentication and Turnstile are explicit fixtures; all outbound Worker network requests are denied
+and counted. Browser requests are restricted to the fixture origin, with an
+explicit blocked-request control after the ceremony. No live provider is contacted.
 The fixture is not imported by the application or a shipped product page.
 
 This is browser protocol/transport evidence with a virtual authenticator, not
