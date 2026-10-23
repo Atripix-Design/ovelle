@@ -13,7 +13,7 @@ interface Start { purpose: 'login' | 'link'; principal?: Principal; ip: string }
 export interface SamlCallback { relayState: string; browserBinding: string; response: string }
 interface Transaction { request_id: string; purpose: Start['purpose']; account_id: string | null; session_id: string | null; created_at: number; expires_at: number }
 interface Identity { id: string; account_id: string; version: number; security_version: number; email_verified_at: number | null }
-type Completion = { kind: 'signed_in'; session: IssuedSession; expiresAt: number } | { kind: 'linked'; identity: { id: string; provider: 'enterprise_saml'; issuer: string; subject: string } }
+type Completion = { kind: 'enrollment'; token: string; expiresAt: number } | { kind: 'signed_in'; session: IssuedSession; expiresAt: number } | { kind: 'linked'; identity: { id: string; provider: 'enterprise_saml'; issuer: string; subject: string } }
 const connectionSql = `EXISTS(SELECT 1 FROM identity_connections WHERE id=? AND organization_id=? AND protocol='saml' AND provider='enterprise_saml' AND issuer=? AND version=? AND enabled=1)`
 const connectionValues = (s: SamlConnectionSettings): SqlValue[] => [s.connectionId, s.organizationId, s.issuer, s.connectionVersion]
 function freshProof(proof: VerifiedSamlIdentity, now: number): void {
@@ -46,7 +46,8 @@ export async function startSamlTransaction(ctx: RequestContext, inputSettings: S
 }
 /** Verify only a selected browser-bound request, then atomically consume it and
  * both issuer/message IDs with current identity/session effects and audit. No
- * email matching, account creation, membership provisioning or public routing. */
+ * email matching, immediate account creation, membership provisioning or public routing.
+ * Unlinked login proof becomes a pending contact enrollment in the same batch. */
 export async function completeSamlTransaction(ctx: RequestContext, inputSettings: SamlConnectionSettings, input: SamlCallback, ip: string, budgetKey: Uint8Array): Promise<Completion> {
   object(input, ['relayState', 'browserBinding', 'response'], true)
   const { relayState, browserBinding, response } = input
@@ -75,20 +76,35 @@ export async function completeSamlTransaction(ctx: RequestContext, inputSettings
       const identity = await ctx.db.prepare(`SELECT i.id,i.account_id,i.version,a.security_version,a.email_verified_at FROM stage0_trusted_identities i JOIN accounts a ON a.id=i.account_id
         WHERE i.connection_id=? AND i.connection_version=? AND i.protocol='saml' AND i.provider='enterprise_saml' AND i.issuer=? AND i.subject=? AND i.saml_name_id_format=? AND a.disabled_at IS NULL`)
         .bind(settings.connectionId, settings.connectionVersion, proof.issuer, proof.subject, proof.nameIdFormat).first<Identity>()
-      if (!identity) throw new Stage0Error('unauthenticated')
-      const row: SessionRow = { id: ctx.ids.next(), account_id: identity.account_id, transport: 'browser', method: 'saml',
-        assurance: identity.email_verified_at === null ? 'enrollment' : 'authenticated', account_security_version: identity.security_version,
-        external_identity_id: identity.id, external_identity_version: identity.version, connection_id: settings.connectionId, connection_version: settings.connectionVersion,
-        created_at: preparedAt, authenticated_at: proof.authenticatedAt, passkey_verified_at: null,
-        expires_at: Math.min(preparedAt + 43_200_000, proof.authenticatedAt + 43_200_000, proof.sessionExpiresAt ?? Infinity) }
-      if (row.expires_at <= preparedAt) throw new Stage0Error('unauthenticated')
-      const prepared = await prepareSessionIssuance(ctx, row)
-      authority = { sql: `EXISTS(SELECT 1 FROM stage0_trusted_identities i JOIN accounts a ON a.id=i.account_id
-        WHERE i.id=? AND i.account_id=? AND i.version=? AND i.connection_id=? AND i.connection_version=? AND i.protocol='saml'
-          AND i.issuer=? AND i.subject=? AND i.saml_name_id_format=? AND a.disabled_at IS NULL AND a.security_version=? AND (a.email_verified_at IS NOT NULL OR ?='enrollment'))`,
-      values: [identity.id, identity.account_id, identity.version, settings.connectionId, settings.connectionVersion, proof.issuer, proof.subject, proof.nameIdFormat, identity.security_version, row.assurance] }
-      effects.push(prepared.insert, auditStatement(ctx, 'session.issue', row.id, prepared.issued.principal, settings.organizationId))
-      result = { kind: 'signed_in', session: prepared.issued, expiresAt: row.expires_at }
+      if (!identity) {
+        // An existing disabled, foreign or unknown-format identity is not a new
+        // person. Pending enrollment cannot revive or relabel an existing link.
+        const existing = await ctx.db.prepare('SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?')
+          .bind(settings.connectionId, proof.issuer, proof.subject).first()
+        if (existing) throw new Stage0Error('unauthenticated')
+        const token = randomSecret(), expiresAt = Math.min(preparedAt + 900_000, proof.authenticatedAt + 43_200_000, proof.sessionExpiresAt ?? Infinity)
+        authority = { sql: 'NOT EXISTS(SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?)', values: [settings.connectionId, proof.issuer, proof.subject] }
+        effects.push(
+          ctx.db.prepare('DELETE FROM saml_enrollments WHERE id IN (SELECT id FROM saml_enrollments WHERE expires_at<=? LIMIT 100)').bind(preparedAt),
+          ctx.db.prepare(`INSERT INTO saml_enrollments(id,token_digest,organization_id,connection_id,connection_version,settings_digest,issuer,subject,name_id_format,authenticated_at,session_expires_at,created_at,expires_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+            .bind(ctx.ids.next(), await secretDigest(token), settings.organizationId, settings.connectionId, settings.connectionVersion, settingsDigest, proof.issuer, proof.subject, proof.nameIdFormat, proof.authenticatedAt, proof.sessionExpiresAt ?? null, preparedAt, expiresAt),
+        )
+        result = { kind: 'enrollment', token, expiresAt }
+      } else {
+        const row: SessionRow = { id: ctx.ids.next(), account_id: identity.account_id, transport: 'browser', method: 'saml',
+          assurance: identity.email_verified_at === null ? 'enrollment' : 'authenticated', account_security_version: identity.security_version,
+          external_identity_id: identity.id, external_identity_version: identity.version, connection_id: settings.connectionId, connection_version: settings.connectionVersion,
+          created_at: preparedAt, authenticated_at: proof.authenticatedAt, passkey_verified_at: null,
+          expires_at: Math.min(preparedAt + 43_200_000, proof.authenticatedAt + 43_200_000, proof.sessionExpiresAt ?? Infinity) }
+        if (row.expires_at <= preparedAt) throw new Stage0Error('unauthenticated')
+        const prepared = await prepareSessionIssuance(ctx, row)
+        authority = { sql: `EXISTS(SELECT 1 FROM stage0_trusted_identities i JOIN accounts a ON a.id=i.account_id
+          WHERE i.id=? AND i.account_id=? AND i.version=? AND i.connection_id=? AND i.connection_version=? AND i.protocol='saml'
+            AND i.issuer=? AND i.subject=? AND i.saml_name_id_format=? AND a.disabled_at IS NULL AND a.security_version=? AND (a.email_verified_at IS NOT NULL OR ?='enrollment'))`,
+        values: [identity.id, identity.account_id, identity.version, settings.connectionId, settings.connectionVersion, proof.issuer, proof.subject, proof.nameIdFormat, identity.security_version, row.assurance] }
+        effects.push(prepared.insert, auditStatement(ctx, 'session.issue', row.id, prepared.issued.principal, settings.organizationId))
+        result = { kind: 'signed_in', session: prepared.issued, expiresAt: row.expires_at }
+      }
     } else {
       if (proof.authenticatedAt <= preparedAt - 300_000 || proof.authenticatedAt < transaction.created_at - 60_000) throw new Stage0Error('unauthenticated')
       const source = await loadLiveSession(ctx, { accountId: transaction.account_id!, sessionId: transaction.session_id!, transport: 'browser' } as Principal)
@@ -110,7 +126,7 @@ export async function completeSamlTransaction(ctx: RequestContext, inputSettings
     freshProof(proof, now)
     if (linkPrincipal && proof.authenticatedAt <= now - 300_000) throw new Stage0Error('unauthenticated')
     const link = linkPrincipal ? identityLinkGuard(linkPrincipal, now) : { sql: '1', values: [] }
-    if (result.kind === 'signed_in' && now >= result.expiresAt) throw new Stage0Error('unauthenticated')
+    if (result.kind !== 'linked' && now >= result.expiresAt) throw new Stage0Error('unauthenticated')
     await guardedBatch(ctx, `EXISTS(SELECT 1 FROM saml_transactions WHERE request_id=? AND ${selection}) AND ${connectionSql}
       AND NOT EXISTS(SELECT 1 FROM saml_replays WHERE digest IN (?,?)) AND (${authority.sql}) AND (${link.sql})`,
     [transaction.request_id, ...selectors, now, now, ...connectionValues(settings), ...replayDigests, ...authority.values, ...link.values], [

@@ -38,8 +38,11 @@ which adds maintained AuthnRequests, atomic request/replay consumption and
 existing-account session/link effects with local signed-message/D1 evidence.
 Migration 0014 is allocated. The [internal SAML HTTP adapter](../../architecture/stage0-saml-http.md)
 adds bounded cross-site POST admission, independent flow cookies and shared
-CSRF/Turnstile composition with signed-message/D1 Request tests. New-account
-enrollment and actual browser/hosted/provider acceptance remain required. These internal
+CSRF/Turnstile composition with signed-message/D1 Request tests. The [SAML contact enrollment continuation](../../architecture/stage0-saml-enrollment.md)
+adds pending proof and separate nominated-contact verification, atomically creates
+new account/identity/session/audit and preserves original IdP authentication and
+session ceilings. Migration 0015 is allocated. Actual browser/hosted/provider/mail
+acceptance and presentation remain required. These internal
 services do not complete SAML login readiness or any original whole-plan task.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser

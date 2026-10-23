@@ -49,10 +49,11 @@ it('rejects swapped browser, RelayState and signed request evidence without cons
 })
 it('does not create or email-match an account or grant organization membership for an unlinked subject', async () => {
   const attempt = await flow()
-  await expect(finish({ ...attempt.input, response: attempt.response({ subject: 'a@example.test' }) })).rejects.toThrow()
+  expect((await finish({ ...attempt.input, response: attempt.response({ subject: 'a@example.test' }) })).kind).toBe('enrollment')
   expect(await f.execute('SELECT count(*) AS n FROM accounts').first('n')).toBe(4)
   expect(await f.execute('SELECT count(*) AS n FROM sessions').first('n')).toBe(0)
-  expect(await f.execute('SELECT consumed_at FROM saml_transactions').first('consumed_at')).toBeNull()
+  expect(await f.execute('SELECT consumed_at FROM saml_transactions').first('consumed_at')).toBe(now)
+  expect(await f.execute('SELECT count(*) AS n FROM saml_enrollments').first('n')).toBe(1)
 })
 it('requires a fresh existing account and fresh new IdP authentication for explicit linking', async () => {
   const weak = await issueSession(f.ctx, { accountId: 'a', method: 'password' }, 'browser')

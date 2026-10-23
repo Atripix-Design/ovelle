@@ -1,6 +1,7 @@
 import type { RequestContext } from '../../contracts'
 import { guardedBatch } from '../../db'
 import { Stage0Error } from '../../errors'
+import { normalizedEmail, normalizedContactName, sendContactVerification } from '../contact'
 import { consumeAuthEmailBudget, finishAuthAttempt, reserveAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretMac, secretPattern } from '../secrets'
 import { issueSession, type IssuedSession } from '../sessions'
@@ -18,14 +19,6 @@ const trusted = `e.consumed_at IS NULL AND e.created_at<=? AND e.expires_at>?
     (e.provider='google' AND e.tenant_id IS NULL AND c.issuer=e.issuer)
     OR (e.provider='microsoft' AND e.tenant_id IS NOT NULL AND e.issuer='https://login.microsoftonline.com/'||e.tenant_id||'/v2.0'
       AND (c.issuer=e.issuer OR c.issuer='https://login.microsoftonline.com/{tenantid}/v2.0'))))`
-function normalizedEmail(input: unknown): string {
-  // Reject controls before trimming, including hidden header separators.
-  // eslint-disable-next-line no-control-regex
-  if (typeof input !== 'string' || /[\u0000-\u001f\u007f]/.test(input)) throw new Stage0Error('invalid_input')
-  const email = input.trim().toLowerCase()
-  if (email.length > 254 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) throw new Stage0Error('invalid_input')
-  return email
-}
 async function load(ctx: RequestContext, token: string): Promise<EnrollmentRow> {
   if (!secretPattern.test(token)) throw new Stage0Error('unauthenticated')
   const now = ctx.clock.now()
@@ -85,8 +78,7 @@ async function create(ctx: RequestContext, row: EnrollmentRow, email: string, na
 export async function submitOidcContact(ctx: RequestContext, token: string, input: { email: string; displayName: string; ip: string }, budgetKey: Uint8Array): Promise<IssuedSession | null> {
   const row = await load(ctx, token)
   const email = normalizedEmail(input.email)
-  if (typeof input.displayName !== 'string' || input.displayName.trim().length < 1 || input.displayName.trim().length > 120) throw new Stage0Error('invalid_input')
-  const name = input.displayName.trim()
+  const name = normalizedContactName(input.displayName)
   await consumeAuthEmailBudget(ctx, { email, ip: input.ip }, budgetKey)
   const exists = await ctx.db.prepare('SELECT 1 FROM accounts WHERE email=?').bind(email).first()
   if (!exists && row.contact_proved === 1 && email === row.email_hint) {
@@ -101,11 +93,7 @@ export async function submitOidcContact(ctx: RequestContext, token: string, inpu
       .bind(email, name, exists ? null : await secretDigest(secret), Math.min(now + 900_000, row.expires_at), version, exists ? 'suppressed' : 'pending', row.id),
   ])
   if (exists) return null
-  let delivery = 'failed'
-  try {
-    const sent = await ctx.mailer.send({ to: email, kind: 'verification', url: `${ctx.config.origin}/account/verify-contact#token=${secret}` })
-    if (sent.status === 'accepted') delivery = 'accepted'
-  } catch { /* Delivery failures do not change acceptance or disclose provider details. */ }
+  const delivery = await sendContactVerification(ctx, email, secret)
   await ctx.db.prepare('UPDATE oidc_enrollments SET delivery=? WHERE id=? AND contact_version=? AND consumed_at IS NULL').bind(delivery, row.id, version).run()
   return null
 }

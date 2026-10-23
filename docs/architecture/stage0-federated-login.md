@@ -15,7 +15,10 @@ remain open. The [internal SAML verifier](stage0-saml-security.md) now validates
 real signed response/assertion fixtures through a maintained implementation in
 workerd. The [durable SAML service](stage0-saml-transactions.md) now adds
 request/replay consumption, existing-account sessions and explicit linking.
-New-account enrollment, browser HTTP/cookie composition, hosted evidence and
+The [internal SAML HTTP adapter](stage0-saml-http.md) and
+[first-time contact enrollment](stage0-saml-enrollment.md) now provide bounded
+browser handlers and pending proof/contact confirmation with local fixtures.
+Real browser/provider/mail acceptance, hosted evidence and
 real IdP acceptance remain unfinished.
 The remaining discussion records requirements, not completed login.
 

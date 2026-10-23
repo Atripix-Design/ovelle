@@ -2,8 +2,7 @@
 
 October 23, 2026. This continues the [maintained SAML verifier](stage0-saml-security.md)
 with durable internal request, replay, existing-account login and explicit identity
-linking services. It does not register HTTP routes, set browser cookies, enroll a
-new account or establish hosted/real-provider acceptance. The separate
+linking services, with [pending first-time enrollment](stage0-saml-enrollment.md). It does not register HTTP routes, set browser cookies or establish hosted/real-provider acceptance. The separate
 [internal HTTP composition](stage0-saml-http.md) adds browser admission and cookies. The public Worker does
 not import these services. The original Stage 0 plan remains incomplete.
 
@@ -57,7 +56,9 @@ requests and 100 expired replay rows during a start; it cannot erase still-valid
 replay evidence. No raw assertion, attributes or provider token enters D1/audit.
 
 Login locates only the exact already-linked connection, issuer, subject and NameID
-format. It does not search by email, create an account or grant membership. The
+format. It does not search by email or grant membership. An absent exact identity now
+creates [pending contact enrollment](stage0-saml-enrollment.md), with no immediate
+account/session; any existing but unusable exact identity still denies. The
 new browser session uses the existing session preparation helper, keeps SAML
 connection/identity/version provenance, and has authenticated or contact-enrollment
 assurance according to the account. Provider roles/MFA never establish local
@@ -101,8 +102,10 @@ freshness/deadline races, quotas, migration constraints and audit rollback. The
 existing authorization policy tests remain authoritative for organization actions;
 a SAML session does not confer new grants or access to another organization.
 
-Still required: new-account/contact enrollment for first-time SAML-only users;
-internal HTTP start/link/POST callback admission, browser cookie/RelayState binding
+The [internal HTTP adapter](stage0-saml-http.md) and
+[contact enrollment](stage0-saml-enrollment.md) now implement those server contracts.
+Still required: full browser/real-provider/mail enrollment acceptance and browser
+cookie/RelayState binding acceptance
 and error handling; reviewed provider metadata/key lifecycle and customer setup;
 hosted CPU/headroom and real IdP/browser acceptance; controlled public routing and
 manual migration/rollout. A SameSite=Lax OIDC GET callback cookie must not simply be

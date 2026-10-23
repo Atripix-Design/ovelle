@@ -2,10 +2,11 @@ import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
 import { authenticateRequest, browserSessionCookie } from '../http'
 import { verifyPrelogin } from '../prelogin'
-import { secretPattern } from '../secrets'
+import { equalSecret, secretPattern } from '../secrets'
 import { verifyTurnstile } from '../turnstile'
-import { authResponse, boundedJsonBody, requireBrowserOrigin, strictFlowCookie } from '../web'
+import { authResponse, boundedJsonBody, readFlowCookie, requireBrowserOrigin, strictFlowCookie } from '../web'
 import { validateSamlConnection, type SamlConnectionSettings } from './authorization'
+import { confirmSamlContact, getSamlEnrollment, samlEnrollmentCsrf, submitSamlContact } from './enrollment'
 import { completeSamlTransaction, startSamlTransaction } from './transactions'
 
 export interface SamlHttpDependencies {
@@ -29,7 +30,10 @@ function readBinding(ctx: RequestContext, request: Request) {
     const i = part.indexOf('=')
     return i >= 0 && part.slice(0, i).trim() === name(ctx) ? [part.slice(i + 1).trim()] : []
   })
-  const parts = values.length === 1 ? values[0].split('.') : []
+  return selection(values.length === 1 ? values[0] : '')
+}
+function selection(value: string) {
+  const parts = value.split('.')
   if (parts.length !== 2 || !connectionPattern.test(parts[0]) || !secretPattern.test(parts[1])) throw new Stage0Error('unauthenticated')
   return { connectionId: parts[0], browserBinding: parts[1] }
 }
@@ -78,11 +82,33 @@ async function form(request: Request): Promise<{ relayState: string; response: s
 export async function handleSamlRequest(ctx: RequestContext, request: Request, deps: SamlHttpDependencies): Promise<Response> {
   const url = new URL(request.url), match = /^\/api\/v1\/auth\/saml\/(start|link|callback)$/.exec(url.pathname)
   if (url.origin !== ctx.config.origin) return authResponse(ctx, { error: 'forbidden' }, 403)
-  if (!match) return authResponse(ctx, { error: 'not_found' }, 404)
-  if (request.method !== 'POST') return authResponse(ctx, { error: 'method_not_allowed' }, 405, { Allow: 'POST' })
-  const callback = match[1] === 'callback'
+  const enrollment = /^\/api\/v1\/auth\/saml\/enrollment(\/(contact|confirm))?$/.exec(url.pathname)
+  if (!match && !enrollment) return authResponse(ctx, { error: 'not_found' }, 404)
+  const expected = enrollment && !enrollment[1] ? 'GET' : 'POST'
+  if (request.method !== expected) return authResponse(ctx, { error: 'method_not_allowed' }, 405, { Allow: expected })
+  const callback = match?.[1] === 'callback'
   try {
     if (url.search || url.hash) throw new Stage0Error('invalid_input')
+    if (enrollment) {
+      requireBrowserOrigin(ctx, request, expected === 'POST')
+      const pending = selection(readFlowCookie(ctx.config, request, 'saml_enrollment'))
+      if (expected === 'POST' && !equalSecret(request.headers.get('X-CSRF-Token') ?? '', await samlEnrollmentCsrf(pending.browserBinding))) throw new Stage0Error('forbidden')
+      const settings = await profile(deps, pending.connectionId)
+      if (expected === 'GET') return authResponse(ctx, await getSamlEnrollment(ctx, settings, pending.browserBinding))
+      const parsed = await boundedJsonBody(request, 4096)
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Stage0Error('invalid_input')
+      const data = parsed as Record<string, unknown>
+      if (enrollment[2] === 'contact') {
+        if (Object.keys(data).some(key => !['email', 'displayName'].includes(key)) || typeof data.email !== 'string' || typeof data.displayName !== 'string') throw new Stage0Error('invalid_input')
+        await submitSamlContact(ctx, settings, pending.browserBinding, { email: data.email, displayName: data.displayName, ip: deps.trustedIp }, deps.budgetKey)
+        return authResponse(ctx, { accepted: true }, 202)
+      }
+      if (Object.keys(data).some(key => key !== 'token') || typeof data.token !== 'string') throw new Stage0Error('invalid_input')
+      const session = await confirmSamlContact(ctx, settings, pending.browserBinding, data.token, deps.trustedIp, deps.budgetKey)
+      const headers = new Headers({ 'Set-Cookie': await browserSessionCookie(ctx, session) })
+      headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'saml_enrollment', '', 0))
+      return authResponse(ctx, null, 204, headers)
+    }
     if (callback) {
       if (request.headers.has('Authorization') || (request.headers.has('Sec-Fetch-Mode') && request.headers.get('Sec-Fetch-Mode') !== 'navigate')
         || (request.headers.has('Sec-Fetch-Dest') && request.headers.get('Sec-Fetch-Dest') !== 'document')) throw new Stage0Error('forbidden')
@@ -90,16 +116,18 @@ export async function handleSamlRequest(ctx: RequestContext, request: Request, d
       if (request.headers.get('Origin') !== new URL(settings.entryPoint).origin) throw new Stage0Error('forbidden')
       const input = await form(request)
       const result = await completeSamlTransaction(ctx, settings, { ...input, browserBinding: binding.browserBinding }, deps.trustedIp, deps.budgetKey)
-      const headers = new Headers({ Location: result.kind === 'linked' ? '/account/security' : '/account', 'Set-Cookie': bindingCookie(ctx, '', 0) })
+      const headers = new Headers({ Location: result.kind === 'linked' ? '/account/security' : result.kind === 'enrollment' ? '/account/enroll' : '/account', 'Set-Cookie': bindingCookie(ctx, '', 0) })
       headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'prelogin', '', 0))
+      if (result.kind === 'enrollment') headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'saml_enrollment', `${settings.connectionId}.${result.token}`, Math.max(0, Math.floor((result.expiresAt - ctx.clock.now()) / 1000))))
       if (result.kind === 'signed_in') {
         headers.append('Set-Cookie', await browserSessionCookie(ctx, result.session))
         headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'enrollment', '', 0))
+        headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'saml_enrollment', '', 0))
       }
       return authResponse(ctx, null, 303, headers)
     }
     requireBrowserOrigin(ctx, request, true)
-    const principal = match[1] === 'link' ? await authenticateRequest(ctx, request, 'browser') : undefined
+    const principal = match![1] === 'link' ? await authenticateRequest(ctx, request, 'browser') : undefined
     if (!principal) await verifyPrelogin(ctx, request, deps.budgetKey)
     const parsed = await boundedJsonBody(request, 4096)
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Stage0Error('invalid_input')

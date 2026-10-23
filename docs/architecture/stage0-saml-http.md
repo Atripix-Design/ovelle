@@ -3,8 +3,9 @@
 October 23, 2026. `auth/saml/routes.ts` composes the existing maintained SAML
 request/verifier and durable transaction services into internal browser HTTP
 handlers. The public Worker does not import these handlers. This is local
-signed-message/Workers/D1 evidence, not enabled public login, first-time SAML
-enrollment, hosted CPU evidence or real-provider/browser acceptance.
+signed-message/Workers/D1 evidence, not enabled public login, hosted CPU evidence or real-provider/browser acceptance. The separate
+[contact enrollment continuation](stage0-saml-enrollment.md) adds the internal
+first-time pending/contact/confirmation contract.
 
 ## Starts and explicit links
 
@@ -60,8 +61,9 @@ duplicate decoded field names, unknown fields and malformed forms fail closed.
 The existing transaction service applies its stricter response/secret bounds and
 charges the durable callback budget before XML/signature verification.
 
-The adapter calls the existing durable signed-response service. Login requires an
-exact previously linked identity and NameID format; linking uses the stored
+The adapter calls the existing durable signed-response service. Login signs in an
+exact previously linked identity and NameID format, or creates only pending contact
+enrollment for a wholly unlinked subject; linking uses the stored
 initiating account/session and retains current owner/admin local-passkey rules.
 Final request/replay/session-or-link/audit effects remain atomic. Revocation,
 expiry, wrong binding, profile substitution, duplicate callbacks or invalid
@@ -69,7 +71,8 @@ signatures cannot issue a session or link an identity.
 
 Successful login sets only the existing HttpOnly Strict browser session cookie;
 credentials are absent from JSON and redirects. Fixed 303 destinations are
-`/account` for login and `/account/security` for linking. Callback success clears
+`/account` for existing-account login, `/account/security` for linking and
+`/account/enroll` for pending first-time contact enrollment. Callback success clears
 the flow/pre-login cookies. Failure clears the flow cookie and returns a generic
 303 to `/account/sign-in?result=failed`, without parser/provider details. Responses
 reuse no-store, no-referrer, no CORS and restrictive CSP headers. Ordinary
@@ -87,8 +90,9 @@ that a Strict session is available throughout a cross-site redirect chain.
 
 Before public composition, verify actual browser navigation/cookie behavior,
 including the signed-in landing and subsequent same-origin requests, against the
-supported browsers and reviewed IdP profiles. Implement first-time SAML-only
-account/contact enrollment without email matching or automatic membership.
+supported browsers and reviewed IdP profiles. Verify the internal first-time SAML-only
+[contact enrollment](stage0-saml-enrollment.md) and mail presentation without
+email matching or automatic membership.
 Trusted metadata/certificate lifecycle, hosted verification CPU/headroom, actual
 provider acceptance, remote identity migrations, rollout and the original
 recovery/native/UI/full Stage 0 requirements remain unfinished.
