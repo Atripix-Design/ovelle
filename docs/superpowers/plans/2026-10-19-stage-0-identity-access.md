@@ -244,11 +244,12 @@ versions, an executable authorization/version guard and SQL/result mapping.
 
 ## Task 7: Invite staff and accept explicitly as the intended account
 
-**Internal service continuation (October 23):** create/accept/revoke/resend,
+**Internal service and HTTP continuation (October 23):** create/accept/revoke/resend,
 sealed offers, current-authority transactional acceptance and staff-only read services
 are implemented with local Workers/D1 tests; see [invitation evidence](../../architecture/stage0-staff-invitations.md).
-Public HTTP/GET-preview composition remains open, so the original Task 7 checklist
-is retained until that boundary is verified. This does not clear recovery or live-rollout gates.
+Guarded internal HTTP composition and authenticated read-only GET preview are
+implemented and exercised locally. This completes Task 7's internal contract; public
+Worker enabling remains controlled rollout work and recovery remains unfinished.
 
 **Files:** Task 7 map; `tests/worker/stage0/invitations.test.ts`.
 
@@ -258,10 +259,10 @@ is retained until that boundary is verified. This does not clear recovery or liv
 `revokeStaffInvitation(ctx, input: InvitationCommandInput): Promise<InvitationSnapshot>`,
 `resendStaffInvitation(ctx, input: InvitationCommandInput): Promise<InvitationSnapshot>`.
 
-- [ ] Write failing tests for admin inviting a coordinator within authority, owner-only admin invitations, no activation from send/GET preview, wrong verified email, expired token, revoked inviter, changed grants and administrator acceptance without passkey assurance.
-- [ ] Run `npm run test:stage0 -- tests/worker/stage0/invitations.test.ts`; expect missing lifecycle methods. Implement pending/accepted/revoked/expired state with separate delivery status, 72-hour expiry and token rotation on resend. Email failure leaves no active membership.
-- [ ] Acceptance must re-evaluate inviter authority and current offered scopes and atomically consume the invitation, activate one membership/grant set and append audit. Existing active members are not silently granted extra access; revoked members require explicit reactivation with only the newly reviewed grants.
-- [ ] Race two accepts, accept versus revoke, and resend versus stale-link acceptance. Verify only the current valid transition succeeds; resending revoked invitations fails and duplicate calls do not duplicate memberships. Run Task 7 and delegation tests to PASS; review and commit.
+- [x] Write failing tests for admin inviting a coordinator within authority, owner-only admin invitations, no activation from send/GET preview, wrong verified email, expired token, revoked inviter, changed grants and administrator acceptance without passkey assurance.
+- [x] Run `npm run test:stage0 -- tests/worker/stage0/invitations.test.ts`; expect missing lifecycle methods. Implement pending/accepted/revoked/expired state with separate delivery status, 72-hour expiry and token rotation on resend. Email failure leaves no active membership.
+- [x] Acceptance must re-evaluate inviter authority and current offered scopes and atomically consume the invitation, activate one membership/grant set and append audit. Existing active members are not silently granted extra access; revoked members require explicit reactivation with only the newly reviewed grants.
+- [x] Race two accepts, accept versus revoke, and resend versus stale-link acceptance. Verify only the current valid transition succeeds; resending revoked invitations fails and duplicate calls do not duplicate memberships. Run Task 7 and delegation tests to PASS; review and commit.
 
 ## Task 8: Revoke access and preserve ownership/recovery invariants
 

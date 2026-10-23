@@ -5,7 +5,8 @@ October 23, 2026. This implements the invitation services from Task 7 of the
 and the pending/accepted/expired/revoked behavior proposed under
 [coordinator invitations and permissions](../feature-list.md#coordinator-invitations-and-permissions).
 It does not expose public staff routes or enable live invitation delivery. Recovery,
-HTTP composition, native/UI integration and controlled rollout remain unfinished.
+native/UI integration and controlled rollout remain unfinished. Internal HTTP composition
+is now implemented as described below; public Worker routing remains disconnected.
 The roadmap's recovery gate still applies before public signup or invitations.
 
 ## Authority and state
@@ -44,7 +45,8 @@ Only token digests enter D1. Raw secrets exist transiently in mail URLs using a
 fragment. Mail is sent after commit, with shared email/IP budgets consumed before
 sending. Acceptance uses the shared attempt reservation/settlement budgets. Callers
 must supply the trusted edge IP and server budget key, never request JSON values.
-Public HTTP origin/CSRF/method/admission composition remains future work.
+The internal adapter composes origin/CSRF/method/admission checks; enabling public
+Worker routing remains future controlled rollout work.
 
 Mail failure never activates membership. Delivery is tracked separately from the
 invitation lifecycle, with a version/digest guard preventing an old callback from
@@ -66,4 +68,37 @@ current authority changes inside final batches, expiry, reactivation, failed and
 late delivery, shared send quotas, immutable offers and lifecycle races. A populated
 migration test verifies sessions, receipts, audit, existing commands and foreign keys.
 Fixtures issue synthetic sessions and use fixture mail; they do not demonstrate a
-real provider login or real email. Preview service tests are not HTTP GET evidence.
+real provider login or real email. HTTP adapter tests now exercise authenticated GET preview without consuming tokens.
+They do not enable live routing or establish a rendered confirmation flow.
+
+## Internal HTTP contract
+
+`handleStaffInvitationRequest` accepts a fixed server-selected browser/desktop
+transport, trusted edge IP and quota key. It reuses the shared session adapter:
+browser mutations require exact origin and session CSRF, while native bearer
+requests reject browser cookies/origin/fetch metadata. A caller cannot select
+principal, transport or quota identity through JSON or forwarded-IP headers.
+
+| Route | Behavior |
+| --- | --- |
+| `GET/POST /api/v1/organizations/:orgId/invitations` | Authorized bounded list or pending creation (201). |
+| `GET /api/v1/organizations/:orgId/invitations/:invitationId` | Authorized detail and immutable offered grants. |
+| `POST /api/v1/organizations/:orgId/invitations/:invitationId/{resend,revoke}` | Explicit expected-version transition. |
+| `GET /api/v1/invitations/preview` | Authenticated, read-only minimal organization/state/expiry preview using `X-Invitation-Token`. |
+| `POST /api/v1/invitations/accept` | Intended verified account acceptance; administrators require passkey assurance. |
+
+All command POSTs require `Idempotency-Key`. JSON is limited to 16 KiB, rejects
+unknown/missing top-level fields and non-string acceptance tokens, and rejects
+unknown grant/scope fields before domain validation. Query strings are rejected.
+The preview header must be deliberately populated from the mail fragment by a
+future client: a mail prefetch/navigation supplies neither the header nor an
+acceptance POST. Preview returns no recipient email, grants or token. Possession
+of a token permits minimal preview for another authenticated account; accepting
+it still requires the intended verified account. That distinction supports
+account-switch confirmation without revealing private staff permissions.
+
+Responses use no-store/no-referrer, nosniff and restrictive CSP with no CORS grant.
+Expected domain failures use a closed error vocabulary; unexpected SQL/provider
+failures return only `unavailable` (503). Neither errors nor snapshots reflect
+credentials. Shared IP/email quotas are reserved before delivery; HTTP tests
+verify forwarded-IP spoofing cannot select a different trusted budget.
