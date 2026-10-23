@@ -45,6 +45,12 @@ provider-preserving assurance step-up and internal guarded HTTP routes. Migratio
 0008 is allocated to credentials/challenges and derived-session revocation. Local
 Workers/D1 tests and a Chromium virtual-authenticator ceremony provide evidence;
 Task 4 remains incomplete without recovery and the remaining acceptance work.
+The [recovery continuation](../../architecture/stage0-recovery-review.md) implements
+recent-existing-passkey-protected eight-code issuance/rotation and safe status,
+with digest-only migration 0013 and internal browser routes. Consumption and
+replacement enrollment remain closed pending reconciliation of the original
+password-plus-code draft with optional passwords and confirmed federation.
+This does not complete Task 4 or its recovery/session demonstration.
 The [organization-command continuation](../../architecture/stage0-organization-commands.md)
 implements the internal Task 6 service contract: atomic creator-limited setup,
 proposed baseline records, scoped program/location changes and guarded retry
@@ -288,8 +294,9 @@ owner request/accept/cancel are implemented with local Workers/D1 tests. See
 [operator review contract](../../architecture/stage0-recovery-review.md).
 Guarded internal HTTP composition now exposes membership reads/changes and owner
 request/detail/accept/cancel; the public Worker remains disconnected.
-Task 8 remains incomplete: recovery codes and the required recovery/session
-revocation demonstration are missing. Native/UI and
+Task 8 remains incomplete: code consumption, replacement enrollment and the
+required recovery/session revocation demonstration are missing. Code issuance
+and rotation are implemented internally as described in the recovery continuation. Native/UI and
 hosted rollout remain separate unfinished work; the checkboxes below retain the
 original whole-task acceptance contract.
 
