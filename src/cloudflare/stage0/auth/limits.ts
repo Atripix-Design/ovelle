@@ -83,3 +83,14 @@ export async function consumeAuthEmailBudget(ctx: RequestContext, input: Selecto
   const now = ctx.clock.now()
   await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
 }
+
+/** Provider starts have no email yet. Reserve five starts per provider/IP and
+ * the shared thirty-per-IP challenge ceiling. No refund on successful login:
+ * starting a flow already consumed database and provider work.
+ */
+export async function consumeOidcStartBudget(ctx: RequestContext, provider: 'google' | 'microsoft', ip: string, keyMaterial: Uint8Array): Promise<void> {
+  if (provider !== 'google' && provider !== 'microsoft') throw new Stage0Error('invalid_input')
+  const limits = await budgets({ email: `oidc-start:${provider}`, ip }, keyMaterial, false)
+  const now = ctx.clock.now()
+  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+}

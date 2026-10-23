@@ -8,6 +8,8 @@ October 23 continuation: [HTTP session adapters and durable auth budgets](stage0
 are implemented internally, including reload-safe CSRF bootstrap. They remain
 disconnected from the public Worker. The historical scope/evidence below describes
 the October 22 foundation; the continuation documents the subsequent work.
+[OIDC verification, linking and browser transactions](stage0-oidc-security.md)
+now add another internal layer; public login remains disabled.
 
 ## Confirmed authentication direction
 

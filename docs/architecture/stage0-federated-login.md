@@ -7,6 +7,11 @@ Provider integrations and password runtime approval remain pending. The
 [shared backend foundation](stage0-shared-backend.md) implements storage, sessions
 and organization access, not the provider login routes.
 
+October 23: [implemented OIDC verification/linking/transaction boundary](stage0-oidc-security.md)
+now covers part of the direction below. It remains internal and locally tested;
+SAML, public callback composition, contact onboarding and real provider setup
+remain open. The remaining discussion records requirements, not completed login.
+
 ## Universal boundary
 
 Use an Ovelle account independent of login method, with one or more linked

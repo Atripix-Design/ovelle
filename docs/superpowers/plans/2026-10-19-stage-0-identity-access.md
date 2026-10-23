@@ -30,6 +30,11 @@ These cover additional parts of Tasks 2–3; no original task or Stage 0 increme
 is thereby complete. Migration `0004_auth_limits.sql` is now allocated to quotas;
 assign the future desktop migration the next available number when implemented.
 The public Worker still does not import or enable these auth adapters.
+The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
+Google/Microsoft verification, exact-identity linking and one-time browser
+transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are
+allocated to those changes. Public callback/start routing, contact onboarding,
+SAML and the rest of Tasks 3–11 remain incomplete.
 
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests and hosted investigation are implemented.

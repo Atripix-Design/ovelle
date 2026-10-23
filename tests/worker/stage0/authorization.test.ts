@@ -91,7 +91,7 @@ it('racing a revoke against a write yields a valid commit order and blocks every
 it('requires the configured SAML connection and binds its session to its organization', async () => {
   await f.execute("INSERT INTO identity_connections(id,organization_id,protocol,provider,issuer,created_at) VALUES('saml-a','org-a','saml','enterprise_saml','urn:fixture:a',1)").run()
   await f.execute("INSERT INTO external_identities(id,account_id,connection_id,issuer,subject,created_at) VALUES('saml-c','c','saml-a','urn:fixture:a','subject-c',1)").run()
-  const saml = (await issueSession(f.ctx,{accountId:'c',method:'saml',externalIdentityId:'saml-c'},'browser')).principal
+  const saml = (await issueSession(f.ctx,{accountId:'c',method:'saml',externalIdentityId: 'saml-c', identityVersion: 1, connectionVersion: 1},'browser')).principal
   expect((await getOrganization(f.ctx,saml,'org-a')).name).toBe('A')
   await expect(getOrganization(f.ctx,saml,'org-b')).rejects.toMatchObject({code:'not_found'})
   await f.execute("UPDATE organizations SET required_connection_id='saml-a',version=version+1 WHERE id='org-a'").run()

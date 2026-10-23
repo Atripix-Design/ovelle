@@ -62,9 +62,9 @@ it('revokes own sessions and all transports without allowing another account to 
 it('binds federated sessions to the exact account, identity, protocol and connection version', async () => {
   await f.execute("INSERT INTO identity_connections(id,protocol,provider,issuer,client_id,created_at) VALUES('google','oidc','google','https://accounts.google.com','fixture',1)").run()
   await f.execute("INSERT INTO external_identities(id,account_id,connection_id,issuer,subject,created_at) VALUES('identity-a','a','google','https://accounts.google.com','fixture-subject',1)").run()
-  await expect(issueSession(f.ctx, { accountId: 'b', method: 'oidc', externalIdentityId: 'identity-a' }, 'browser')).rejects.toMatchObject({ code: 'unauthenticated' })
-  await expect(issueSession(f.ctx, { accountId: 'a', method: 'saml', externalIdentityId: 'identity-a' }, 'browser')).rejects.toMatchObject({ code: 'unauthenticated' })
-  const issued = await issueSession(f.ctx, { accountId: 'a', method: 'oidc', externalIdentityId: 'identity-a' }, 'browser')
+  await expect(issueSession(f.ctx, { accountId: 'b', method: 'oidc', externalIdentityId: 'identity-a', identityVersion: 1, connectionVersion: 1 }, 'browser')).rejects.toMatchObject({ code: 'unauthenticated' })
+  await expect(issueSession(f.ctx, { accountId: 'a', method: 'saml', externalIdentityId: 'identity-a', identityVersion: 1, connectionVersion: 1 }, 'browser')).rejects.toMatchObject({ code: 'unauthenticated' })
+  const issued = await issueSession(f.ctx, { accountId: 'a', method: 'oidc', externalIdentityId: 'identity-a', identityVersion: 1, connectionVersion: 1 }, 'browser')
   expect(issued.principal).toMatchObject({ assurance: 'authenticated', connectionId: 'google', connectionVersion: 1 })
   await f.execute("UPDATE identity_connections SET version=2,enabled=0 WHERE id='google'").run()
   await expect(resolveSession(f.ctx, issued.token, 'browser')).rejects.toMatchObject({ code: 'unauthenticated' })
@@ -94,7 +94,7 @@ it('prevents modifying session assurance or unrevoking a retired session in plac
 it('does not revive external-identity sessions after disable and re-enable', async () => {
   await f.execute("INSERT INTO identity_connections(id,protocol,provider,issuer,client_id,created_at) VALUES('google','oidc','google','https://accounts.google.com','fixture',1)").run()
   await f.execute("INSERT INTO external_identities(id,account_id,connection_id,issuer,subject,created_at) VALUES('identity-a','a','google','https://accounts.google.com','subject-a',1)").run()
-  const session = await issueSession(f.ctx,{accountId:'a',method:'oidc',externalIdentityId:'identity-a'},'browser')
+  const session = await issueSession(f.ctx,{accountId:'a',method:'oidc',externalIdentityId: 'identity-a', identityVersion: 1, connectionVersion: 1},'browser')
   await f.execute("UPDATE external_identities SET disabled_at=1,version=2 WHERE id='identity-a'").run()
   await f.execute("UPDATE external_identities SET disabled_at=NULL,version=3 WHERE id='identity-a'").run()
   await expect(resolveSession(f.ctx,session.token,'browser')).rejects.toMatchObject({code:'unauthenticated'})

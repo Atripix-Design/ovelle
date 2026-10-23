@@ -2,7 +2,7 @@ import type { D1Database } from '@cloudflare/workers-types'
 import { applyD1Migrations, env, type D1Migration } from 'cloudflare:test'
 import { fixtureContext } from './helpers'
 
-export async function databaseFixture() {
+export async function databaseFixture(migrationLimit?: number) {
   const bindings = env as unknown as { DB: D1Database; TEST_MIGRATIONS: D1Migration[] }
   const db = bindings.DB
   // This plugin/runtime shares D1 state between tests in a file. Reset only the
@@ -12,7 +12,7 @@ export async function databaseFixture() {
     db.prepare('PRAGMA defer_foreign_keys = ON'),
     ...objects.results.map(row => db.prepare(`DROP ${row.type.toUpperCase()} "${row.name.replaceAll('"', '""')}"`)),
   ])
-  await applyD1Migrations(db, bindings.TEST_MIGRATIONS)
+  await applyD1Migrations(db, bindings.TEST_MIGRATIONS.slice(0, migrationLimit))
   const ctx = fixtureContext(db)
   let now = ctx.clock.now()
   ctx.clock.now = () => now

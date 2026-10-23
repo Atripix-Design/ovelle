@@ -13,7 +13,7 @@ export interface IssuedSession { token: string; csrfToken: string | null; princi
 /** Only a verified server-side credential/protocol adapter may invoke the issuer.
  * This is not proof verification, and must never receive a deserialized request body.
  */
-export interface VerifiedAuthentication { accountId: string; method: Method; externalIdentityId?: string }
+export interface VerifiedAuthentication { accountId: string; method: Method; externalIdentityId?: string; identityVersion?: number; connectionVersion?: number }
 const secretPattern = /^[A-Za-z0-9_-]{43}$/
 function secret(): string {
   return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
@@ -62,12 +62,12 @@ async function prepareIssuance(ctx: RequestContext, row: SessionRow) {
 export async function issueSession(ctx: RequestContext, auth: VerifiedAuthentication, transport: Transport): Promise<IssuedSession> {
   if (!['password', 'passkey', 'oidc', 'saml'].includes(auth.method) || !['browser', 'desktop'].includes(transport)) throw new Stage0Error('invalid_input')
   const federated = auth.method === 'oidc' || auth.method === 'saml'
-  if (federated !== Boolean(auth.externalIdentityId)) throw new Stage0Error('invalid_input')
+  if (federated !== Boolean(auth.externalIdentityId) || (federated && (!Number.isSafeInteger(auth.identityVersion) || auth.identityVersion! < 1 || !Number.isSafeInteger(auth.connectionVersion) || auth.connectionVersion! < 1)) || (!federated && (auth.identityVersion !== undefined || auth.connectionVersion !== undefined))) throw new Stage0Error('invalid_input')
   const account = await ctx.db.prepare('SELECT security_version,email_verified_at FROM accounts WHERE id=? AND disabled_at IS NULL').bind(auth.accountId).first<{ security_version: number; email_verified_at: number | null }>()
   if (!account) throw new Stage0Error('unauthenticated')
   if (auth.method === 'passkey' && account.email_verified_at === null) throw new Stage0Error('forbidden')
-  const identity = federated ? await ctx.db.prepare(`SELECT i.connection_id,c.version,i.version AS identity_version FROM external_identities i JOIN identity_connections c ON c.id=i.connection_id WHERE i.id=? AND i.account_id=? AND i.disabled_at IS NULL AND c.enabled=1 AND c.protocol=? AND c.issuer=i.issuer`)
-    .bind(auth.externalIdentityId!, auth.accountId, auth.method).first<{ connection_id: string; version: number; identity_version: number }>() : null
+  const identity = federated ? await ctx.db.prepare(`SELECT i.connection_id,i.connection_version AS version,i.version AS identity_version FROM stage0_trusted_identities i WHERE i.id=? AND i.account_id=? AND i.protocol=? AND i.version=? AND i.connection_version=?`)
+    .bind(auth.externalIdentityId!, auth.accountId, auth.method, auth.identityVersion!, auth.connectionVersion!).first<{ connection_id: string; version: number; identity_version: number }>() : null
   if (federated && !identity) throw new Stage0Error('unauthenticated')
   const now = ctx.clock.now()
   const row: SessionRow = { id: ctx.ids.next(), account_id: auth.accountId, transport, method: auth.method,
@@ -77,7 +77,7 @@ export async function issueSession(ctx: RequestContext, auth: VerifiedAuthentica
     created_at: now, authenticated_at: now, passkey_verified_at: auth.method === 'passkey' ? now : null, expires_at: now + 43_200_000 }
   const prepared = await prepareIssuance(ctx, row)
   await guardedBatch(ctx, `EXISTS(SELECT 1 FROM accounts WHERE id=? AND disabled_at IS NULL AND security_version=? AND (email_verified_at IS NOT NULL OR ?='enrollment'))
-    AND (? IS NULL OR EXISTS(SELECT 1 FROM external_identities i JOIN identity_connections c ON c.id=i.connection_id WHERE i.id=? AND i.account_id=? AND i.version=? AND i.disabled_at IS NULL AND c.id=? AND c.version=? AND c.enabled=1 AND c.protocol=? AND c.issuer=i.issuer))`,
+    AND (? IS NULL OR EXISTS(SELECT 1 FROM stage0_trusted_identities i WHERE i.id=? AND i.account_id=? AND i.version=? AND i.connection_id=? AND i.connection_version=? AND i.protocol=?))`,
   [row.account_id, row.account_security_version, row.assurance, row.external_identity_id, row.external_identity_id, row.account_id, row.external_identity_version, row.connection_id, row.connection_version, row.method],
   [prepared.insert, auditStatement(ctx, 'session.issue', row.id, prepared.issued.principal)])
   return prepared.issued
