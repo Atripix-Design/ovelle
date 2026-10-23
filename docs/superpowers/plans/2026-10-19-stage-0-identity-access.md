@@ -33,8 +33,12 @@ The public Worker still does not import or enable these auth adapters.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser
 transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are
-allocated to those changes. Public callback/start routing, contact onboarding,
-SAML and the rest of Tasks 3–11 remain incomplete.
+allocated to those changes. The [browser/enrollment continuation](../../architecture/stage0-oidc-http-enrollment.md)
+adds guarded internal start/link/callback routes, pre-login CSRF/Turnstile and
+browser-bound new-account/contact verification. Migration 0007 is allocated to
+pending enrollments. Public routing, real delivery/provider acceptance, SAML and
+the rest of Tasks 3–11 remain incomplete. No original task is marked complete by
+these internal subsets.
 
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests and hosted investigation are implemented.

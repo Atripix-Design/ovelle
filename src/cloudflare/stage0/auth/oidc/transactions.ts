@@ -7,10 +7,11 @@ import { consumeOidcStartBudget } from '../limits'
 import { issueSession, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
 import { assertOidcLinkPrincipal, linkOidcIdentity, oidcLinkGuard, resolveOidcLogin, type IdentitySnapshot } from './identities'
 import { createOidcAuthorization, newOidcSecrets, verifyOidcCode, type OidcSecrets, type OidcSettings } from './protocol'
+import { beginOidcEnrollment } from './enrollment'
 
 interface Start { purpose: OidcSecrets['purpose']; principal?: Principal; ip: string }
 interface Transaction { purpose: OidcSecrets['purpose']; created_at: number; account_id: string | null; session_id: string | null }
-type Completion = { kind: 'signed_in'; session: IssuedSession } | { kind: 'linked'; identity: IdentitySnapshot }
+type Completion = { kind: 'signed_in'; session: IssuedSession } | { kind: 'linked'; identity: IdentitySnapshot } | { kind: 'enrollment'; token: string }
 const secretPattern = /^[A-Za-z0-9_-]{43}$/
 const encode = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
 async function digest(value: string): Promise<string> {
@@ -30,10 +31,13 @@ const connectionValues = (settings: OidcSettings) => [settings.connectionId, set
  * pre-login CSRF/Turnstile and an edge-owned IP; caller input is not authorization.
  * A fresh binding replaces the previous browser flow when its cookie is set.
  */
-export async function startOidcTransaction(ctx: RequestContext, settings: OidcSettings, start: Start, budgetKey: Uint8Array, fetcher?: CustomFetch): Promise<{ authorizationUrl: string; browserBinding: string }> {
+export async function startOidcTransaction(ctx: RequestContext, settings: OidcSettings, start: Start, budgetKey: Uint8Array, fetcher?: CustomFetch, admission?: () => Promise<void>): Promise<{ authorizationUrl: string; browserBinding: string }> {
   if (!['login', 'link'].includes(start.purpose) || (start.purpose === 'link') !== Boolean(start.principal) || (start.principal && start.principal.transport !== 'browser')) throw new Stage0Error('invalid_input')
   if (start.principal) await assertOidcLinkPrincipal(ctx, start.principal)
   await consumeOidcStartBudget(ctx, settings.provider, start.ip, budgetKey)
+  // The HTTP adapter supplies Turnstile here, after durable admission and before
+  // any external challenge/provider request. No second quota charge is needed.
+  if (admission) await admission()
   const now = ctx.clock.now()
   const state = newOidcSecrets(ctx, start.purpose).state
   const browserBinding = encode(crypto.getRandomValues(new Uint8Array(32)))
@@ -67,7 +71,12 @@ export async function completeOidcTransaction(ctx: RequestContext, settings: Oid
   if (!row) throw new Stage0Error('unauthenticated')
   const secrets = await transactionSecrets(ctx, settings, states[0], browserBinding, row.purpose, row.created_at)
   const verified = await verifyOidcCode(ctx, settings, secrets, callback, fetcher)
-  if (row.purpose === 'login') return { kind: 'signed_in', session: await issueSession(ctx, await resolveOidcLogin(ctx, verified), 'browser') }
+  if (row.purpose === 'login') {
+    const linked = await ctx.db.prepare('SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?')
+      .bind(verified.connectionId, verified.issuer, verified.subject).first()
+    if (!linked) return { kind: 'enrollment', ...await beginOidcEnrollment(ctx, verified) }
+    return { kind: 'signed_in', session: await issueSession(ctx, await resolveOidcLogin(ctx, verified), 'browser') }
+  }
   const session = await ctx.db.prepare("SELECT * FROM stage0_live_sessions WHERE id=? AND account_id=? AND transport='browser' AND expires_at>? AND created_at<=?")
     .bind(row.session_id, row.account_id, ctx.clock.now(), ctx.clock.now()).first<SessionRow>()
   if (!session) throw new Stage0Error('unauthenticated')

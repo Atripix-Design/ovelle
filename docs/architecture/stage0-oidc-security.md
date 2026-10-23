@@ -57,8 +57,9 @@ callback. The ordinary account cookie remains Strict; this transaction cookie
 cannot authenticate an account or call protected commands. Local fixtures use a
 distinct name. Duplicate/malformed/missing binding cookies fail closed. A new
 start replaces the browser's previous flow; parallel browser tabs cannot complete
-different flows using the same single cookie slot. Clear this cookie on completion
-in the future HTTP adapter.
+different flows using the same single cookie slot. The
+[internal HTTP adapter](stage0-oidc-http-enrollment.md) clears this cookie on
+completion or callback failure.
 
 A single D1 UPDATE claims the transaction before any code exchange. It checks
 state, browser binding, provider, configuration version, expiry and live initiating
@@ -70,9 +71,9 @@ Starts consume durable keyed-digest counters: five per provider/IP per fifteen
 minutes plus the shared thirty-per-IP challenge limit. Success does not refund a
 start. This is conservative for shared networks and needs pilot measurement.
 The start service requires a trusted edge IP and stable environment-specific
-32-byte budget key. Its caller must still enforce exact Origin, pre-login CSRF,
-Turnstile and fixed route handling. Those HTTP starts/callback responses are not
-implemented or exposed yet. Never wire these internal functions directly to
+32-byte budget key. The internal HTTP adapter enforces exact Origin, pre-login
+CSRF, Turnstile and fixed route handling, with Turnstile called after durable
+admission and before provider work. Public routing remains disabled. Never wire these internal functions directly to
 unvalidated JSON or return their internal session object as JSON.
 
 ## Account and organization authority
@@ -80,8 +81,10 @@ unvalidated JSON or return their internal session object as JSON.
 `auth/oidc/identities.ts` resolves only an existing exact connection/issuer/subject
 identity. Matching email never selects, merges or creates an account. Google Gmail
 and verified Workspace contact evidence is distinguished from other email hints;
-Microsoft email/UPN never becomes automatic contact verification. New-account and
-missing/unverified-contact onboarding remains to be implemented.
+Microsoft email/UPN never becomes automatic contact verification. The transaction
+service now directs unlinked identities into a separate digest-only enrollment;
+[contact onboarding](stage0-oidc-http-enrollment.md) requires explicit nomination
+and, when needed, a separate browser-bound email proof before creating an account.
 
 Linking requires a live verified Ovelle account authenticated less than five
 minutes ago. Owners and active administrators additionally require recent local
@@ -99,7 +102,8 @@ expand the approved common tenant template. Google and SAML retain exact issuer
 checks. Existing populated Microsoft exact-issuer identities are backfilled;
 existing audit records and sessions survive the migration. Migration
 `0006_oidc_transactions.sql` adds the digest-only single-use transactions.
-Both migrations remain local/unapplied to hosted databases.
+These migrations and the subsequent 0007 enrollment migration remain
+local/unapplied to hosted databases.
 
 Federated session issuance now requires the verified identity and connection
 versions, not just an identity ID. A configuration change between protocol
@@ -119,8 +123,9 @@ populated-database migration; browser binding, expiry and single-use callbacks.
 These are local protocol/security tests, not evidence of real provider delivery,
 hosted concurrency, provider provisioning or user acceptance.
 
-Still required: safe start/callback HTTP composition, pre-login abuse integration,
-contact/new-account onboarding, maintained SAML verification, passkeys/recovery,
+Internal HTTP starts/callbacks, pre-login abuse integration and contact/new-account
+onboarding are now implemented as described in the linked continuation. Still
+required: public composition and acceptance, maintained SAML verification, passkeys/recovery,
 organization commands and invitations/ownership, native handoff, Figma-backed UI,
 real provider setup and separately authorized hosted migration/rollout. The full
 Stage 0 plan remains open. Password login remains gated by its runtime decision.

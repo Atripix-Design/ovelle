@@ -9,7 +9,7 @@ are implemented internally, including reload-safe CSRF bootstrap. They remain
 disconnected from the public Worker. The historical scope/evidence below describes
 the October 22 foundation; the continuation documents the subsequent work.
 [OIDC verification, linking and browser transactions](stage0-oidc-security.md)
-now add another internal layer; public login remains disabled.
+now add another internal layer, with [guarded browser routes and contact enrollment](stage0-oidc-http-enrollment.md) composing those services internally. Public routing, real provider/mail acceptance and hosted migrations remain gated.
 
 ## Confirmed authentication direction
 

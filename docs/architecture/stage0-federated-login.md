@@ -8,8 +8,9 @@ Provider integrations and password runtime approval remain pending. The
 and organization access, not the provider login routes.
 
 October 23: [implemented OIDC verification/linking/transaction boundary](stage0-oidc-security.md)
-now covers part of the direction below. It remains internal and locally tested;
-SAML, public callback composition, contact onboarding and real provider setup
+now covers part of the direction below. It remains internal and locally tested.
+Internal [browser routes and contact onboarding](stage0-oidc-http-enrollment.md)
+are now implemented with local fixtures. SAML, public callback composition and real provider setup
 remain open. The remaining discussion records requirements, not completed login.
 
 ## Universal boundary
