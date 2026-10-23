@@ -36,8 +36,10 @@ workerd. It produces branded protocol evidence for the
 [durable SAML continuation](../../architecture/stage0-saml-transactions.md)
 which adds maintained AuthnRequests, atomic request/replay consumption and
 existing-account session/link effects with local signed-message/D1 evidence.
-Migration 0014 is allocated. New-account enrollment, browser HTTP/POST/cookie
-composition and hosted/provider acceptance remain required. These internal
+Migration 0014 is allocated. The [internal SAML HTTP adapter](../../architecture/stage0-saml-http.md)
+adds bounded cross-site POST admission, independent flow cookies and shared
+CSRF/Turnstile composition with signed-message/D1 Request tests. New-account
+enrollment and actual browser/hosted/provider acceptance remain required. These internal
 services do not complete SAML login readiness or any original whole-plan task.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser

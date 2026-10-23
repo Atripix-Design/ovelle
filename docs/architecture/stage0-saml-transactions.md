@@ -3,16 +3,15 @@
 October 23, 2026. This continues the [maintained SAML verifier](stage0-saml-security.md)
 with durable internal request, replay, existing-account login and explicit identity
 linking services. It does not register HTTP routes, set browser cookies, enroll a
-new account or establish hosted/real-provider acceptance. The public Worker does
+new account or establish hosted/real-provider acceptance. The separate
+[internal HTTP composition](stage0-saml-http.md) adds browser admission and cookies. The public Worker does
 not import these services. The original Stage 0 plan remains incomplete.
 
 ## Request creation
 
 `startSamlTransaction` accepts server-selected connection configuration and a
-trusted purpose, optional authenticated browser principal and edge IP. A future
-HTTP adapter must supply admission: exact Origin and pre-login CSRF/Turnstile for
-login, or authenticated CSRF for linking. This service is not an HTTP admission
-layer. All login and linking starts share five attempts per IP window across SAML connections,
+trusted purpose, optional authenticated browser principal and edge IP. The [internal HTTP adapter](stage0-saml-http.md) supplies admission: exact Origin and pre-login CSRF/Turnstile for
+login, or authenticated CSRF for linking, followed by Turnstile after the durable start budget. This transaction service itself is not an HTTP admission layer. All login and linking starts share five attempts per IP window across SAML connections,
 plus the existing global thirty-per-IP challenge ceiling.
 
 The maintained Node-SAML Redirect implementation creates an AuthnRequest with a

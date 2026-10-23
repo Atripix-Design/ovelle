@@ -21,12 +21,14 @@ function freshProof(proof: VerifiedSamlIdentity, now: number): void {
 }
 /** Internal only: a future HTTP adapter must admit starts using exact Origin,
  * pre-login CSRF/Turnstile or authenticated CSRF, and a trusted edge IP. */
-export async function startSamlTransaction(ctx: RequestContext, inputSettings: SamlConnectionSettings, input: Start, budgetKey: Uint8Array): Promise<{ authorizationUrl: string; browserBinding: string }> {
+export async function startSamlTransaction(ctx: RequestContext, inputSettings: SamlConnectionSettings, input: Start, budgetKey: Uint8Array, admission?: () => Promise<void>): Promise<{ authorizationUrl: string; browserBinding: string }> {
   const settings = validateSamlConnection(inputSettings), purpose = input.purpose, ip = input.ip
   const principal = input.principal ? Object.freeze({ ...input.principal }) : undefined
   if (!['login', 'link'].includes(purpose) || (purpose === 'link') !== Boolean(principal) || (principal && principal.transport !== 'browser')) throw new Stage0Error('invalid_input')
   if (principal) await assertIdentityLinkPrincipal(ctx, principal)
   await consumeSamlStartBudget(ctx, ip, budgetKey)
+  // Charge durable capacity before the HTTP adapter performs Turnstile admission.
+  if (admission) await admission()
   const now = ctx.clock.now(), requestId = '_' + randomSecret(), relayState = randomSecret(), browserBinding = randomSecret()
   const settingsDigest = await samlSettingsDigest(ctx, settings)
   const relayDigest = await secretDigest(relayState), bindingDigest = await secretDigest(browserBinding)
