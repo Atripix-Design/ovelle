@@ -39,6 +39,12 @@ browser-bound new-account/contact verification. Migration 0007 is allocated to
 pending enrollments. Public routing, real delivery/provider acceptance, SAML and
 the rest of Tasks 3–11 remain incomplete. No original task is marked complete by
 these internal subsets.
+The [passkey continuation](../../architecture/stage0-passkey-security.md) adds
+maintained WebAuthn verification, account-bound registration, discoverable login,
+provider-preserving assurance step-up and internal guarded HTTP routes. Migration
+0008 is allocated to credentials/challenges and derived-session revocation. Local
+Workers/D1 tests and a Chromium virtual-authenticator ceremony provide evidence;
+Task 4 remains incomplete without recovery and the remaining acceptance work.
 
 User authorized beginning implementation with authentication-runtime and KDF
 validation. Task 1 local code/tests and hosted investigation are implemented.

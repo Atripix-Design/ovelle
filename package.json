@@ -28,6 +28,7 @@
     "check:ci": "node --test scripts/ci/*.test.mjs",
     "test:stage0-probe": "node --test scripts/stage0-hosted-probe.test.mjs",
     "test:stage0": "vitest run --config vitest.stage0.config.mts",
+    "test:stage0-passkey-browser": "node scripts/verify-stage0-passkey-browser.mjs",
     "benchmark:stage0-password": "node --experimental-strip-types scripts/benchmark-stage0-password.ts",
     "check:stage0": "tsc -p tsconfig.stage0.json"
   },
@@ -45,6 +46,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1147.0",
     "@aws-sdk/s3-request-presigner": "^3.1147.0",
+    "@simplewebauthn/server": "14.0.3",
     "jose": "6.2.12",
     "openid-client": "6.8.8"
   }

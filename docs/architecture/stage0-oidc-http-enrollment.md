@@ -102,8 +102,8 @@ browser/UI acceptance.
 Future composition must supply trusted dependencies and preserve the fixed
 origin/transport contracts. The account/enrollment/verification pages above are
 destinations for future Figma-backed UI, not implemented pages. Public routing,
-real provider and mail configuration, separately authorized migrations, passkeys
-and recovery, SAML, organization workflows, Electron handoff and full acceptance
+real provider and mail configuration, separately authorized migrations, recovery
+and remaining [passkey integration](stage0-passkey-security.md), SAML, organization workflows, Electron handoff and full acceptance
 remain open. There is no hosted rollout or enablement change in this increment.
 
 Reference: [Cloudflare Turnstile server validation](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/).

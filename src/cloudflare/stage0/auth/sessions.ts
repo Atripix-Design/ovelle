@@ -8,6 +8,7 @@ export interface SessionRow {
   id: string; account_id: string; transport: Transport; method: Method; assurance: Principal['assurance'];
   account_security_version: number; external_identity_id: string | null; external_identity_version: number | null; connection_id: string | null; connection_version: number | null;
   created_at: number; authenticated_at: number; passkey_verified_at: number | null; expires_at: number
+  passkey_credential_id?: string | null
 }
 export interface IssuedSession { token: string; csrfToken: string | null; principal: Principal }
 /** Only a verified server-side credential/protocol adapter may invoke the issuer.
@@ -52,11 +53,13 @@ export async function resolveSession(ctx: RequestContext, token: string, transpo
   if (!row) throw new Stage0Error('unauthenticated')
   return principalFromRow(row)
 }
-async function prepareIssuance(ctx: RequestContext, row: SessionRow) {
+/** Trusted service composition only: callers must guard the live credential and
+ * account authority and commit this statement atomically with their evidence. */
+export async function prepareSessionIssuance(ctx: RequestContext, row: SessionRow) {
   const token = secret()
   const csrfToken = row.transport === 'browser' ? await sessionCsrfSecret(token) : null
-  const insert = ctx.db.prepare(`INSERT INTO sessions(id,account_id,token_digest,csrf_digest,transport,method,assurance,account_security_version,external_identity_id,external_identity_version,connection_id,connection_version,created_at,authenticated_at,passkey_verified_at,expires_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-    .bind(row.id, row.account_id, await digest(token), csrfToken ? await digest(csrfToken) : null, row.transport, row.method, row.assurance, row.account_security_version, row.external_identity_id, row.external_identity_version, row.connection_id, row.connection_version, row.created_at, row.authenticated_at, row.passkey_verified_at, row.expires_at)
+  const insert = ctx.db.prepare(`INSERT INTO sessions(id,account_id,token_digest,csrf_digest,transport,method,assurance,account_security_version,external_identity_id,external_identity_version,connection_id,connection_version,created_at,authenticated_at,passkey_verified_at,expires_at,passkey_credential_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+    .bind(row.id, row.account_id, await digest(token), csrfToken ? await digest(csrfToken) : null, row.transport, row.method, row.assurance, row.account_security_version, row.external_identity_id, row.external_identity_version, row.connection_id, row.connection_version, row.created_at, row.authenticated_at, row.passkey_verified_at, row.expires_at, row.passkey_credential_id ?? null)
   return { insert, issued: { token, csrfToken, principal: principalFromRow(row) } }
 }
 export async function issueSession(ctx: RequestContext, auth: VerifiedAuthentication, transport: Transport): Promise<IssuedSession> {
@@ -75,7 +78,7 @@ export async function issueSession(ctx: RequestContext, auth: VerifiedAuthentica
     account_security_version: account.security_version, external_identity_id: auth.externalIdentityId ?? null, external_identity_version: identity?.identity_version ?? null,
     connection_id: identity?.connection_id ?? null, connection_version: identity?.version ?? null,
     created_at: now, authenticated_at: now, passkey_verified_at: auth.method === 'passkey' ? now : null, expires_at: now + 43_200_000 }
-  const prepared = await prepareIssuance(ctx, row)
+  const prepared = await prepareSessionIssuance(ctx, row)
   await guardedBatch(ctx, `EXISTS(SELECT 1 FROM accounts WHERE id=? AND disabled_at IS NULL AND security_version=? AND (email_verified_at IS NOT NULL OR ?='enrollment'))
     AND (? IS NULL OR EXISTS(SELECT 1 FROM stage0_trusted_identities i WHERE i.id=? AND i.account_id=? AND i.version=? AND i.connection_id=? AND i.connection_version=? AND i.protocol=?))`,
   [row.account_id, row.account_security_version, row.assurance, row.external_identity_id, row.external_identity_id, row.account_id, row.external_identity_version, row.connection_id, row.connection_version, row.method],
@@ -86,7 +89,7 @@ export async function rotateSession(ctx: RequestContext, principal: Principal): 
   const existing = await loadLiveSession(ctx, principal)
   // Rotation is not reauthentication: retain the original auth time and absolute expiry.
   const row = { ...existing, id: ctx.ids.next(), created_at: ctx.clock.now() }
-  const prepared = await prepareIssuance(ctx, row)
+  const prepared = await prepareSessionIssuance(ctx, row)
   const guard = liveSessionCondition(principal, ctx.clock.now())
   await guardedBatch(ctx, guard.sql, guard.values, [prepared.insert,
     ctx.db.prepare('UPDATE sessions SET revoked_at=? WHERE id=?').bind(ctx.clock.now(), existing.id),

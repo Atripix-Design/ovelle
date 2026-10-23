@@ -3,6 +3,8 @@ import { databaseFixture } from './database'
 import { issueSession } from '../../../src/cloudflare/stage0/auth/sessions'
 import { authorizeOrganization, getOrganization, listPrograms, getProgram, renameProgram } from '../../../src/cloudflare/stage0/access/organizations'
 import type { Principal } from '../../../src/cloudflare/stage0/contracts'
+import { beginPasskeyRegistration, finishPasskeyRegistration } from '../../../src/cloudflare/stage0/auth/passkeys/service'
+import { passkeyFixture } from './passkey-fixture'
 
 let f: Awaited<ReturnType<typeof databaseFixture>>
 let a: Principal, c: Principal, d: Principal
@@ -99,12 +101,12 @@ it('requires the configured SAML connection and binds its session to its organiz
   expect((await getOrganization(f.ctx,saml,'org-a')).name).toBe('A')
   await grant('mc-a','org-a','program.manage')
   await expect(renameProgram(f.ctx,saml,'org-a','a1',{name:'No local UV',expectedVersion:1})).rejects.toMatchObject({code:'forbidden'})
-  // Test fixture only: a future local WebAuthn verifier must supply this evidence.
-  await f.db.batch([
-    f.execute("INSERT INTO sessions(id,account_id,token_digest,csrf_digest,transport,method,assurance,account_security_version,external_identity_id,external_identity_version,connection_id,connection_version,created_at,authenticated_at,passkey_verified_at,expires_at) SELECT 'saml-stepup',account_id,?,csrf_digest,transport,method,'passkey',account_security_version,external_identity_id,external_identity_version,connection_id,connection_version,created_at,authenticated_at,?,expires_at FROM sessions WHERE id=?", 'f'.repeat(64), f.ctx.clock.now(), saml.sessionId),
-    f.execute('UPDATE sessions SET revoked_at=? WHERE id=?',f.ctx.clock.now(),saml.sessionId),
-  ])
-  const stepped = {...saml,sessionId:'saml-stepup'}
+  const key = new Uint8Array(32).fill(17)
+  const start = await beginPasskeyRegistration(f.ctx, saml, '127.0.0.1', key)
+  const authenticator = await passkeyFixture()
+  const { session } = await finishPasskeyRegistration(f.ctx, saml, start.flowToken, await authenticator.registration(start.options.challenge), 'Staff passkey', '127.0.0.1', key)
+  const stepped = session.principal
+  expect(stepped).toMatchObject({ method: 'saml', connectionId: 'saml-a', assurance: 'passkey' })
   await renameProgram(f.ctx,stepped,'org-a','a1',{name:'SAML plus local UV',expectedVersion:1})
   await f.execute("UPDATE identity_connections SET enabled=0,version=version+1 WHERE id='saml-a'").run()
   await expect(getOrganization(f.ctx,stepped,'org-a')).rejects.toMatchObject({code:'unauthenticated'})

@@ -125,7 +125,7 @@ hosted concurrency, provider provisioning or user acceptance.
 
 Internal HTTP starts/callbacks, pre-login abuse integration and contact/new-account
 onboarding are now implemented as described in the linked continuation. Still
-required: public composition and acceptance, maintained SAML verification, passkeys/recovery,
+required: public composition and acceptance, maintained SAML verification, recovery and remaining [passkey integration](stage0-passkey-security.md),
 organization commands and invitations/ownership, native handoff, Figma-backed UI,
 real provider setup and separately authorized hosted migration/rollout. The full
 Stage 0 plan remains open. Password login remains gated by its runtime decision.

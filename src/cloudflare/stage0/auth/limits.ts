@@ -94,3 +94,9 @@ export async function consumeOidcStartBudget(ctx: RequestContext, provider: 'goo
   const now = ctx.clock.now()
   await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
 }
+
+export async function consumePasskeyStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
+  const limits = await budgets({ email: 'passkey-start', ip }, keyMaterial, false)
+  const now = ctx.clock.now()
+  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+}
