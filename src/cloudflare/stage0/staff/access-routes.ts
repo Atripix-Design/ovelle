@@ -2,7 +2,7 @@ import type {CommandContext,Principal,RequestContext} from '../contracts'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse,boundedJsonBody} from '../auth/web'
-import {segment,object,grants} from './http-input'
+import {segment,object,grants} from '../http-input'
 import {changeMembershipGrants,getMembership,listMemberships,revokeMembership} from './memberships'
 import {acceptOwnershipTransfer,getOwnershipTransfer,requestOwnershipTransfer,revokeOwnershipTransfer} from './ownership'
 

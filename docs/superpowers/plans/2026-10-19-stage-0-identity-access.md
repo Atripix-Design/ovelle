@@ -229,6 +229,13 @@ versions, an executable authorization/version guard and SQL/result mapping.
 
 ## Task 6: Build organization creation and scoped structure
 
+October 23 continuation: internal organization/structure HTTP composition now
+reuses the implemented commands, with recorded-policy reads and the planned
+paginated own-organization/access-management audit endpoints. See
+[organization evidence](../../architecture/stage0-organization-commands.md).
+The public Worker remains disconnected; recovery, native/UI, provider acceptance
+and hosted identity rollout are still unfinished.
+
 **Files:** Task 6 map; `tests/worker/stage0/organizations.test.ts`, `structure.test.ts`.
 
 **Consumes:** Passkey-ready principal, action grants, command receipts and validation.

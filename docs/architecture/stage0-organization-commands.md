@@ -87,10 +87,85 @@ allowance, foreign tenant IDs, scoped/intersection access, archives, stale-versi
 races, receipt isolation/revocation and authority changed immediately before commit.
 No hosted D1 concurrency, provider acceptance or product UI is claimed.
 
-Recovery, invitations/delegation, membership changes/ownership transfer, SAML
-protocol verification, native sign-in and shared UI remain open. Recovery and
-ownership transfer must be accepted before live organizations are enabled. Public
-API composition still needs HTTP schema validation, CSRF/transport admission and
-appropriate abuse controls. Migrations are applied only through a separately
-authorized, environment-checked rollout with recovery evidence; delivery never
-applies identity migrations automatically.
+[Invitations](stage0-staff-invitations.md) and
+[staff access/ownership](stage0-staff-access.md) now have internal services and
+HTTP adapters. Recovery, SAML protocol verification, native sign-in and shared
+UI remain unfinished. Recovery and ownership acceptance are required before live
+organizations. Identity migrations still require a separately authorized,
+environment-checked rollout with recovery evidence; delivery never applies them.
+
+## Internal HTTP composition
+
+`access/routes.ts` exposes the following internal contracts using a trusted,
+server-selected browser/desktop transport. The public Worker does not import it.
+All writes call the existing guarded commands above. Shared strict DTO/path parsing
+now lives at `stage0/http-input.ts` and is also used by staff invitation/access routes.
+
+| Route | Contract |
+| --- | --- |
+| `POST /api/v1/organizations` | Complete name/contact email/time zone/first program/first location; passkey-ready creator; safe snapshot (201). |
+| `GET/PATCH /api/v1/organizations/:orgId` | Read current organization or replace settings with `expectedVersion`. |
+| `GET/POST /api/v1/organizations/:orgId/programs` | Scoped list or create using `name` (201). GET accepts optional `locationId` context. |
+| `GET/PATCH /api/v1/organizations/:orgId/programs/:id` | Scoped detail or name/version update with optional boolean `archived`. GET accepts optional `locationId`. |
+| `GET/POST /api/v1/organizations/:orgId/locations` | Scoped list or create using `name` (201). GET accepts optional `programId` context. |
+| `GET/PATCH /api/v1/organizations/:orgId/locations/:id` | Scoped detail or name/version update with optional boolean `archived`. GET accepts optional `programId`. |
+| `GET /api/v1/organizations/:orgId/policies` | Read the actual recorded proposed policy; no record returns 404. |
+| `GET /api/v1/me/organizations` | Current accessible organization directory with bounded pagination. |
+| `GET /api/v1/organizations/:orgId/audit` | Organization-level authorized access-management history with bounded pagination. |
+
+Every mutation requires `Idempotency-Key`, bounded strict JSON (16 KiB), known
+fields and version where appropriate. Resource and organization IDs come from
+the route; owner, principal, assurance and scope overrides are rejected. Browser
+writes require exact Origin plus session CSRF; native bearer requests reject
+browser cookies/Origin/fetch-site metadata. Cross-transport credentials fail.
+Query selectors are allowlisted, nonempty and unique; mutation query strings and
+unexpected fields/types fail. Program/location context only narrows reads and
+cannot broaden writes. Structure lists retain the existing 100-row bound and ID
+order; their pagination remains a future contract.
+
+Safe no-store/no-referrer/nosniff/CSP/request-ID responses have no CORS grant.
+Unknown methods return 405 with Allow. Unexpected SQL failures return only
+`unavailable`; snapshots omit owner/creator, session and credential evidence.
+GET performs no mutation or policy activation. Switching organization only selects
+an already authorized context.
+
+## Directory, recorded policy and audit reads
+
+`listAccessibleOrganizations` checks the live central `organization.read` policy
+for each selected row, including current membership, account/session and required
+SSO. Its fixed SQL outer alias is a closed repository mode, never a caller-supplied
+identifier. It returns ordinary organization snapshots, not global organization
+or membership records. Enrollment-only sessions see no organizations.
+
+Directory and audit accept integer `limit` (default 50, maximum 100) and optional
+`cursor`. Directory pages order IDs ascending; its cursor is the last returned
+opaque organization ID. Audit pages order `(createdAt, id)` descending; a bounded
+canonical versioned cursor includes the organization and last tuple. The next
+cursor is null when no further rows were observed. Cursors select positions and
+grant no authority: every page rechecks current access. Pagination is not a
+transactional snapshot; newly inserted earlier-position records need a first-page
+refresh. Unknown, duplicate, malformed, cross-organization or out-of-range audit
+selectors are rejected.
+
+`getOrganizationPolicies` requires current organization read access and selects
+stored version/status/rules/time with the same SQL policy. It never synthesizes
+legacy defaults or marks a proposed policy approved. The rule fields describe the
+recorded proposal, not executable volunteer eligibility/hour behavior.
+
+`listAccessAudit` requires `audit.read` at organization scope; owners derive this
+access, admins need an explicit organization grant, coordinators cannot gain it
+through an inserted administrative grant. Current authority is checked again
+inside the final SELECT after preflight. The closed access-management allowlist
+includes organization, invitation, membership and ownership events. Global
+account/session, program/location and future private-domain events are excluded.
+Snapshots contain event ID, actor account ID, action, resource ID, request ID and
+time only; source session, credentials and database proof fields are omitted.
+These are minimal events, without a before/after grant diff or future narratives.
+
+Local tests cover complete route composition, recorded-policy reads, pagination
+and equal-time audit ordering, scope intersections, admin/coordinator tenant role
+confusion, current SSO/session changes, command replay/archives, strict body/query
+admission and error redaction. Directory session invalidation and audit grant
+removal immediately before their final SELECT return no protected rows. Full
+backend regressions also cover the unchanged staff parser consumers. This remains
+local service/adapter evidence, not provider, hosted identity or rendered UI proof.

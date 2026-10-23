@@ -1,5 +1,5 @@
 import type {CommandContext, Principal, RequestContext} from '../contracts'
-import {segment,object,grants} from './http-input'
+import {segment,object,grants} from '../http-input'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse, boundedJsonBody} from '../auth/web'

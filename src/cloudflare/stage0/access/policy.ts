@@ -24,10 +24,11 @@ export function validateScope(scope: Scope): void {
  * allowArchived is only for replaying an already committed command receipt;
  * it preserves scope checks and does not permit new edits to archived rows.
  */
-export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location', allowArchived = false): string {
+export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location' | 'organization', allowArchived = false): string {
   parseAction(action)
   validateScope(scope)
-  const org = b.add(organizationId)
+  // Directory reads use this fixed outer alias; no caller supplies SQL names.
+  const org = rowKind === 'organization' ? 'listed.id' : b.add(organizationId)
   const session = b.add(principal.sessionId)
   const account = b.add(principal.accountId)
   const transport = b.add(principal.transport)

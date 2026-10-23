@@ -1,5 +1,5 @@
-import type {Grant} from '../contracts'
-import {Stage0Error} from '../errors'
+import type {Grant} from './contracts'
+import {Stage0Error} from './errors'
 
 // Shared strict transport DTO parsing; domain validation remains in services.
 export function segment(value:string):string {
