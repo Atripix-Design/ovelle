@@ -11,7 +11,11 @@ October 23: [implemented OIDC verification/linking/transaction boundary](stage0-
 now covers part of the direction below. It remains internal and locally tested.
 Internal [browser routes and contact onboarding](stage0-oidc-http-enrollment.md)
 are now implemented with local fixtures. SAML, public callback composition and real provider setup
-remain open. The remaining discussion records requirements, not completed login.
+remain open. The [internal SAML verifier](stage0-saml-security.md) now validates
+real signed response/assertion fixtures through a maintained implementation in
+workerd. Durable request/replay consumption, SAML account/session/browser
+composition, hosted evidence and real IdP acceptance remain unfinished.
+The remaining discussion records requirements, not completed login.
 
 ## Universal boundary
 
