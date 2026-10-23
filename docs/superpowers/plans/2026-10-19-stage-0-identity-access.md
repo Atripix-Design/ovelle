@@ -49,6 +49,12 @@ adds real Chromium cross-site navigation/cookie evidence and rejection controls
 using the existing internal services, with a non-secret CI job gating deployment.
 It does not complete product presentation, real-provider/mail, hosted execution
 or a supported-browser acceptance matrix.
+The [authentication mail adapter](../../architecture/stage0-auth-mail.md) adds
+constrained contact-verification and staff-invitation message composition behind
+the existing AuthMailer using an injected Cloudflare email binding. Controlled
+transport and D1 tests prove composition/failure behavior, not live delivery.
+Auth sender/binding provisioning, actual delivery and password-reset authority
+remain required; public auth remains closed and Task 3 remains incomplete.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser
 transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are
