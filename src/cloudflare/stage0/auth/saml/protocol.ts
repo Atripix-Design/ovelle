@@ -29,7 +29,7 @@ const formats = ['urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', 'urn:oa
 const fail = (): never => { throw new Stage0Error('unauthenticated') }
 const validText = (value: unknown, max = 1024): value is string => typeof value === 'string' && value.length > 0 && value.length <= max && !/[\p{Cc}]/u.test(value)
 const idPattern = /^[A-Za-z_][A-Za-z0-9_.-]{0,255}$/
-function settingsGuard(settings: SamlSettings): Readonly<SamlSettings> {
+export function validateSamlSettings(settings: SamlSettings): Readonly<SamlSettings> {
   try {
     if (![settings.connectionId, settings.organizationId].every(value => validText(value, 256)) || !validText(settings.issuer) || !validText(settings.audience)
       || !Number.isSafeInteger(settings.connectionVersion) || settings.connectionVersion < 1 || !formats.includes(settings.nameIdFormat)
@@ -110,7 +110,7 @@ function parse(encoded: string): { xml: string; root: Element } {
  * browser/request/assertion state with current connection/account checks before
  * issuing a session. This function performs no network access or D1 writes. */
 export async function verifySamlResponse(ctx: Context, inputSettings: SamlSettings, inputRequest: SamlRequestEvidence, encoded: string): Promise<VerifiedSamlIdentity> {
-  const settings = settingsGuard(inputSettings)
+  const settings = validateSamlSettings(inputSettings)
   const request = Object.freeze({ ...inputRequest })
   const now = ctx.clock.now()
   if (!idPattern.test(request.requestId) || !Number.isSafeInteger(request.createdAt) || request.createdAt > now || request.createdAt <= now - 300_000) fail()

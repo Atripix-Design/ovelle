@@ -1,17 +1,12 @@
 import type { Principal, RequestContext } from '../../contracts'
 import { auditStatement, guardedBatch } from '../../db'
 import { Stage0Error } from '../../errors'
-import { liveSessionCondition, loadLiveSession, type VerifiedAuthentication } from '../sessions'
+import type { VerifiedAuthentication } from '../sessions'
+import { assertIdentityLinkPrincipal as assertOidcLinkPrincipal, identityLinkGuard as oidcLinkGuard } from '../linking'
+export { assertIdentityLinkPrincipal as assertOidcLinkPrincipal, identityLinkGuard as oidcLinkGuard } from '../linking'
 import { consumeOidcIdentity, type VerifiedOidcIdentity } from './protocol'
 
 export interface IdentitySnapshot { id: string; provider: string; issuer: string; subject: string }
-const recent = 300_000
-// Owners and active admins must use a local passkey even when an upstream IdP
-// claims MFA. Linking changes future ways into this existing Ovelle account.
-const elevated = `EXISTS(SELECT 1 FROM organization_memberships m JOIN organizations o ON o.id=m.organization_id
-  WHERE m.account_id=s.account_id AND m.state='active' AND (m.preset='admin' OR o.owner_account_id=s.account_id))`
-const linkAssurance = `s.assurance!='enrollment' AND s.authenticated_at>? AND s.authenticated_at<=?
-  AND (NOT (${elevated}) OR (s.assurance='passkey' AND s.passkey_verified_at>? AND s.passkey_verified_at<=?))`
 
 function consume(ctx: RequestContext, proof: VerifiedOidcIdentity, purpose: 'login' | 'link') {
   const verified = consumeOidcIdentity(proof)
@@ -22,18 +17,6 @@ function consume(ctx: RequestContext, proof: VerifiedOidcIdentity, purpose: 'log
 async function currentConnection(ctx: RequestContext, proof: VerifiedOidcIdentity): Promise<boolean> {
   return Boolean(await ctx.db.prepare(`SELECT 1 FROM identity_connections WHERE id=? AND provider=? AND protocol='oidc'
     AND client_id=? AND version=? AND enabled=1`).bind(proof.connectionId, proof.provider, proof.clientId, proof.connectionVersion).first())
-}
-
-export function oidcLinkGuard(principal: Principal, now: number) {
-  const live = liveSessionCondition(principal, now)
-  return { sql: `${live.sql} AND EXISTS(SELECT 1 FROM stage0_live_sessions s WHERE s.id=? AND (${linkAssurance}))`,
-    values: [...live.values, principal.sessionId, now - recent, now, now - recent, now] }
-}
-
-export async function assertOidcLinkPrincipal(ctx: RequestContext, principal: Principal): Promise<void> {
-  await loadLiveSession(ctx, principal)
-  const guard = oidcLinkGuard(principal, ctx.clock.now())
-  if (!await ctx.db.prepare(`SELECT 1 WHERE ${guard.sql}`).bind(...guard.values).first()) throw new Stage0Error('forbidden')
 }
 
 /** Resolve an already linked immutable issuer/subject pair. Email and provider

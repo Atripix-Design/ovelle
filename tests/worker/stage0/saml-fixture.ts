@@ -4,6 +4,7 @@ import { SignedXml } from 'xml-crypto'
 // Ephemeral test-only signing material: no private key is committed or sent out.
 const pair = generateKeyPairSync('rsa', { modulusLength: 2048 })
 const privateKey = pair.privateKey.export({ type: 'pkcs8', format: 'pem' }).toString()
+export const testSigningKey = privateKey
 export const publicKey = pair.publicKey.export({ type: 'spki', format: 'pem' }).toString()
 export const samlIssuer = 'https://identity.example.test/saml'
 export const persistent = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'

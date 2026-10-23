@@ -108,3 +108,11 @@ export async function consumeDesktopStartBudget(ctx: RequestContext, ip: string,
   const now = ctx.clock.now()
   await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
 }
+
+/** All enterprise SAML starts share one purpose/IP limit; rotating connection
+ * selectors cannot multiply starts. The global IP challenge ceiling also applies. */
+export async function consumeSamlStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
+  const limits = await budgets({ email: 'saml-start', ip }, keyMaterial, false)
+  const now = ctx.clock.now()
+  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+}

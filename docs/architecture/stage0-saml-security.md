@@ -3,7 +3,10 @@
 October 23, 2026. This implements the maintained protocol-verification layer of the
 confirmed direct enterprise SAML direction. It does not enable SAML login, create
 an account/session, consume a durable request or prove hosted/provider readiness.
-The public Worker does not import this module.
+The public Worker does not import this module. The later
+[durable transaction service](stage0-saml-transactions.md) now consumes protocol
+evidence atomically with existing-account session/link effects; browser HTTP and
+new-account enrollment remain unfinished.
 
 ## Maintained implementation and runtime
 
@@ -91,15 +94,17 @@ The pinned release's [cache interface](https://github.com/node-saml/node-saml/bl
 uses separate get/remove operations; it is not a durable atomic replay guarantee.
 The wrapper supplies only a read view of the caller-selected request evidence.
 Repeated verification of the same signed message is not persistent consumption.
-A later service must atomically consume browser-bound request/assertion state,
+The [durable service](stage0-saml-transactions.md) now atomically consumes
+browser-bound request/assertion state for existing accounts. Any further composition must
 recheck current connection/account authority and commit session/linking effects.
 That service must use the branded result, preserve exact identity binding and
 retain SSO provenance without automatic email linking or JIT membership grants.
 There is deliberately no direct route from this protocol function to an issuer.
 
-Remaining work includes durable SAML request/replay storage and races, connection
-lifecycle/metadata review, identity linking/enrollment, browser POST/cookie binding,
-HTTP quotas, hosted runtime/headroom evidence and real IdP acceptance. Existing
+Durable request/replay and existing-account composition are now covered by that
+service. Remaining work includes connection lifecycle/metadata review, new-account
+enrollment, browser POST/cookie binding and HTTP admission, hosted runtime/headroom
+evidence and real IdP acceptance. Existing
 organization authorization, passkeys, desktop exchange and recovery issuance are
 reused; full recovery, native integration and the broader Stage 0 remain open.
 

@@ -13,8 +13,10 @@ Internal [browser routes and contact onboarding](stage0-oidc-http-enrollment.md)
 are now implemented with local fixtures. SAML, public callback composition and real provider setup
 remain open. The [internal SAML verifier](stage0-saml-security.md) now validates
 real signed response/assertion fixtures through a maintained implementation in
-workerd. Durable request/replay consumption, SAML account/session/browser
-composition, hosted evidence and real IdP acceptance remain unfinished.
+workerd. The [durable SAML service](stage0-saml-transactions.md) now adds
+request/replay consumption, existing-account sessions and explicit linking.
+New-account enrollment, browser HTTP/cookie composition, hosted evidence and
+real IdP acceptance remain unfinished.
 The remaining discussion records requirements, not completed login.
 
 ## Universal boundary

@@ -32,9 +32,13 @@ assign the future desktop migration the next available number when implemented.
 The public Worker still does not import or enable these auth adapters.
 The [SAML protocol continuation](../../architecture/stage0-saml-security.md) adds
 maintained response/assertion verification and strict signed-fixture evidence in
-workerd. It produces branded protocol evidence only: durable replay consumption,
-identity/session/browser composition, hosted runtime and real IdP acceptance
-remain open. It does not complete SAML login or any original whole-plan task.
+workerd. It produces branded protocol evidence for the
+[durable SAML continuation](../../architecture/stage0-saml-transactions.md)
+which adds maintained AuthnRequests, atomic request/replay consumption and
+existing-account session/link effects with local signed-message/D1 evidence.
+Migration 0014 is allocated. New-account enrollment, browser HTTP/POST/cookie
+composition and hosted/provider acceptance remain required. These internal
+services do not complete SAML login readiness or any original whole-plan task.
 The [OIDC continuation](../../architecture/stage0-oidc-security.md) adds maintained
 Google/Microsoft verification, exact-identity linking and one-time browser
 transactions with local signed-token/D1 tests. Migrations 0005 and 0006 are
