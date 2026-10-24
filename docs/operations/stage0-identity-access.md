@@ -114,6 +114,11 @@ Keep these obligations open until the corresponding evidence and authority exist
   configuration rejects `AUTH_LOCAL_FIXTURES`; an environment flag cannot enable
   Stage 0. Future deployment composition must name and verify its own bindings
   without logging keys, assertions, recovery codes or complete credential URLs.
+  The internal [direct-provider settings resolver](../architecture/stage0-oidc-settings.md)
+  now defines the exact `AUTH_GOOGLE_*` and `AUTH_MICROSOFT_*` connection, version,
+  client ID and secret bindings and rechecks their enabled D1 authority on each
+  lookup. These bindings remain unprovisioned; signed fixture logins do not
+  establish registration or credential validity with actual providers.
 - Verify the exact development artifact with designated identities, actual email,
   passkeys, tenant denials, revocation and recovery. Keep production separate.
   Complete the broader Stage 0 volunteer records, private versioned documents,
