@@ -6,6 +6,7 @@ import { Stage0Error } from '../../errors'
 import { consumePasskeyStartBudget, finishAuthAttempt, reserveAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretPattern } from '../secrets'
 import { liveSessionCondition, loadLiveSession, prepareSessionIssuance, type SessionRow } from '../sessions'
+import { recoveryEnrollmentGuard } from '../recovery'
 import { authenticationOptions, decodeBytes, encodeBytes, registrationOptions, verifyAuthentication, verifyRegistration } from './protocol'
 
 interface Challenge { id: string; challenge_digest: string; purpose: 'register' | 'login' | 'step_up'; account_id: string | null; session_id: string | null; initial: number; consumed_at: number; expires_at: number }
@@ -16,13 +17,15 @@ function registrationPolicy(row: SessionRow, count: number, now: number): boolea
     : row.assurance === 'passkey' && Boolean(row.passkey_credential_id) && recent(row.passkey_verified_at, now))
 }
 function registrationGuard(row: SessionRow, initial: boolean, now: number) {
-  return {
+  const normal = {
     sql: `EXISTS(SELECT 1 FROM stage0_live_sessions s WHERE s.id=? AND s.account_id=? AND s.transport='browser' AND s.expires_at>? AND s.created_at<=? AND s.assurance!='enrollment'
       AND ((?=1 AND s.authenticated_at>? AND s.authenticated_at<=? AND NOT EXISTS(SELECT 1 FROM passkey_credentials WHERE account_id=s.account_id))
         OR (?=0 AND s.assurance='passkey' AND s.passkey_credential_id IS NOT NULL AND s.passkey_verified_at>? AND s.passkey_verified_at<=?)))
       AND (SELECT count(*) FROM passkey_credentials WHERE account_id=?)<10`,
     values: [row.id, row.account_id, now, now, initial ? 1 : 0, now - 300_000, now, initial ? 1 : 0, now - 300_000, now, row.account_id],
   }
+  const recovery = recoveryEnrollmentGuard(row, now)
+  return { sql: `((${normal.sql}) OR (${recovery.sql}))`, values: [...normal.values, ...recovery.values] }
 }
 async function newChallenge(ctx: RequestContext, purpose: Challenge['purpose'], row: SessionRow | null, initial: boolean, statements: D1PreparedStatement[] = []) {
   const token = randomSecret(); const challenge = randomSecret(); const now = ctx.clock.now()
@@ -67,7 +70,9 @@ export async function beginPasskeyRegistration(ctx: RequestContext, principal: P
   const row = await loadLiveSession(ctx, principal)
   const person = await account(ctx, row.account_id)
   const credentials = await ctx.db.prepare('SELECT id,transports FROM passkey_credentials WHERE account_id=?').bind(row.account_id).all<{ id: string; transports: string }>()
-  if (!registrationPolicy(row, credentials.results.length, ctx.clock.now())) throw new Stage0Error('forbidden')
+  const recovery = recoveryEnrollmentGuard(row, ctx.clock.now())
+  const recovering = Boolean(await ctx.db.prepare(`SELECT 1 WHERE ${recovery.sql}`).bind(...recovery.values).first())
+  if (!registrationPolicy(row, credentials.results.length, ctx.clock.now()) && !recovering) throw new Stage0Error('forbidden')
   await consumePasskeyStartBudget(ctx, ip, budgetKey)
   const started = await newChallenge(ctx, 'register', row, credentials.results.length === 0, [ctx.db.prepare('INSERT INTO passkey_users(account_id,user_handle) VALUES(?,?) ON CONFLICT(account_id) DO NOTHING').bind(row.account_id, randomSecret())])
   const handle = await ctx.db.prepare('SELECT user_handle FROM passkey_users WHERE account_id=?').bind(row.account_id).first<string>('user_handle')
@@ -87,9 +92,24 @@ export async function finishPasskeyRegistration(ctx: RequestContext, principal: 
     const verified = await verifyRegistration(ctx.config, pending.challenge_digest, response)
     const credential = verified.credential
     const row = sessionRow(ctx, existing, existing.account_id, existing.account_security_version, credential.id)
+    const recovering = existing.assurance === 'enrollment'
+    if (recovering) {
+      // The short enrollment deadline bounds replacement, while the resulting
+      // session keeps the 12-hour absolute limit anchored to signed provider auth.
+      // A second epoch change also invalidates any intervening old-key login.
+      row.account_security_version++
+      row.expires_at = existing.authenticated_at + 43_200_000
+    }
     const prepared = await prepareSessionIssuance(ctx, row)
     const policy = registrationGuard(existing, pending.initial === 1, ctx.clock.now()); const challenge = challengeGuard(ctx, pending)
     await guardedBatch(ctx, `(${policy.sql}) AND (${challenge.sql}) AND NOT EXISTS(SELECT 1 FROM passkey_credentials WHERE id=?)`, [...policy.values, ...challenge.values, credential.id], [
+      ...(recovering ? [
+        ctx.db.prepare('UPDATE accounts SET security_version=security_version+1 WHERE id=?').bind(existing.account_id),
+        ctx.db.prepare('UPDATE sessions SET revoked_at=coalesce(revoked_at,?) WHERE account_id=?').bind(ctx.clock.now(), existing.account_id),
+        ctx.db.prepare('UPDATE passkey_credentials SET disabled_at=?,version=version+1 WHERE account_id=? AND disabled_at IS NULL').bind(ctx.clock.now(), existing.account_id),
+        ctx.db.prepare('UPDATE recovery_enrollments SET completed_at=? WHERE session_id=?').bind(ctx.clock.now(), existing.id),
+        auditStatement(ctx, 'recovery.complete', existing.account_id, principal),
+      ] : []),
       ctx.db.prepare('INSERT INTO passkey_credentials(id,account_id,public_key,counter,device_type,backed_up,transports,name,created_at) VALUES(?,?,?,?,?,?,?,?,?)')
         .bind(credential.id, existing.account_id, encodeBytes(credential.publicKey), credential.counter, verified.credentialDeviceType, verified.credentialBackedUp ? 1 : 0, JSON.stringify(credential.transports ?? []), name.trim(), ctx.clock.now()),
       prepared.insert,

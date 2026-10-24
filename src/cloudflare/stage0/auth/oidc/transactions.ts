@@ -7,11 +7,12 @@ import { consumeOidcStartBudget } from '../limits'
 import { issueSession, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
 import { assertOidcLinkPrincipal, linkOidcIdentity, oidcLinkGuard, resolveOidcLogin, type IdentitySnapshot } from './identities'
 import { createOidcAuthorization, newOidcSecrets, verifyOidcCode, type OidcSecrets, type OidcSettings } from './protocol'
+import { beginProviderRecovery } from '../recovery'
 import { beginOidcEnrollment } from './enrollment'
 
 interface Start { purpose: OidcSecrets['purpose']; principal?: Principal; ip: string }
 interface Transaction { purpose: OidcSecrets['purpose']; created_at: number; account_id: string | null; session_id: string | null }
-type Completion = { kind: 'signed_in'; session: IssuedSession } | { kind: 'linked'; identity: IdentitySnapshot } | { kind: 'enrollment'; token: string }
+type Completion = { kind: 'recovery'; session: IssuedSession } | { kind: 'signed_in'; session: IssuedSession } | { kind: 'linked'; identity: IdentitySnapshot } | { kind: 'enrollment'; token: string }
 const secretPattern = /^[A-Za-z0-9_-]{43}$/
 const encode = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
 async function digest(value: string): Promise<string> {
@@ -32,7 +33,7 @@ const connectionValues = (settings: OidcSettings) => [settings.connectionId, set
  * A fresh binding replaces the previous browser flow when its cookie is set.
  */
 export async function startOidcTransaction(ctx: RequestContext, settings: OidcSettings, start: Start, budgetKey: Uint8Array, fetcher?: CustomFetch, admission?: () => Promise<void>): Promise<{ authorizationUrl: string; browserBinding: string }> {
-  if (!['login', 'link'].includes(start.purpose) || (start.purpose === 'link') !== Boolean(start.principal) || (start.principal && start.principal.transport !== 'browser')) throw new Stage0Error('invalid_input')
+  if (!['login', 'link', 'recovery'].includes(start.purpose) || (start.purpose === 'link') !== Boolean(start.principal) || (start.principal && start.principal.transport !== 'browser')) throw new Stage0Error('invalid_input')
   if (start.principal) await assertOidcLinkPrincipal(ctx, start.principal)
   await consumeOidcStartBudget(ctx, settings.provider, start.ip, budgetKey)
   // The HTTP adapter supplies Turnstile here, after durable admission and before
@@ -65,12 +66,13 @@ export async function completeOidcTransaction(ctx: RequestContext, settings: Oid
   const row = await ctx.db.prepare(`UPDATE oidc_transactions SET consumed_at=?
     WHERE state_digest=? AND binding_digest=? AND provider=? AND connection_id=? AND connection_version=?
       AND consumed_at IS NULL AND created_at<=? AND expires_at>? AND ${connectionCondition}
-      AND (purpose='login' OR EXISTS(SELECT 1 FROM stage0_live_sessions s WHERE s.id=oidc_transactions.session_id AND s.account_id=oidc_transactions.account_id AND s.transport='browser' AND s.expires_at>? AND s.created_at<=?))
+      AND (purpose IN ('login','recovery') OR EXISTS(SELECT 1 FROM stage0_live_sessions s WHERE s.id=oidc_transactions.session_id AND s.account_id=oidc_transactions.account_id AND s.transport='browser' AND s.expires_at>? AND s.created_at<=?))
     RETURNING purpose,created_at,account_id,session_id`)
     .bind(now, await digest(states[0]), await digest(browserBinding), settings.provider, settings.connectionId, settings.connectionVersion, now, now, ...connectionValues(settings), now, now).first<Transaction>()
   if (!row) throw new Stage0Error('unauthenticated')
   const secrets = await transactionSecrets(ctx, settings, states[0], browserBinding, row.purpose, row.created_at)
   const verified = await verifyOidcCode(ctx, settings, secrets, callback, fetcher)
+  if (row.purpose === 'recovery') return { kind: 'recovery', session: await beginProviderRecovery(ctx, verified) }
   if (row.purpose === 'login') {
     const linked = await ctx.db.prepare('SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?')
       .bind(verified.connectionId, verified.issuer, verified.subject).first()

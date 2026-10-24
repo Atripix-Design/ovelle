@@ -195,6 +195,16 @@ public credential endpoints receive their own origin/rate/Turnstile validation;
 CSRF tokens are issued to enrollment and authenticated web sessions. Enrollment
 sessions have an explicit allowlist and cannot call organization/staff APIs.
 
+## October 23 recovery continuation
+
+The user approved Google/Microsoft sign-in plus passkeys and fresh linked-provider
+sign-in plus a recovery code for replacement-only enrollment. This supersedes
+password-plus-code acceptance wording in the historical task bullets below;
+local passwords/reset remain deferred pending KDF approval. The [recovery contract](../../architecture/stage0-recovery-review.md)
+now records internal consumption, replacement, global session/exchange invalidation
+and required-SSO preservation. Real provider, device and public/native/UI rollout
+acceptance remains open; the original task scope is retained.
+
 ## Task 1: Resolve runtime choices and establish executable test contracts
 
 **Files:** Task 1 map above; tests `tests/worker/stage0/config.test.ts` and

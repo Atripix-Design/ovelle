@@ -87,9 +87,10 @@ Do not infer actual auth or provider readiness from a green site deployment.
 
 Keep these obligations open until the corresponding evidence and authority exist:
 
-- Resolve the optional password KDF/runtime decision and account-recovery contract.
-  Current `passwordDecision` is pending and `enabled` remains false. Recovery-code
-  issuance does not establish consumption/replacement or recovery-session safety.
+- The October 23 decision selects Google/Microsoft plus passkeys, with fresh
+  linked-provider plus code recovery. Verify its [internal recovery contract](../architecture/stage0-recovery-review.md)
+  against actual providers and devices before rollout. Optional local passwords
+  remain deferred behind KDF/runtime approval; `enabled` remains false.
 - Review actual Google/Microsoft registrations and supported SAML customer profiles,
   form origins, certificate/metadata lifecycle, connection disabling and linking.
   Complete supported browser/device, hosted runtime/CPU and public TLS/edge checks.
@@ -104,7 +105,7 @@ Keep these obligations open until the corresponding evidence and authority exist
   and target D1 database, inspect its applied migration history, capture a D1 Time
   Travel bookmark and protected backup, review pending migrations in numeric order,
   and apply only the approved development set manually. Prepared identity migrations
-  currently extend through `0015_saml_enrollments.sql`; do not assume remote state
+  currently extend through `0016_provider_recovery.sql`; do not assume remote state
   or rerun them blindly. Never run identity migrations automatically from CI.
 - Before composing public auth, review all required configuration: hosted
   `AUTH_ORIGIN`, `AUTH_RP_ID`, `AUTH_EMAIL_FROM`, `TURNSTILE_SITE_KEY` and

@@ -12,7 +12,7 @@ export interface OidcSettings {
   clientId: string
   clientSecret: string
 }
-export interface OidcSecrets { state: string; nonce: string; verifier: string; createdAt: number; purpose: 'login' | 'link' }
+export interface OidcSecrets { state: string; nonce: string; verifier: string; createdAt: number; purpose: 'login' | 'link' | 'recovery' }
 const proofBrand: unique symbol = Symbol('verified OIDC identity')
 export interface VerifiedOidcIdentity {
   readonly [proofBrand]: true
@@ -27,6 +27,7 @@ export interface VerifiedOidcIdentity {
   readonly emailVerified: boolean
   readonly displayName: string | null
   readonly verifiedAt: number
+  readonly authenticatedAt: number | null
   readonly purpose: OidcSecrets['purpose']
 }
 const proofs = new WeakSet<VerifiedOidcIdentity>()
@@ -47,10 +48,10 @@ function checkSettings(settings: OidcSettings): void {
 }
 function checkSecrets(ctx: Context, secrets: OidcSecrets): void {
   const now = ctx.clock.now()
-  if (![secrets.state, secrets.nonce, secrets.verifier].every(value => typeof value === 'string' && secretPattern.test(value)) || !['login', 'link'].includes(secrets.purpose) || !Number.isSafeInteger(secrets.createdAt) || secrets.createdAt > now || now >= secrets.createdAt + 300_000) throw new Stage0Error('unauthenticated')
+  if (![secrets.state, secrets.nonce, secrets.verifier].every(value => typeof value === 'string' && secretPattern.test(value)) || !['login', 'link', 'recovery'].includes(secrets.purpose) || !Number.isSafeInteger(secrets.createdAt) || secrets.createdAt > now || now >= secrets.createdAt + 300_000) throw new Stage0Error('unauthenticated')
 }
 export function newOidcSecrets(ctx: Context, purpose: OidcSecrets['purpose']): OidcSecrets {
-  if (!['login', 'link'].includes(purpose)) throw new Stage0Error('invalid_input')
+  if (!['login', 'link', 'recovery'].includes(purpose)) throw new Stage0Error('invalid_input')
   return { state: client.randomState(), nonce: client.randomNonce(), verifier: client.randomPKCECodeVerifier(), createdAt: ctx.clock.now(), purpose }
 }
 
@@ -107,8 +108,8 @@ export async function createOidcAuthorization(ctx: Context, settings: OidcSettin
     return client.buildAuthorizationUrl(config, {
       response_type: 'code', redirect_uri: callbackUri(ctx, settings.provider), scope: 'openid profile email',
       state: secrets.state, nonce: secrets.nonce, code_challenge: await client.calculatePKCECodeChallenge(secrets.verifier), code_challenge_method: 'S256',
-      ...(secrets.purpose === 'link' ? settings.provider === 'google'
-        ? { prompt: 'select_account consent', claims: JSON.stringify({ id_token: { auth_time: { essential: true } } }) }
+      ...(secrets.purpose !== 'login' ? settings.provider === 'google'
+        ? { prompt: 'select_account consent', ...(secrets.purpose === 'recovery' ? { max_age: '0' } : {}), claims: JSON.stringify({ id_token: { auth_time: { essential: true } } }) }
         : { prompt: 'login', max_age: '0' } : { prompt: 'select_account' }),
     })
   } catch { throw new Stage0Error('configuration') }
@@ -124,15 +125,16 @@ export async function verifyOidcCode(ctx: Context, settings: OidcSettings, secre
   if (callback.origin + callback.pathname !== callbackUri(ctx, settings.provider) || callback.hash || callback.username || callback.password) throw new Stage0Error('unauthenticated')
   try {
     const { config, keys } = await configuration(ctx, settings, fetcher)
-    const tokens = await client.authorizationCodeGrant(config, callback, { pkceCodeVerifier: secrets.verifier, expectedNonce: secrets.nonce, expectedState: secrets.state, idTokenExpected: true, ...(secrets.purpose === 'link' ? { maxAge: 300 } : {}) })
+    const tokens = await client.authorizationCodeGrant(config, callback, { pkceCodeVerifier: secrets.verifier, expectedNonce: secrets.nonce, expectedState: secrets.state, idTokenExpected: true, ...(secrets.purpose !== 'login' ? { maxAge: 300 } : {}) })
     checkSecrets(ctx, secrets)
     const claims = tokens.claims()!
     const nowSeconds = Math.floor(ctx.clock.now() / 1000)
     // The maintained verifier checks JWT validity and max-age. Ovelle also
     // rejects future authentication evidence and uses an exclusive five-minute
     // step-up boundary, consistently with its local account-link policy.
-    if (!Number.isSafeInteger(claims.iat) || claims.iat > nowSeconds || (secrets.purpose === 'link' &&
+    if (!Number.isSafeInteger(claims.iat) || claims.iat > nowSeconds || (secrets.purpose !== 'login' &&
       (typeof claims.auth_time !== 'number' || !Number.isSafeInteger(claims.auth_time) || claims.auth_time > nowSeconds || claims.auth_time <= nowSeconds - 300))) throw new Stage0Error('unauthenticated')
+    if (secrets.purpose === 'recovery' && (claims.auth_time as number) < Math.floor(secrets.createdAt / 1000)) throw new Stage0Error('unauthenticated')
     if (typeof claims.sub !== 'string' || !claims.sub || claims.sub.length > 512) throw new Stage0Error('unauthenticated')
     let tenantId: string | null = null
     if (settings.provider === 'microsoft') {
@@ -149,7 +151,7 @@ export async function verifyOidcCode(ctx: Context, settings: OidcSettings, secre
     // Google is authoritative for Gmail and verified Workspace addresses. Other
     // email hints and Microsoft's mutable email/UPN still need contact proof.
     const emailVerified = settings.provider === 'google' && claims.email_verified === true && email !== null && (email.toLowerCase().endsWith('@gmail.com') || (typeof claims.hd === 'string' && claims.hd.length > 0))
-    const proof: VerifiedOidcIdentity = Object.freeze({ [proofBrand]: true as const, provider: settings.provider, connectionId: settings.connectionId, connectionVersion: settings.connectionVersion, clientId: settings.clientId, issuer: claims.iss, subject: claims.sub, tenantId, email, emailVerified, displayName: typeof claims.name === 'string' && claims.name.length <= 120 ? claims.name : null, verifiedAt: ctx.clock.now(), purpose: secrets.purpose })
+    const proof: VerifiedOidcIdentity = Object.freeze({ [proofBrand]: true as const, provider: settings.provider, connectionId: settings.connectionId, connectionVersion: settings.connectionVersion, clientId: settings.clientId, issuer: claims.iss, subject: claims.sub, tenantId, email, emailVerified, displayName: typeof claims.name === 'string' && claims.name.length <= 120 ? claims.name : null, verifiedAt: ctx.clock.now(), authenticatedAt: secrets.purpose !== 'login' ? (claims.auth_time as number) * 1000 : null, purpose: secrets.purpose })
     proofs.add(proof)
     return proof
   } catch { throw new Stage0Error('unauthenticated') }

@@ -34,6 +34,20 @@ proposal, superseded by this direct OIDC direction. Revise the identity/session
 schema before Task 2; do not implement the draft's
 password-only assumptions unchanged.
 
+## October 23 approved sign-in and recovery decision
+
+The user confirmed Google/Microsoft sign-in plus passkeys for the initial release,
+with lost-passkey recovery requiring fresh linked-provider sign-in **and** a
+one-use recovery code. Local passwords/reset are deferred pending runtime/KDF
+approval. The historical password-first/password-plus-code language below is
+superseded for this release; enterprise SAML and organization-required SSO remain
+in scope. Recovery never creates or links an account by email and grants only
+replacement enrollment until a new user-verified passkey commits. Sessions and
+pending desktop exchanges are invalidated, old keys are disabled on successful
+replacement, and organization authority is preserved. The [recovery contract](../../architecture/stage0-recovery-review.md)
+records exact internal transitions, tests and separate live rollout requirements.
+This decision does not enable public authentication or authorize remote migrations.
+
 ## Outcome and boundary
 
 A staff member can establish a verified Ovelle account, sign in, create an

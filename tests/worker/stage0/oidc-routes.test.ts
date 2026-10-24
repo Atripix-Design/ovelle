@@ -50,9 +50,9 @@ async function csrf() {
   expect(response.status).toBe(200); remember(response)
   return (await response.json() as { csrfToken: string }).csrfToken
 }
-async function start() {
+async function start(purpose: 'start' | 'recovery' = 'start') {
   const token = await csrf()
-  const response = await handleOidcRequest(f.ctx, request('/api/v1/auth/oidc/google/start', 'POST', { turnstileToken: 'fixture-token' }, { 'X-CSRF-Token': token }), deps)
+  const response = await handleOidcRequest(f.ctx, request(`/api/v1/auth/oidc/google/${purpose}`, 'POST', { turnstileToken: 'fixture-token' }, { 'X-CSRF-Token': token }), deps)
   expect(response.status).toBe(200); remember(response)
   authorization = new URL((await response.json() as { authorizationUrl: string }).authorizationUrl)
   provider.state.claims.nonce = authorization.searchParams.get('nonce')!
@@ -74,6 +74,25 @@ it('completes a real signed fixture flow with cookie-only credentials and a fixe
   expect(me.status).toBe(200)
   expect(await me.text()).not.toContain(token)
   expect(response.headers.get('Access-Control-Allow-Origin')).toBeNull()
+})
+it('separates recovery from ordinary login, requiring prelogin CSRF and the recovery Turnstile action', async () => {
+  const token=await csrf()
+  const path='/api/v1/auth/oidc/google/recovery'
+  expect((await handleOidcRequest(f.ctx,request(path,'POST',{turnstileToken:'fixture-token'}),deps)).status).toBe(403)
+  // An otherwise valid ordinary-login challenge cannot admit recovery.
+  expect((await handleOidcRequest(f.ctx,request(path,'POST',{turnstileToken:'fixture-token'},{'X-CSRF-Token':token}),deps)).status).toBe(403)
+  deps.turnstileFetch=async()=>Response.json({success:true,hostname:'localhost',action:'oidc_recovery',challenge_ts:new Date(f.ctx.clock.now()).toISOString()})
+  const url=await start('recovery')
+  provider.state.claims.auth_time=Math.floor(f.ctx.clock.now()/1000)
+  expect(authorization.searchParams.get('max_age')).toBe('0')
+  expect(JSON.parse(authorization.searchParams.get('claims')!)).toEqual({id_token:{auth_time:{essential:true}}})
+  const response=await handleOidcRequest(f.ctx,request(url.href,'GET',undefined,{'Sec-Fetch-Site':'cross-site','Sec-Fetch-Mode':'navigate','Sec-Fetch-Dest':'document'}),deps)
+  expect(response.status).toBe(303);expect(response.headers.get('Location')).toBe('/account/recover');remember(response)
+  const session=await resolveSession(f.ctx,jar.get('ovelle_local_session')!,'browser')
+  expect(session).toMatchObject({accountId:'d',method:'oidc',assurance:'enrollment'})
+  expect(response.headers.getSetCookie().find(c=>c.startsWith('ovelle_local_session='))).toContain('Max-Age=300')
+  expect(jar.has('ovelle_local_oidc')).toBe(false)
+  expect(await response.text()).toBe('')
 })
 it('denies missing/cross-site CSRF, bearer mixing, wrong method, malformed or oversized JSON before external work', async () => {
   const token = await csrf()

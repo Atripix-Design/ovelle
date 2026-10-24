@@ -49,7 +49,7 @@ async function sessionHeaders(ctx: RequestContext, session: IssuedSession): Prom
 export async function handleOidcRequest(ctx: RequestContext, request: Request, deps: OidcHttpDependencies): Promise<Response> {
   const url = new URL(request.url)
   if (url.origin !== ctx.config.origin) return authResponse(ctx, { error: 'forbidden' }, 403)
-  const match = /^\/api\/v1\/auth\/oidc\/(google|microsoft)\/(start|link|callback)$/.exec(url.pathname)
+  const match = /^\/api\/v1\/auth\/oidc\/(google|microsoft)\/(start|link|recovery|callback)$/.exec(url.pathname)
   const callback = match?.[2] === 'callback'
   const expected = match ? callback ? 'GET' : 'POST' : ['/api/v1/auth/prelogin', '/api/v1/auth/enrollment'].includes(url.pathname) ? 'GET'
     : ['/api/v1/auth/enrollment/contact', '/api/v1/auth/enrollment/confirm'].includes(url.pathname) ? 'POST' : null
@@ -69,11 +69,11 @@ export async function handleOidcRequest(ctx: RequestContext, request: Request, d
         const settings = await deps.getSettings(provider)
         if (settings.provider !== provider) throw new Stage0Error('configuration')
         const result = await completeOidcTransaction(ctx, settings, url, readOidcBindingCookie(ctx.config, request), deps.providerFetch)
-        const headers = result.kind === 'signed_in' ? await sessionHeaders(ctx, result.session) : new Headers()
+        const headers = result.kind === 'signed_in' || result.kind === 'recovery' ? await sessionHeaders(ctx, result.session) : new Headers()
         headers.append('Set-Cookie', oidcBindingCookie(ctx.config, null))
         headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'prelogin', '', 0))
         if (result.kind === 'enrollment') headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'enrollment', result.token, 900))
-        headers.set('Location', result.kind === 'signed_in' ? '/account' : result.kind === 'linked' ? '/account/security' : '/account/enroll')
+        headers.set('Location', result.kind === 'recovery' ? '/account/recover' : result.kind === 'signed_in' ? '/account' : result.kind === 'linked' ? '/account/security' : '/account/enroll')
         return authResponse(ctx, null, 303, headers)
       }
       requireBrowserOrigin(ctx, request, true)
@@ -83,8 +83,8 @@ export async function handleOidcRequest(ctx: RequestContext, request: Request, d
       if (typeof parsed.turnstileToken !== 'string' || !parsed.turnstileToken || parsed.turnstileToken.length > 2048) throw new Stage0Error('invalid_input')
       const settings = await deps.getSettings(provider)
       if (settings.provider !== provider) throw new Stage0Error('configuration')
-      const started = await startOidcTransaction(ctx, settings, { purpose: principal ? 'link' : 'login', principal, ip: deps.trustedIp }, deps.budgetKey, deps.providerFetch,
-        () => verifyTurnstile(ctx, deps.turnstileSecret, parsed.turnstileToken as string, deps.trustedIp, principal ? 'oidc_link' : 'oidc_login', deps.turnstileFetch))
+      const started = await startOidcTransaction(ctx, settings, { purpose: principal ? 'link' : match[2] === 'recovery' ? 'recovery' : 'login', principal, ip: deps.trustedIp }, deps.budgetKey, deps.providerFetch,
+        () => verifyTurnstile(ctx, deps.turnstileSecret, parsed.turnstileToken as string, deps.trustedIp, principal ? 'oidc_link' : match[2] === 'recovery' ? 'oidc_recovery' : 'oidc_login', deps.turnstileFetch))
       const headers = new Headers({ 'Set-Cookie': oidcBindingCookie(ctx.config, started.browserBinding) })
       headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'prelogin', '', 0))
       return authResponse(ctx, { authorizationUrl: started.authorizationUrl }, 200, headers)

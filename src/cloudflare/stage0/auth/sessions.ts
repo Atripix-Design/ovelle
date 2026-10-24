@@ -97,14 +97,18 @@ export async function rotateSession(ctx: RequestContext, principal: Principal): 
   return prepared.issued
 }
 export async function revokeSession(ctx: RequestContext, principal: Principal, targetId: string): Promise<void> {
-  await loadLiveSession(ctx, principal)
+  const source = await loadLiveSession(ctx, principal)
+  if (source.assurance === 'enrollment' && targetId !== source.id) throw new Stage0Error('forbidden')
   const exists = await ctx.db.prepare('SELECT id FROM sessions WHERE id=? AND account_id=?').bind(targetId, principal.accountId).first()
   if (!exists) throw new Stage0Error('not_found')
   const guard = liveSessionCondition(principal, ctx.clock.now())
   await guardedBatch(ctx, guard.sql, guard.values, [ctx.db.prepare('UPDATE sessions SET revoked_at=coalesce(revoked_at,?) WHERE id=? AND account_id=?').bind(ctx.clock.now(), targetId, principal.accountId), auditStatement(ctx, 'session.revoke', targetId, principal)])
 }
 export async function revokeAllSessions(ctx: RequestContext, principal: Principal): Promise<void> {
-  await loadLiveSession(ctx, principal)
+  const source = await loadLiveSession(ctx, principal)
+  // A provider-only recovery proof may abandon itself, but the code is required
+  // before it can invalidate other sessions or change the account security epoch.
+  if (source.assurance === 'enrollment') throw new Stage0Error('forbidden')
   const guard = liveSessionCondition(principal, ctx.clock.now())
   await guardedBatch(ctx, guard.sql, guard.values, [
     ctx.db.prepare('UPDATE accounts SET security_version=security_version+1 WHERE id=?').bind(principal.accountId),
