@@ -61,6 +61,13 @@ concurrency tests retain their broader edge matrices. The connected test adds
 coverage of newly created and accepted state flowing between those modules; it
 is not a replacement for those suites or evidence of hosted concurrency.
 
+The connected journey now runs organization/staff requests through the
+[internal backend root](../architecture/stage0-backend-composition.md), including
+the fixed native namespace for desktop reads. The root also composes existing
+auth handlers, server-owned provider settings, concrete mail and stable admission
+key. Its signed provider/passkey integration remains isolated fixture evidence;
+the public Worker still does not import it.
+
 ## Reproduce and bind evidence
 
 Run the focused journey and `npm run test:stage0`, `npm run check`, `npm run lint`,
@@ -119,6 +126,10 @@ Keep these obligations open until the corresponding evidence and authority exist
   client ID and secret bindings and rechecks their enabled D1 authority on each
   lookup. These bindings remain unprovisioned; signed fixture logins do not
   establish registration or credential validity with actual providers.
+  Internal server composition now captures these dependencies and the canonical
+  32-byte base64url `AUTH_ADMISSION_KEY`. Review the root's fixed browser/native
+  paths and trusted edge-IP integration before public import; no request field
+  or environment flag selects transport or enables authentication.
 - Verify the exact development artifact with designated identities, actual email,
   passkeys, tenant denials, revocation and recovery. Keep production separate.
   Complete the broader Stage 0 volunteer records, private versioned documents,

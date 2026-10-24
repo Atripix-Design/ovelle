@@ -86,7 +86,8 @@ This evidence does not prove a real provider registration, provider credential
 validity, browser recovery, a physical passkey, actual delivery, remote schema
 application or public authentication. Continue the
 [rollout acceptance](../operations/stage0-identity-access.md#separate-rollout-acceptance)
-and [original-plan requirements](../operations/stage0-status.md). The next backend
-composition step must wire these concrete settings and existing adapters together,
-preserve trusted edge-IP and browser/native transport boundaries, and retain the
-separate public rollout gate.
+and [original-plan requirements](../operations/stage0-status.md). The
+[internal backend root](stage0-backend-composition.md) now wires these concrete
+settings and existing adapters together while preserving trusted edge-IP and
+fixed browser/native transport boundaries. Public Worker import remains subject
+to the separate rollout gate.
