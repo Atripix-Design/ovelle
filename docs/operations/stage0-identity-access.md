@@ -92,6 +92,12 @@ Do not infer actual auth or provider readiness from a green site deployment.
 
 ## Separate rollout acceptance
 
+The [development rollout packet](stage0-development-rollout.md) records the
+read-only target baseline, exact pending migration digests, isolated local
+migration/export/import rehearsal, backup and execution sequence, and provider
+registration requirements. It prepares a reviewable action; no remote migration,
+backup export, provider registration or public enablement has been performed.
+
 Keep these obligations open until the corresponding evidence and authority exist:
 
 - The October 23 decision selects Google/Microsoft plus passkeys, with fresh
