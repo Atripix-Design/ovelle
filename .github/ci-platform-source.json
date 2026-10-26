@@ -7,6 +7,14 @@
       "target": ".github/actions/setup-node-adaptive/action.yml",
       "sourceSha256": "64146eacaf609f3f961a1830c04edf32e7c6823b738e3d01c291b0ced1de1343",
       "vendoredSha256": "c320458a792f7046526312124dafc18135c4db4e0584ec1c545ccb653a536167"
+    },
+    {
+      "repository": "Atripix-Design/ci-infrastructure",
+      "commit": "81c3343a7377b344ce4a1bf34df73461e6611783",
+      "source": "actions/setup-github-cli/action.yml",
+      "target": ".github/actions/setup-github-cli/action.yml",
+      "sourceSha256": "d1dea47c7cd310d27eaa534d48fc91f50c5a8d7cd2685b93f107e620665ec0a5",
+      "vendoredSha256": "d1dea47c7cd310d27eaa534d48fc91f50c5a8d7cd2685b93f107e620665ec0a5"
     }
   ],
   "adaptation": "Owner-required self-hosted-only policy: static restricted runner groups, no hosted selector or replay, isolated publishing capacity required separately from ordinary builders. setup-node-adaptive requires self-hosted execution."

@@ -167,6 +167,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - uses: ./.github/actions/setup-github-cli
       - name: Verify current branch source
         id: source
         env:
@@ -227,7 +228,12 @@ jobs:
     timeout-minutes: 5
     permissions:
       actions: write
+      contents: read
     steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+      - uses: ./.github/actions/setup-github-cli
       - name: Delete temporary package transfer
         env:
           GH_TOKEN: ${{ github.token }}

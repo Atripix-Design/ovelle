@@ -67,7 +67,10 @@ export function createAuthMailer(config: Stage0Config, binding: Pick<SendEmail, 
         const message = compose(origin, sender, input)
         const result = await send(message)
         const id = result?.messageId
-        if (typeof id !== 'string' || id.length > 256 || !/^[A-Za-z0-9][A-Za-z0-9._:@/-]*$/.test(id)) return failed()
+        // Cloudflare returns RFC-style <id@domain> acknowledgements. Preserve
+        // the provider's ID, while still excluding controls, lists and markup.
+        const safeId = /^(?:[A-Za-z0-9][A-Za-z0-9._:@/-]*|<[A-Za-z0-9][A-Za-z0-9._:/-]*@[A-Za-z0-9][A-Za-z0-9.-]*>)$/
+        if (typeof id !== 'string' || id.length > 256 || /\p{Cc}/u.test(id) || !safeId.test(id)) return failed()
         return { status: 'accepted', providerId: id }
       } catch {
         // A thrown request or malformed acknowledgement can follow acceptance.

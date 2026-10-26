@@ -23,6 +23,7 @@ test('packaging stays secret-free while delivery and cleanup require a separate 
   assert.equal(transfer.with.path.trim().split('\n').length, 3)
   assert.equal(jobs.deploy['runs-on'].group, 'atripix-ovelle-publishers')
   assert.ok(!jobs.deploy.steps.some(step => step.run?.includes('package:all')))
+  for (const job of [jobs.deploy, jobs['cleanup-packages']]) assert.ok(job.steps.some(step => step.uses === './.github/actions/setup-github-cli'))
   const download = jobs.deploy.steps.find(step => step.uses?.startsWith('actions/download-artifact@'))
   assert.equal(download.with.name, transfer.with.name)
   assert.equal(download.with.path, 'release/desktop')
@@ -30,7 +31,7 @@ test('packaging stays secret-free while delivery and cleanup require a separate 
   assert.ok(jobs['cleanup-packages'].if.includes('always()'))
   assert.equal(jobs['cleanup-packages'].permissions.actions, 'write')
   assert.ok(jobs['cleanup-packages'].needs.includes('deploy'))
-  assert.ok(jobs['cleanup-packages'].steps[0].run.includes('--method DELETE'))
+  assert.ok(jobs['cleanup-packages'].steps.find(step => step.name === 'Delete temporary package transfer').run.includes('--method DELETE'))
 })
 
 test('identity deployment gate requires protocol matrices and the existing passkey ceremony', async () => {

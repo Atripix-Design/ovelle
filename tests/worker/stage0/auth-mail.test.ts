@@ -127,7 +127,13 @@ describe('authentication mail binding', () => {
     expect(t.messages).toHaveLength(0)
   })
 
-  it.each([undefined, null, {}, { messageId: '' }, { messageId: 'bad\r\nid' }, { messageId: 'x'.repeat(257) }, { messageId: 7 }, new Error(`provider detail ${verification}`)])('does not turn an uncertain provider result into success or automatic retries: %j', async acknowledgement => {
+  it.each(['fixture-message-id', '<development-ack@dev.mail.ovelle.org>'])('accepts a bounded provider message ID verbatim: %s', async messageId => {
+    const t = transport({ messageId })
+    expect(await createAuthMailer(config(), t.binding).send(input())).toEqual({ status: 'accepted', providerId: messageId })
+    expect(t.messages).toHaveLength(1)
+  })
+
+  it.each([undefined, null, {}, { messageId: '' }, { messageId: 'bad\r\nid' }, { messageId: 'trailing\n' }, { messageId: 'trailing\r' }, { messageId: '<trailing@example.test>\n' }, { messageId: '<bad\r\nid@example.test>' }, { messageId: '<missing-close@example.test' }, { messageId: 'missing-open@example.test>' }, { messageId: '<>' }, { messageId: '<<nested@example.test>>' }, { messageId: '<not-a-message-id>' }, { messageId: '<one@example.test> <two@example.test>' }, { messageId: 'x'.repeat(257) }, { messageId: 7 }, new Error(`provider detail ${verification}`)])('does not turn an uncertain provider result into success or automatic retries: %j', async acknowledgement => {
     const t = transport(acknowledgement === undefined ? {} : acknowledgement)
     expect(await createAuthMailer(config(), t.binding).send(input())).toEqual(failed)
     expect(t.messages).toHaveLength(1)

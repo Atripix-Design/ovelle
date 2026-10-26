@@ -39,3 +39,12 @@ Development Wrangler configuration separately preserves `AUTH_EMAIL`, restricted
 to `accounts@dev.mail.ovelle.org`. Authentication secrets remain remotely managed
 secret bindings. This change does not expose Stage 0 routes or enable production
 authentication. The original 46-row Stage 0 acceptance audit still applies.
+
+On October 26 the owner authorized isolated publishing capacity. Slot 2 is
+reserved for the Ovelle publishing group, restricted to development CI and the
+manual development runtime probe. Its registration excludes builder and global
+browser/WordPress labels. The publisher installs its checksum-verified GitHub CLI
+inside each disposable job. Live registration confirmed only the publisher labels, with no builder or browser
+labels. Runtime inspection confirmed a non-root container, no host mounts/devices
+or published ports, no privilege, and a dedicated single-container network.
+Exact-SHA delivery remains the final operational check.
