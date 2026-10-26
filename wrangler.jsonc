@@ -48,6 +48,12 @@
           "allowed_sender_addresses": [
             "downloads@dev.mail.ovelle.org"
           ]
+        },
+        {
+          "name": "AUTH_EMAIL",
+          "allowed_sender_addresses": [
+            "accounts@dev.mail.ovelle.org"
+          ]
         }
       ]
     },

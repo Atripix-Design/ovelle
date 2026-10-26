@@ -5,38 +5,20 @@ on:
   push:
     branches: [development, main]
   workflow_dispatch:
-    inputs:
-      force_hosted: { type: boolean, default: false }
-      source_event: { type: string, default: "" }
-      source_sha: { type: string, default: "" }
-      source_ref: { type: string, default: "" }
-      dispatch_ref: { type: string, default: "" }
-      pull_request_number: { type: string, default: "" }
-      pull_request_base: { type: string, default: "" }
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ inputs.source_event || github.event_name }}-${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+  group: ci-${{ github.event_name }}-${{ github.event.pull_request.head.sha || github.sha }}
   cancel-in-progress: true
 
 jobs:
-  route:
-    uses: ./.github/workflows/select-runners.yml
-    with:
-      desired_slots: 3
-      lane_names_json: '["build", "typecheck", "lint"]'
-      force_hosted: ${{ inputs.force_hosted || false }}
-      trusted: ${{ github.actor != 'dependabot[bot]' && github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/main') }}
-      runner_app_id: ${{ vars.ATRIPIX_RUNNER_APP_ID }}
-    secrets:
-      runner_app_private_key: ${{ secrets.ATRIPIX_RUNNER_APP_PRIVATE_KEY }}
-
   build:
     name: build
-    needs: route
-    runs-on: ${{ fromJSON(needs.route.outputs.slot_1) }}
+    runs-on:
+      group: atripix-private-builders
+      labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral]
     timeout-minutes: 20
     outputs:
       package_artifact_id: ${{ steps.packages.outputs.artifact-id }}
@@ -45,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22
@@ -54,7 +36,7 @@ jobs:
       - run: npm run build
       # Packaging is secret-free; keep it in the already allocated build slot.
       - name: Prepare packaging tools without root
-        if: (inputs.source_event || github.event_name) == 'push'
+        if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
@@ -70,15 +52,15 @@ jobs:
             echo "LD_LIBRARY_PATH=$tools_dir/root/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
           fi
       - name: Package desktop applications
-        if: (inputs.source_event || github.event_name) == 'push'
+        if: github.event_name == 'push'
         env:
-          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
+          VITE_RELEASE_SHA: ${{ github.sha }}
         run: npm run package:all -w @ovelle/desktop
       - name: Verify local packages
-        if: (inputs.source_event || github.event_name) == 'push'
+        if: github.event_name == 'push'
         run: node scripts/verify-desktop-releases.mjs local
-      - name: Transfer packages to hosted delivery
-        if: (inputs.source_event || github.event_name) == 'push'
+      - name: Transfer packages to isolated delivery
+        if: github.event_name == 'push'
         id: packages
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -93,15 +75,16 @@ jobs:
 
   typecheck:
     name: typecheck
-    needs: route
-    runs-on: ${{ fromJSON(needs.route.outputs.slot_2) }}
+    runs-on:
+      group: atripix-private-builders
+      labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral]
     timeout-minutes: 20
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22
@@ -116,15 +99,16 @@ jobs:
 
   lint:
     name: lint
-    needs: route
-    runs-on: ${{ fromJSON(needs.route.outputs.slot_3) }}
+    runs-on:
+      group: atripix-private-builders
+      labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral]
     timeout-minutes: 20
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22
@@ -134,76 +118,52 @@ jobs:
 
   saml-browser:
     name: Identity browser acceptance
-    runs-on: ubuntu-latest
+    runs-on:
+      group: atripix-private-builders
+      labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral, atripix-browser]
     timeout-minutes: 10
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22.12.0
           cache: npm
       - run: node --version
       - run: npm ci
-      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npx playwright install chromium firefox webkit
       - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
       - run: npm run test:stage0-oidc-browser
       - run: npm run test:stage0-passkey-browser
 
-  hosted-fallback-on-failure:
-    if: >-
-      ${{ always() && inputs.force_hosted != true && (
-        (contains(fromJSON(needs.route.outputs.local_slots_json), 1) && needs.build.result == 'failure') ||
-        (contains(fromJSON(needs.route.outputs.local_slots_json), 2) && needs.typecheck.result == 'failure') ||
-        (contains(fromJSON(needs.route.outputs.local_slots_json), 3) && needs.lint.result == 'failure')
-      ) }}
-    needs: [route, build, typecheck, lint]
-    permissions:
-      contents: read
-      actions: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          ref: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-      - uses: ./.github/actions/dispatch-hosted-fallback
-        with:
-          github-token: ${{ github.token }}
-          workflow-file: ci.yml
-          dispatch-ref: ${{ inputs.dispatch_ref || github.head_ref || github.ref_name }}
-          force-hosted: ${{ inputs.force_hosted || false }}
-          source-event: ${{ inputs.source_event || github.event_name }}
-          source-sha: ${{ inputs.source_sha || github.event.pull_request.head.sha || github.sha }}
-          source-ref: ${{ inputs.source_ref || github.event.pull_request.head.ref || github.ref }}
-          pull-request-number: ${{ inputs.pull_request_number || github.event.pull_request.number || '' }}
-          pull-request-base: ${{ inputs.pull_request_base || github.event.pull_request.base.ref || '' }}
-
-  # Publishing and secret-bearing work stay hosted under the platform contract.
+  # Dedicated secret-bearing capacity is required; missing capacity blocks delivery.
   deploy:
     name: Deploy application
     needs: [build, typecheck, lint, saml-browser]
     if: >-
       ${{ github.actor != 'dependabot[bot]' &&
-        (inputs.source_event || github.event_name) == 'push' &&
-        ((inputs.source_ref || github.ref) == 'refs/heads/development' ||
-         (inputs.source_ref || github.ref) == 'refs/heads/main') }}
-    runs-on: ubuntu-latest
+        github.event_name == 'push' &&
+        (github.ref == 'refs/heads/development' ||
+         github.ref == 'refs/heads/main') }}
+    runs-on:
+      group: atripix-ovelle-publishers
+      labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]
     timeout-minutes: 45
     permissions:
       contents: read
-    environment: ${{ (inputs.source_ref || github.ref) == 'refs/heads/main' && 'production' || 'development' }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     concurrency:
-      group: delivery-${{ inputs.source_ref || github.ref }}
+      group: delivery-${{ github.ref }}
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ inputs.source_sha || github.sha }}
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+          ref: ${{ github.sha }}
+      - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22
           cache: npm
@@ -211,9 +171,9 @@ jobs:
         id: source
         env:
           GH_TOKEN: ${{ github.token }}
-          DELIVERY_SOURCE_EVENT: ${{ inputs.source_event || github.event_name }}
-          DELIVERY_SOURCE_SHA: ${{ inputs.source_sha || github.sha }}
-          DELIVERY_SOURCE_REF: ${{ inputs.source_ref || github.ref }}
+          DELIVERY_SOURCE_EVENT: ${{ github.event_name }}
+          DELIVERY_SOURCE_SHA: ${{ github.sha }}
+          DELIVERY_SOURCE_REF: ${{ github.ref }}
         run: node scripts/ci/verify-delivery-source.mjs
       - run: npm ci
       - run: npm run build -w @ovelle/ui
@@ -228,7 +188,7 @@ jobs:
         run: node scripts/verify-desktop-releases.mjs local
       - name: Build website
         env:
-          VITE_RELEASE_SHA: ${{ inputs.source_sha || github.sha }}
+          VITE_RELEASE_SHA: ${{ github.sha }}
           APP_ENV: ${{ steps.source.outputs.environment }}
         run: |
           if [ "$APP_ENV" = development ]; then
@@ -239,9 +199,9 @@ jobs:
       - name: Recheck branch before publishing
         env:
           GH_TOKEN: ${{ github.token }}
-          DELIVERY_SOURCE_EVENT: ${{ inputs.source_event || github.event_name }}
-          DELIVERY_SOURCE_SHA: ${{ inputs.source_sha || github.sha }}
-          DELIVERY_SOURCE_REF: ${{ inputs.source_ref || github.ref }}
+          DELIVERY_SOURCE_EVENT: ${{ github.event_name }}
+          DELIVERY_SOURCE_SHA: ${{ github.sha }}
+          DELIVERY_SOURCE_REF: ${{ github.ref }}
         run: node scripts/ci/verify-delivery-source.mjs
       - name: Upload packages and deploy Worker
         env:
@@ -261,7 +221,9 @@ jobs:
   cleanup-packages:
     needs: [build, typecheck, lint, deploy]
     if: ${{ always() && needs.build.outputs.package_artifact_id != '' }}
-    runs-on: ubuntu-latest
+    runs-on:
+      group: atripix-ovelle-publishers
+      labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]
     timeout-minutes: 5
     permissions:
       actions: write

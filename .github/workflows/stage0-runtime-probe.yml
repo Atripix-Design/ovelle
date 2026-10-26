@@ -6,11 +6,13 @@ permissions:
 jobs:
   probe:
     if: github.repository == 'Atripix-Design/ovelle' && github.ref == 'refs/heads/development'
-    runs-on: ubuntu-latest
+    runs-on:
+      group: atripix-ovelle-publishers
+      labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: ./.github/actions/setup-node-adaptive
         with:
           node-version: 22
           cache: npm
