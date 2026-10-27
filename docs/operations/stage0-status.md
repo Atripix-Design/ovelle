@@ -34,6 +34,18 @@ sample delivery and acknowledgement compatibility, not invitation consumption or
 an end-to-end login. Private operator receipts retain provider and backup evidence
 without publishing credentials, inbox contents or database exports.
 
+A separate October 26 hosted test bundled the existing organization/session
+services at `0e416264948cf95cdb8deb8ebfd8bf5522c0fe17` into a token-protected,
+expiring Worker with a newly created disposable D1 database and all 16 migrations.
+Eight separate HTTP requests with one creation key returned the same organization;
+eight competing creation keys produced one success; eight competing version-one
+updates produced one success. Independent database reads confirmed three created
+organizations, one update, matching receipts/audits and clean foreign keys.
+Revoking the session denied replay of its previous successful command. The Worker
+and database were deleted and their absence confirmed. This establishes those
+hosted D1 command invariants using synthetic identity, without real inbox actions,
+provider login, physical passkeys or changes to either application database.
+
 ## Requirement reconciliation
 
 IDs identify the acceptance bullets in their original order within each task.
@@ -53,7 +65,7 @@ failure. Existing tests with different filenames may cover the intended contract
 | 2.1 | Identity, membership, scope, owner and transfer constraints exist in prepared migrations; schema and staff tests exercise their invariants. | October 26 remote development readback matches the restored upgrade. Production identity migrations remain unapplied. |
 | 2.2 | `db.ts`, `commands.ts` and domain commands use transactional constraint guards rather than treating zero updated rows as rollback. | Original `commands.test.ts` is not required as a duplicate of existing command/authorization/domain tests. |
 | 2.3 | Guarded commands store receipts and audit atomically, bind request content and reauthorize replay; organization/staff tests cover stale or changed requests. | No public generic command or SQL endpoint is implied. |
-| 2.4 | Organization, structure, membership, ownership and authorization tests exercise competing commands, revocation order and rollback. | Local workerd/D1 race results do not establish hosted concurrency or edge CPU headroom. |
+| 2.4 | Organization, structure, membership, ownership and authorization tests exercise competing commands, revocation order and rollback. | Separate hosted D1 requests now verify creation-key replay, creator allowance, version races and revoked-session replay denial. This does not establish every command race or edge CPU headroom. |
 | 3.1 | Accounts, sessions and direct-provider enrollment tests cover identity/contact binding, no automatic membership, expiry and replay. | Original password registration, overwrite protection, password login and reset remain unimplemented; provider enrollment is not their substitute. |
 | 3.2 | OIDC/SAML maintain their own verified assertion, enrollment and explicit contact-confirmation services. | No selected password KDF, password registration/token service or password verification/reset contract is implemented. |
 | 3.3 | Browser/desktop credential separation, cookie/Origin/CSRF checks, Turnstile adapters, durable quotas, expiry, logout and disabled-account denial are implemented internally. The [backend root](../architecture/stage0-backend-composition.md) composes them with fixed browser/native paths and server-owned dependencies. See [HTTP security](../architecture/stage0-http-security.md). | Development Turnstile is restricted to dev.ovelle.org, with stable admission/origin/RP/sender settings provisioned. Real challenge completion and public Worker composition remain separate. |
@@ -67,7 +79,7 @@ failure. Existing tests with different filenames may cover the intended contract
 | 5.3 | Complete grant intersections, foreign scope IDs, widening, self-escalation and administrative target restrictions are tested across authorization/invitation/membership suites. | No additional permissive helper is needed to match an older proposed interface name. |
 | 5.4 | Final SQL guards reuse live policy; [capabilities](../architecture/stage0-capabilities.md) are bounded advisory snapshots. | A capability response or hidden control never becomes enforcement authority. |
 | 6.1 | Organization tests cover creator allowance, enrollment/primary-only denial, owner bootstrap, idempotency and rollback. | A local organization is not a verified nonprofit or payment recipient. |
-| 6.2 | Creation atomically writes owner membership/grants, initial structure, recorded policy, audit and receipt. | Development identity schema application is verified; production activation and hosted organization-creation acceptance remain separate. |
+| 6.2 | Creation atomically writes owner membership/grants, initial structure, recorded policy, audit and receipt. | Development identity schema and isolated hosted organization-creation concurrency are verified. Production activation and real-user organization journeys remain separate. |
 | 6.3 | Bounded settings, IANA time zone, versions, tenant-qualified scope reads/updates and reference-preserving archives are implemented. | Recorded staff-reviewed defaults are not a full operating-policy editor or downstream eligibility/hour enforcement. |
 | 6.4 | Selected organization changes context without granting authority; organization and authorization suites cover it. | Public organization UI remains unfinished. |
 | 7.1 | Invitation suites cover owner/admin bounds, intended verified account, explicit acceptance, stale inviter/grants and passkey-ready administrator acceptance. | Sample inbox delivery is verified; a real invitation delivery/consumption journey and product acceptance pages remain unverified. |
@@ -86,7 +98,7 @@ failure. Existing tests with different filenames may cover the intended contract
 | 10.2 | Backend fixture pages measure protocol transport only. | Product browser fixtures/configuration and `test:stage0-browser` remain missing; do not alias protocol scripts to claim completion. |
 | 10.3 | Safe server DTOs and advisory capabilities exist. | Shared account clients, account workspace, public application routes and native adapters remain unfinished. |
 | 10.4 | Existing unrelated shared-UI checks do not establish account-flow parity. | Account-flow loading/focus/theme/material/responsive/Figma and dual-consumer acceptance remain unfinished. |
-| 11.1 | The [connected acceptance journey](stage0-identity-access.md) creates two organizations, invites/accepts, denies scope widening, revokes existing credentials, transfers ownership and reconciles audit. Separate suites cover callback expiry/provider rejection. | Identity establishment and mail transport are fixtures; no real provider or hosted-concurrency claim. |
+| 11.1 | The [connected acceptance journey](stage0-identity-access.md) creates two organizations, invites/accepts, denies scope widening, revokes existing credentials, transfers ownership and reconciles audit. Separate suites cover callback expiry/provider rejection. | The connected journey retains fixture identity/mail. Separate hosted organization-command races passed; real provider identity and the full hosted journey remain unproved. |
 | 11.2 | Full backend checks and seven browser journeys are mandatory in non-secret CI and bound to source. | Native and product-browser suites/UI acceptance from Tasks 9–10 remain missing; passing backend suites does not complete the requested command list. |
 | 11.3 | Internal adapters and their composed backend root enforce explicit origins and fixed browser/native routing; config keeps `enabled: false` and password decision pending. The root captures provider/mail dependencies and a stable admission key. The runbook names configuration and migration order. | Development settings and schema were configured through authorized manual operations. Public Worker import, native dependency/storage verification and auth enablement remain unfulfilled. No automatic identity migrations. |
 | 11.4 | Existing development delivery proves the ordinary application artifact can be published and read back. | Separate October 26 evidence covers development DB inspection, bookmark/private backup, local restore/upgrade and manual migrations. Successful real provider/passkey/native recovery and full related-record/document restore remain unproved. Ordinary delivery does not perform these steps. |
