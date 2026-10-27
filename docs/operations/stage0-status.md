@@ -8,14 +8,31 @@ public login service or a complete Stage 0 release. This audit follows the
 Backend-only implementation does not remove native, presentation, provider or
 rollout requirements from the full plan.
 
-The measured baseline is `acf76e5e06cc127025ec1ae4a78836a24588fd00`, with
-[CI run 40037580398](https://github.com/Atripix-Design/ovelle/actions/runs/40037580398):
-613 backend tests across 48 files, types, lint, builds, privacy and public mail
-checks passed. The hosted Node 22.12.0 browser job passed six SAML/OIDC journeys
-across Chromium, Firefox and WebKit, plus the existing Chromium virtual-passkey
-ceremony. Development bundle readback matched that full SHA, health reported a
-healthy development database, and public authentication routes remained closed.
-This is a dated evidence record, not a claim that every future checkout passed.
+The October 26 backend baseline is `671bfa02738efecf2d567ae02f0d87fe6a86d883`, with
+[CI run 40396795173](https://github.com/Atripix-Design/ovelle/actions/runs/40396795173):
+669 backend tests across 52 files, types, lint, builds, privacy and CI contract
+checks passed. The self-hosted browser job passed the SAML/OIDC matrix across
+Chromium, Firefox and WebKit plus the Chromium virtual-passkey ceremony. The
+isolated publisher deployed development, verified actual downloads against that
+source, and a fresh publisher completed artifact cleanup. October 26 readback
+confirmed healthy development and production databases and closed public auth
+routes. This is dated evidence, not a claim about future checkouts.
+
+Authorized development setup also applied migrations 0002–0016 after a private
+backup and local restore/upgrade rehearsal: 16 migration-history entries, 113
+schema objects, matching schema readback and no foreign-key violations. Google
+and Microsoft client bindings are provisioned; development connection rows and
+security settings are configured. Production identity schema and connection rows
+remain inactive. Fifteen hosted internal security/provider-discovery checks passed;
+they did not establish a successful human provider login.
+
+The initial sample and one separately approved diagnostic reached the selected
+Outlook inbox. The diagnostic exposed a valid Cloudflare angle-bracket message ID
+that the adapter rejected. The adapter fix passes regression tests and replay of
+the captured acknowledgement. No post-fix live message was sent; this proves
+sample delivery and acknowledgement compatibility, not invitation consumption or
+an end-to-end login. Private operator receipts retain provider and backup evidence
+without publishing credentials, inbox contents or database exports.
 
 ## Requirement reconciliation
 
@@ -29,18 +46,18 @@ failure. Existing tests with different filenames may cover the intended contract
 | ID | Current implementation and evidence | Remaining requirement or limit |
 | --- | --- | --- |
 | 1.1 | The plan records direct Google/Microsoft OIDC and enterprise SAML without a broker. | The October 23 decision selects providers plus passkeys and provider-plus-code recovery; optional local passwords remain deferred pending KDF approval. |
-| 1.2 | `config.ts`, `contracts.ts`, `config.test.ts` validate environment/origin boundaries and the closed action vocabulary. The [OIDC settings resolver](../architecture/stage0-oidc-settings.md) binds fixed server credentials to live D1 connection/client/version authority. Workers/D1 tests are pinned and isolated. | Live secrets and provider settings have not been established by these tests; public composition remains required. |
+| 1.2 | `config.ts`, `contracts.ts`, `config.test.ts` validate environment/origin boundaries and the closed action vocabulary. The [OIDC settings resolver](../architecture/stage0-oidc-settings.md) binds fixed server credentials to live D1 connection/client/version authority. Workers/D1 tests are pinned and isolated. | Actual Google/Microsoft bindings and development connection settings were provisioned separately on October 26. Successful provider login and public composition remain required. |
 | 1.3 | `test:stage0` runs `vitest.stage0.config.mts`; fixture mail and D1 remain isolated. | No replacement test configuration is needed because the original proposed filename differed. |
 | 1.4 | The [runtime evidence](../architecture/stage0-runtime-evidence.md) retains local and hosted candidate measurements. | Hosted full-work-factor PBKDF2 was rejected; Argon2 CPU/audit suitability is unresolved. No KDF is approved. Do not repeat unchanged probes or lower work factors. |
 | 1.5 | Parameter rejection and independent password-candidate fixtures run in `password-runtime.test.ts`. | The evidenced KDF selection and freeze required before password storage are missing. |
-| 2.1 | Identity, membership, scope, owner and transfer constraints exist in prepared migrations; schema and staff tests exercise their invariants. | Prepared and locally applied schemas do not prove remote applied state. |
+| 2.1 | Identity, membership, scope, owner and transfer constraints exist in prepared migrations; schema and staff tests exercise their invariants. | October 26 remote development readback matches the restored upgrade. Production identity migrations remain unapplied. |
 | 2.2 | `db.ts`, `commands.ts` and domain commands use transactional constraint guards rather than treating zero updated rows as rollback. | Original `commands.test.ts` is not required as a duplicate of existing command/authorization/domain tests. |
 | 2.3 | Guarded commands store receipts and audit atomically, bind request content and reauthorize replay; organization/staff tests cover stale or changed requests. | No public generic command or SQL endpoint is implied. |
 | 2.4 | Organization, structure, membership, ownership and authorization tests exercise competing commands, revocation order and rollback. | Local workerd/D1 race results do not establish hosted concurrency or edge CPU headroom. |
 | 3.1 | Accounts, sessions and direct-provider enrollment tests cover identity/contact binding, no automatic membership, expiry and replay. | Original password registration, overwrite protection, password login and reset remain unimplemented; provider enrollment is not their substitute. |
 | 3.2 | OIDC/SAML maintain their own verified assertion, enrollment and explicit contact-confirmation services. | No selected password KDF, password registration/token service or password verification/reset contract is implemented. |
-| 3.3 | Browser/desktop credential separation, cookie/Origin/CSRF checks, Turnstile adapters, durable quotas, expiry, logout and disabled-account denial are implemented internally. The [backend root](../architecture/stage0-backend-composition.md) composes them with fixed browser/native paths and server-owned dependencies. See [HTTP security](../architecture/stage0-http-security.md). | Real Turnstile/provider configuration and public Worker composition remain separate. |
-| 3.4 | Contact/invitation credentials persist before sending; delivery status and resend rotation use the [concrete auth mail adapter](../architecture/stage0-auth-mail.md). | Password reset, its global invalidation behavior and real delivery remain missing. Contact mail is not password-reset mail. |
+| 3.3 | Browser/desktop credential separation, cookie/Origin/CSRF checks, Turnstile adapters, durable quotas, expiry, logout and disabled-account denial are implemented internally. The [backend root](../architecture/stage0-backend-composition.md) composes them with fixed browser/native paths and server-owned dependencies. See [HTTP security](../architecture/stage0-http-security.md). | Development Turnstile is restricted to dev.ovelle.org, with stable admission/origin/RP/sender settings provisioned. Real challenge completion and public Worker composition remain separate. |
+| 3.4 | Contact/invitation credentials persist before sending; delivery status and resend rotation use the [concrete auth mail adapter](../architecture/stage0-auth-mail.md). | Two authorized sample messages reached Outlook; captured acknowledgement replay verifies the adapter fix. Real contact/invitation consumption and password reset remain unproved. Contact mail is not password-reset mail. |
 | 4.1 | Maintained WebAuthn verification and purpose/account/session/challenge/UV checks exist in passkey protocol/service/route tests. Primary-only replacement is denied. | Provider-plus-code replacement is implemented internally; real provider and physical-device acceptance remains separate. |
 | 4.2 | Passkey challenges and assurance-changing session rotation are implemented internally; the original session deadline is retained. | The dedicated recovery callback and consumption adapter preserve enrollment-only boundaries; they remain publicly disconnected. |
 | 4.3 | Eight digest-only codes and recent-passkey-protected issuance/rotation are implemented and tested. | The approved provider-plus-code service now consumes once, invalidates sessions/exchanges and restricts replacement; no email-only or operator bypass. Live acceptance remains open. |
@@ -50,10 +67,10 @@ failure. Existing tests with different filenames may cover the intended contract
 | 5.3 | Complete grant intersections, foreign scope IDs, widening, self-escalation and administrative target restrictions are tested across authorization/invitation/membership suites. | No additional permissive helper is needed to match an older proposed interface name. |
 | 5.4 | Final SQL guards reuse live policy; [capabilities](../architecture/stage0-capabilities.md) are bounded advisory snapshots. | A capability response or hidden control never becomes enforcement authority. |
 | 6.1 | Organization tests cover creator allowance, enrollment/primary-only denial, owner bootstrap, idempotency and rollback. | A local organization is not a verified nonprofit or payment recipient. |
-| 6.2 | Creation atomically writes owner membership/grants, initial structure, recorded policy, audit and receipt. | Remote identity schema application remains a separate operation. |
+| 6.2 | Creation atomically writes owner membership/grants, initial structure, recorded policy, audit and receipt. | Development identity schema application is verified; production activation and hosted organization-creation acceptance remain separate. |
 | 6.3 | Bounded settings, IANA time zone, versions, tenant-qualified scope reads/updates and reference-preserving archives are implemented. | Recorded staff-reviewed defaults are not a full operating-policy editor or downstream eligibility/hour enforcement. |
 | 6.4 | Selected organization changes context without granting authority; organization and authorization suites cover it. | Public organization UI remains unfinished. |
-| 7.1 | Invitation suites cover owner/admin bounds, intended verified account, explicit acceptance, stale inviter/grants and passkey-ready administrator acceptance. | Real inbox delivery and product acceptance pages remain unverified. |
+| 7.1 | Invitation suites cover owner/admin bounds, intended verified account, explicit acceptance, stale inviter/grants and passkey-ready administrator acceptance. | Sample inbox delivery is verified; a real invitation delivery/consumption journey and product acceptance pages remain unverified. |
 | 7.2 | Pending/accepted/revoked/expired offers, 72-hour expiry, separate delivery state and explicit resend rotation are implemented internally. | A send acknowledgement does not create membership or prove delivery. |
 | 7.3 | Acceptance rechecks current inviter authority and reviewed scopes in the atomic batch; it does not silently add access to existing members. | Public routing remains disconnected. |
 | 7.4 | Competing accept/revoke/resend transitions and duplicate prevention have existing Worker/D1 tests. | Do not rebuild this lifecycle because an older planning snapshot says it is pending. |
@@ -71,8 +88,8 @@ failure. Existing tests with different filenames may cover the intended contract
 | 10.4 | Existing unrelated shared-UI checks do not establish account-flow parity. | Account-flow loading/focus/theme/material/responsive/Figma and dual-consumer acceptance remain unfinished. |
 | 11.1 | The [connected acceptance journey](stage0-identity-access.md) creates two organizations, invites/accepts, denies scope widening, revokes existing credentials, transfers ownership and reconciles audit. Separate suites cover callback expiry/provider rejection. | Identity establishment and mail transport are fixtures; no real provider or hosted-concurrency claim. |
 | 11.2 | Full backend checks and seven browser journeys are mandatory in non-secret CI and bound to source. | Native and product-browser suites/UI acceptance from Tasks 9–10 remain missing; passing backend suites does not complete the requested command list. |
-| 11.3 | Internal adapters and their composed backend root enforce explicit origins and fixed browser/native routing; config keeps `enabled: false` and password decision pending. The root captures provider/mail dependencies and a stable admission key. The runbook names configuration and migration order. | Public Worker import, real settings, native dependency/storage verification and auth enablement remain unfulfilled. No automatic identity migrations. |
-| 11.4 | Existing development delivery proves the ordinary application artifact can be published and read back. | Separate authority and evidence are needed for target identity DB inspection, Time Travel bookmark/private backup, manual migrations, real provider/mail/passkey/native acceptance and recovery/restore. Ordinary delivery does not perform these steps. |
+| 11.3 | Internal adapters and their composed backend root enforce explicit origins and fixed browser/native routing; config keeps `enabled: false` and password decision pending. The root captures provider/mail dependencies and a stable admission key. The runbook names configuration and migration order. | Development settings and schema were configured through authorized manual operations. Public Worker import, native dependency/storage verification and auth enablement remain unfulfilled. No automatic identity migrations. |
+| 11.4 | Existing development delivery proves the ordinary application artifact can be published and read back. | Separate October 26 evidence covers development DB inspection, bookmark/private backup, local restore/upgrade and manual migrations. Successful real provider/passkey/native recovery and full related-record/document restore remain unproved. Ordinary delivery does not perform these steps. |
 | 11.5 | Verification/runbook, limitations and this reconciliation are published as task files through development. | Volunteer records, private documents/signatures, fuller policies, backup/restore and pilot/guardian rules remain required for Stage 0. |
 
 ## What prevents completion
@@ -85,10 +102,12 @@ local D1 checks do not establish actual provider/physical-device recovery. Local
 passwords remain deferred and require an approved KDF/runtime before adding them;
 they do not block the approved provider recovery implementation.
 
-Real provider registrations, SAML customer/certificate lifecycle, auth sender and
-mail-client behavior need correct account access and separately authorized setup
-and verification. No fixture or successful development deployment grants that
-authority. Native/UI work remains part of the original objective but outside the
+Google/Microsoft registrations and development security settings now have separately
+authorized setup evidence, as does sample auth-sender delivery to Outlook. Successful
+provider/passkey/recovery journeys, invitation/contact consumption and SAML
+customer/certificate lifecycle still require acceptance at their actual scope.
+These completed setup steps do not authorize production identity activation.
+Native/UI work remains part of the original objective but outside the
 current backend-only implementation boundary.
 
 Stage 0 also retains volunteer records, versioned private documents/signatures,
