@@ -32,3 +32,19 @@ it('runs the full PBKDF2 work factor against the independent fixture', async () 
   expect(await probeCandidate('pbkdf2-webcrypto')).toBe(true)
   expect(await probeCandidate('pbkdf2-webcrypto', true)).toBe(false)
 })
+
+it('accepts only the exact reviewed sizes and work factors for each research candidate', () => {
+  const profiles = [
+    { algorithm: 'pbkdf2-sha256', iterations: 600_000, saltBytes: 16, outputBytes: 32 },
+    { algorithm: 'argon2id', memoryKiB: 19_456, passes: 2, parallelism: 1, saltBytes: 16, outputBytes: 32 },
+  ] as const
+  for (const profile of profiles) {
+    expect(() => validateCandidateParameters(profile)).not.toThrow()
+    for (const [field, value] of Object.entries(profile)) {
+      if (typeof value !== 'number') continue
+      for (const invalid of [0, value - 1, value + 1, Infinity, NaN]) {
+        expect(() => validateCandidateParameters({ ...profile, [field]: invalid })).toThrow()
+      }
+    }
+  }
+})

@@ -481,6 +481,10 @@
     {
       "owner": "scripts/desktop-release-validation.mjs",
       "reason": "Pure signed-download destination and lifetime checks used before the release verifier follows a Worker redirect."
+    },
+    {
+      "owner": "scripts/stage0-password-candidates.ts",
+      "reason": "Immutable research-only KDF sizes/work factors shared by exact profile validation and derivation; no production credential capability."
     }
   ],
   "sourceMappings": [

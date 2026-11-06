@@ -554,3 +554,16 @@ matrix interruption. WebKit remains unverified for the missing-library reason.
   zero errors. No repack, deploy, remote download or CI/runner change occurred.
 - This improves verification correctness; it does not resolve application catalog
   duplication, Figma-dependent UI work or missing WebKit/runtime evidence.
+
+### Password research tooling ownership
+
+- Reviewed local/hosted password research modules and their evidence boundaries.
+  Consolidated immutable KDF sizes/work factors so parameter validation and actual
+  derivation consume one owner. Algorithms and independent vectors are unchanged.
+- Five password-runtime tests passed, including both vectors/wrong passwords and
+  mutation of every numeric profile field. Three mocked hosted-runner tests passed.
+  Type checks, lint and 15 architecture tests passed; final test types rechecked.
+- No hosted probe, remote Worker creation, credentials, CI configuration or provider
+  settings changed. The benchmark remains research tooling, not production auth.
+- Application/UI, broader tooling/non-code review, Figma source access and final
+  runtime/CI evidence remain outstanding.
