@@ -453,3 +453,48 @@ request-sharing, retained badge, invalid/error response, compact count, keyboard
 320/390-pixel mobile checks. No actual GitHub response or native Electron bridge is
 claimed by these fixtures. Seventeen architecture tests and the current graph pass
 with six unchanged exceptions. No hook or component source was edited.
+
+## Historical migration responsibility review
+
+Reviewed the complete 0001–0016 chain across the SQL review tranches and refreshed
+identity, admission, OIDC, passkey, desktop, recovery and SAML definitions here.
+Git history confirms migrations have not changed since `ec45f10`. The decisions
+below retain historical upgrade snapshots rather than regenerating them from current
+application constants. They complement the previously recorded grant-policy checks.
+
+| Migration | Owned durable invariant / retention decision |
+| --- | --- |
+| `0001_download_email_limits.sql` | Public-download quota storage/expiry index; keep separate from keyed internal-auth admission. The service owns its quota policy and transaction statements. |
+| `0002_identity.sql` | Account/connection/identity/session shape, identity/version immutability, revocation epochs, live identity/session joins, append-only audit and batch-aborting guards. No password implementation or live clock is supplied by the schema. |
+| `0003_organization_access.sql` | Organization ownership/bootstrap, immutable creator allowance, membership uniqueness, tenant-composite resource references and scope shape. Stored grant vocabulary does not alone authorize requests. |
+| `0004_auth_limits.sql` | Atomic budget ceilings and lease window identities; callers derive keyed selectors, trusted time and refund conditions. These rows are not raw email/IP identifiers. |
+| `0005_oidc_identities.sql` | Exact Microsoft tenant issuer handling, trusted-identity projection, updated live-session projection and preserved audit expansion. Do not generalize template expansion to arbitrary issuers. |
+| `0006_oidc_transactions.sql` | Digest-only browser transaction binding, fixed deadline, immutable purpose/source and one-time consumption. Protocol verification remains outside SQL. |
+| `0007_oidc_enrollments.sql` | Bound pending provider identity, immutable proof hints, versioned contact state and bounded enrollment lifetime. Contact delivery state is not account-link authority. |
+| `0008_passkeys.sql` | Public credential/user-handle storage, counter/version/disable monotonicity, bounded challenges and session credential provenance. Challenge expiry enforcement for authentication remains in the consuming service guard. |
+| `0009_organization_commands.sql` | Organization retention, proposed policy, immutable idempotency receipts and expanded audit actions. Retain command payload digest ownership in the command service. |
+| `0010_staff_invitations.sql` | Issuer/session proof references, invitation state/version rules, sealed immutable grant offers, restricted issuance vocabulary and receipt/audit expansion. Current inviter authority must still be rechecked when accepting. |
+| `0011_staff_access.sql` | Two-party ownership transfer evidence, fixed request/version/source/target, one accepted transfer per organization version and append-only completion state; expanded receipts/audit. |
+| `0012_desktop_auth.sql` | Digest-only state/code, S256 challenge metadata, pending→approved→consumed transitions and browser source references. PKCE verification, callback admission and live-session authority remain service checks. |
+| `0013_recovery_codes.sql` | Monotonic recovery-set version, eight bounded positions, digest-only codes and immutable existing code records. This migration alone does not enable recovery login. |
+| `0014_saml_transactions.sql` | Exact optional NameID formats without inventing legacy values, versioned connection/settings/request binding and issuer-scoped replay digest retention. Signature/assertion verification remains protocol-owned. |
+| `0015_saml_enrollments.sql` | Browser-bound pending identity/contact authority with IdP authentication/session deadlines retained, tenant-composite references and one-time contact consumption. No automatic organization membership. |
+| `0016_provider_recovery.sql` | Forward OIDC recovery-purpose extension preserving prior transactions; browser enrollment-only provider proof and completion evidence; append-only audit expansion. Ordinary account/staff authority still requires the service transition and epoch checks. |
+
+The current `stage0_live_sessions` view deliberately does not evaluate wall time.
+`auth/sessions.ts` resolution and guards add `expires_at > now` and `created_at <= now`.
+Likewise `auth/passkeys/service.ts` distinguishes retiring a pending challenge from
+accepting one for authentication: the latter checks purpose, binding, unconsumed
+state, origin/RP and time in its UPDATE/guard predicates. Collapsing those operations
+or moving guards into a stale preflight would weaken the existing boundary.
+
+Table rebuilds copy rows and reinstall indexes/append-only triggers. Populated
+upgrade fixtures and schema/service tests are the evidence for that behavior;
+source repetition alone is not a defect. No historical migration, remote schema,
+provider settings or deployment state was changed during this review. Review
+coverage is not an exhaustive security proof or evidence of remote migration state.
+
+Fresh local verification passed: 733 Stage 0 tests in 61 files, including populated
+migration, schema, live-authority, session and protocol/service fixtures. The SQL
+responsibility review is recorded for all 16 migrations; final published-state
+verification and the remaining non-SQL migration work are still required.

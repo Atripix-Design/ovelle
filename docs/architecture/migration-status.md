@@ -679,3 +679,15 @@ output uses a temporary directory instead of overwriting dated evidence. Archite
 tests (17) pass. Component changes remain pending current Figma access or the user's
 explicit decision on the requested narrowly scoped nonvisual exception; no exception
 has been assumed from elapsed time or automatic goal continuations.
+
+### Historical SQL responsibility review completed
+
+Recorded retention decisions for all 16 migrations and their boundary with service
+clock, protocol, authorization and transaction guards. Retain historical table
+rebuild definitions; they preserve upgrade history and are not generated artifacts
+of current TypeScript policy. Verified the explicit distinction between session-view
+validity and caller time checks, and passkey retirement versus live authentication.
+No SQL/provider changes. A fresh full Stage 0 run passed 733 tests in 61 files.
+This closes the migration-file responsibility inventory, not all security/remote
+schema evidence or the overall objective. Remaining component/application/gallery,
+CSS, recording and final browser/native/CI work remain active.
