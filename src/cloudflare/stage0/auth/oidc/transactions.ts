@@ -6,7 +6,8 @@ import { randomSecret, secretDigest as digest, secretPattern } from '../secrets'
 import { encodeBase64Url as encode } from '../../domain/base64url'
 import { consumeOidcStartBudget } from '../limits'
 import { issueSession, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
-import { assertOidcLinkPrincipal, linkOidcIdentity, oidcLinkGuard, resolveOidcLogin, type IdentitySnapshot } from './identities'
+import { assertIdentityLinkPrincipal, identityLinkGuard } from '../linking'
+import { linkOidcIdentity, resolveOidcLogin, type IdentitySnapshot } from './identities'
 import { createOidcAuthorization, newOidcSecrets, verifyOidcCode, type OidcSecrets, type OidcSettings } from './protocol'
 import { beginProviderRecovery } from '../recovery'
 import { beginOidcEnrollment } from './enrollment'
@@ -30,7 +31,7 @@ const connectionValues = (settings: OidcSettings) => [settings.connectionId, set
  */
 export async function startOidcTransaction(ctx: RequestContext, settings: OidcSettings, start: Start, budgetKey: Uint8Array, fetcher?: CustomFetch, admission?: () => Promise<void>): Promise<{ authorizationUrl: string; browserBinding: string }> {
   if (!['login', 'link', 'recovery'].includes(start.purpose) || (start.purpose === 'link') !== Boolean(start.principal) || (start.principal && start.principal.transport !== 'browser')) throw new Stage0Error('invalid_input')
-  if (start.principal) await assertOidcLinkPrincipal(ctx, start.principal)
+  if (start.principal) await assertIdentityLinkPrincipal(ctx, start.principal)
   await consumeOidcStartBudget(ctx, settings.provider, start.ip, budgetKey)
   // The HTTP adapter supplies Turnstile here, after durable admission and before
   // any external challenge/provider request. No second quota charge is needed.
@@ -40,7 +41,7 @@ export async function startOidcTransaction(ctx: RequestContext, settings: OidcSe
   const browserBinding = randomSecret()
   const secrets = await transactionSecrets(ctx, settings, state, browserBinding, start.purpose, now)
   const authorizationUrl = (await createOidcAuthorization(ctx, settings, secrets, fetcher)).href
-  const guard = start.principal ? oidcLinkGuard(start.principal, ctx.clock.now()) : { sql: '1', values: [] }
+  const guard = start.principal ? identityLinkGuard(start.principal, ctx.clock.now()) : { sql: '1', values: [] }
   // Discovery can take time: never save a transaction that already expired.
   if (ctx.clock.now() >= now + 300_000) throw new Stage0Error('unauthenticated')
   await guardedBatch(ctx, `(${guard.sql}) AND ${connectionCondition}`, [...guard.values, ...connectionValues(settings)], [

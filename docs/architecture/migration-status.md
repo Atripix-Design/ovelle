@@ -408,3 +408,21 @@ active, including final source-wide, browser and exact-head CI evidence.
   six unchanged exceptions. No provider, UI, migration or CI configuration changed.
 - SAML source review is recorded in `review-coverage.md`; real-browser/provider
   acceptance and final exact-head CI are not inferred from local fixtures.
+
+### OIDC settings, protocol and linking review
+
+- Reviewed settings capture, protocol verification, identity persistence, shared
+  linking policy and durable transaction orchestration. Recorded retained
+  responsibilities and verification limits in `review-coverage.md`.
+- Removed OIDC-specific aliases/re-exports of shared linking guards. Both identity
+  persistence and transaction orchestration now import the policy owner directly.
+  SQL predicates, preflight timing and final guarded writes are unchanged.
+- Added these five concept owners without expanding dependency permissions or
+  exceptions. OIDC's provider JSON parser has different acceptance semantics from
+  the shared HTTP parser; unifying them is not a behavior-preserving substitution.
+- Verification: 91 focused OIDC/recovery tests across six files, all workspace and
+  backend type checks, workspace lint and 15 architecture tests passed. The graph
+  remains 207 code files, six explicit exceptions and zero errors.
+- OIDC enrollment/routes still need their remaining source review. Whole-repository
+  completion, Figma-dependent UI cycles and final runtime verification remain open.
+  No CI configuration or runner changes were made.

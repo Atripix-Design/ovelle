@@ -417,6 +417,26 @@
     {
       "owner": "src/cloudflare/stage0/auth/saml/form.ts",
       "reason": "Bounded UTF-8 form decoding with exact SAML callback fields; no authentication or persistence effects."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/linking.ts",
+      "reason": "Shared live-session and recent local-passkey policy for identity linking; callers retain atomic SQL enforcement."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/settings.ts",
+      "reason": "Fixed credential snapshots and live connection preflight; never request-selected provider endpoints or secret aliases."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/protocol.ts",
+      "reason": "Pinned OIDC provider adapter, bounded network responses and single-use verified identity provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/identities.ts",
+      "reason": "Exact issuer/subject login resolution and guarded identity linking; email is never linking authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/transactions.ts",
+      "reason": "Durable browser binding and one-time OIDC callback claims before provider exchange, with explicit completion branches."
     }
   ],
   "sourceMappings": [

@@ -2,8 +2,7 @@ import type { Principal, RequestContext } from '../../contracts'
 import { auditStatement, guardedBatch } from '../../db'
 import { Stage0Error } from '../../errors'
 import type { VerifiedAuthentication } from '../sessions'
-import { assertIdentityLinkPrincipal as assertOidcLinkPrincipal, identityLinkGuard as oidcLinkGuard } from '../linking'
-export { assertIdentityLinkPrincipal as assertOidcLinkPrincipal, identityLinkGuard as oidcLinkGuard } from '../linking'
+import { assertIdentityLinkPrincipal, identityLinkGuard } from '../linking'
 import { consumeOidcIdentity, type VerifiedOidcIdentity } from './protocol'
 
 export interface IdentitySnapshot { id: string; provider: string; issuer: string; subject: string }
@@ -38,9 +37,9 @@ export async function resolveOidcLogin(ctx: RequestContext, input: VerifiedOidcI
  */
 export async function linkOidcIdentity(ctx: RequestContext, principal: Principal, input: VerifiedOidcIdentity): Promise<IdentitySnapshot> {
   const proof = consume(ctx, input, 'link')
-  await assertOidcLinkPrincipal(ctx, principal)
+  await assertIdentityLinkPrincipal(ctx, principal)
   const now = ctx.clock.now()
-  const live = oidcLinkGuard(principal, now)
+  const live = identityLinkGuard(principal, now)
   if (!await currentConnection(ctx, proof)) throw new Stage0Error('forbidden')
   const existing = await ctx.db.prepare('SELECT id,account_id,disabled_at FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?')
     .bind(proof.connectionId, proof.issuer, proof.subject).first<{ id: string; account_id: string; disabled_at: number | null }>()
