@@ -477,6 +477,10 @@
     {
       "owner": "src/cloudflare/stage0/auth/web.ts",
       "reason": "Browser flow origin checks and Strict flow-cookie transport, without generic HTTP helper forwarding."
+    },
+    {
+      "owner": "scripts/desktop-release-validation.mjs",
+      "reason": "Pure signed-download destination and lifetime checks used before the release verifier follows a Worker redirect."
     }
   ],
   "sourceMappings": [

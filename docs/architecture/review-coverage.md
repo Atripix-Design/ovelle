@@ -190,3 +190,12 @@ production readiness; source hashes are emitted by each verifier.
 
 SAML Firefox 157.0 was also verified in a separate successful run after the
 matrix interruption. WebKit remains unverified for the missing-library reason.
+
+## Release packaging and verification tooling
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `scripts/verify-desktop-releases.mjs` | Retain local artifact inspection and optional remote release verification as an operator command. Version comes from desktop package metadata; remote health, CDN ranges and Worker download paths are checked separately. Extracted signed-redirect validation before following the URL. Sample/header checks do not prove full artifact equality or code signing. | New pure redirect-validator tests and syntax check. No live release verification was run in this tranche. |
+| `scripts/desktop-release-validation.mjs` | Own HTTPS/exact authority, bucket/artifact path, single algorithm and canonical positive 1–300 second expiry validation. Reject credentials, nondefault ports, fragments and duplicate security parameters before following the URL. This checks redirect policy, not cryptographic validity; remote fetch remains required. | Three table-driven tests cover accepted boundaries, malformed/missing/duplicate lifetimes and altered destination/transport. |
+| `scripts/repack-mac.mjs` | Retain architecture-specific app discovery, temporary ZIP construction, integrity/size verification and rename together as packaging. Version comes from desktop metadata. It does not sign, notarize or deploy the app. Existing release directory is an operator build output; no repack was executed during review. | Source and syntax review only; final artifact/build evidence remains required. |
+| `scripts/check-repository-privacy.mjs` | Retain tracked-file inspection and location-only reporting. Reads binary metadata as text as well as source. The explicit regex set is a bounded privacy heuristic, not comprehensive secret detection; untracked/ignored files are outside its scan. | Current tracked-tree scan passed; rerun after staging to include added files. |

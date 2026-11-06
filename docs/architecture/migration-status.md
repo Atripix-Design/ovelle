@@ -540,3 +540,17 @@ active, including final source-wide, browser and exact-head CI evidence.
 
 SAML Firefox 157.0 was also verified in a separate successful run after the
 matrix interruption. WebKit remains unverified for the missing-library reason.
+
+### Release verifier policy boundary
+
+- Reviewed release verification/repacking and repository privacy tooling. Extracted
+  signed-download redirect checks into a pure owner with independent tests.
+- Fixed verifier false-acceptance: missing, negative and nonnumeric expiry formerly
+  passed the sole upper-bound comparison. Require one canonical positive expiry
+  up to 300 seconds, one expected algorithm, HTTPS and exact destination without
+  credentials, nondefault port or fragment before following the redirect.
+- Three focused tests and all 15 architecture tests passed; source syntax checks
+  and tracked-tree privacy scan passed. Graph: 209 files, six existing exceptions,
+  zero errors. No repack, deploy, remote download or CI/runner change occurred.
+- This improves verification correctness; it does not resolve application catalog
+  duplication, Figma-dependent UI work or missing WebKit/runtime evidence.

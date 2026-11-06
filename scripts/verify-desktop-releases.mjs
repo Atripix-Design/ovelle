@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { closeSync, openSync, readFileSync, readSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { verifyRemote } from './ci/verify-network.mjs'
+import { assertPresignedDownload } from './desktop-release-validation.mjs'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
 const filenames = [
@@ -76,13 +77,7 @@ for (const environment of environments) {
       if (redirect.status === 302) {
         const signed = new URL(redirect.headers.get('location') ?? 'https://invalid.example')
         const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
-        if (!accountId) throw new Error('CLOUDFLARE_ACCOUNT_ID is required to verify signed downloads')
-        if (signed.hostname !== `${accountId}.r2.cloudflarestorage.com` ||
-            signed.pathname !== `/ovelle-storage-${environment}/releases/desktop/${filename}` ||
-            signed.searchParams.get('X-Amz-Algorithm') !== 'AWS4-HMAC-SHA256' ||
-            Number(signed.searchParams.get('X-Amz-Expires')) > 300) {
-          throw new Error(`${environment} issued an invalid R2 presigned download: ${filename}`)
-        }
+        assertPresignedDownload(signed, { accountId, environment, filename })
         const sample = await fetch(signed, { headers: { Range: 'bytes=0-0' }, signal })
         if (sample.status !== 206 || !sample.headers.get('content-disposition')?.includes(filename)) {
           throw new Error(`${environment} presigned download failed: ${filename} (${sample.status})`)
