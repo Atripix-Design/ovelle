@@ -400,3 +400,33 @@ publisher credentials, checksum-pinned temporary GitHub CLI installation and no
 hosted fallback. No `.github` or CI script changes were made. File/function review
 of the remaining component/gallery sources, broader CSS/SQL and recorded-video
 coverage remains outstanding alongside the previously documented Figma blocker.
+
+## Shared UI foundation review and unresolved findings
+
+| Source | Responsibility and review decision | Remaining work / evidence |
+| --- | --- | --- |
+| `packages/ui/src/material.tsx` | Retain provider settings, normalization and derived material variables together. Components override provider values explicitly; caller style overrides are preserved. Material, transparency and motion are separate controls. | Default frost 35 is repeated within the owner and should use one private default when component changes are unblocked. Existing UI tests and browser material coverage are recorded above. |
+| `packages/ui/src/skeleton.tsx` | Retain DOM measurement, observation and cleanup as one loading-mask capability. Atomic elements, painted empty shapes and text ranges are distinct measurement cases. LoadingBoundary composes one accessible region with inert, retained content. | No per-component mask registry. The effect disconnects observers/listeners and cancels frames on cleanup. Current web mutation/retention/geometry checks passed in the browser-review tranche; this is not exhaustive DOM/memory coverage. |
+| `packages/ui/src/figma-assets.tsx` | Retain bundled URL inventory and theme image rendering behind a private table. All 111 referenced local asset files exist. | Confirmed inherited-key lookup defect below. Existence alone does not prove native geometry, identity or current Figma parity. |
+| `packages/ui/src/website-assets.ts` | Retain semantic names for exact downloaded website image/mask assets. Source references remain separate from implementation images. | Current source review; full source-slot/geometry comparison still requires Figma evidence. |
+| `packages/ui/src/index.tsx` | Public exports currently also implement Button, IconAction and DownloadAction. Their action state/material behavior is cohesive, but implementation in the barrel causes the documented import cycles. | Move these implementations behind direct internal imports after required source retrieval; retain public exports. Five migration cycle exceptions remain unresolved. |
+| `packages/ui/src/controls.tsx` | Field/select/native-input behavior and material variants are shared UI responsibilities. Select's private helpers keep native form change semantics, pointer/keyboard selection and focus together. | Asset-pair policy overlaps composites; controls should consume a single pair owner while preserving wrapper/skin differences. No automatic split by line count. |
+| `packages/ui/src/composites.tsx` | Retain composed status/FAQ/card/navigation/dialog behavior using existing controls. Modal lifecycle and focus restoration belong with the dialog; external-navigation actions remain caller-provided. | Replace self-barrel imports and consolidate repeated asset-pair knowledge. Two repeated pairs (`3a7d2.svg`, `2a5a3.svg`) currently agree. Matching wrappers should not be assumed: the two SourceAsset helpers render different markup/classes. |
+| `packages/ui/src/date-picker.tsx` | Retain local-date parsing/formatting and calendar interaction; noon/local field comparisons avoid UTC date shifts and reject rollover. Month shifting clamps to the target month's last day. | Direct Button import still required to remove the barrel cycle. Existing independent date and browser keyboard tests cover selected boundaries, not every locale/date combination. |
+| `packages/ui/src/pagination.tsx` | Retain bounded page-window calculation and pagination interaction together; it does not allocate all page numbers for large totals. | Page/count normalization is repeated in calculation and rendering. Introduce one private normalization owner with unchanged independent boundary tests when component work is unblocked. Barrel cycle also remains. |
+| `packages/ui/src/empty-state.tsx` | Retain semantic empty-state layout with caller-owned content/action slots and material behavior. | No data loading, routing or business action decisions introduced. |
+| `packages/ui/src/github-link.tsx` | Retain repository-link presentation, compact count formatting and loading state composed from NavigationItem and LoadingBoundary. | Count fetching/caching stays in the shared application hook. Repository default is overridable; no native capability import. |
+
+### Confirmed inherited asset-name defect
+
+Current built `FigmaAsset({ name: 'missing.svg' })` throws, but `toString` and
+`constructor` return image elements whose `src` is a function; `__proto__` returns
+an object-valued `src`. The private plain-object table is queried by truthiness
+instead of own-property membership. This was reproduced directly against the built
+module; it does not establish attacker control of a current call site.
+
+Required fix: check own properties for both `name` and optional `darkName`, retain
+all existing URL mappings/theme geometry, and add negative regressions for inherited
+names alongside valid light/dark pairs. Component implementation is unchanged while
+fresh Figma context/screenshots are quota-blocked. This finding is unfinished work,
+not an accepted architectural exception or a passing test of correct behavior.

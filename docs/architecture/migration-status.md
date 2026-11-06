@@ -657,3 +657,15 @@ points never imported it; the web build passed after removal. Thirteen local CI
 fixture tests passed, while the live current-SHA delivery check failed. CI sources,
 runner configuration and provider state remain unchanged under the read-only request.
 The whole migration is still active with the remaining source/design/runtime work.
+
+### Shared UI foundations: review complete, fixes pending
+
+Recorded responsibility decisions for material, skeleton, asset maps, primitive
+barrel, controls/composites, calendar, pagination, empty state and GitHub link.
+Confirmed all 111 FigmaAsset file references exist, and reproduced inherited-name
+acceptance (`toString`, `constructor`, `__proto__`) in the current asset lookup.
+Required fixes now explicitly include own-property asset lookup, shared theme-pair
+ownership, private frost/page normalization and the five existing barrel cycles.
+No component edits were made because current Figma context/screenshots remain
+unavailable. These recorded reviews do not mark affected files compliant or finish
+the remaining workflow/website/gallery/CSS/SQL/runtime review.
