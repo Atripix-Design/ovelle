@@ -16,8 +16,8 @@ try {
     globalThis.ipcReply = { status: 200, body: { releases: [{ id: 'fixture' }] } }
     globalThis.fetch = async (url, init) => {
       globalThis.ipcRequests.push({ url, ...init })
-      const { body, status } = globalThis.ipcReply
-      return Response.json(body, { status })
+      const { body, status, raw } = globalThis.ipcReply
+      return raw === undefined ? Response.json(body, { status }) : new Response(raw, { status })
     }
   })
   assert.deepEqual(await page.evaluate(() => window.ovelleDownloads.loadReleases()), [{ id: 'fixture' }])
@@ -40,6 +40,20 @@ try {
   await application.evaluate(() => { globalThis.ipcReply = { status: 503, body: {} } })
   await assert.rejects(page.evaluate(() => window.ovelleDownloads.loadReleases()), /Download catalog unavailable/)
   await assert.rejects(page.evaluate(() => window.ovelleDownloads.emailLink('reader@example.com')), /Email delivery unavailable/)
+
+  for (const body of [null, [], 'ok', 1, {}, { releases: null }, { releases: {} }]) {
+    await application.evaluate((body) => { globalThis.ipcReply = { status: 200, body } }, body)
+    await assert.rejects(page.evaluate(() => window.ovelleDownloads.loadReleases()), /Download catalog unavailable/)
+  }
+  for (const body of [null, [], 'ok', {}, { sent: 'true' }, { sent: 'false' }, { sent: 1 }, { sent: {} }]) {
+    await application.evaluate((body) => { globalThis.ipcReply = { status: 200, body } }, body)
+    await assert.rejects(page.evaluate(() => window.ovelleDownloads.emailLink('reader@example.com')), /Email delivery unavailable/)
+  }
+  await application.evaluate(() => { globalThis.ipcReply = { status: 200, raw: '<html>upstream error</html>' } })
+  await assert.rejects(page.evaluate(() => window.ovelleDownloads.loadReleases()), /Download catalog unavailable/)
+  await assert.rejects(page.evaluate(() => window.ovelleDownloads.emailLink('reader@example.com')), /Email delivery unavailable/)
+  await application.evaluate(() => { globalThis.ipcReply = { status: 200, body: { releases: [] } } })
+  assert.deepEqual(await page.evaluate(() => window.ovelleDownloads.loadReleases()), [])
   await application.evaluate(() => { globalThis.ipcReply = { status: 200, body: { sent: false } } })
   await assert.rejects(page.evaluate(() => window.ovelleDownloads.emailLink('reader@example.com')), /Email delivery unavailable/)
 

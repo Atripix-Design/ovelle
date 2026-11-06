@@ -626,3 +626,13 @@ widths, dynamic-loading checks passed, and the component check passed 31 familie
 across 12 theme/material/frost settings in the web consumer. Architecture tests (17)
 and syntax checks passed. No component/Figma changes or CI fixes. These local web
 results do not complete the outstanding native, second-consumer or Figma work.
+
+### Native service-envelope ownership
+
+Added a private response-envelope decoder in desktop main and strict email success
+acknowledgement. Invalid catalog envelopes now fail before reaching the renderer.
+Real Electron IPC tests cover malformed JSON/envelopes, false-success values and a
+valid empty catalog, alongside existing sender/input/failure checks. Desktop build,
+type/lint and 17 architecture tests passed. Release-item DTO ownership/validation
+and the wider application/UI migration remain incomplete; no duplicate DTO schema
+was introduced to bypass that coordinated work.

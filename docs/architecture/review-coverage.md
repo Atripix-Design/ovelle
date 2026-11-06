@@ -322,3 +322,26 @@ No component implementation or design reference was changed. Seventeen architect
 tests and syntax validation passed; six prior exceptions remain. The local Tailnet
 preview returned HTTP 200 during verification. Native Electron, second-consumer
 execution, current Figma comparison and final-state CI remain separate requirements.
+
+## Native service-envelope validation
+
+`apps/desktop/src/main/downloads.ts` now owns one private decoder for successful
+JSON object envelopes shared by its two service operations. HTTP failures, invalid
+JSON, null, arrays and scalar envelopes produce the operation's stable IPC error.
+The email handler requires literal `sent: true`; strings, numbers and objects can
+no longer become false delivery success. Catalog responses require a release array,
+including a legitimate empty array. This does not validate individual release DTOs:
+coordinated catalog/type ownership across server, shared app and UI remains open.
+
+The decoder stays private beside its two consumers. It introduces no renderer/native
+back-import, new public abstraction, endpoint policy or speculative shared DTO.
+Existing per-invocation sender/frame/document authorization remains before transport.
+
+Verification: rebuilt desktop main/preload/renderer and passed both desktop TypeScript
+targets, desktop lint, 17 architecture tests and the real Electron IPC verifier on a
+local virtual display. Added malformed-envelope, truthy acknowledgement, non-JSON
+response and empty-catalog fixtures. Existing invalid-input, HTTP failure, navigation
+revocation and BrowserWindow preference checks also passed. Network responses were
+fixture-controlled; these results do not prove mail delivery, live release metadata
+or the OS sandbox beyond the checked preferences. The virtual display was stopped
+after verification; no runner or provider settings were changed.
