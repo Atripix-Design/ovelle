@@ -60,7 +60,9 @@
       "roots": [
         "apps/desktop/src/main"
       ],
-      "allowed": [],
+      "allowed": [
+        "desktop-contracts"
+      ],
       "node": true,
       "electron": true
     },
@@ -69,7 +71,9 @@
       "roots": [
         "apps/desktop/src/preload"
       ],
-      "allowed": [],
+      "allowed": [
+        "desktop-contracts"
+      ],
       "node": true,
       "electron": true
     },
@@ -216,6 +220,16 @@
       ],
       "node": false,
       "electron": false
+    },
+    {
+      "id": "desktop-contracts",
+      "roots": [
+        "apps/desktop/src/contracts"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false,
+      "external": []
     }
   ],
   "concepts": [
@@ -278,6 +292,18 @@
     {
       "owner": "scripts/browser-tooling.mjs",
       "reason": "Installed browser and recording provider selection and interface validation for operator-run verification tools."
+    },
+    {
+      "owner": "apps/desktop/src/contracts/downloads.ts",
+      "reason": "Closed download IPC channel vocabulary shared by main and preload without native capabilities."
+    },
+    {
+      "owner": "apps/desktop/src/main/downloads.ts",
+      "reason": "Download IPC sender authorization and development service transport; rechecks the sender on every call."
+    },
+    {
+      "owner": "apps/desktop/src/main/index.ts",
+      "reason": "Native window lifecycle, sandbox configuration and external navigation allowlist."
     }
   ],
   "sourceMappings": [

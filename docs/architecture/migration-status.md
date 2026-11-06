@@ -149,3 +149,29 @@ UI/tooling migration exceptions. This is local evidence only.
 Still outstanding: Figma-dependent UI cycles and variant/consumer evidence; full
 application/native and feature/persistence ownership review; non-JS/TS artifacts;
 final build/browser checks; and successful CI on the final published source.
+
+## Native download boundary tranche
+
+- Moved download IPC authorization and HTTP handling out of application lifecycle
+  into `apps/desktop/src/main/downloads.ts`. Sender-frame and document checks
+  remain inside every IPC invocation. The trusted renderer URL is fixed at startup.
+- Main and preload now import one closed channel vocabulary from the native-free
+  `desktop-contracts` zone. Negative architecture fixtures reject renderer imports
+  of main and native dependencies in contracts. No new exception was added.
+- Added `check:electron-ipc` against the built Electron application: real preload
+  and main IPC with fixture HTTP responses, invalid payload rejection without
+  outbound requests, non-success/delivery-failure propagation, navigation revocation
+  and expected BrowserWindow preferences. This is not proof of real email delivery
+  or OS-level sandbox enforcement under Playwright automation.
+- Desktop build, all repository type checks, desktop lint and ten architecture
+  tests pass. Architecture scans 194 files with the six previously recorded
+  exceptions. UI implementations and CI configuration were not changed.
+
+Application data-shape ownership, shared Home/hooks, broader backend and non-code
+reviews, Figma-dependent UI work and final remote CI evidence remain outstanding.
+
+The existing Electron download check also passed against the live development
+release catalog, including the restricted external download handoff. Its email
+HTTP call was intercepted, so no message was sent. Local native checks used a
+temporary Xvfb display with GLX disabled after this host's graphics driver crashed
+with GLX; no CI service or host package installation was changed.

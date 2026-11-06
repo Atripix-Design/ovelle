@@ -35,7 +35,8 @@
     "check:stage0": "tsc -p tsconfig.stage0.json",
     "check:architecture": "node scripts/architecture/check.mjs",
     "test:architecture": "node --test scripts/architecture/*.test.mjs",
-    "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs"
+    "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs",
+    "check:electron-ipc": "node scripts/check-electron-ipc.mjs"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",

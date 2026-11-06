@@ -72,3 +72,20 @@ test('the repository service boundary rejects route and composition back-imports
     'src/cloudflare/stage0/http/response.ts': '',
   }, contract), [])
 })
+
+test('desktop contracts stay platform independent and cannot grant renderer native access', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({
+    'apps/desktop/src/main/index.ts': "import '../contracts/downloads'",
+    'apps/desktop/src/preload/index.ts': "import '../contracts/downloads'",
+    'apps/desktop/src/contracts/downloads.ts': '',
+  }, contract), [])
+  const findings = analyze({
+    'apps/desktop/src/renderer/src/main.tsx': "import '../../main/downloads'",
+    'apps/desktop/src/main/downloads.ts': '',
+    'apps/desktop/src/contracts/downloads.ts': "import '../main/downloads'; import 'electron'; import 'node:fs'",
+  }, contract)
+  for (const rule of ['dependency-direction', 'native-boundary', 'node-in-browser']) {
+    assert.ok(findings.some(finding => finding.rule === rule))
+  }
+})

@@ -133,3 +133,21 @@ scientific laws or arbitrary size limits:
 - [Ousterhout: deep modules](https://web.stanford.edu/~ouster/cgi-bin/cs190-winter18/lecture.php?topic=modularDesign)
 - [Metz: wrong abstractions](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
 - [Bogard: feature/use-case organization](https://www.jimmybogard.com/vertical-slice-architecture/)
+
+## Desktop download boundary
+
+`apps/desktop/src/contracts/downloads.ts` owns the closed IPC channel vocabulary.
+Main and preload consume it; it cannot import native, application or third-party
+code. `main/downloads.ts` owns IPC registration, per-invocation sender checks and
+the development download service requests. Its registration input is the trusted
+renderer URL fixed at startup. The lifecycle entry point owns windows and the
+external-navigation allowlist. The preload exposes only the two named operations;
+it does not expose generic IPC invocation.
+
+`npm run check:electron-ipc` runs against the built desktop application and requires
+a display (a local virtual display is sufficient). It uses real Electron IPC with
+fixture HTTP responses to check payload rejection, service failures and revocation
+after navigation. It does not prove upstream delivery or OS-level sandboxing:
+Playwright launches Electron with its automation flags. The separate existing
+`check:electron-downloads` checks the live development catalog and native external
+handoff; its email HTTP response is also a fixture, not a sent message.
