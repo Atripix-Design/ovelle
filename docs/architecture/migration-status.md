@@ -505,3 +505,19 @@ active, including final source-wide, browser and exact-head CI evidence.
   cookies; domain access/base64url/input; HTTP body/cookies/input. Earlier migration
   notes exist for several, but must be reconciled with current source before
   claiming complete backend review. Other source areas and final evidence remain.
+
+### Backend review-ledger reconciliation
+
+- Reread the 12 remaining backend sources and reconciled their earlier migration
+  evidence into explicit responsibility/retention entries. All current backend
+  TypeScript files have review rows; that is source coverage, not whole-goal proof.
+- Rechecked public download-email fixtures and all 15 architecture tests; the graph
+  still has 207 code files, six explicit exceptions and zero errors. This tranche
+  changes documentation only; the prior 730-test run remains the latest full suite.
+- Began application review: Home duplicates release metadata and marks fallback
+  URLs available without R2 evidence; UI owns the presentation type and the native
+  loader returns unchecked JSON. These require coordinated contract/fallback work
+  with component/Figma and consumer verification. GitHub-star cache behavior also
+  needs application-level verification. Details are in review-coverage.md.
+- UI cycles, broader tooling/configuration/SQL review and final runtime/CI evidence
+  remain outstanding. No CI/runner or provider settings were changed.

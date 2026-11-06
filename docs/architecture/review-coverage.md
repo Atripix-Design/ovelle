@@ -132,3 +132,42 @@ Electron authentication UI, live provider approval or final real-browser evidenc
 Remaining source coverage must be checked against the actual file inventory, not
 inferred from these group names. Application/UI and tooling/configuration/SQL
 reviews and final integration evidence remain open.
+
+## Remaining backend source reconciliation
+
+Current-source reread reconciles the earlier migration tranches below. Retaining a
+boundary is an explicit review decision, not an instruction to split every file.
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/worker.ts` | Retain public routing, DB health and asset composition. Generic API rejection keeps internal Stage 0 composition disconnected. Release and mail services do not import this entry point. | Public-release tests cover routing, health, asset delegation and Stage 0 rejection. |
+| `src/cloudflare/releases.ts` | Retain release catalog and archive transport together. R2 metadata owns availability; storage errors propagate. HEAD never signs or reads a body; GET streams or signs according to configured capability. Signing clients/URLs are request-local. Shared-app fallback catalog ownership remains a separate unresolved concern. | Public-release tests use fixture R2 plus the actual signer; no live R2/deployment claim. |
+| `src/cloudflare/download-email.ts` | Retain public request decoding, quota reservation and link delivery as private helpers behind one entry point. Public email syntax and response contracts differ from Stage 0. Reservations are conservative, including failures/partial counter denial. Development-only sender/link capability stays explicit. | `check:download-email` verifies SQLite quota behavior, malformed/oversized requests and simulated delivery failures; no real email sent. |
+| `src/cloudflare/stage0/auth/budgets.ts` | Retain pure versioned HMAC counter identity/window derivation. Email-like selectors also represent opaque flow purposes; normalization is not mailbox validation. Persisted counter ceilings remain migration-owned. | Auth-budget tests include independent expected hashes and selector/window cases. |
+| `src/cloudflare/stage0/auth/limits.ts` | Retain atomic counter consumption, bounded cleanup and window-bound attempt settlement. Successful verification refunds once; failed/crashed attempts and starts consume capacity. Late completion cannot refund a different window. | Auth-limit tests exercise concurrent ceilings, leases, retention and repeat/late settlement. |
+| `src/cloudflare/stage0/auth/oidc/cookies.ts` | Retain protocol-specific Lax browser binding and stricter whitespace parsing. It never authenticates ordinary requests. Do not substitute shared cookie parsing with different acceptance semantics. | Cookie and OIDC route/transaction suites. |
+| `src/cloudflare/stage0/domain/access.ts` | Retain one immutable action policy table deriving runtime/type vocabulary and grantable actions. Scope validation checks shape/IDs, not resource ownership or live authority. SQL consumers enforce those separately. | Action-policy, authorization and scope tests. |
+| `src/cloudflare/stage0/domain/base64url.ts` | Retain byte encoding only. Protocols own decoding limits, canonicality and failure semantics. Consumers currently encode bounded secret/cursor/protocol values. | Secret representation, protocol and cursor suites. |
+| `src/cloudflare/stage0/domain/input.ts` | Retain exact enumerable-field validation with optional required own fields. It neither normalizes nor proves domain values. This is the shared shape owner, not an extensible schema framework. | Input-boundary and adapter/service tests. |
+| `src/cloudflare/stage0/http/body.ts` | Retain content-type, byte bound, fatal UTF-8/JSON parsing and stream cancellation. Callers own size limits and external error mapping. OIDC/public-mail parsers retain documented different compatibility semantics. | Input-boundary and protocol-route tests cover malformed bodies and cancellation. |
+| `src/cloudflare/stage0/http/cookies.ts` | Retain unique named-cookie selection without decoding/unquoting secrets. Protocol consumers own value syntax and attributes; duplicates fail. | Cookie parsing tests. |
+| `src/cloudflare/stage0/http/input.ts` | Retain decoded path-segment restrictions and bounded grant DTO shape checks. Domain action/scope meaning remains validated by services. Removed forwarding exports are not reintroduced. | Input-boundary and staff/organization HTTP tests. |
+
+All current `src/cloudflare/**/*.ts` files now have explicit review rows. This
+proves source review coverage only: it does not resolve app-side catalog ownership,
+UI cycles, non-TypeScript artifacts, live runtime/CI evidence or future changes.
+
+## Next application findings
+
+`apps/shared/Home.tsx` still owns fallback release metadata alongside rendering and
+loading. Its fallback marks generated URLs available, independently of the R2-backed
+server catalog. `packages/ui/src/website.tsx` owns the presentation release type,
+while Electron's loader returns unchecked JSON. Resolve data-contract ownership and
+fallback semantics with the required component source/Figma evidence and both
+consumer checks; a server-only catalog review cannot settle this issue.
+
+`apps/shared/useGitHubStars.ts` keeps API/cache data outside shared UI. Current cache
+is browser-local, lasts 15 minutes and rejects future timestamps; an in-flight
+request is shared within the loaded module, times out after five seconds and does
+not update unmounted subscribers. Complete application verification must exercise
+cache expiry/failure and consumer loading behavior, not infer them from this read.
