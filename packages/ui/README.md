@@ -38,7 +38,7 @@ Import `@ovelle/ui/styles.css` once. For Tailwind 4, configure `@tailwindcss/vit
 @source "../node_modules/@ovelle/ui/dist";
 ```
 
-The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`, so Tailwind utilities override its defaults. `className` styles the public wrapper; action controls expose `surfaceClassName` for the inner surface. `Field` and `Select` expose `wrapperClassName` for layout; Field exposes `inputClassName`.
+The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`. Ordinary Tailwind utilities in the later `utilities` layer override normal component declarations. Existing `!important` declarations protect transparent wrapper surfaces, reduced-motion/transparency behavior and skeleton fallbacks; ordinary utilities do not override those declarations. Apply action-surface styling through the surface slot rather than the transparent outer wrapper. `className` styles the public wrapper; action controls expose `surfaceClassName` for the inner surface. `Field` and `Select` expose `wrapperClassName` for layout; Field exposes `inputClassName`.
 
 ## Exports
 

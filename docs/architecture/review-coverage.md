@@ -562,3 +562,37 @@ proving validation fails first. A valid appearance-only chapter 12 and a normal
 interaction chapter 12 were recorded locally. The final normal run includes visible
 mask motion assertions; this does not revalidate all 13 chapters, other consumers,
 Figma parity, provider behavior or a human visual watch. No component/style changes.
+
+
+## Stylesheet layer ownership review
+
+Parsed all 15 tracked CSS files with PostCSS and inspected their layer ancestry.
+All 537 rules in the eight shared UI stylesheets belong to a named layer, including
+all 210 rules in `website.css`; its appended component blocks do not escape the
+components layer. This closes the suspected unlayered-shared-style issue without
+changing cascade order. `tokens.css` remains generated from the local semantic
+color owner; the normal component styles remain in the components layer.
+
+Both app Tailwind entry points declare theme, base, components, utilities in the
+same order and scan the shared UI source using their own relative paths. Those
+relative paths are consumer configuration, not competing style policy. The 120
+Home rules are in the components layer. Gallery and recording page styles are
+unlayered and scoped to their respective fixture surfaces. Both application root
+stylesheets repeat the same font/canvas/body declarations; consolidating those
+shared defaults remains part of the pending source-backed presentation pass.
+
+The shared styles contain 29 important declarations: transparent outer wrappers,
+reduced-motion/transparency enforcement and skeleton fallbacks. The README now
+qualifies its utility-override promise instead of implying that ordinary utilities
+can override these declarations. Wrapper and inner action-surface slots remain
+distinct public styling boundaries. A Chromium probe using the actual base stylesheet
+and a later utility layer confirmed width becomes 200px while an attempted red
+wrapper background stays transparent. This isolates the cascade contract; it is
+not a rendered-app or design-parity test. No important declarations were removed.
+
+Repeated website selector blocks also retain source-order overrides, such as
+workflow preview padding and records layout. Consolidating them requires preserving
+responsive, theme and material precedence with source-backed browser evidence;
+matching selectors alone do not justify deletion or extraction. The independently
+confirmed hero-sheet close-button specificity defect remains unresolved. This
+layer audit does not prove pixel parity or close the remaining CSS/component work.

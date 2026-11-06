@@ -713,3 +713,15 @@ a hidden pseudo-element. Invalid CLI fixtures and valid appearance/interaction c
 12 runs were checked; complete 13-chapter playback and a human visual watch are not
 claimed. Recorder responsibility review is now explicit. Remaining component fixes,
 CSS review and final-state browser/native/CI evidence still prevent completion.
+
+
+### Stylesheet cascade inventory
+
+Verified layer ancestry across all 15 tracked CSS files. All shared UI rules are
+layered; the suspected appended unlayered website rules are absent. Corrected the
+README's overly broad utility-override claim to disclose important wrapper and
+accessibility declarations. Recorded app-versus-gallery ownership and remaining
+root-default duplication/source-order cleanup. No CSS/component behavior changed.
+A fresh Figma context request still returns the Starter-plan tool quota limit;
+required source-backed component corrections and the nonvisual exception decision
+remain unresolved. The goal is not complete.
