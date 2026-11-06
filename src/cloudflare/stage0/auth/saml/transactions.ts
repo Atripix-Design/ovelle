@@ -5,7 +5,7 @@ import { exactObject } from '../../domain/input'
 import { assertIdentityLinkPrincipal, identityLinkGuard } from '../linking'
 import { consumeSamlStartBudget, reserveAuthAttempt, finishAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretPattern } from '../secrets'
-import { loadLiveSession, prepareSessionIssuance, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
+import { absoluteSessionLifetimeMs, loadLiveSession, prepareSessionIssuance, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
 import { createSamlAuthorization, samlSettingsDigest, validateSamlConnection, type SamlConnectionSettings } from './authorization'
 import { consumeSamlIdentity, verifySamlResponse, type VerifiedSamlIdentity } from './protocol'
 
@@ -82,7 +82,7 @@ export async function completeSamlTransaction(ctx: RequestContext, inputSettings
         const existing = await ctx.db.prepare('SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?')
           .bind(settings.connectionId, proof.issuer, proof.subject).first()
         if (existing) throw new Stage0Error('unauthenticated')
-        const token = randomSecret(), expiresAt = Math.min(preparedAt + 900_000, proof.authenticatedAt + 43_200_000, proof.sessionExpiresAt ?? Infinity)
+        const token = randomSecret(), expiresAt = Math.min(preparedAt + 900_000, proof.authenticatedAt + absoluteSessionLifetimeMs, proof.sessionExpiresAt ?? Infinity)
         authority = { sql: 'NOT EXISTS(SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?)', values: [settings.connectionId, proof.issuer, proof.subject] }
         effects.push(
           ctx.db.prepare('DELETE FROM saml_enrollments WHERE id IN (SELECT id FROM saml_enrollments WHERE expires_at<=? LIMIT 100)').bind(preparedAt),
@@ -95,7 +95,7 @@ export async function completeSamlTransaction(ctx: RequestContext, inputSettings
           assurance: identity.email_verified_at === null ? 'enrollment' : 'authenticated', account_security_version: identity.security_version,
           external_identity_id: identity.id, external_identity_version: identity.version, connection_id: settings.connectionId, connection_version: settings.connectionVersion,
           created_at: preparedAt, authenticated_at: proof.authenticatedAt, passkey_verified_at: null,
-          expires_at: Math.min(preparedAt + 43_200_000, proof.authenticatedAt + 43_200_000, proof.sessionExpiresAt ?? Infinity) }
+          expires_at: Math.min(preparedAt + absoluteSessionLifetimeMs, proof.authenticatedAt + absoluteSessionLifetimeMs, proof.sessionExpiresAt ?? Infinity) }
         if (row.expires_at <= preparedAt) throw new Stage0Error('unauthenticated')
         const prepared = await prepareSessionIssuance(ctx, row)
         authority = { sql: `EXISTS(SELECT 1 FROM stage0_trusted_identities i JOIN accounts a ON a.id=i.account_id

@@ -5,7 +5,7 @@ import { normalizedEmail, normalizedContactName } from '../contact'
 import { sendContactVerification } from '../contact-delivery'
 import { consumeAuthEmailBudget, finishAuthAttempt, reserveAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretMac, secretPattern } from '../secrets'
-import { prepareSessionIssuance, type IssuedSession, type SessionRow } from '../sessions'
+import { absoluteSessionLifetimeMs, prepareSessionIssuance, type IssuedSession, type SessionRow } from '../sessions'
 import { samlSettingsDigest, validateSamlConnection, type SamlConnectionSettings } from './authorization'
 interface Enrollment {
  id: string; organization_id: string; connection_id: string; connection_version: number; settings_digest: string;
@@ -58,7 +58,7 @@ export async function confirmSamlContact(ctx: RequestContext, settings: SamlConn
     const session: SessionRow = { id: ctx.ids.next(), account_id: accountId, transport: 'browser', method: 'saml', assurance: 'authenticated',
       account_security_version: 1, external_identity_id: identityId, external_identity_version: 1, connection_id: row.connection_id,
       connection_version: row.connection_version, created_at: preparedAt, authenticated_at: row.authenticated_at, passkey_verified_at: null,
-      expires_at: Math.min(preparedAt + 43_200_000, row.authenticated_at + 43_200_000, row.session_expires_at ?? Infinity) }
+      expires_at: Math.min(preparedAt + absoluteSessionLifetimeMs, row.authenticated_at + absoluteSessionLifetimeMs, row.session_expires_at ?? Infinity) }
     const prepared = await prepareSessionIssuance(ctx, session), now = ctx.clock.now()
     if (now >= session.expires_at) throw new Stage0Error('unauthenticated')
     try {

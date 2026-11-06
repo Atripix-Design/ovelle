@@ -31,7 +31,20 @@ reason to share policy across these domains.
 | `src/cloudflare/stage0/auth/passkeys/service.ts` | Retain challenge issuance/claim, registration, login and step-up orchestration together. Private helpers expose shared transaction predicates and row preparation; splitting each SQL statement into a repository layer would obscure atomic credential/account/challenge checks. Recovery registration shares these mechanisms but keeps its explicit epoch/old-key/session invalidation transaction. Admission callback is a trusted adapter capability, not a request field. | `passkeys.test.ts`, `provider-recovery.test.ts`: challenge replay, counters, concurrent operations, recency, account binding, provenance and recovery replacement. |
 | `src/cloudflare/stage0/auth/passkeys/routes.ts` | Retain fixed browser routes, flow CSRF/cookies and payload dispatch. Reuse exact object-shape parsing while preserving per-operation fields and byte limits. Protocol response contents remain validated by the verifier, not by a cast at this boundary. | `passkey-routes.test.ts`: browser/admission boundaries, payload constraints and fixed operation dispatch. |
 
-Follow-up identified: twelve-hour values occur in session issuance, passkey
-replacement and SAML freshness/session caps. Establish which represent the same
-session policy during federation review before sharing them; matching durations
-do not establish matching authority or lifetime anchors.
+Resolved lifetime follow-up: `sessions.ts` owns `absoluteSessionLifetimeMs`,
+consumed by ordinary issuance, passkey issuance/replacement and SAML
+issuance/enrollment. Each caller retains its authentication anchor and earlier
+provider deadline. SAML protocol acceptance independently owns its maximum
+authentication age; the equal current duration does not make it session policy.
+
+## SAML protocol and persistence
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/stage0/auth/saml/protocol.ts` | Retain bounded DOM/envelope policy and maintained signature-verifier adaptation together. Local parsing rejects ambiguous structures before verification; it does not replace cryptography. A frozen proof in a private WeakSet provides single-use in-process provenance; durable replay protection remains elsewhere. Settings/key validation is the verifier's input boundary. Maximum authentication age is an independent protocol rule. | `saml-protocol.test.ts`: signed fixture verification and hostile XML/signature/condition/time cases. No network or database effects occur in the adapter. |
+| `src/cloudflare/stage0/auth/saml/authorization.ts` | Retain outbound Redirect generation/signing, connection validation and settings digest together. The digest captures reviewed endpoint/key/profile changes; request-state persistence remains transaction-owned. The maintained library's cache stub does not claim durable issuance or replay protection. | `saml-authorization.test.ts` and transaction tests: fixed endpoints, signatures, frozen settings and input/profile rejection. |
+| `src/cloudflare/stage0/auth/saml/transactions.ts` | Retain start/callback orchestration and the final transaction together. Response/assertion replay IDs, pending request, live connection and identity effects commit atomically. Login, linking and pending enrollment have explicit authority branches, not a generic account-upsert abstraction. Shared session ceiling replaces repeated values while existing deadline minima stay local. | `saml-transactions.test.ts`, transaction migration tests and enrollment tests: replay, concurrency, connection/profile changes, linking authority and provider deadlines. |
+| `src/cloudflare/stage0/auth/saml/enrollment.ts` | Retain contact submission/confirmation as a pending SAML enrollment service. Email is independently verified contact data, never account-link authority. Delivery is version-guarded after commit; confirmation atomically creates account/identity/session and consumes enrollment. The session ceiling is shared but contact verification never restarts IdP time. | `saml-enrollment.test.ts`, schema/migration tests: suppression, stale delivery/confirmation, identity collisions, request quotas and original authentication/session expiry. |
+
+SAML HTTP form parsing and the final real-browser flow still require their remaining
+review/verification; the protocol/service entries do not claim completion for them.

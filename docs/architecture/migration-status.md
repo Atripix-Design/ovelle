@@ -375,3 +375,22 @@ Validation passed: 88 tests across eight recovery/passkey files, all repository
 type checks, workspace lint and fifteen architecture tests. Tests use signed
 fixtures and local D1; no live credential, provider setting or CI configuration
 was changed. Whole-codebase review and final browser/CI evidence remain open.
+
+## SAML protocol/service review and lifetime ownership
+
+- Read SAML authorization, verification, transaction and contact-enrollment modules
+  in full. Recorded why protocol policy and atomic replay/identity effects retain
+  separate owners, and why contact verification cannot be a generic account link.
+- `sessions.ts` now owns `absoluteSessionLifetimeMs`, used by ordinary, passkey and
+  SAML issuance and SAML pending/contact enrollment caps. All existing arithmetic,
+  authentication anchors and earlier provider deadlines remain unchanged.
+- SAML verification names its separate maximum authentication-age policy locally;
+  sharing session lifetime must not couple protocol acceptance to issuance policy.
+- Existing independently written expiry tests cover original authentication time,
+  provider caps, pending enrollment age and step-up preservation. No new mirror
+  tests were added merely to assert a constant's numeric value.
+
+Validation passed: 716 backend tests in 60 files, all repository type checks,
+workspace lint, fifteen architecture tests and diff checks. No live provider,
+credential, migration, UI or CI configuration changed. The whole migration remains
+active, including final source-wide, browser and exact-head CI evidence.

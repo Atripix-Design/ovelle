@@ -395,6 +395,22 @@
     {
       "owner": "src/cloudflare/stage0/auth/turnstile.ts",
       "reason": "Closed challenge-action vocabulary and bounded fail-closed Siteverify verification."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/protocol.ts",
+      "reason": "Bounded SAML verification, reviewed settings, independent proof freshness and one-use in-process provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/authorization.ts",
+      "reason": "SAML Redirect authorization generation/signing and settings identity, without durable transaction state."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/transactions.ts",
+      "reason": "Atomic SAML request/replay consumption with live identity/linking/session effects."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/enrollment.ts",
+      "reason": "SAML pending contact verification and atomic account/identity/session creation with original IdP deadlines."
     }
   ],
   "sourceMappings": [

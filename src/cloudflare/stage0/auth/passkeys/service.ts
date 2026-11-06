@@ -5,7 +5,7 @@ import { auditStatement, guardedBatch } from '../../db'
 import { Stage0Error } from '../../errors'
 import { consumePasskeyStartBudget, finishAuthAttempt, reserveAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretPattern } from '../secrets'
-import { liveSessionCondition, loadLiveSession, prepareSessionIssuance, type SessionRow } from '../sessions'
+import { absoluteSessionLifetimeMs, liveSessionCondition, loadLiveSession, prepareSessionIssuance, type SessionRow } from '../sessions'
 import { recoveryEnrollmentGuard } from '../recovery'
 import { authenticationOptions, decodeBytes, encodeBytes, registrationOptions, verifyAuthentication, verifyRegistration } from './protocol'
 
@@ -61,7 +61,7 @@ function sessionRow(ctx: RequestContext, existing: SessionRow | null, accountId:
   // Step-up changes assurance, not primary identity/provenance, auth time or
   // absolute expiry. Required-SAML policies still see the original connection.
   return { ...(existing ?? { account_id: accountId, transport: 'browser', method: 'passkey', account_security_version: securityVersion,
-    external_identity_id: null, external_identity_version: null, connection_id: null, connection_version: null, authenticated_at: now, expires_at: now + 43_200_000 }),
+    external_identity_id: null, external_identity_version: null, connection_id: null, connection_version: null, authenticated_at: now, expires_at: now + absoluteSessionLifetimeMs }),
     id: ctx.ids.next(), created_at: now, assurance: 'passkey', passkey_verified_at: now, passkey_credential_id: credentialId }
 }
 
@@ -98,7 +98,7 @@ export async function finishPasskeyRegistration(ctx: RequestContext, principal: 
       // session keeps the 12-hour absolute limit anchored to signed provider auth.
       // A second epoch change also invalidates any intervening old-key login.
       row.account_security_version++
-      row.expires_at = existing.authenticated_at + 43_200_000
+      row.expires_at = existing.authenticated_at + absoluteSessionLifetimeMs
     }
     const prepared = await prepareSessionIssuance(ctx, row)
     const policy = registrationGuard(existing, pending.initial === 1, ctx.clock.now()); const challenge = challengeGuard(ctx, pending)

@@ -18,6 +18,8 @@ export interface VerifiedSamlIdentity {
   readonly responseId: string; readonly assertionId: string; readonly authenticatedAt: number
   readonly expiresAt: number; readonly sessionExpiresAt: number | null; readonly verifiedAt: number
 }
+// Protocol proof freshness is independent of how long Ovelle issues a session.
+const maximumAuthenticationAgeMs = 43_200_000
 const proofs = new WeakSet<VerifiedSamlIdentity>()
 const assertionNs = 'urn:oasis:names:tc:SAML:2.0:assertion'
 const protocolNs = 'urn:oasis:names:tc:SAML:2.0:protocol'
@@ -149,7 +151,7 @@ export async function verifySamlResponse(ctx: Context, inputSettings: SamlSettin
     const authenticatedAt = timestamp(statement.getAttribute('AuthnInstant'))
     if (issueTimes.some(time => time > now || time < now - 300_000) || timestamp(conditions.getAttribute('NotBefore')) > now
       || (data.hasAttribute('NotBefore') && timestamp(data.getAttribute('NotBefore')) > now)
-      || expiresAt <= now || assertionExpiresAt > Math.min(...issueTimes) + 300_000 || authenticatedAt > now || authenticatedAt < now - 43_200_000) fail()
+      || expiresAt <= now || assertionExpiresAt > Math.min(...issueTimes) + 300_000 || authenticatedAt > now || authenticatedAt < now - maximumAuthenticationAgeMs) fail()
     const saml = new SAML({ issuer: settings.audience, audience: settings.audience, callbackUrl: callback, idpCert: [...settings.signingKeys],
       wantAssertionsSigned: true, wantAuthnResponseSigned: true, acceptedClockSkewMs: 0, maxAssertionAgeMs: 300_000,
       validateInResponseTo: ValidateInResponseTo.always, requestIdExpirationPeriodMs: 300_000,

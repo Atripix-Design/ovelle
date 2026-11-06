@@ -4,6 +4,10 @@ import { Stage0Error } from '../errors'
 import { randomSecret as secret, secretDigest as digest, secretPattern } from './secrets'
 import { encodeBase64Url } from '../domain/base64url'
 
+/** Absolute Ovelle session ceiling. Callers retain their original authentication
+ * anchor and any earlier provider expiry; rotation never restarts this window. */
+export const absoluteSessionLifetimeMs = 43_200_000
+
 type Transport = Principal['transport']
 type Method = Principal['method']
 export interface SessionRow {
@@ -72,7 +76,7 @@ export async function issueSession(ctx: RequestContext, auth: VerifiedAuthentica
     assurance: account.email_verified_at === null ? 'enrollment' : auth.method === 'passkey' ? 'passkey' : 'authenticated',
     account_security_version: account.security_version, external_identity_id: auth.externalIdentityId ?? null, external_identity_version: identity?.identity_version ?? null,
     connection_id: identity?.connection_id ?? null, connection_version: identity?.version ?? null,
-    created_at: now, authenticated_at: now, passkey_verified_at: auth.method === 'passkey' ? now : null, expires_at: now + 43_200_000 }
+    created_at: now, authenticated_at: now, passkey_verified_at: auth.method === 'passkey' ? now : null, expires_at: now + absoluteSessionLifetimeMs }
   const prepared = await prepareSessionIssuance(ctx, row)
   await guardedBatch(ctx, `EXISTS(SELECT 1 FROM accounts WHERE id=? AND disabled_at IS NULL AND security_version=? AND (email_verified_at IS NOT NULL OR ?='enrollment'))
     AND (? IS NULL OR EXISTS(SELECT 1 FROM stage0_trusted_identities i WHERE i.id=? AND i.account_id=? AND i.version=? AND i.connection_id=? AND i.connection_version=? AND i.protocol=?))`,
