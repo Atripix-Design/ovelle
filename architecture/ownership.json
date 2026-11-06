@@ -437,6 +437,10 @@
     {
       "owner": "src/cloudflare/stage0/auth/oidc/transactions.ts",
       "reason": "Durable browser binding and one-time OIDC callback claims before provider exchange, with explicit completion branches."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/enrollment.ts",
+      "reason": "Pending OIDC enrollment lifetime, contact verification and atomic account/identity creation; session issuance rechecks live authority after commit."
     }
   ],
   "sourceMappings": [

@@ -119,6 +119,7 @@ it('routes new verified identities into enrollment and confirms an authoritative
   const url = await start()
   const callbackResponse = await handleOidcRequest(f.ctx, request(url.href), deps)
   expect(callbackResponse.headers.get('Location')).toBe('/account/enroll'); remember(callbackResponse)
+  expect(callbackResponse.headers.getSetCookie().find(cookie => cookie.startsWith('ovelle_local_enrollment='))).toMatch(/; Max-Age=900(?:;|$)/)
   expect(jar.has('ovelle_local_session')).toBe(false)
   const snapshot = await handleOidcRequest(f.ctx, request('/api/v1/auth/enrollment'), deps)
   const data = await snapshot.json() as { csrfToken: string; emailHint: string }

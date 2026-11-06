@@ -151,3 +151,18 @@ it('does not accept deserialized proof or continue after connection revocation',
   await f.execute("UPDATE identity_connections SET enabled=0,version=2 WHERE id='microsoft'").run()
   await expect(confirmOidcContact(f.ctx, enrollment.token, deliveredToken(), contact.ip, key)).rejects.toMatchObject({ code: 'unauthenticated' })
 })
+
+it('retains the original enrollment deadline across late contact submission', async () => {
+  const enrollment = await start('microsoft')
+  const startedAt = f.ctx.clock.now()
+  f.advance(899_000)
+  await submitOidcContact(f.ctx, enrollment.token, contact, key)
+  const row = await f.execute('SELECT expires_at,contact_expires_at FROM oidc_enrollments').first<{ expires_at: number; contact_expires_at: number }>()
+  expect(row).toEqual({ expires_at: startedAt + 900_000, contact_expires_at: startedAt + 900_000 })
+  f.advance(999)
+  expect(await getOidcEnrollment(f.ctx, enrollment.token)).toHaveProperty('csrfToken')
+  f.advance(1)
+  await expect(getOidcEnrollment(f.ctx, enrollment.token)).rejects.toMatchObject({ code: 'unauthenticated' })
+  await expect(confirmOidcContact(f.ctx, enrollment.token, deliveredToken(), contact.ip, key)).rejects.toMatchObject({ code: 'unauthenticated' })
+  expect(await f.execute('SELECT count(*) AS n FROM external_identities').first('n')).toBe(0)
+})

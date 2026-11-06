@@ -1,13 +1,14 @@
 import type { CustomFetch } from 'openid-client'
 import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
+import { exactObject } from '../../domain/input'
 import { authenticateRequest, browserSessionCookie } from '../http'
 import { beginPrelogin, verifyPrelogin } from '../prelogin'
 import { equalSecret, secretPattern } from '../secrets'
 import type { IssuedSession } from '../sessions'
 import { verifyTurnstile } from '../turnstile'
 import { authResponse, boundedJsonBody, readFlowCookie, requireBrowserOrigin, strictFlowCookie } from '../web'
-import { confirmOidcContact, enrollmentCsrf, getOidcEnrollment, submitOidcContact } from './enrollment'
+import { confirmOidcContact, enrollmentCsrf, getOidcEnrollment, oidcEnrollmentLifetimeMs, submitOidcContact } from './enrollment'
 import type { OidcProvider, OidcSettings } from './protocol'
 import { completeOidcTransaction, startOidcTransaction } from './transactions'
 import { oidcBindingCookie, readOidcBindingCookie } from './cookies'
@@ -24,9 +25,7 @@ export interface OidcHttpDependencies {
   turnstileFetch?: (url: string, init: RequestInit) => Promise<Response>
 }
 async function body(request: Request, fields: string[]): Promise<Record<string, unknown>> {
-  const parsed = await boundedJsonBody(request, 4096)
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).some(key => !fields.includes(key))) throw new Stage0Error('invalid_input')
-  return parsed as Record<string, unknown>
+  return exactObject(await boundedJsonBody(request, 4096), fields)
 }
 async function enrollmentToken(ctx: RequestContext, request: Request, mutation: boolean): Promise<string> {
   requireBrowserOrigin(ctx, request, mutation)
@@ -73,7 +72,7 @@ export async function handleOidcRequest(ctx: RequestContext, request: Request, d
         const headers = result.kind === 'signed_in' || result.kind === 'recovery' ? await sessionHeaders(ctx, result.session) : new Headers()
         headers.append('Set-Cookie', oidcBindingCookie(ctx.config, null))
         headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'prelogin', '', 0))
-        if (result.kind === 'enrollment') headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'enrollment', result.token, 900))
+        if (result.kind === 'enrollment') headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'enrollment', result.token, oidcEnrollmentLifetimeMs / 1000))
         headers.set('Location', result.kind === 'recovery' ? '/account/recover' : result.kind === 'signed_in' ? '/account' : result.kind === 'linked' ? '/account/security' : '/account/enroll')
         return authResponse(ctx, null, 303, headers)
       }

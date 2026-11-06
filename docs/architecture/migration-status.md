@@ -426,3 +426,19 @@ active, including final source-wide, browser and exact-head CI evidence.
 - OIDC enrollment/routes still need their remaining source review. Whole-repository
   completion, Figma-dependent UI cycles and final runtime verification remain open.
   No CI configuration or runner changes were made.
+
+### OIDC enrollment and HTTP review
+
+- Completed source responsibility review of enrollment and routes. Retained atomic
+  account/identity/audit/enrollment completion, followed by independently guarded
+  session issuance, and version-guarded post-commit mail outcomes.
+- Enrollment owns its pending lifetime, consumed by record creation and the browser
+  cookie. Contact challenge expiry remains capped by the original enrollment deadline.
+- Reused the shared exact-object validator in OIDC HTTP decoding and clarified
+  private enrollment helper names; request/error/transaction behavior is preserved.
+- Added independent late-submission/exclusive-expiry and cookie-duration assertions.
+  All 38 focused tests across four files passed, together with type checks, lint
+  and 15 architecture tests. Six existing architecture exceptions remain.
+- This completes the recorded OIDC source group review, not the whole migration or
+  live provider/browser verification. Remaining application/UI, staff/access and
+  tooling/configuration reviews and final integration evidence still apply.

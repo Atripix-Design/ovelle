@@ -8,6 +8,9 @@ import { randomSecret, secretDigest, secretMac, secretPattern } from '../secrets
 import { issueSession, type IssuedSession } from '../sessions'
 import { consumeOidcIdentity, type VerifiedOidcIdentity } from './protocol'
 
+/** Pending enrollment lifetime; the browser cookie uses the same deadline window. */
+export const oidcEnrollmentLifetimeMs = 900_000
+
 interface EnrollmentRow {
   id: string; provider: 'google' | 'microsoft'; connection_id: string; connection_version: number; client_id: string;
   issuer: string; subject: string; tenant_id: string | null; email_hint: string | null; contact_proved: number;
@@ -20,7 +23,7 @@ const trusted = `e.consumed_at IS NULL AND e.created_at<=? AND e.expires_at>?
     (e.provider='google' AND e.tenant_id IS NULL AND c.issuer=e.issuer)
     OR (e.provider='microsoft' AND e.tenant_id IS NOT NULL AND e.issuer='https://login.microsoftonline.com/'||e.tenant_id||'/v2.0'
       AND (c.issuer=e.issuer OR c.issuer='https://login.microsoftonline.com/{tenantid}/v2.0'))))`
-async function load(ctx: RequestContext, token: string): Promise<EnrollmentRow> {
+async function loadPendingEnrollment(ctx: RequestContext, token: string): Promise<EnrollmentRow> {
   if (!secretPattern.test(token)) throw new Stage0Error('unauthenticated')
   const now = ctx.clock.now()
   const row = await ctx.db.prepare(`SELECT e.* FROM oidc_enrollments e WHERE e.token_digest=? AND (${trusted})`)
@@ -43,16 +46,16 @@ export async function beginOidcEnrollment(ctx: RequestContext, input: VerifiedOi
   await guardedBatch(ctx, 'NOT EXISTS(SELECT 1 FROM external_identities WHERE connection_id=? AND issuer=? AND subject=?)', [proof.connectionId, proof.issuer, proof.subject], [
     ctx.db.prepare('DELETE FROM oidc_enrollments WHERE id IN (SELECT id FROM oidc_enrollments WHERE expires_at<=? LIMIT 100)').bind(now),
     ctx.db.prepare(`INSERT INTO oidc_enrollments(id,token_digest,provider,connection_id,connection_version,client_id,issuer,subject,tenant_id,email_hint,contact_proved,display_name_hint,created_at,expires_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-      .bind(ctx.ids.next(), await secretDigest(token), proof.provider, proof.connectionId, proof.connectionVersion, proof.clientId, proof.issuer, proof.subject, proof.tenantId, email, proof.emailVerified && email !== null ? 1 : 0, proof.displayName, now, now + 900_000),
+      .bind(ctx.ids.next(), await secretDigest(token), proof.provider, proof.connectionId, proof.connectionVersion, proof.clientId, proof.issuer, proof.subject, proof.tenantId, email, proof.emailVerified && email !== null ? 1 : 0, proof.displayName, now, now + oidcEnrollmentLifetimeMs),
   ])
   return { token }
 }
 export async function getOidcEnrollment(ctx: RequestContext, token: string) {
-  const row = await load(ctx, token)
+  const row = await loadPendingEnrollment(ctx, token)
   return { emailHint: row.email_hint, displayNameHint: row.display_name_hint, csrfToken: await enrollmentCsrf(token) }
 }
 
-async function create(ctx: RequestContext, row: EnrollmentRow, email: string, name: string, digest: string | null): Promise<IssuedSession> {
+async function completeEnrollment(ctx: RequestContext, row: EnrollmentRow, email: string, name: string, digest: string | null): Promise<IssuedSession> {
   const now = ctx.clock.now()
   const accountId = ctx.ids.next()
   const identityId = ctx.ids.next()
@@ -77,13 +80,13 @@ async function create(ctx: RequestContext, row: EnrollmentRow, email: string, na
  * the nominated authoritative Google contact. Only transport sees a session.
  */
 export async function submitOidcContact(ctx: RequestContext, token: string, input: { email: string; displayName: string; ip: string }, budgetKey: Uint8Array): Promise<IssuedSession | null> {
-  const row = await load(ctx, token)
+  const row = await loadPendingEnrollment(ctx, token)
   const email = normalizedEmail(input.email)
   const name = normalizedContactName(input.displayName)
   await consumeAuthEmailBudget(ctx, { email, ip: input.ip }, budgetKey)
   const exists = await ctx.db.prepare('SELECT 1 FROM accounts WHERE email=?').bind(email).first()
   if (!exists && row.contact_proved === 1 && email === row.email_hint) {
-    try { return await create(ctx, row, email, name, null) }
+    try { return await completeEnrollment(ctx, row, email, name, null) }
     catch (error) { if (error instanceof Stage0Error && error.code === 'conflict') return null; throw error }
   }
   const secret = randomSecret()
@@ -99,7 +102,7 @@ export async function submitOidcContact(ctx: RequestContext, token: string, inpu
   return null
 }
 export async function confirmOidcContact(ctx: RequestContext, token: string, contactToken: string, ip: string, budgetKey: Uint8Array): Promise<IssuedSession> {
-  const row = await load(ctx, token)
+  const row = await loadPendingEnrollment(ctx, token)
   if (!row.contact_email || !row.contact_name || !row.contact_digest || row.contact_expires_at === null || !secretPattern.test(contactToken)) throw new Stage0Error('unauthenticated')
   const lease = await reserveAuthAttempt(ctx, { email: row.contact_email, ip }, budgetKey)
   let success = false
@@ -107,7 +110,7 @@ export async function confirmOidcContact(ctx: RequestContext, token: string, con
     const digest = await secretDigest(contactToken)
     if (digest !== row.contact_digest || row.contact_expires_at <= ctx.clock.now()) throw new Stage0Error('unauthenticated')
     let session: IssuedSession
-    try { session = await create(ctx, row, row.contact_email, row.contact_name, digest) }
+    try { session = await completeEnrollment(ctx, row, row.contact_email, row.contact_name, digest) }
     catch (error) { if (error instanceof Stage0Error && error.code === 'conflict') throw new Stage0Error('unauthenticated'); throw error }
     success = true
     return session
