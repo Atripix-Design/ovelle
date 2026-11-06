@@ -109,8 +109,11 @@ subpaths and dependency cycles (including type dependencies).
 Limitations: it does not analyze CSS imports, dataflow, hidden global I/O, aliases
 configured outside this map, transitive dependency internals, duplicate business
 meaning or abstraction quality. It is not a security sandbox. Type checking, tests
-and source review remain required. New import aliases need explicit resolution
-support and negative tests before adoption.
+and source review remain required. Absolute paths, URL modules and package `#` aliases fail as unsupported import
+specifiers rather than being mistaken for external packages. Exact virtual modules
+may be declared per zone: only tests currently declare `cloudflare:test`, supplied
+by the test runtime. This is not a wildcard protocol or alias allowance. Other new
+import aliases need explicit resolution support and negative tests before adoption.
 
 `architecture/exceptions.json` is an exact finding list, never a wildcard ignore.
 Each entry needs a reason, removal condition and tracking reference. Stale and

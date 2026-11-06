@@ -211,3 +211,11 @@ matrix interruption. WebKit remains unverified for the missing-library reason.
 
 Hosted probe source review does not constitute execution approval, a successful
 hosted measurement, production password readiness or a change to CI configuration.
+
+## Architecture enforcement tooling
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `scripts/architecture/check.mjs` | Retain Git-aware source inventory, ownership/config loading and exact exception reconciliation as the CLI. Includes nonignored untracked source; absent deleted files are omitted. Concept owners must exist. Duplicate/stale exceptions fail rather than silently widening a baseline. It does not inspect ignored source or prove semantic abstraction quality. | Current repository scan and source review. |
+| `scripts/architecture/dependencies.mjs` | Retain syntax dependency extraction, relative resolution, ownership/direction checks and cycle traversal as the pure analyzer. Unsupported absolute/URL/package-alias specifiers now fail instead of being treated as npm packages. Exact runtime virtual modules are zone-scoped; only test fixtures declare cloudflare:test. No wildcard exception was added. | 17 positive/negative tests, including 45 import-form/specifier combinations and virtual-module scope rejection. |
+| `scripts/architecture/dependencies.test.mjs` | Retain synthetic graphs and real repository-map fixtures as independent checker tests. Assertions require specific violations and permitted cases rather than mirroring implementation traversal. | All 17 tests pass; current repository graph remains 209 files and six prior exceptions. |

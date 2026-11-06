@@ -55,6 +55,14 @@ export function analyze(sources, config, packageExports = {}) {
         report('dynamic-import', from, `line:${line}`)
         continue
       }
+      // These forms can name source outside the relative resolver. Treating them
+      // as npm packages would silently bypass ownership and dependency checks.
+      // Add explicit resolution and negative fixtures before supporting an alias.
+      if (specifier.startsWith('/') || specifier.startsWith('\\') || specifier.startsWith('#') ||
+          (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(specifier) && !specifier.startsWith('node:') && !(zone.virtualModules ?? []).includes(specifier))) {
+        report('unsupported-import-specifier', from, specifier)
+        continue
+      }
       if (specifier.startsWith('.')) {
         const target = resolveLocal(from, specifier, files, config.sourceMappings)
         if (!target) { report('unresolved-local-import', from, specifier); continue }

@@ -132,3 +132,37 @@ test('release services cannot import the public Worker composition', () => {
     'src/cloudflare/worker.ts': '',
   }, contract).map(finding => finding.rule), ['dependency-direction'])
 })
+
+test('absolute paths, URL modules and package aliases cannot bypass ownership as external packages', () => {
+  const unsupported = [
+    '/native/secret.ts', '//host/native/secret.ts', String.raw`C:\native\secret.ts`,
+    String.raw`\\host\native\secret.ts`, 'file:///native/secret.ts',
+    'https://example.test/module.js', 'data:text/javascript,export default 1',
+    '#native', '#native/secret',
+  ]
+  for (const specifier of unsupported) {
+    for (const statement of [
+      `import ${JSON.stringify(specifier)}`,
+      `export * from ${JSON.stringify(specifier)}`,
+      `type T = import(${JSON.stringify(specifier)}).T`,
+      `import(${JSON.stringify(specifier)})`,
+      `require(${JSON.stringify(specifier)})`,
+    ]) {
+      assert.deepEqual(analyze({ 'app/a.ts': statement }, config), [
+        { rule: 'unsupported-import-specifier', from: 'app/a.ts', target: specifier },
+      ])
+    }
+  }
+  assert.deepEqual(rules({ 'app/a.ts': "import '@vendor/package/subpath'; import 'react'" }), [])
+  assert.deepEqual(rules({ 'native/a.ts': "import 'node:fs/promises'" }), [])
+  assert.deepEqual(rules({ 'app/a.ts': "import 'node:fs/promises'" }), ['node-in-browser'])
+})
+
+test('known runtime virtual modules are exact and scoped to the declaring zone', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({ 'tests/worker/stage0/example.ts': "import { env } from 'cloudflare:test'" }, contract), [])
+  for (const from of ['src/cloudflare/stage0/auth/accounts.ts', 'apps/shared/example.ts']) {
+    assert.deepEqual(analyze({ [from]: "import { env } from 'cloudflare:test'" }, contract).map(item => item.rule), ['unsupported-import-specifier'])
+  }
+  assert.deepEqual(analyze({ 'tests/worker/stage0/example.ts': "import 'cloudflare:test/hidden'" }, contract).map(item => item.rule), ['unsupported-import-specifier'])
+})

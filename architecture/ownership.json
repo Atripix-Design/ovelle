@@ -128,7 +128,10 @@
         "public-worker"
       ],
       "node": true,
-      "electron": false
+      "electron": false,
+      "virtualModules": [
+        "cloudflare:test"
+      ]
     },
     {
       "id": "tooling",

@@ -567,3 +567,17 @@ matrix interruption. WebKit remains unverified for the missing-library reason.
   settings changed. The benchmark remains research tooling, not production auth.
 - Application/UI, broader tooling/non-code review, Figma source access and final
   runtime/CI evidence remain outstanding.
+
+### Architecture verifier import resolution boundary
+
+- Closed a checker blind spot: absolute paths, URL imports and package # aliases
+  were treated as external packages and could bypass source ownership checks.
+  They now fail as unsupported until deliberate resolution is implemented.
+- Declared the existing runtime virtual module cloudflare:test exactly in the tests
+  zone. Backend/app use and subpaths fail. This preserves a known fixture capability,
+  not a wildcard alias allowance; no exceptions or dependency edges were broadened.
+- All 17 architecture tests pass, covering static/export/type/dynamic/require forms,
+  legitimate package imports, Node restrictions and virtual-module scope. Current
+  scan: 209 files, six prior exceptions, zero errors. CI config remains unchanged.
+- Recorded checker source responsibilities and limits. UI/application, remaining
+  tooling/non-code review and final evidence still prevent whole-goal completion.
