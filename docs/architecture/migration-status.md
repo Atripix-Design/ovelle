@@ -299,3 +299,28 @@ ownership, Figma-dependent UI work, tooling/non-JS/TS review and final verificat
 The public download email module has distinct input, quota and delivery concerns
 that need a further responsibility review; passing its existing check is not that
 review's completion.
+
+## Public download email responsibility review
+
+- Completed the deferred handler review. Kept one feature module and one public
+  operation; introduced private named operations for HTTP recipient validation,
+  quota reservation and message construction/provider acknowledgement. These are
+  meaningful responsibilities without adding a generic mail or quota framework.
+- Preserved method/origin/content-type/body-limit/address checks and error order,
+  development-only sender gate, hash/window formats, counter semantics, cleanup,
+  email content and acknowledgement requirement. Validation remains outside the
+  delivery catch, preserving stream-failure behavior. No Stage 0 validator or
+  admission policy was substituted for this distinct public endpoint.
+- Documented conservative quota semantics: provider failure retains reservations;
+  a rejected counter does not refund the other counter's successful increment.
+- Expanded the SQLite-backed executable check to prove invalid/config-disabled
+  requests never reserve, provider failures consume the recipient allowance,
+  quota denial precedes provider invocation, safe no-store errors omit diagnostics,
+  and oversized request streams are cancelled. Existing concurrent quota checks
+  and sender/content assertions continue to pass. All delivery is fixture-only.
+- Worker type checking, architecture checking, fifteen architecture tests and
+  diff checks passed. No new public API, architecture exception, CI change,
+  provider mutation, migration or UI change was introduced.
+
+The whole-codebase migration remains active; the remaining areas and final
+verification requirements above are not satisfied by this feature review.

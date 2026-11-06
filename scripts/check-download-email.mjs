@@ -19,6 +19,7 @@ assert.equal((await sendDownloadEmail(request('invalid'),env)).status,400);
 assert.equal((await sendDownloadEmail(request('x'.repeat(1500)),env)).status,413);
 assert.equal((await sendDownloadEmail(request('reader@example.com'),{...env,APP_ENV:'production'})).status,503);
 assert.equal(messages.length,0,'Rejected requests never send');
+assert.equal(sqlite.prepare('SELECT count(*) AS n FROM download_email_limits').get().n,0,'Invalid/config-disabled requests never reserve quota');
 const results = await Promise.all(Array.from({length:4},()=>sendDownloadEmail(request('reader@example.com'),env)));
 assert.deepEqual(results.map(r=>r.status).sort(),[200,200,200,429]);
 assert.equal(messages.length,3);
@@ -29,4 +30,25 @@ assert.equal((await sendDownloadEmail(request('third@example.com'),env)).status,
 assert.equal((await sendDownloadEmail(request('failed@example.com',{'CF-Connecting-IP':'192.0.2.2'}),{...env,EMAIL:{async send(){throw Error('provider unavailable')}}})).status,503);
 assert.equal((await sendDownloadEmail(request('unacknowledged@example.com',{'CF-Connecting-IP':'192.0.2.3'}),{...env,EMAIL:{async send(){return {}}}})).status,503);
 assert.ok(sqlite.prepare('SELECT key FROM download_email_limits').all().every(r=>!r.key.includes('@')),'D1 contains quota hashes, not addresses');
+// Failed delivery still consumes the reservation; no provider detail leaks.
+let failedSends = 0;
+const failing = {...env,EMAIL:{async send(){failedSends++;throw Error('private provider diagnostic')}}};
+for (let attempt = 0; attempt < 3; attempt++) {
+  const response = await sendDownloadEmail(request('failure-budget@example.com',{'CF-Connecting-IP':'192.0.2.44'}),failing);
+  assert.equal(response.status,503);
+  assert.equal(response.headers.get('Cache-Control'),'no-store');
+  assert.deepEqual(await response.json(),{error:'We couldn’t send the link. Please try again.'});
+}
+const denied = await sendDownloadEmail(request('failure-budget@example.com',{'CF-Connecting-IP':'192.0.2.44'}),failing);
+assert.equal(denied.status,429);
+assert.equal(denied.headers.get('Retry-After'),'600');
+assert.equal(failedSends,3,'Quota denial must precede provider invocation');
+// The HTTP parser consumes at most the configured body limit and cancels the stream.
+let cancelled = false;
+const oversized = new Request('https://dev.ovelle.org/api/download-email',{
+  method:'POST',headers:{'Content-Type':'application/json'},duplex:'half',
+  body:new ReadableStream({start(controller){controller.enqueue(new Uint8Array(1025));},cancel(){cancelled=true;}}),
+});
+assert.equal((await sendDownloadEmail(oversized,env)).status,413);
+assert.equal(cancelled,true);
 sqlite.close(); console.log('ovelle download email validation and quotas verified');
