@@ -1,6 +1,8 @@
 import { expect, it } from 'vitest'
 import { actionPolicies, grantableActions, parseAction, stage0Actions, validateScope } from '../../../src/cloudflare/stage0/domain/access'
 import { normalizedGrants } from '../../../src/cloudflare/stage0/staff/validation'
+import { issueSession } from '../../../src/cloudflare/stage0/auth/sessions'
+import { databaseFixture } from './database'
 
 // Expected permissions are written independently of the implementation's table.
 const expected = [
@@ -47,4 +49,41 @@ it('rejects unknown and inherited action names and malformed scope dimensions', 
     expect(() => validateScope(scope as never)).toThrow('invalid_input')
   }
   expect(() => validateScope({ kind: 'program_location', programId: 'p', locationId: 'l' })).not.toThrow()
+})
+
+it('keeps the migrated membership vocabulary aligned without treating stored grants as authorization', async () => {
+  const f = await databaseFixture()
+  // Historical storage recognizes owner-only actions; live authorization still
+  // requires ownership. Invitation issuance has the narrower contract below.
+  for (const [action] of expected) {
+    await f.execute("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind) VALUES(?,'mc-a','org-a',?,'organization')", action, action).run()
+  }
+  expect((await f.execute('SELECT action FROM membership_grants ORDER BY action').all<{ action: string }>()).results.map(row => row.action))
+    .toEqual(expected.map(([action]) => action).sort())
+  for (const action of ['finance.read', 'program.delete', 'toString', '', 'PROGRAM.READ']) {
+    await expect(f.execute("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind) VALUES(?,'mc-a','org-a',?,'organization')", action, action).run())
+      .rejects.toThrow('CHECK constraint failed')
+  }
+})
+
+it('enforces the independent invitation grant matrix in the migrated database', async () => {
+  const f = await databaseFixture()
+  const issued = await issueSession(f.ctx, { accountId: 'a', method: 'passkey' }, 'browser')
+  const now = f.ctx.clock.now()
+  for (const [index, preset] of (['admin', 'coordinator'] as const).entries()) {
+    await f.execute(`INSERT INTO staff_invitations
+      (id,organization_id,email,preset,inviter_account_id,issued_session_id,token_digest,created_at,updated_at,expires_at)
+      VALUES(?,'org-a',?,?,'a',?,?,?,?,?)`,
+    preset, `${preset}@example.test`, preset, issued.principal.sessionId, String(index).repeat(64), now, now, now + 259200000).run()
+    for (const [action, _write, classification] of expected) {
+      const insert = f.execute("INSERT INTO invitation_grants(id,invitation_id,organization_id,action,scope_kind) VALUES(?,?,'org-a',?,'organization')", `${preset}:${action}`, preset, action)
+      const accepted = classification !== 'owner-only' && (preset === 'admin' || classification === 'coordinator')
+      if (accepted) await insert.run()
+      else await expect(insert.run()).rejects.toThrow(preset === 'coordinator' ? 'invitation_grant_preset' : 'CHECK constraint failed')
+    }
+    expect((await f.execute('SELECT action FROM invitation_grants WHERE invitation_id=? ORDER BY action', preset).all<{ action: string }>()).results.map(row => row.action))
+      .toEqual(expected.filter(([, , classification]) => classification !== 'owner-only' && (preset === 'admin' || classification === 'coordinator')).map(([action]) => action).sort())
+    await expect(f.execute("INSERT INTO invitation_grants(id,invitation_id,organization_id,action,scope_kind) VALUES(?,?,'org-a','finance.read','organization')", `${preset}:unknown`, preset).run()).rejects.toThrow()
+  }
+  expect((await f.execute('PRAGMA foreign_key_check').all()).results).toEqual([])
 })

@@ -250,3 +250,33 @@ Verification: all workspace and backend type checks, workspace lint and workspac
 builds passed; 13 shared-UI behavior tests passed against the rebuilt package.
 These tests do not replace source Figma/rendered fidelity or real Electron checks.
 SQL, CSS and broader configuration/artifact coverage remain unfinished.
+
+## SQL grant-policy boundary
+
+- `migrations/0003_organization_access.sql` retains the historical membership
+  storage vocabulary, tenant-composite foreign keys and scope-shape constraints.
+  A stored owner-only action is not proof of ownership; the live authorization
+  predicate remains responsible for that check.
+- `migrations/0010_staff_invitations.sql` has a narrower invitation vocabulary
+  and a coordinator-specific insert trigger. These enforce the same issuance
+  classifications as domain validation at the database boundary. Sealed offers
+  cannot be appended, edited or deleted.
+- `tests/worker/stage0/action-policy.test.ts` now exercises actual inserts after
+  applying the complete migration chain. Independent expected actions drive both
+  domain and storage assertions: all eleven membership action names, nine admin
+  invitation actions and four coordinator invitation actions, with owner-only and
+  unknown-action rejection for invitations. Invalid membership action samples are
+  also rejected. This is behavioral coverage, not a proof over all possible strings.
+- Historical migrations remain immutable snapshots. Repeated definitions in
+  SQLite table rebuilds preserve earlier upgrade steps; generating them from the
+  current TypeScript policy would make past migrations change with present code.
+  Future intentional policy changes need a forward migration and updated independent
+  expectations. No production database or provider state was touched.
+
+The populated invitation and staff-access migration tests separately check row
+preservation, receipt replay, audit immutability and foreign keys. Grant-policy
+coverage does not establish complete migration or whole-repository compliance.
+
+Verification: full Stage 0 suite passed (733 tests in 61 files), all workspace
+and backend type checks passed, and 17 architecture tests passed. The current
+architecture scan still reports six explicit exceptions and zero errors.

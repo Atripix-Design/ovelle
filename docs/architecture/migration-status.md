@@ -594,3 +594,14 @@ matrix interruption. WebKit remains unverified for the missing-library reason.
   13 behavior tests. No signed desktop packaging/deployment or visual parity claim.
 - CI/runner configuration remains unchanged; application release ownership, UI
   source access, SQL/CSS/tooling review and final runtime evidence remain open.
+
+### SQL grant-policy alignment
+
+Added real D1 insert coverage for the final migrated membership and invitation
+schemas using independent action expectations. The tests preserve the distinction
+between stored action vocabulary, grant issuance and live ownership authorization.
+Historical migrations remain fixed; future policy changes require forward migrations.
+Full Stage 0 verification passed: 733 tests in 61 files, plus workspace/backend
+type checks and 17 architecture tests. Six architecture exceptions remain unchanged.
+No CI, provider or production database changes. Broader SQL/CSS review and the
+previously listed application/UI migration and runtime evidence remain outstanding.
