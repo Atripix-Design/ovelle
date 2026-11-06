@@ -42,7 +42,7 @@ Persistent source clips, render report and QA frames: the external recording out
 
 ## Re-recording
 
-Run `node scripts/record-component-video.mjs --chapters 0,1,2 --output /absolute/artifacts`. `--appearance-only` records Dark Soft Glass supplements. `--url` selects the consumer. The helper comes from the installed video-creator skill at `~/.codex/skills/video-creator/scripts/recording-interactions.mjs`; set `OVELLE_VIDEO_INTERACTIONS_MODULE` to override its absolute module path. Each invocation owns isolated browser contexts and output directories. The source manifest includes chapter, title, source, trimStart, duration and timestamped screenshot/state events.
+Run `node scripts/record-component-video.mjs --chapters 0,1,2 --output /absolute/artifacts`. `--appearance-only` records Dark Soft Glass supplements. `--url` selects the consumer. The helper comes from the installed video-creator skill at `~/.codex/skills/video-creator/scripts/recording-interactions.mjs`; set `OVELLE_VIDEO_INTERACTIONS_MODULE` to override its absolute module path. Each invocation uses isolated browser contexts. Choose a fresh output directory for each run: existing files are not an archival store. The source manifest includes chapter, title, appearancesOnly, source, trimStart, duration and timestamped screenshot/state events. Chapter arguments must be unique supported integers; malformed, duplicate and unknown options fail before driver loading or browser launch. The current dynamic-loading recording checks the visible `.ov-skeleton-map` animation (pulse versus none), rather than the hidden pseudo-element used by the initial recordings.
 
 ## Timestamped state index
 

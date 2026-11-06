@@ -2,19 +2,32 @@
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { parseArgs } from 'node:util';
 import { loadInteractionDriver } from './browser-tooling.mjs';
+// These are recording scenarios, not a generated inventory of component states.
+const supportedChapters = Array.from({ length: 13 }, (_, index) => index);
+const { values } = parseArgs({ options: {
+  chapters: { type: 'string', default: supportedChapters.join(',') },
+  output: { type: 'string', default: '/tmp/ovelle-video' },
+  url: { type: 'string', default: 'http://127.0.0.1:5174/components?walkthrough' },
+  'appearance-only': { type: 'boolean', default: false },
+}, strict: true, allowPositionals: false });
+if (!/^(?:0|[1-9][0-9]*)(?:,(?:0|[1-9][0-9]*))*$/.test(values.chapters)) throw new Error('Expected comma-separated chapter numbers');
+const chapters = values.chapters.split(',').map(Number);
+if (chapters.some(chapter => !supportedChapters.includes(chapter))) throw new Error('Unsupported recording chapter');
+if (new Set(chapters).size !== chapters.length) throw new Error('Duplicate chapters would overwrite evidence');
+if (!values.output.trim()) throw new Error('Recording output directory is required');
+const url = new URL(values.url);
+if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('Expected an HTTP(S) preview URL without credentials');
+const out = resolve(values.output), appearancesOnly = values['appearance-only'];
 const createInteractionDriver = await loadInteractionDriver();
-const args=process.argv.slice(2), arg=(key,fallback)=>args.includes(key)?args[args.indexOf(key)+1]:fallback;
-const chapters=arg('--chapters','0,1,2,3,4,5,6,7,8,9,10,11,12').split(',').map(Number), out=resolve(arg('--output','/tmp/ovelle-video'));
-const appearancesOnly=args.includes('--appearance-only');
-const url=arg('--url','http://127.0.0.1:5174/components?walkthrough');
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true});
 const clips=[];
 try {for(const chapter of chapters){
  const context=await browser.newContext({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}},reducedMotion:'no-preference'});
  const page=await context.newPage(), began=Date.now();
- await page.goto(url); await page.getByLabel('Chapter',{exact:true}).selectOption(String(chapter)); await page.evaluate(()=>document.fonts.ready); await page.waitForTimeout(500);
+ await page.goto(url.href); await page.getByLabel('Chapter',{exact:true}).selectOption(String(chapter)); await page.evaluate(()=>document.fonts.ready); await page.waitForTimeout(500);
  const title=await page.locator('h1').innerText(), trimStart=(Date.now()-began)/1000;
  const driver=await createInteractionDriver(page,{scrollMs:300,responseMs:650}), events=[];
  // Native dialogs occupy the top layer; place recording-only overlays inside it.
@@ -44,7 +57,7 @@ try {for(const chapter of chapters){
  if(chapter===9){const trigger=()=>stage.getByRole('button',{name:purposeLabel(),exact:true}),purposeLabel=()=>pagePurpose==='archive'?'Archive contacts':'Export contacts';let pagePurpose='archive';await driver.click(trigger());await mark('Archive dialog open/default');await driver.click(page.getByRole('dialog').getByRole('button',{name:'Cancel',exact:true}));await mark('Cancel restores trigger focus');await driver.click(trigger());await key(page.locator('body'),'Escape');if(await page.getByRole('dialog').count())throw Error('Escape failed');await mark('Escape restores trigger focus');for(const purpose of ['archive','export']){pagePurpose=purpose;await select('Dialog purpose',purpose);for(const outcome of ['success','error']){await select('Simulated outcome',outcome);await driver.click(trigger());await mark(purpose+' default');await driver.click(page.getByRole('dialog').getByRole('button',{name:purposeLabel(),exact:true}),100);await mark(purpose+' loading · local simulation');await page.waitForTimeout(1500);await mark(purpose+' '+outcome+' · local simulation');if(await page.getByRole('dialog').getAttribute('data-state')!==outcome)throw Error('dialog outcome');await driver.click(page.getByRole('dialog').getByRole('button',{name:outcome==='success'?'Done':'Cancel',exact:true}));}}}
  if(chapter===10){const d=stage.getByRole('button',{name:/Report date/});await driver.click(d);await mark('Empty date open · min/max disabled days');for(const k of ['ArrowRight','ArrowDown','ArrowLeft','ArrowUp','Home','End','PageDown','PageUp']){await key(page.locator('[data-date]:focus'),k);await mark('Calendar '+k);}await key(page.locator('[data-date]:focus'),'Enter');if(await stage.locator('output').innerText()==='None')throw Error('date Enter selection');await mark('Keyboard selected date');await driver.click(d);const next=page.getByRole('button',{name:'Next month',exact:true});await driver.click(next);await mark('Next month');await driver.click(page.getByRole('button',{name:'Previous month',exact:true}));await mark('Previous month');await driver.click(page.locator('[data-date="2026-10-15"]'));await mark('Pointer selected October 15');await driver.click(d);await driver.click(page.getByRole('button',{name:'Clear date',exact:true}));if(await stage.locator('output').innerText()!=='None')throw Error('date clear');await mark('Date cleared');await driver.click(d);await key(page.locator('body'),'Escape');await mark('Calendar Escape closed/trigger focus');}
  if(chapter===11){const p=stage.getByRole('navigation',{name:'Pagination',exact:true}).first();await driver.click(p.getByRole('button',{name:'Page 12',exact:true}));if(await p.getByRole('button',{name:'Next page'}).isEnabled())throw Error('last next');await mark('Last page; next disabled');for(let i=0;i<6;i++)await driver.click(p.getByRole('button',{name:'Previous page'}),200);await mark('Middle page 6 and gaps');await hold(p.getByRole('button',{name:'Page 6',exact:true}));await driver.click(p.getByRole('button',{name:'Page 1',exact:true}));if(await p.getByRole('button',{name:'Previous page'}).isEnabled())throw Error('first previous');await mark('First/single page and narrow compact');await driver.click(stage.getByRole('button',{name:'Clear search'}));if(await stage.getByLabel('Search',{exact:true}).inputValue()!=='')throw Error('search clear');await mark('Compact/start search cleared');await driver.click(stage.getByRole('button',{name:'Check again'}));await mark('Regular/center nested action');}
- if(chapter===12){const f=stage.getByLabel('Workspace name');await driver.fill(f,'Retained team');await driver.click(stage.getByRole('button',{name:'Load page',exact:true}));if(!await f.evaluate(el=>!!el.closest('[inert]')))throw Error('loading controls not inert');await mark('Loading actual mounted layout; controls inert');await driver.click(stage.getByRole('button',{name:'Change content'}));await mark('Text/list mutations during loading');await page.setViewportSize({width:620,height:900});await mark('Narrow wrapped loading layout');await page.setViewportSize({width:1440,height:900});await driver.click(stage.getByRole('button',{name:'Finish loading'}));if(await f.inputValue()!=='Retained team')throw Error('loading lost input');await mark('Input retained after loading');for(const motion of ['no-preference','reduce']){await page.emulateMedia({reducedMotion:motion});await driver.click(stage.getByRole('button',{name:'Load page',exact:true}));const animation=await stage.locator('.ov-skeleton').first().evaluate(el=>getComputedStyle(el,'::after').animationName).catch(()=>null);await mark('Motion '+motion+' / CSS animation '+animation);await driver.click(stage.getByRole('button',{name:'Finish loading'}));}await page.emulateMedia({reducedMotion:'no-preference'});}
+ if(chapter===12){const f=stage.getByLabel('Workspace name');await driver.fill(f,'Retained team');await driver.click(stage.getByRole('button',{name:'Load page',exact:true}));if(!await f.evaluate(el=>!!el.closest('[inert]')))throw Error('loading controls not inert');await mark('Loading actual mounted layout; controls inert');await driver.click(stage.getByRole('button',{name:'Change content'}));await mark('Text/list mutations during loading');await page.setViewportSize({width:620,height:900});await mark('Narrow wrapped loading layout');await page.setViewportSize({width:1440,height:900});await driver.click(stage.getByRole('button',{name:'Finish loading'}));if(await f.inputValue()!=='Retained team')throw Error('loading lost input');await mark('Input retained after loading');for(const motion of ['no-preference','reduce']){await page.emulateMedia({reducedMotion:motion});await driver.click(stage.getByRole('button',{name:'Load page',exact:true}));const mask=stage.locator('.ov-skeleton-map').first();await mask.waitFor({state:'visible'});const animation=await mask.evaluate(el=>getComputedStyle(el).animationName);if(animation!==(motion==='reduce'?'none':'ov-skeleton-pulse'))throw Error('Visible loading-mask motion mismatch');await mark('Motion '+motion+' / visible mask animation '+animation);await driver.click(stage.getByRole('button',{name:'Finish loading'}));}await page.emulateMedia({reducedMotion:'no-preference'});}
  }
  // Each family gets both themes, both solid/glass, continuous frost endpoints and independent opacity.
  for(const [theme,material] of (appearancesOnly?[['dark','soft-glass']]:[['dark','solid'],['dark','liquid-glass'],['light','liquid-glass'],['light','soft-glass']])){await select('Theme',theme);await select('Material',material);await mark(`${theme} / ${material} / frost 35`);}
@@ -55,6 +68,6 @@ try {for(const chapter of chapters){
  if(chapter===10){await driver.click(stage.getByRole('button',{name:/Report date/}));await mark('Dark Liquid Glass / open calendar');await key(page.locator('body'),'Escape');}
  if(chapter===7){await driver.click(stage.locator('.ov-site-navigation-mobile').getByRole('button',{name:'Menu'}));await mark('Dark Liquid Glass / open mobile menu');}
  }
- await driver.pause(1100);const duration=(Date.now()-began)/1000-trimStart;await context.close();const source=await page.video().path();clips.push({chapter,title,source,trimStart:Number(trimStart.toFixed(3)),duration:Number(duration.toFixed(3)),events});await writeFile(resolve(out,'clips.json'),JSON.stringify(clips,null,2));
+ await driver.pause(1100);const duration=(Date.now()-began)/1000-trimStart;await context.close();const source=await page.video().path();clips.push({chapter,title,appearancesOnly,source,trimStart:Number(trimStart.toFixed(3)),duration:Number(duration.toFixed(3)),events});await writeFile(resolve(out,'clips.json'),JSON.stringify(clips,null,2));
 }} finally {await browser.close();}
 console.log('RECORDING_COMPLETE');

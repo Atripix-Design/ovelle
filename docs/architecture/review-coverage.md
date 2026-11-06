@@ -534,3 +534,31 @@ Overall sheet dimension assertions passed without detecting this. Required work:
 retrieve current source, correct the shared composition/variant with that evidence,
 and add an explicit nested geometry assertion. No CSS or component was changed;
 this mismatch remains unresolved and the automated pass is not reported as parity.
+
+## Recording tool boundary and evidence semantics
+
+`scripts/record-component-video.mjs` retains scenario choreography, real browser
+contexts, recording overlays, timestamps and clip serialization as one operator
+command. Its private interaction helpers hide repeated pacing without exporting
+application abstractions. Scenario IDs are an independent recording plan; they do
+not define product component state or backend behavior.
+
+Replaced ad-hoc argument lookup with strict Node argument parsing. Empty/malformed,
+unsupported and duplicate chapters, unknown options, empty output paths and invalid
+preview protocols/credentials now fail before driver loading/browser launch. Duplicate
+chapter IDs previously reused screenshot names within one run, invalidating earlier
+clip references. The manifest now records appearancesOnly so a supplement cannot be
+mistaken for an interaction pass. Operators still choose fresh output directories;
+separate invocations intentionally targeting the same directory can overwrite files.
+
+The dynamic-loading chapter previously queried a hidden skeleton pseudo-element.
+It now waits for the visible SVG mask and asserts its animation is ov-skeleton-pulse
+for normal motion and none for reduced motion. Capture labels elsewhere are annotations
+of recorded actions/states; only explicit assertions establish tested outcomes.
+A full human watch at normal speed remains separate from script success.
+
+The argument test exercises 12 invalid cases with an unavailable driver override,
+proving validation fails first. A valid appearance-only chapter 12 and a normal
+interaction chapter 12 were recorded locally. The final normal run includes visible
+mask motion assertions; this does not revalidate all 13 chapters, other consumers,
+Figma parity, provider behavior or a human visual watch. No component/style changes.

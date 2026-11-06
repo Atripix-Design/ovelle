@@ -703,3 +703,13 @@ rather than the stored reference's circle. Persisted its current render and CSS
 specificity evidence. This remains an unresolved source-required correction, not a
 visual parity claim. No component/style edits were made; the Figma exception request
 remains pending. Recorder review, broader CSS and final runtime/CI evidence remain.
+
+### Recording tool review and evidence corrections
+
+Validated recording options before driver/browser access, rejected duplicate chapters
+that overwrite earlier evidence, and recorded appearance-only mode in clip metadata.
+Corrected the dynamic-loading motion probe to assert the visible SVG mask instead of
+a hidden pseudo-element. Invalid CLI fixtures and valid appearance/interaction chapter
+12 runs were checked; complete 13-chapter playback and a human visual watch are not
+claimed. Recorder responsibility review is now explicit. Remaining component fixes,
+CSS review and final-state browser/native/CI evidence still prevent completion.
