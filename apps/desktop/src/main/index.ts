@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { registerDownloadHandlers } from './downloads.js'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
+declare const __OVELLE_LIVE_URL__: string
+const liveURL = __OVELLE_LIVE_URL__
 
 function createWindow(): void {
   const window = new BrowserWindow({
@@ -17,7 +19,8 @@ function createWindow(): void {
     // letting the renderer provide the area used to move the window.
     ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden' as const } : {}),
     webPreferences: {
-      preload: join(currentDir, '../preload/index.cjs'),
+      // The remote development renderer does not receive native capabilities.
+      preload: liveURL ? undefined : join(currentDir, '../preload/index.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -31,7 +34,9 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  if (process.env.ELECTRON_RENDERER_URL) {
+  if (liveURL) {
+    void window.loadURL(liveURL)
+  } else if (process.env.ELECTRON_RENDERER_URL) {
     void window.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
     void window.loadFile(join(currentDir, '../renderer/index.html'))
@@ -39,7 +44,7 @@ function createWindow(): void {
 }
 
 void app.whenReady().then(() => {
-  registerDownloadHandlers(process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href)
+  if (!liveURL) registerDownloadHandlers(process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href)
   createWindow()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
