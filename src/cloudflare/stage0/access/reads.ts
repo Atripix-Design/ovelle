@@ -1,4 +1,6 @@
 import { Bindings } from '../db'
+import { encodeBase64Url } from '../domain/base64url'
+import { exactObject } from '../domain/input'
 import type {OrganizationSnapshot,Principal,RequestContext,Scope} from '../contracts'
 import {Stage0Error} from '../errors'
 import {loadLiveSession} from '../auth/sessions'
@@ -15,7 +17,7 @@ const scope:Scope={kind:'organization'}
 function invalid():never{throw new Stage0Error('invalid_input')}
 function identifier(value:unknown):string{if(typeof value!=='string'||!value||value.length>256||/\p{Cc}/u.test(value))return invalid();return value}
 function page(input:PageInput){
- if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(key=>!['limit','cursor'].includes(key)))return invalid()
+ exactObject(input,['limit','cursor'])
  const limit=input.limit===undefined?50:input.limit
  if(!Number.isInteger(limit)||limit<1||limit>100||(input.cursor!==undefined&&(typeof input.cursor!=='string'||!input.cursor)))return invalid()
  return {limit,cursor:input.cursor}
@@ -40,7 +42,7 @@ export async function getOrganizationPolicies(ctx:RequestContext,principal:Princ
  if(!row)throw new Stage0Error('not_found')
  return {organizationId:row.organization_id,status:row.status,assignmentReview:row.assignment_review,eligibilityBypass:Boolean(row.eligibility_bypass),automaticHourApproval:Boolean(row.automatic_hour_approval),version:row.version,createdAt:row.created_at}
 }
-function encodeCursor(org:string,time:number,id:string):string{return btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify([1,org,time,id])))).replaceAll('+','-').replaceAll('/','_').replaceAll('=','')}
+function encodeCursor(org:string,time:number,id:string):string{return encodeBase64Url(new TextEncoder().encode(JSON.stringify([1,org,time,id])))}
 function decodeCursor(cursor:string,org:string):{time:number;id:string}{
  try{
   if(cursor.length>2048||!/^[A-Za-z0-9_-]+$/.test(cursor))return invalid()

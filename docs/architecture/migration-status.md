@@ -458,3 +458,19 @@ active, including final source-wide, browser and exact-head CI evidence.
   clear-grants-then-revoke scenario; all type checks, lint and 15 architecture tests
   passed. Existing six exceptions remain unchanged. No CI/runner changes made.
 - Remaining whole-codebase review and final runtime/UI evidence remain open.
+
+### Remaining staff/access service review
+
+- Reviewed invitation lifecycle/delivery/validation, organization reads/commands,
+  access policy/advisory capabilities, command receipts and database guards.
+  Recorded retained responsibilities and exact authority/transaction distinctions
+  in `review-coverage.md`; added missing access-service concept owners.
+- Access reads now reuse canonical base64url byte encoding and exact-object shape
+  validation. Cursor version, organization binding, strict decoding, canonicality
+  and live page authorization remain local and unchanged.
+- Full backend verification passed: 730 tests in 61 files, all type checks,
+  workspace lint and 15 architecture tests. The graph remains 207 code files with
+  six explicit exceptions and zero errors. CI/runner configuration was not changed.
+- Staff/access source review is recorded, but remaining desktop/auth adapters,
+  application/UI, tooling/configuration/SQL and final runtime evidence still prevent
+  whole-goal completion.

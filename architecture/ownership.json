@@ -449,6 +449,22 @@
     {
       "owner": "src/cloudflare/stage0/staff/ownership.ts",
       "reason": "Two-party ownership-transfer request/accept/revoke lifecycle and live initiating/recipient authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/reads.ts",
+      "reason": "Live-authorized organization directory, proposed policy snapshots and bounded access-audit pagination."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/capabilities.ts",
+      "reason": "Bounded advisory capability projection through current SQL policy; never reusable authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/commands.ts",
+      "reason": "Organization bootstrap/settings and program/location changes with canonical command receipts and atomic authorization."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/organizations.ts",
+      "reason": "Authorized organization/program/location reads and operation preflight; final writes retain their own live guards."
     }
   ],
   "sourceMappings": [
