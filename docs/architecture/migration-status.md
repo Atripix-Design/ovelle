@@ -615,3 +615,14 @@ response fixtures for metadata, status, magic bytes, chunking and cancellation.
 Six validator tests, 17 architecture tests and command syntax checks pass. No live
 provider calls or CI configuration changes were made. Whole-codebase completion
 remains subject to the outstanding application/UI, non-JS/TS and runtime evidence.
+
+### Browser-check evidence review
+
+Reviewed six website/component/navigation/loading verification scripts and recorded
+their distinct responsibilities and evidence limits. Corrected the website check's
+unsubstantiated sheet-focus claim by adding real keyboard/focus assertions, including
+native Chromium's browser-chrome traversal behavior. Website checks passed at five
+widths, dynamic-loading checks passed, and the component check passed 31 families
+across 12 theme/material/frost settings in the web consumer. Architecture tests (17)
+and syntax checks passed. No component/Figma changes or CI fixes. These local web
+results do not complete the outstanding native, second-consumer or Figma work.

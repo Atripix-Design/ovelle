@@ -306,3 +306,19 @@ fixture tests), as do all 17 architecture tests and syntax checks for the three
 changed commands. No live verification, signed URL generation, credentials, provider
 mutation or CI configuration changes occurred. Samples do not prove full artifact
 identity, signatures, extraction integrity or runtime behavior.
+
+## Browser verification responsibilities
+
+| Source | Review decision | Evidence and limits |
+| --- | --- | --- |
+| `scripts/check-website.mjs` | Keep the whole Home journey together: responsive assets, workflow navigation, email retry fixture, modal interaction and pinned scrolling. Added actual sheet focus entry, forward/reverse keyboard traversal, rejection of background focus and restoration after selection/Escape; the prior success text claimed focus without those assertions. A local helper permits one browser-chrome traversal only when the document loses focus. | Passed Chromium at 1440/1024/768/390/320; modal checks at 390/320. Email transport is mocked, not sent. Public release availability is not verified by this check. |
+| `scripts/check-dynamic-loading.mjs` | Keep mounted-state retention, inert controls, mutation-driven masks and responsive geometry together. Calendar/checkbox captures are supporting evidence, not Figma comparisons. | Passed against the current web gallery at desktop/mobile widths. |
+| `scripts/check-content-components.mjs` | Retain keyboard/date/pagination expectations independently from implementation, with manifest-derived family count only for inventory coverage. Geometry, inert/focus, status count and asset/layout assertions remain explicit. | Passed all 31 loaded/skeleton pairs and 12 theme/material/frost combinations, transparency, reduced motion and mobile layout in the web consumer. |
+| `scripts/check-github-navigation.mjs` | Retain navigation-specific link/native-icon semantics, focus, menu keyboard and theme/material evidence as one feature check. Its two URLs are browser-rendered consumers, not native Electron IPC. | Source review only in this tranche. Historical captures are not a fresh run. |
+| `scripts/check-github-stars.mjs` | Retain the delayed API fixture, mounted badge identity, stable width, StrictMode request count, cache reload and invalid/error responses together. Each scenario uses an isolated browser context through newPage. | Source review only in this tranche. Fixtures do not prove live GitHub availability; short reload checks do not cover the full cache-expiry interval. |
+| `scripts/check-website-refinement.mjs` | Retain independent crop/typography/mask and transition expectations. Gallery container changes are screenshot-only fixture adjustments, not product changes. | Source review only. Fixed-time transition sampling is timing-sensitive and does not prove every animation frame. No fresh Figma parity claim. |
+
+No component implementation or design reference was changed. Seventeen architecture
+tests and syntax validation passed; six prior exceptions remain. The local Tailnet
+preview returned HTTP 200 during verification. Native Electron, second-consumer
+execution, current Figma comparison and final-state CI remain separate requirements.

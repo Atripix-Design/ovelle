@@ -41,11 +41,34 @@ try {
       await page.getByRole('button', {name:'Try again'}).evaluate(n => { n.click(); n.click(); });
       await page.getByRole('heading', { name: 'Check your inbox.' }).waitFor();
       assert.equal(attempts, 2, 'Repeated clicks while sending must not send another message');
-      await page.locator('.ov-hero-select').click();
-      const choice=page.getByRole('dialog').getByRole('button', {name:'Relationships',exact:true});
+      const sheetTrigger = page.locator('.ov-hero-select');
+      await sheetTrigger.click();
+      const sheet = page.getByRole('dialog');
+      await sheet.waitFor();
+      assert.equal(await sheet.evaluate(n => n.contains(document.activeElement)), true, 'Opening the sheet must move focus inside');
+      const sheetButtons = sheet.getByRole('button');
+      // Native modal traversal may visit browser chrome (document loses focus).
+      // Permit that single step, but never a focused background document control.
+      async function tabWithinSheet(key, expected) {
+        await page.keyboard.press(key);
+        if (!(await page.evaluate(() => document.hasFocus()))) await page.keyboard.press(key);
+        assert.equal(await expected.evaluate(n => n === document.activeElement), true, `${key} returns inside the native modal`);
+      }
+      await sheetButtons.last().focus();
+      await tabWithinSheet('Tab', sheetButtons.first());
+      await tabWithinSheet('Shift+Tab', sheetButtons.last());
+      await sheetTrigger.evaluate(n => n.focus());
+      assert.equal(await sheet.evaluate(n => n.contains(document.activeElement)), true, 'Background trigger cannot take focus while the modal is open');
+      const choice=sheet.getByRole('button', {name:'Relationships',exact:true});
       await choice.click();
       assert.equal(await page.locator('.ov-hero-workflow-scene').getAttribute('data-stage'), 'enrich');
       assert.equal(await page.getByRole('dialog').isVisible(), false);
+      assert.equal(await sheetTrigger.evaluate(n => n === document.activeElement), true, 'Selection restores trigger focus');
+      await sheetTrigger.click();
+      await sheet.waitFor();
+      await page.keyboard.press('Escape');
+      assert.equal(await sheet.isVisible(), false);
+      assert.equal(await sheetTrigger.evaluate(n => n === document.activeElement), true, 'Escape restores trigger focus');
       assert.equal(await page.getByLabel('Email address').inputValue(), 'reader@example.com');
     }
     await page.screenshot({ path: `${output}/home-${width}.png`, fullPage: true });
