@@ -207,3 +207,28 @@ completion requirements above.
 The complete local backend suite passed after this tranche: 692 tests in 56 files.
 This includes staff membership/ownership, HTTP boundaries, migrations, sessions and
 federation regression coverage. It is local evidence, not remote CI or deployment.
+
+## Authentication admission and environment policy tranche
+
+- Reviewed `auth/limits.ts`, its consumers' distinct start purposes and existing
+  D1 lease/refund tests. Extracted keyed selector derivation and window lifetimes
+  to `auth/budgets.ts`, enforced as backend-domain with no persistence imports.
+  Exact HMAC domain/version, JSON encoding, selector normalization and counter
+  lifetimes remain unchanged; independent Python-HMAC vectors cover all four IDs.
+- Replaced the positional email boolean with an explicit challenge/email policy
+  choice. Provider/passkey/native/SAML starts share the private non-refundable
+  consumption operation. Public purpose-specific methods remain stable; they do
+  not expose a general caller-controlled rate-limit key or alter refund semantics.
+- `config.ts` owns immutable hosted auth origins consumed by config validation and
+  mail capability construction. Local fixture gates, mail sender validation,
+  binding capture and disabled public-auth rollout state remain unchanged.
+- Focused validation passed: 90 tests in admission, counter derivation, config and
+  mail; all repository type checks and twelve architecture tests. The gate scans
+  198 source files and retains six previously disclosed exceptions.
+
+Outstanding work remains as listed above. Mechanical boundaries and these feature
+reviews do not establish the whole codebase's completion.
+
+The full local backend suite passed after the final start-path consolidation:
+695 tests across 57 files, plus Stage 0 type checking and workspace lint. No
+migrations, provider settings, UI code or CI configuration changed.

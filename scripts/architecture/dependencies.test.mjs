@@ -99,3 +99,11 @@ test('staff normalization cannot acquire request or delivery capabilities', () =
   }, contract)
   assert.deepEqual(findings.map(finding => finding.rule), ['dependency-direction', 'dependency-direction'])
 })
+
+test('admission counter derivation cannot import persistence', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({
+    'src/cloudflare/stage0/auth/budgets.ts': "import './limits'",
+    'src/cloudflare/stage0/auth/limits.ts': '',
+  }, contract).map(finding => finding.rule), ['dependency-direction'])
+})

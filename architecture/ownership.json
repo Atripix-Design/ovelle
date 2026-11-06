@@ -106,7 +106,8 @@
         "src/cloudflare/stage0/staff/routes.ts",
         "src/cloudflare/stage0/backend.ts",
         "src/cloudflare/stage0/http",
-        "src/cloudflare/stage0/staff/validation.ts"
+        "src/cloudflare/stage0/staff/validation.ts",
+        "src/cloudflare/stage0/auth/budgets.ts"
       ]
     },
     {
@@ -166,7 +167,8 @@
         "src/cloudflare/stage0/domain",
         "src/cloudflare/stage0/errors.ts",
         "src/cloudflare/stage0/auth/contact.ts",
-        "src/cloudflare/stage0/staff/validation.ts"
+        "src/cloudflare/stage0/staff/validation.ts",
+        "src/cloudflare/stage0/auth/budgets.ts"
       ],
       "allowed": [],
       "node": false,
@@ -318,6 +320,18 @@
     {
       "owner": "src/cloudflare/stage0/staff/invitations.ts",
       "reason": "Invitation transitions and live issuer/recipient authority, kept with atomic guarded SQL and receipts."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/budgets.ts",
+      "reason": "Versioned keyed admission-counter identities, selector normalization and window lifetimes; independent of D1."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/limits.ts",
+      "reason": "Atomic admission consumption, bounded retention, leases and window-aware refunds."
+    },
+    {
+      "owner": "src/cloudflare/stage0/config.ts",
+      "reason": "Stage 0 environment validation and canonical hosted authentication origins; does not authorize rollout."
     }
   ],
   "sourceMappings": [

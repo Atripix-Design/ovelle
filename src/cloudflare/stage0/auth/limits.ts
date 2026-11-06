@@ -2,26 +2,8 @@ import type { D1PreparedStatement } from '@cloudflare/workers-types'
 import type { RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
 
-interface Selectors { email: string; ip: string }
-type Kind = 'challenge_pair' | 'challenge_ip' | 'email_address' | 'email_ip'
-interface Budget { id: string; kind: Kind; lifetime: number }
-
-async function budgets(input: Selectors, keyMaterial: Uint8Array, email: boolean): Promise<Budget[]> {
-  if (!(keyMaterial instanceof Uint8Array) || keyMaterial.byteLength !== 32) throw new Stage0Error('configuration')
-  if (typeof input.email !== 'string' || typeof input.ip !== 'string') throw new Stage0Error('invalid_input')
-  const address = input.email.trim().toLowerCase()
-  const ip = input.ip.toLowerCase()
-  // Control characters are rejected deliberately in caller-supplied identifiers.
-  // eslint-disable-next-line no-control-regex
-  if (!address || address.length > 254 || /[\u0000-\u001f\u007f]/.test(address) || ip.length > 64 || !/^[a-f0-9:.]+$/.test(ip)) throw new Stage0Error('invalid_input')
-  const key = await crypto.subtle.importKey('raw', keyMaterial, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
-  const digest = async (kind: Kind, selectors: string[]): Promise<Budget> => {
-    const bytes = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(JSON.stringify(['ovelle:auth-budget:v1', kind, ...selectors]))))
-    return { id: Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join(''), kind, lifetime: email ? 3_600_000 : 900_000 }
-  }
-  return email ? Promise.all([digest('email_address', [address]), digest('email_ip', [ip])])
-    : Promise.all([digest('challenge_pair', [address, ip]), digest('challenge_ip', [ip])])
-}
+import { deriveAuthBudgets } from './budgets'
+import type { AuthBudget, AuthBudgetSelectors } from './budgets'
 
 function cleanup(ctx: RequestContext, now: number): D1PreparedStatement[] {
   // Bounded request-path cleanup; callers can later schedule the same indexed
@@ -32,7 +14,7 @@ function cleanup(ctx: RequestContext, now: number): D1PreparedStatement[] {
   ]
 }
 
-function consume(ctx: RequestContext, budget: Budget, now: number): D1PreparedStatement {
+function consume(ctx: RequestContext, budget: AuthBudget, now: number): D1PreparedStatement {
   return ctx.db.prepare(`INSERT INTO auth_limits(id,kind,used,expires_at) VALUES(?,?,1,?)
     ON CONFLICT(id) DO UPDATE SET used=CASE WHEN auth_limits.expires_at<=? THEN 1 ELSE auth_limits.used+1 END,
     expires_at=CASE WHEN auth_limits.expires_at<=? THEN excluded.expires_at ELSE auth_limits.expires_at END`)
@@ -51,8 +33,8 @@ async function batch(ctx: RequestContext, statements: D1PreparedStatement[]): Pr
  * or an unsalted hash. Reserve before verification, then settle in a finally
  * block. Pending/crashed attempts conservatively occupy their window's budget.
  */
-export async function reserveAuthAttempt(ctx: RequestContext, input: Selectors, keyMaterial: Uint8Array): Promise<string> {
-  const [pair, ip] = await budgets(input, keyMaterial, false)
+export async function reserveAuthAttempt(ctx: RequestContext, input: AuthBudgetSelectors, keyMaterial: Uint8Array): Promise<string> {
+  const [pair, ip] = await deriveAuthBudgets(input, keyMaterial, 'challenge')
   const now = ctx.clock.now()
   const leaseId = ctx.ids.next()
   await batch(ctx, [...cleanup(ctx, now), consume(ctx, pair, now), consume(ctx, ip, now),
@@ -78,8 +60,15 @@ export async function finishAuthAttempt(ctx: RequestContext, leaseId: string, su
 /** Shared across verification/reset/invitation sends. Count the reservation even
  * if delivery fails; provider retry and resend never create an unlimited budget.
  */
-export async function consumeAuthEmailBudget(ctx: RequestContext, input: Selectors, keyMaterial: Uint8Array): Promise<void> {
-  const limits = await budgets(input, keyMaterial, true)
+export async function consumeAuthEmailBudget(ctx: RequestContext, input: AuthBudgetSelectors, keyMaterial: Uint8Array): Promise<void> {
+  const limits = await deriveAuthBudgets(input, keyMaterial, 'email')
+  const now = ctx.clock.now()
+  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+}
+
+/** Starts consume challenge capacity without a refundable verifier lease. */
+async function consumeStart(ctx: RequestContext, selector: string, ip: string, keyMaterial: Uint8Array): Promise<void> {
+  const limits = await deriveAuthBudgets({ email: selector, ip }, keyMaterial, 'challenge')
   const now = ctx.clock.now()
   await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
 }
@@ -90,29 +79,21 @@ export async function consumeAuthEmailBudget(ctx: RequestContext, input: Selecto
  */
 export async function consumeOidcStartBudget(ctx: RequestContext, provider: 'google' | 'microsoft', ip: string, keyMaterial: Uint8Array): Promise<void> {
   if (provider !== 'google' && provider !== 'microsoft') throw new Stage0Error('invalid_input')
-  const limits = await budgets({ email: `oidc-start:${provider}`, ip }, keyMaterial, false)
-  const now = ctx.clock.now()
-  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+  await consumeStart(ctx, `oidc-start:${provider}`, ip, keyMaterial)
 }
 
 export async function consumePasskeyStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
-  const limits = await budgets({ email: 'passkey-start', ip }, keyMaterial, false)
-  const now = ctx.clock.now()
-  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+  await consumeStart(ctx, 'passkey-start', ip, keyMaterial)
 }
 
 /** First-party native starts share the global per-IP challenge ceiling, with
  * five requests per IP/window for this purpose. A browser body cannot set IP. */
 export async function consumeDesktopStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
-  const limits = await budgets({ email: 'desktop-request', ip }, keyMaterial, false)
-  const now = ctx.clock.now()
-  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+  await consumeStart(ctx, 'desktop-request', ip, keyMaterial)
 }
 
 /** All enterprise SAML starts share one purpose/IP limit; rotating connection
  * selectors cannot multiply starts. The global IP challenge ceiling also applies. */
 export async function consumeSamlStartBudget(ctx: RequestContext, ip: string, keyMaterial: Uint8Array): Promise<void> {
-  const limits = await budgets({ email: 'saml-start', ip }, keyMaterial, false)
-  const now = ctx.clock.now()
-  await batch(ctx, [...cleanup(ctx, now), ...limits.map(limit => consume(ctx, limit, now))])
+  await consumeStart(ctx, 'saml-start', ip, keyMaterial)
 }

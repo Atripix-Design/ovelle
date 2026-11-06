@@ -158,3 +158,16 @@ request capability contracts. Invitation delivery is a backend effect: it combin
 post-commit sending with version/token-guarded outcome persistence. Keep that
 operation separate from contact verification's non-persistent delivery helper;
 sharing their similar mail calls would conceal different failure semantics.
+
+Authentication admission has two owners: `auth/budgets.ts` derives versioned keyed
+counter identities and window lifetimes without database access; `auth/limits.ts`
+owns atomic consumption, bounded cleanup, leases and refunds. Flow-start selectors
+are intentionally opaque identifiers, not mailboxes. Do not substitute contact or
+invitation normalization for the admission selector contract. Start operations
+share a non-refundable consumption path; verification attempts retain their leases
+and window-aware refunds. Historical SQL migrations own the deployed counter
+ceilings and remain unchanged by this separation.
+
+`config.ts` owns the hosted auth-origin table. Mail setup consumes that table while
+independently validating its binding, sender and RP ID; sharing the origin policy
+does not remove validation at the mail capability boundary or enable public auth.

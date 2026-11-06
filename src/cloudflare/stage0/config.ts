@@ -1,5 +1,11 @@
 import { Stage0Error } from './errors'
 
+/** Canonical hosted auth origins; local fixture authority is checked separately. */
+export const hostedAuthOrigins = Object.freeze({
+  development: 'https://dev.ovelle.org',
+  production: 'https://ovelle.org',
+})
+
 export interface Stage0Config {
   environment: 'local' | 'development' | 'production'
   origin: string
@@ -24,7 +30,7 @@ export function loadStage0Config(env: Record<string, unknown>): Stage0Config {
   if (local) {
     if (origin !== 'http://localhost:4173' || env.AUTH_LOCAL_FIXTURES !== 'true') return fail()
   } else {
-    const expected = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
+    const expected = hostedAuthOrigins[environment]
     if (origin !== expected || env.AUTH_LOCAL_FIXTURES !== undefined) return fail()
     for (const name of ['TURNSTILE_SITE_KEY', 'TURNSTILE_SECRET_KEY']) {
       if (typeof env[name] !== 'string' || !env[name].trim()) return fail()

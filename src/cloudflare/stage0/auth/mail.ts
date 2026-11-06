@@ -1,5 +1,5 @@
 import type { EmailMessageBuilder, SendEmail } from '@cloudflare/workers-types'
-import type { Stage0Config } from '../config'
+import { hostedAuthOrigins, type Stage0Config } from '../config'
 import type { AuthEmail, AuthMailer, DeliveryResult } from '../contracts'
 import { Stage0Error } from '../errors'
 import { normalizedEmail } from './contact'
@@ -53,7 +53,7 @@ export function createAuthMailer(config: Stage0Config, binding: Pick<SendEmail, 
   let origin: string, sender: string, send: SendEmail['send']
   try {
     const { environment, origin: configuredOrigin, rpId, emailFrom } = config
-    const expected = environment === 'production' ? 'https://ovelle.org' : environment === 'development' ? 'https://dev.ovelle.org' : null
+    const expected = environment === 'production' || environment === 'development' ? hostedAuthOrigins[environment] : null
     if (!expected || configuredOrigin !== expected || rpId !== new URL(expected).hostname || typeof binding?.send !== 'function') throw new Stage0Error('configuration')
     origin = configuredOrigin
     sender = mailbox(emailFrom)
