@@ -3,7 +3,8 @@ import {segment,grants} from '../http/input'
 import {exactObject} from '../domain/input'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
-import {authResponse, boundedJsonBody} from '../auth/web'
+import { authResponse } from '../http/response'
+import { boundedJsonBody } from '../http/body'
 import {acceptStaffInvitation, createStaffInvitation, getStaffInvitation, listStaffInvitations, previewStaffInvitation, resendStaffInvitation, revokeStaffInvitation} from './invitations'
 
 export interface StaffHttpDependencies {trustedIp:string;budgetKey:Uint8Array}

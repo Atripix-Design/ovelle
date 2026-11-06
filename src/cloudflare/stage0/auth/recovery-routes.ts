@@ -3,7 +3,9 @@ import type { RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
 import { authenticateRequest, browserSessionCookie } from './http'
 import { consumeRecoveryCode, getRecoveryCodeStatus, rotateRecoveryCodes } from './recovery'
-import { authResponse, boundedJsonBody, requireBrowserOrigin } from './web'
+import { authResponse } from '../http/response'
+import { boundedJsonBody } from '../http/body'
+import { requireBrowserOrigin } from './web'
 
 /** Internal browser adapter. Explicit POST confirmation prevents accidental
  * rotation; existing cookie/CSRF checks own identity and assurance server-side.

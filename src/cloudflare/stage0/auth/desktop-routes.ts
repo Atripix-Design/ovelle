@@ -3,7 +3,8 @@ import {Stage0Error} from '../errors'
 import {exactObject} from '../domain/input'
 import {authenticateRequest} from './http'
 import {approveDesktopRequest,createDesktopRequest,exchangeDesktopCode,type DesktopApprovalInput,type DesktopExchangeInput,type DesktopRequestInput} from './desktop'
-import {authResponse,boundedJsonBody} from './web'
+import { authResponse } from '../http/response'
+import { boundedJsonBody } from '../http/body'
 
 /** Compose only at fixed server routes. The edge supplies canonical IP and a
  * stable environment HMAC key; never read either from a request body/header here.

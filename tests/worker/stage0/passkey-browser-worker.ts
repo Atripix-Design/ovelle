@@ -7,7 +7,7 @@ import { handleSessionRequest } from '../../../src/cloudflare/stage0/auth/routes
 import { beginPrelogin } from '../../../src/cloudflare/stage0/auth/prelogin'
 import { browserSessionCookie } from '../../../src/cloudflare/stage0/auth/http'
 import { issueSession } from '../../../src/cloudflare/stage0/auth/sessions'
-import { authResponse } from '../../../src/cloudflare/stage0/auth/web'
+import { authResponse } from '../../../src/cloudflare/stage0/http/response'
 
 const key = new Uint8Array(32).fill(13)
 export default {

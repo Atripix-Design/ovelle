@@ -102,3 +102,16 @@ The desktop adapter import was migrated without claiming a complete source revie
 These entries complete the recorded staff/access service review. They do not
 complete the remaining desktop/auth adapters, application/UI, tooling, SQL/config
 and generated-artifact review or the required final runtime evidence.
+
+## Desktop handoff and common authentication transport
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/stage0/auth/desktop.ts` | Retain request/approval/exchange as one durable handoff protocol. Raw callback validation precedes URL normalization. Approval binds one live browser session; exchange requires matching state, callback, code and S256 verifier, and consumes the code atomically with native issuance/audit. Copy original authentication provenance and absolute expiry; exchange is not reauthentication. Admission leases remain bounded. | Desktop-auth and schema tests cover exact callbacks, invalid DTOs, PKCE, expiry, concurrent use, authority revocation and rollback. |
+| `src/cloudflare/stage0/auth/desktop-routes.ts` | Retain fixed endpoints, trusted edge inputs, bounded bodies and browser approval/native exchange separation. Explicitly reject browser credential headers on native operations; only native exchange receives a token. Generic response/body helpers now come directly from HTTP foundation owners. | Desktop-auth HTTP tests cover credential/header separation, methods, shape rejection and safe response content. |
+| `src/cloudflare/stage0/auth/http.ts` | Retain server-selected credential transport, live resolution, browser CSRF and session-cookie construction. Browser cookies use database-owned remaining expiry; native bearer authentication rejects browser headers. Principals and transport cannot be selected by request JSON. | HTTP-session, session-route and cookie tests cover duplicate/foreign credentials, CSRF, expiry/rotation, disabled authority and transport confusion. |
+| `src/cloudflare/stage0/auth/web.ts` | Retain browser-flow origin checks and Strict cookie naming/serialization/selection. Removed forwarding exports of bounded JSON and response construction, migrating every consumer and browser-test worker directly to those owners. OIDC/SAML alternate SameSite bindings remain protocol-owned. | Cookie parsing and all protocol-route suites, plus source/type checking of the browser-test worker. |
+| `src/cloudflare/stage0/auth/routes.ts` | Retain fixed account/session read, rotation and logout adaptation. Native transport does not gain browser rotation. Account snapshots and authentication metadata omit bearer credentials; safe errors suppress database/provider details. | Session-route tests exercise both transports, rotation, logout-all, cookies and safe errors. |
+
+These are server source and local fixture checks. They do not establish a shipped
+Electron authentication UI, live provider approval or final real-browser evidence.

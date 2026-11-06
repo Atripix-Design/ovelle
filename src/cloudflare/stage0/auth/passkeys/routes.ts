@@ -6,7 +6,9 @@ import { authenticateRequest, browserSessionCookie } from '../http'
 import { verifyPrelogin } from '../prelogin'
 import { equalSecret, secretMac, secretPattern } from '../secrets'
 import { verifyTurnstile } from '../turnstile'
-import { authResponse, boundedJsonBody, readFlowCookie, requireBrowserOrigin, strictFlowCookie } from '../web'
+import { authResponse } from '../../http/response'
+import { boundedJsonBody } from '../../http/body'
+import { readFlowCookie, requireBrowserOrigin, strictFlowCookie } from '../web'
 import { beginPasskeyAuthentication, beginPasskeyRegistration, finishPasskeyAuthentication, finishPasskeyRegistration } from './service'
 
 export interface PasskeyHttpDependencies {

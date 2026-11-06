@@ -465,6 +465,18 @@
     {
       "owner": "src/cloudflare/stage0/access/organizations.ts",
       "reason": "Authorized organization/program/location reads and operation preflight; final writes retain their own live guards."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/desktop.ts",
+      "reason": "One-time browser-approved native handoff, exact loopback callback and PKCE exchange preserving source session provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/http.ts",
+      "reason": "Server-selected browser/native credential transport, browser CSRF and database-expiry session cookie construction."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/web.ts",
+      "reason": "Browser flow origin checks and Strict flow-cookie transport, without generic HTTP helper forwarding."
     }
   ],
   "sourceMappings": [

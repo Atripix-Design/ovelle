@@ -474,3 +474,17 @@ active, including final source-wide, browser and exact-head CI evidence.
 - Staff/access source review is recorded, but remaining desktop/auth adapters,
   application/UI, tooling/configuration/SQL and final runtime evidence still prevent
   whole-goal completion.
+
+### Desktop handoff and authentication transport review
+
+- Reviewed desktop request/approval/exchange and common session/browser adapters.
+  Recorded exact callback, PKCE, one-use transaction, source provenance/expiry,
+  CSRF and server-selected transport boundaries in `review-coverage.md`.
+- Removed generic HTTP forwarding exports from `auth/web.ts`. All route and
+  browser-test-worker consumers import response/body owners directly; browser-flow
+  origin and cookie helpers remain in their existing owner.
+- Full verification passed: 730 backend tests in 61 files, type checks, workspace
+  lint and 15 architecture tests. Six existing exceptions remain unchanged.
+- Server fixture coverage does not prove shipped Electron auth or live browser/
+  provider flows. Remaining application/UI, tooling/configuration and final runtime
+  evidence still apply. No CI settings or runner changes were made.
