@@ -109,7 +109,8 @@
         "src/cloudflare/stage0/staff/validation.ts",
         "src/cloudflare/stage0/auth/budgets.ts",
         "src/cloudflare/stage0/auth/oidc/cookies.ts",
-        "src/cloudflare/worker.ts"
+        "src/cloudflare/worker.ts",
+        "src/cloudflare/stage0/auth/saml/form.ts"
       ]
     },
     {
@@ -205,7 +206,8 @@
         "src/cloudflare/stage0/auth/web.ts",
         "src/cloudflare/stage0/staff/access-routes.ts",
         "src/cloudflare/stage0/staff/routes.ts",
-        "src/cloudflare/stage0/auth/oidc/cookies.ts"
+        "src/cloudflare/stage0/auth/oidc/cookies.ts",
+        "src/cloudflare/stage0/auth/saml/form.ts"
       ],
       "allowed": [
         "backend",
@@ -411,6 +413,10 @@
     {
       "owner": "src/cloudflare/stage0/auth/saml/enrollment.ts",
       "reason": "SAML pending contact verification and atomic account/identity/session creation with original IdP deadlines."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/form.ts",
+      "reason": "Bounded UTF-8 form decoding with exact SAML callback fields; no authentication or persistence effects."
     }
   ],
   "sourceMappings": [

@@ -394,3 +394,17 @@ Validation passed: 716 backend tests in 60 files, all repository type checks,
 workspace lint, fifteen architecture tests and diff checks. No live provider,
 credential, migration, UI or CI configuration changed. The whole migration remains
 active, including final source-wide, browser and exact-head CI evidence.
+
+## SAML HTTP review
+
+- Read the complete SAML route adapter. Extracted its bounded strict form parser
+  into `auth/saml/form.ts`, classified as transport. Retained origin/profile/cookie
+  authority and callback redirects at the route boundary.
+- SAML enrollment/start JSON inputs now use `exactObject` with their original
+  field sets. Per-field types, CSRF and service validation remain unchanged.
+- Added direct parser edge tests while retaining signed route/enrollment checks.
+  Validation passed: 69 tests in three SAML files, all repository type checks,
+  workspace lint and fifteen architecture tests. The graph covers 207 files with
+  six unchanged exceptions. No provider, UI, migration or CI configuration changed.
+- SAML source review is recorded in `review-coverage.md`; real-browser/provider
+  acceptance and final exact-head CI are not inferred from local fixtures.

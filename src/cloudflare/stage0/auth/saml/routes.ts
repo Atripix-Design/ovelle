@@ -1,3 +1,5 @@
+import { exactObject } from '../../domain/input'
+import { readSamlCallbackForm } from './form'
 import { readUniqueCookie } from '../../http/cookies'
 import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
@@ -39,37 +41,6 @@ async function profile(deps: SamlHttpDependencies, connectionId: string) {
   if (settings.connectionId !== connectionId) throw new Stage0Error('configuration')
   return settings
 }
-async function form(request: Request): Promise<{ relayState: string; response: string }> {
-  // Bound bytes before decoding: the maximal base64 XML may be percent-escaped.
-  // URLSearchParams alone tolerates broken escapes and duplicate field names.
-  const content = request.headers.get('Content-Type')?.toLowerCase()
-  if (!content || !/^application\/x-www-form-urlencoded(?:\s*;\s*charset=utf-8)?\s*$/.test(content) || !request.body) throw new Stage0Error('invalid_input')
-  const reader = request.body.getReader(), chunks: Uint8Array[] = []
-  let size = 0
-  try {
-    while (true) {
-      const next = await reader.read()
-      if (next.done) break
-      size += next.value.byteLength
-      if (size > 270_000) throw new Stage0Error('invalid_input')
-      chunks.push(next.value)
-    }
-    const bytes = new Uint8Array(size)
-    let offset = 0
-    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength }
-    const text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: false }).decode(bytes)
-    const fields = new Map<string, string>()
-    for (const pair of text.split('&')) {
-      const i = pair.indexOf('=')
-      if (i < 1) throw new Stage0Error('invalid_input')
-      const key = decodeURIComponent(pair.slice(0, i).replaceAll('+', ' ')), value = decodeURIComponent(pair.slice(i + 1).replaceAll('+', ' '))
-      if (!['SAMLResponse', 'RelayState'].includes(key) || fields.has(key)) throw new Stage0Error('invalid_input')
-      fields.set(key, value)
-    }
-    if (fields.size !== 2) throw new Stage0Error('invalid_input')
-    return { relayState: fields.get('RelayState')!, response: fields.get('SAMLResponse')! }
-  } finally { await reader.cancel() }
-}
 
 /** Internal composition only, disconnected from the public Worker. The selected
  * profile's entry-point origin must be the real browser form-post origin; other
@@ -92,15 +63,13 @@ export async function handleSamlRequest(ctx: RequestContext, request: Request, d
       if (expected === 'POST' && !equalSecret(request.headers.get('X-CSRF-Token') ?? '', await samlEnrollmentCsrf(pending.browserBinding))) throw new Stage0Error('forbidden')
       const settings = await profile(deps, pending.connectionId)
       if (expected === 'GET') return authResponse(ctx, await getSamlEnrollment(ctx, settings, pending.browserBinding))
-      const parsed = await boundedJsonBody(request, 4096)
-      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Stage0Error('invalid_input')
-      const data = parsed as Record<string, unknown>
+      const data = exactObject(await boundedJsonBody(request, 4096), enrollment[2] === 'contact' ? ['email', 'displayName'] : ['token'])
       if (enrollment[2] === 'contact') {
-        if (Object.keys(data).some(key => !['email', 'displayName'].includes(key)) || typeof data.email !== 'string' || typeof data.displayName !== 'string') throw new Stage0Error('invalid_input')
+        if (typeof data.email !== 'string' || typeof data.displayName !== 'string') throw new Stage0Error('invalid_input')
         await submitSamlContact(ctx, settings, pending.browserBinding, { email: data.email, displayName: data.displayName, ip: deps.trustedIp }, deps.budgetKey)
         return authResponse(ctx, { accepted: true }, 202)
       }
-      if (Object.keys(data).some(key => key !== 'token') || typeof data.token !== 'string') throw new Stage0Error('invalid_input')
+      if (typeof data.token !== 'string') throw new Stage0Error('invalid_input')
       const session = await confirmSamlContact(ctx, settings, pending.browserBinding, data.token, deps.trustedIp, deps.budgetKey)
       const headers = new Headers({ 'Set-Cookie': await browserSessionCookie(ctx, session) })
       headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'saml_enrollment', '', 0))
@@ -111,7 +80,7 @@ export async function handleSamlRequest(ctx: RequestContext, request: Request, d
         || (request.headers.has('Sec-Fetch-Dest') && request.headers.get('Sec-Fetch-Dest') !== 'document')) throw new Stage0Error('forbidden')
       const binding = readBinding(ctx, request), settings = await profile(deps, binding.connectionId)
       if (request.headers.get('Origin') !== new URL(settings.entryPoint).origin) throw new Stage0Error('forbidden')
-      const input = await form(request)
+      const input = await readSamlCallbackForm(request)
       const result = await completeSamlTransaction(ctx, settings, { ...input, browserBinding: binding.browserBinding }, deps.trustedIp, deps.budgetKey)
       const headers = new Headers({ Location: result.kind === 'linked' ? '/account/security' : result.kind === 'enrollment' ? '/account/enroll' : '/account', 'Set-Cookie': bindingCookie(ctx, '', 0) })
       headers.append('Set-Cookie', strictFlowCookie(ctx.config, 'prelogin', '', 0))
@@ -126,10 +95,8 @@ export async function handleSamlRequest(ctx: RequestContext, request: Request, d
     requireBrowserOrigin(ctx, request, true)
     const principal = match![1] === 'link' ? await authenticateRequest(ctx, request, 'browser') : undefined
     if (!principal) await verifyPrelogin(ctx, request, deps.budgetKey)
-    const parsed = await boundedJsonBody(request, 4096)
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Stage0Error('invalid_input')
-    const data = parsed as Record<string, unknown>
-    if (Object.keys(data).some(key => !['connectionId', 'turnstileToken'].includes(key)) || typeof data.connectionId !== 'string' || !connectionPattern.test(data.connectionId)
+    const data = exactObject(await boundedJsonBody(request, 4096), ['connectionId', 'turnstileToken'])
+    if (typeof data.connectionId !== 'string' || !connectionPattern.test(data.connectionId)
       || typeof data.turnstileToken !== 'string' || !data.turnstileToken || data.turnstileToken.length > 2048) throw new Stage0Error('invalid_input')
     const settings = await profile(deps, data.connectionId)
     const started = await startSamlTransaction(ctx, settings, { purpose: principal ? 'link' : 'login', principal, ip: deps.trustedIp }, deps.budgetKey,
