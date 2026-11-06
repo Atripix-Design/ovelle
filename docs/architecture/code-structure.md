@@ -186,3 +186,11 @@ callers retain secret validation. OIDC keeps its stricter whitespace parser in
 transaction services. Cookie naming, expiry and SameSite remain protocol-owned:
 Strict sessions/flows, Lax OIDC redirects and Secure/None SAML POST bindings are
 different policies, not interchangeable serializer defaults.
+
+The public Worker is a separate composition owner. `releases.ts` owns the release
+catalog, metadata-backed availability and R2 download transport; it cannot import
+the Worker entry point. Storage failures propagate instead of becoming absent
+releases. HEAD does not read bodies or sign URLs. Clients and signed URLs are
+request-scoped, with no cross-request cache. UI fallback catalog/type ownership
+still requires the shared-application review; this server boundary alone does not
+resolve that separate concern.

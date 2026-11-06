@@ -124,3 +124,11 @@ test('OIDC persistence cannot import its cookie transport', () => {
     'src/cloudflare/stage0/auth/oidc/cookies.ts': '',
   }, contract).map(finding => finding.rule), ['dependency-direction'])
 })
+
+test('release services cannot import the public Worker composition', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({
+    'src/cloudflare/releases.ts': "import './worker'",
+    'src/cloudflare/worker.ts': '',
+  }, contract).map(finding => finding.rule), ['dependency-direction'])
+})

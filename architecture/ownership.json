@@ -108,7 +108,8 @@
         "src/cloudflare/stage0/http",
         "src/cloudflare/stage0/staff/validation.ts",
         "src/cloudflare/stage0/auth/budgets.ts",
-        "src/cloudflare/stage0/auth/oidc/cookies.ts"
+        "src/cloudflare/stage0/auth/oidc/cookies.ts",
+        "src/cloudflare/worker.ts"
       ]
     },
     {
@@ -122,7 +123,8 @@
         "backend-domain",
         "http-foundation",
         "backend-transport",
-        "backend-composition"
+        "backend-composition",
+        "public-worker"
       ],
       "node": true,
       "electron": false
@@ -236,6 +238,17 @@
       "node": false,
       "electron": false,
       "external": []
+    },
+    {
+      "id": "public-worker",
+      "roots": [
+        "src/cloudflare/worker.ts"
+      ],
+      "allowed": [
+        "backend"
+      ],
+      "node": false,
+      "electron": false
     }
   ],
   "concepts": [
@@ -350,6 +363,14 @@
     {
       "owner": "src/cloudflare/stage0/auth/oidc/cookies.ts",
       "reason": "Short-lived OIDC Lax binding serialization and strict callback cookie parsing, separate from transaction persistence."
+    },
+    {
+      "owner": "src/cloudflare/worker.ts",
+      "reason": "Public Worker routing and health/asset composition; does not enable Stage 0 routes."
+    },
+    {
+      "owner": "src/cloudflare/releases.ts",
+      "reason": "Release catalog availability, R2 archive reads and signed download transport. No cross-request cache."
     }
   ],
   "sourceMappings": [

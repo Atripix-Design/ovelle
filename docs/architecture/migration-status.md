@@ -271,3 +271,31 @@ migrations, provider settings, UI code or CI configuration changed.
 The complete backend suite passed: 701 tests across 59 files. Architecture scans
 203 source files with six unchanged exceptions. No UI, migration, provider or CI
 configuration changed; browser-wide final verification remains outstanding.
+
+## Public Worker and release feature tranche
+
+- Reviewed the public Worker, download email handler, command receipts and D1
+  batch boundary. Extracted catalog and archive transport from `worker.ts` into
+  `releases.ts`; Worker routing/health/assets remain in a separate composition
+  zone, and services cannot import that entry point.
+- Preserved server catalog ordering, copy, fallback version, environment CDN,
+  availability HEADs and no-store URLs. Download path/method checks, metadata-only
+  HEAD, missing-object handling, direct streaming without signing credentials and
+  five-minute signed redirects are unchanged. No cross-request cache was added.
+- Seven runtime tests pass with fixture R2 and actual local AWS URL signing. They
+  cover response behavior, storage failures and Worker routing, including the
+  continued 404 for Stage 0 routes. These are not live R2 or deployment evidence.
+- Download email validation/quota checks, all repository type checks, workspace
+  lint and fifteen architecture tests passed. The current graph has 205 files and
+  six unchanged exceptions. CI and provider configuration remain unchanged.
+- `commands.ts` retains receipt replay and commit coordination as one coherent
+  transactional responsibility: replay rechecks live authority and request digest;
+  a conflicting concurrent commit can replay only after those checks. `db.ts`
+  retains guarded batch and audit-statement construction. No storage abstraction
+  was introduced that would hide required SQL guard/receipt ordering.
+
+Still pending: the broader feature review, shared application/release shape
+ownership, Figma-dependent UI work, tooling/non-JS/TS review and final verification.
+The public download email module has distinct input, quota and delivery concerns
+that need a further responsibility review; passing its existing check is not that
+review's completion.
