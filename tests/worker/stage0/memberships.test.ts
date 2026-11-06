@@ -104,3 +104,14 @@ it('rechecks credential readiness at the final administrator promotion batch',as
  expect(await f.execute("SELECT preset FROM organization_memberships WHERE id='md-a'").first('preset')).toBe('coordinator')
  expect(await f.execute('SELECT count(*) AS n FROM command_receipts').first('n')).toBe(0)
 })
+
+it('clears grants without revoking the membership, then revokes explicitly',async()=>{
+ const cleared=await changeMembershipGrants(cmd(admin),input([]))
+ expect(cleared).toMatchObject({state:'active',version:2})
+ expect((await getMembership(f.ctx,owner,'org-a','md-a')).grants).toEqual([])
+ expect(await getOrganization(f.ctx,target,'org-a')).toMatchObject({id:'org-a'})
+ await expect(getProgram(f.ctx,target,'org-a','a1')).rejects.toMatchObject({code:'not_found'})
+ const revoked=await revokeMembership(cmd(admin,'membership-explicit-revoke'),{organizationId:'org-a',membershipId:'md-a',expectedVersion:2})
+ expect(revoked).toMatchObject({state:'revoked',version:3})
+ await expect(getOrganization(f.ctx,target,'org-a')).rejects.toMatchObject({code:'not_found'})
+})

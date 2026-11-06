@@ -2,8 +2,6 @@ import type { Grant } from '../domain/access'
 import { exactObject } from '../domain/input'
 import { Stage0Error } from '../errors'
 
-export { exactObject } from '../domain/input'
-
 /** Decode a single path segment without accepting hidden separators or controls. */
 export function segment(value: string): string {
   let decoded: string

@@ -33,15 +33,19 @@ async function member(ctx:RequestContext,org:string,id:string):Promise<Member>{
  const row=await ctx.db.prepare('SELECT * FROM organization_memberships WHERE organization_id=? AND id=?').bind(org,id).first<Member>()
  if(!row)throw new Stage0Error('not_found');return row
 }
-async function mutate(ctx:CommandContext,input:RevokeMembershipInput,grants?:Grant[],preset?:MembershipSnapshot['preset']):Promise<MembershipSnapshot>{
+// Both operations share the atomic membership transition, but an empty grant
+// replacement is still an active membership, never an implicit revocation.
+type MembershipChange = {kind:'revoke'} | {kind:'replace-grants';grants:Grant[];preset?:MembershipSnapshot['preset']}
+async function mutate(ctx:CommandContext,input:RevokeMembershipInput,change:MembershipChange):Promise<MembershipSnapshot>{
+ const preset=change.kind==='replace-grants'?change.preset:undefined
  const normalized=normalize(input),org=normalized.organizationId
  await getOrganization(ctx,ctx.principal,org)
  const target=await member(ctx,org,normalized.membershipId)
  // Hash the caller's explicit role choice, not mutable membership state, so a
  // receipt remains replayable after a later role change. Enforce the effective
  // role's grant vocabulary only when applying a new command.
- const reviewed=grants===undefined?undefined:normalizedGrants(grants,'admin')
- const command=reviewed===undefined?'membership.revoke':'membership.grants'
+ const reviewed=change.kind==='replace-grants'?normalizedGrants(change.grants,'admin'):undefined
+ const command=change.kind==='revoke'?'membership.revoke':'membership.grants'
  return withReceipt(ctx,command,org,{...normalized,...(reviewed===undefined?{}:{grants:reviewed,preset:preset??null})},b=>manager(ctx,b,org,target.id,preset),async digest=>{
   const effectivePreset=preset??target.preset
   if(reviewed)normalizedGrants(reviewed,effectivePreset)
@@ -54,7 +58,7 @@ async function mutate(ctx:CommandContext,input:RevokeMembershipInput,grants?:Gra
   if(reviewed)for(const grant of reviewed)await authorizeOrganization(ctx,ctx.principal,org,grant.action,grant.scope)
   const coverage=(reviewed??[]).map(grant=>accessPredicate(b,ctx.principal,org,grant.action,grant.scope,ctx.clock.now()))
   const guard=`(${allowed}) AND (${promotionReady}) AND EXISTS(SELECT 1 FROM organization_memberships WHERE id=${b.add(target.id)} AND organization_id=${b.add(org)} AND version=${b.add(normalized.expectedVersion)} AND state='active')${coverage.map(predicate=>` AND (${predicate})`).join('')}`
-  const result={...snapshot(target),preset:effectivePreset,version:normalized.expectedVersion+1,state:reviewed===undefined?'revoked' as const:'active' as const}
+  const result={...snapshot(target),preset:effectivePreset,version:normalized.expectedVersion+1,state:change.kind==='revoke'?'revoked' as const:'active' as const}
   const statements=[ctx.db.prepare('UPDATE organization_memberships SET state=?,preset=?,version=version+1 WHERE id=? AND organization_id=?').bind(result.state,result.preset,target.id,org),ctx.db.prepare('DELETE FROM membership_grants WHERE membership_id=? AND organization_id=?').bind(target.id,org),
    ...(reviewed??[]).map(grant=>ctx.db.prepare('INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind,program_id,location_id) VALUES(?,?,?,?,?,?,?)').bind(ctx.ids.next(),target.id,org,grant.action,grant.scope.kind,grant.scope.kind==='program_location'?grant.scope.programId??null:null,grant.scope.kind==='program_location'?grant.scope.locationId??null:null)),auditStatement(ctx,command,target.id,ctx.principal,org)]
   return commit(ctx,command,org,org,digest,b,guard,statements,result)
@@ -63,9 +67,9 @@ async function mutate(ctx:CommandContext,input:RevokeMembershipInput,grants?:Gra
 export async function changeMembershipGrants(ctx:CommandContext,input:ChangeGrantsInput):Promise<MembershipSnapshot>{
  if(!input||!Array.isArray(input.grants))throw new Stage0Error('invalid_input')
  if(input.preset!==undefined&&input.preset!=='admin'&&input.preset!=='coordinator')throw new Stage0Error('invalid_input')
- return mutate(ctx,input,input.grants,input.preset)
+ return mutate(ctx,input,{kind:'replace-grants',grants:input.grants,preset:input.preset})
 }
-export async function revokeMembership(ctx:CommandContext,input:RevokeMembershipInput):Promise<MembershipSnapshot>{return mutate(ctx,input)}
+export async function revokeMembership(ctx:CommandContext,input:RevokeMembershipInput):Promise<MembershipSnapshot>{return mutate(ctx,input,{kind:'revoke'})}
 function readable(ctx:RequestContext,principal:Principal,b:Bindings,org:string):string{
  const own=accessPredicate(b,principal,org,'organization.read',scope,ctx.clock.now()),staff=accessPredicate(b,principal,org,'staff.read',scope,ctx.clock.now())
  return `((${own}) AND m.account_id=${b.add(principal.accountId)}) OR (${staff})`

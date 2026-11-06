@@ -1,6 +1,6 @@
 import type {RequestContext} from '../contracts'
 import {Stage0Error} from '../errors'
-import {exactObject} from '../http/input'
+import {exactObject} from '../domain/input'
 import {authenticateRequest} from './http'
 import {approveDesktopRequest,createDesktopRequest,exchangeDesktopCode,type DesktopApprovalInput,type DesktopExchangeInput,type DesktopRequestInput} from './desktop'
 import {authResponse,boundedJsonBody} from './web'

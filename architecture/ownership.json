@@ -441,6 +441,14 @@
     {
       "owner": "src/cloudflare/stage0/auth/oidc/enrollment.ts",
       "reason": "Pending OIDC enrollment lifetime, contact verification and atomic account/identity creation; session issuance rechecks live authority after commit."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/memberships.ts",
+      "reason": "Membership visibility, grant replacement and explicit revocation with live delegated containment and atomic receipts."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/ownership.ts",
+      "reason": "Two-party ownership-transfer request/accept/revoke lifecycle and live initiating/recipient authority."
     }
   ],
   "sourceMappings": [

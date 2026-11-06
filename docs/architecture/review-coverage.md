@@ -68,3 +68,18 @@ remains separate from these source and signed-fixture checks.
 | `src/cloudflare/stage0/auth/oidc/routes.ts` | Retain fixed browser dispatch, origin/CSRF checks, trusted provider selection and cookie/redirect handling. Use shared exact object validation after bounded JSON decoding; field meaning remains operation-specific. Cookie lifetime derives from the enrollment service owner. Callback failures retain clean fixed redirects, while JSON endpoints retain safe status/error responses. | `oidc-routes.test.ts`: signed callback flows, malformed shapes, cookies, CSRF, contact confirmation and explicit 900-second enrollment-cookie contract. |
 
 Provider and real-browser verification remain separate from signed local fixtures.
+
+## Staff membership and ownership transitions
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/stage0/staff/memberships.ts` | Retain membership reads and atomic membership/grant transitions together. Target grant containment applies to revocation as well as replacement. Promotion readiness is rechecked in the final batch; removal does not require the target to retain a passkey. A private discriminated operation replaces optional-argument mode selection: empty grants preserve active membership, revocation is explicit. Receipt digests continue to capture explicit caller choices rather than mutable target roles. | `memberships.test.ts`: replay, scope containment, promotion/demotion, authority races, audit rollback, concurrent mutations and clearing grants followed by explicit revocation. |
+| `src/cloudflare/stage0/staff/ownership.ts` | Retain the two-party request/accept/revoke state machine. Initiator's session stays live; request-time recency must not shorten the acceptance window. Recipient readiness, current owner/version, request state and recipient recency are checked in the final transaction. Expired is a derived read state. No generic membership mutation abstraction hides these different invariants. | `ownership.test.ts`: exclusive expiry, ten-minute acceptance, authority/version changes, race ordering, audit rollback and idempotency. |
+| `src/cloudflare/stage0/staff/access-routes.ts` | Retain fixed membership/ownership paths and method dispatch. Transport is selected by trusted composition; request casts do not confer authority. Service validators own IDs, versions, roles and grants. Import object shape directly from its domain owner. | `staff-access-http.test.ts`: authenticated transports, payload/method boundaries and command integration. |
+| `src/cloudflare/stage0/staff/routes.ts` | Retain invitation-specific HTTP adaptation. Preview takes a deliberate header capability; navigation does not accept invitations. Trusted IP/budget inputs remain composition-owned. Import shape validation directly from its owner. | `invitation-http.test.ts`: preview, acceptance, transport and payload boundaries. Invitation service source review is separately tracked. |
+| `src/cloudflare/stage0/access/routes.ts` | Retain organization route selection, bounded query parsing and DTO dispatch. Query filters are read selectors, never write authority. Pagination decoding and exact-body requirements stay visible at the adapter. Import shape validation directly from the domain owner. | `organization-http.test.ts`: queries, methods, request shapes and live command/read behavior. |
+
+Removed the HTTP input module's forwarding export of `exactObject`; all four
+remaining route consumers now import the domain implementation directly. The HTTP
+module retains path decoding and grant DTO checks, which are its own responsibilities.
+The desktop adapter import was migrated without claiming a complete source review.

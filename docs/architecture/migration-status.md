@@ -442,3 +442,19 @@ active, including final source-wide, browser and exact-head CI evidence.
 - This completes the recorded OIDC source group review, not the whole migration or
   live provider/browser verification. Remaining application/UI, staff/access and
   tooling/configuration reviews and final integration evidence still apply.
+
+### Staff membership, ownership and route review
+
+- Replaced optional-grants mode selection in the shared membership transaction
+  with an explicit revoke/replace-grants operation. Empty replacements remain
+  active memberships. Receipt digests, live scope checks and atomic writes retain
+  their existing semantics.
+- Removed the HTTP input module's forwarding export of domain object validation;
+  migrated all four remaining route consumers directly to its owner.
+- Recorded source reviews for membership/ownership services and staff/access
+  adapters, including promotion readiness, two-party acceptance and request-time
+  versus acceptance-time recency. Added the two service concept owners.
+- Verification: 80 tests across seven focused suites passed, including an explicit
+  clear-grants-then-revoke scenario; all type checks, lint and 15 architecture tests
+  passed. Existing six exceptions remain unchanged. No CI/runner changes made.
+- Remaining whole-codebase review and final runtime/UI evidence remain open.
