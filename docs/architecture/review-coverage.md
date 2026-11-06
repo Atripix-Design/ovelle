@@ -20,3 +20,18 @@ by the session foundation entries. UI/application, tooling, configuration, SQL a
 generated artifacts also need their remaining review and final evidence described
 in `migration-status.md`. A matching-looking validator or constant is not sufficient
 reason to share policy across these domains.
+
+## Recovery and passkeys
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/stage0/auth/recovery.ts` | Retain provider-proof admission, code issuance/consumption and replacement-enrollment guard together as account recovery. They share security-epoch and one-time credential semantics. Consolidated the account-bound stored code digest. Provider proof alone stays enrollment-only; code consumption atomically changes the epoch and revokes sessions. Metadata reads do not reveal secrets, and rotation cannot replay plaintext codes. | `recovery-codes.test.ts`, `provider-recovery.test.ts`, recovery schema/migration tests: independent persisted digest calculation, account binding, concurrency, authority/recency, revocation, one-time use and replacement completion. |
+| `src/cloudflare/stage0/auth/recovery-routes.ts` | Retain browser routing, origin/CSRF and explicit confirmation at the adapter. Reuse `exactObject` rather than maintaining another equivalent field whitelist implementation. Numeric/code meaning remains service-owned. | `recovery-code-routes.test.ts` and provider-recovery HTTP tests. |
+| `src/cloudflare/stage0/auth/passkeys/protocol.ts` | Retain the maintained WebAuthn verifier adapter separately from persistence. Ovelle envelope/attestation restrictions surround, not replace, signature verification. Algorithm choices, top-level origin policy, credential bounds and transport hints are coherent protocol decisions. Returned hints never establish authority. | `passkey-protocol.test.ts`: signed fixture registration/authentication, malformed envelope, origin/RP/challenge and user-verification cases. Final real-browser verification remains separate. |
+| `src/cloudflare/stage0/auth/passkeys/service.ts` | Retain challenge issuance/claim, registration, login and step-up orchestration together. Private helpers expose shared transaction predicates and row preparation; splitting each SQL statement into a repository layer would obscure atomic credential/account/challenge checks. Recovery registration shares these mechanisms but keeps its explicit epoch/old-key/session invalidation transaction. Admission callback is a trusted adapter capability, not a request field. | `passkeys.test.ts`, `provider-recovery.test.ts`: challenge replay, counters, concurrent operations, recency, account binding, provenance and recovery replacement. |
+| `src/cloudflare/stage0/auth/passkeys/routes.ts` | Retain fixed browser routes, flow CSRF/cookies and payload dispatch. Reuse exact object-shape parsing while preserving per-operation fields and byte limits. Protocol response contents remain validated by the verifier, not by a cast at this boundary. | `passkey-routes.test.ts`: browser/admission boundaries, payload constraints and fixed operation dispatch. |
+
+Follow-up identified: twelve-hour values occur in session issuance, passkey
+replacement and SAML freshness/session caps. Establish which represent the same
+session policy during federation review before sharing them; matching durations
+do not establish matching authority or lifetime anchors.

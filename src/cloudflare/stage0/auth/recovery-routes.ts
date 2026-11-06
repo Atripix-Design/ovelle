@@ -1,3 +1,4 @@
+import { exactObject } from '../domain/input'
 import type { RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
 import { authenticateRequest, browserSessionCookie } from './http'
@@ -16,9 +17,7 @@ export async function handleRecoveryCodeRequest(ctx: RequestContext, request: Re
     const principal = await authenticateRequest(ctx, request, 'browser')
     if (url.search) throw new Stage0Error('invalid_input')
     if (request.method === 'GET') return authResponse(ctx, await getRecoveryCodeStatus(ctx, principal))
-    const body = await boundedJsonBody(request, 4096)
-    if (!body || typeof body !== 'object' || Array.isArray(body) || Object.keys(body).some(key => !['expectedVersion', 'confirmation'].includes(key))) throw new Stage0Error('invalid_input')
-    const input = body as Record<string, unknown>
+    const input = exactObject(await boundedJsonBody(request, 4096), ['expectedVersion', 'confirmation'])
     if (input.confirmation !== true || typeof input.expectedVersion !== 'number') throw new Stage0Error('invalid_input')
     return authResponse(ctx, await rotateRecoveryCodes(ctx, principal, input.expectedVersion))
   } catch (error) {
@@ -36,9 +35,7 @@ export async function handleRecoveryRequest(ctx: RequestContext, request: Reques
     requireBrowserOrigin(ctx, request, true)
     const principal = await authenticateRequest(ctx, request, 'browser')
     if (url.search) throw new Stage0Error('invalid_input')
-    const parsed = await boundedJsonBody(request, 4096)
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).some(key => !['code', 'confirmation'].includes(key))) throw new Stage0Error('invalid_input')
-    const body = parsed as Record<string, unknown>
+    const body = exactObject(await boundedJsonBody(request, 4096), ['code', 'confirmation'])
     if (body.confirmation !== true || typeof body.code !== 'string' || body.code.length > 128) throw new Stage0Error('invalid_input')
     const session = await consumeRecoveryCode(ctx, principal, body.code, deps.trustedIp, deps.budgetKey)
     return authResponse(ctx, null, 204, { 'Set-Cookie': await browserSessionCookie(ctx, session) })

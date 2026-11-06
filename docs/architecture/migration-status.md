@@ -358,3 +358,20 @@ apply. No UI, migration, deployment, provider or CI configuration changed here.
 Validation for this review passed: 56 focused tests in six authentication files,
 all repository type checks, workspace lint, fifteen architecture tests and diff
 checks. No provider requests, UI changes, migrations or CI changes were made.
+
+## Recovery/passkey source review
+
+- Read recovery service/routes and passkey protocol/service/routes in full and
+  recorded ownership decisions in `review-coverage.md`. Retained the existing
+  protocol/persistence/HTTP separation and atomic authority checks.
+- Recovery-code issuance and consumption now share one private account-bound
+  digest definition. Existing tests calculate persisted digests independently.
+- Recovery and passkey adapters now use the domain-owned exact object parser,
+  preserving their field sets, error handling, value checks and body limits.
+- Identified session/passkey/SAML duration relationships for the remaining
+  federation review; no timeout or authorization behavior was changed by guesswork.
+
+Validation passed: 88 tests across eight recovery/passkey files, all repository
+type checks, workspace lint and fifteen architecture tests. Tests use signed
+fixtures and local D1; no live credential, provider setting or CI configuration
+was changed. Whole-codebase review and final browser/CI evidence remain open.

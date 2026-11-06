@@ -1,4 +1,5 @@
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server'
+import { exactObject } from '../../domain/input'
 import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
 import { authenticateRequest, browserSessionCookie } from '../http'
@@ -16,9 +17,7 @@ export interface PasskeyHttpDependencies {
 }
 const flowCsrf = (token: string) => secretMac(token, ['ovelle:passkey-flow-csrf:v1'])
 async function body(request: Request, fields: string[], limit: number): Promise<Record<string, unknown>> {
-  const parsed = await boundedJsonBody(request, limit)
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).some(key => !fields.includes(key))) throw new Stage0Error('invalid_input')
-  return parsed as Record<string, unknown>
+  return exactObject(await boundedJsonBody(request, limit), fields)
 }
 /** Internal adapter only. Public Worker routing and provider/rollout gates remain
  * closed. Real browser transport owns credentials; renderer DTOs cannot select

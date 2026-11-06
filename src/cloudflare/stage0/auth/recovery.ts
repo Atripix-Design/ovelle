@@ -6,6 +6,10 @@ import { liveSessionCondition, loadLiveSession, prepareSessionIssuance, type Ses
 import { consumeOidcIdentity, type VerifiedOidcIdentity } from './oidc/protocol'
 import { finishAuthAttempt, reserveAuthAttempt } from './limits'
 
+// Account binding is part of the stored format, not a caller-selected hash domain.
+const recoveryCodeDigest = (accountId: string, code: string) =>
+  secretDigest(JSON.stringify(['ovelle:recovery-code:v1', accountId, code]))
+
 /** A recovery callback verifies a provider without giving an ordinary login.
  * Only an already linked immutable subject can produce this short-lived proof.
  * Provider/email contact enrollment and normal login cannot substitute for it. */
@@ -46,7 +50,7 @@ export async function consumeRecoveryCode(ctx: RequestContext, principal: Princi
   let success = false
   try {
     if (typeof code !== 'string' || !secretPattern.test(code)) throw new Stage0Error('unauthenticated')
-    const digest = await secretDigest(JSON.stringify(['ovelle:recovery-code:v1', source.account_id, code]))
+    const digest = await recoveryCodeDigest(source.account_id, code)
     if (!await ctx.db.prepare('SELECT 1 FROM recovery_codes WHERE account_id=? AND code_digest=?').bind(source.account_id, digest).first()) throw new Stage0Error('unauthenticated')
     const now = ctx.clock.now(), live = liveSessionCondition(principal, now)
     const row: SessionRow = { ...source, id: ctx.ids.next(), created_at: now, account_security_version: source.account_security_version + 1 }
@@ -103,7 +107,7 @@ export async function rotateRecoveryCodes(ctx: RequestContext, principal: Princi
   if (session.assurance !== 'passkey' || !session.passkey_credential_id || session.passkey_verified_at === null
     || session.passkey_verified_at > before || session.passkey_verified_at <= before - 300_000) throw new Stage0Error('forbidden')
   const codes = Array.from({ length: 8 }, () => randomSecret())
-  const digests = await Promise.all(codes.map(code => secretDigest(JSON.stringify(['ovelle:recovery-code:v1', session.account_id, code]))))
+  const digests = await Promise.all(codes.map(code => recoveryCodeDigest(session.account_id, code)))
   const now = ctx.clock.now()
   // The database-owned passkey binding/provenance and recency must remain valid
   // at the write, including provider/key revocation while hashing the new set.

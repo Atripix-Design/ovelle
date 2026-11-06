@@ -375,6 +375,26 @@
     {
       "owner": "src/cloudflare/stage0/db.ts",
       "reason": "SQL value/binding assembly, guarded D1 batches and audit statements; independent of feature authorization predicates."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/recovery.ts",
+      "reason": "Account-bound recovery codes, provider proof admission and atomic replacement authority/epoch changes."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/passkeys/protocol.ts",
+      "reason": "WebAuthn verifier adapter and Ovelle envelope, algorithm and attestation policy, without persistence."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/passkeys/service.ts",
+      "reason": "Passkey challenge lifecycle and atomic registration/login/step-up/recovery credential transitions."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/prelogin.ts",
+      "reason": "Signed pre-login browser cookie, fixed original lifetime and separate CSRF proof."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/turnstile.ts",
+      "reason": "Closed challenge-action vocabulary and bounded fail-closed Siteverify verification."
     }
   ],
   "sourceMappings": [
