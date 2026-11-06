@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 
-const output = new URL('../docs/design-system/migration/github-stars-2026-10-11/', import.meta.url).pathname;
+// Fresh runs must not overwrite the dated source-review evidence by default.
+const output = process.env.OVELLE_GITHUB_STARS_OUTPUT || '/tmp/ovelle-github-stars';
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch();
 const api = 'https://api.github.com/repos/Atripix-Design/ovelle';
@@ -63,8 +64,38 @@ try {
       await count.screenshot({ path: `${output}/${consumer}-${name}.png` });
       await scenario.close();
     }
-    audit.push({ consumer, validZero: true, compactCount: '1.3k', singleRequest: true, cache: true, failureAndInvalid: '—', retainedBadge: true, stableWidth: 152, mobileWidths: [390, 320] });
+    // Independent cache contract: 15 minutes, exclusive expiry, no future dates.
+    // Freeze Date.now only; timers and the actual fetch/render lifecycle still run.
+    const now = 1_800_000_000_000;
+    const cacheCases = [
+      { name: 'cached-zero', raw: JSON.stringify({ count: 0, fetchedAt: now }), calls: 0, text: '0' },
+      { name: 'before-expiry', raw: JSON.stringify({ count: 77, fetchedAt: now - 899999 }), calls: 0, text: '77' },
+      { name: 'at-expiry', raw: JSON.stringify({ count: 77, fetchedAt: now - 900000 }), calls: 1, text: '123' },
+      { name: 'future-date', raw: JSON.stringify({ count: 77, fetchedAt: now + 1 }), calls: 1, text: '123' },
+      { name: 'malformed', raw: '{', calls: 1, text: '123' },
+      { name: 'invalid-count', raw: JSON.stringify({ count: -1, fetchedAt: now }), calls: 1, text: '123' },
+      { name: 'invalid-date', raw: JSON.stringify({ count: 77, fetchedAt: String(now) }), calls: 1, text: '123' },
+      { name: 'storage-unavailable', raw: null, calls: 1, text: '123' },
+    ];
+    for (const scenario of cacheCases) {
+      const cachedPage = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+      const cacheErrors = []; cachedPage.on('pageerror', error => cacheErrors.push(error.message));
+      let requests = 0;
+      await cachedPage.addInitScript(({ now, raw }) => {
+        Date.now = () => now;
+        if (raw === null) Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Fixture storage unavailable', 'SecurityError'); } });
+        else localStorage.setItem('ovelle.github-stars.v1', raw);
+      }, { now, raw: scenario.raw });
+      await cachedPage.route(api, route => { requests++; return route.fulfill({ json: { stargazers_count: 123 } }); });
+      await cachedPage.goto(base);
+      await cachedPage.locator('.home .ov-site-navigation-desktop .ov-github-stars').getByText(scenario.text, { exact: true }).waitFor();
+      await cachedPage.locator('.home .ov-site-navigation-desktop .ov-skeleton[data-loading="false"]').waitFor();
+      assert.equal(requests, scenario.calls, `${consumer}: ${scenario.name}`);
+      assert.deepEqual(cacheErrors, [], `${consumer}: ${scenario.name}`);
+      await cachedPage.close();
+    }
+    audit.push({ consumer, validZero: true, compactCount: '1.3k', singleRequest: true, cache: true, cacheCases: cacheCases.map(scenario => scenario.name), failureAndInvalid: '—', retainedBadge: true, stableWidth: 152, mobileWidths: [390, 320] });
   }
   await writeFile(`${output}/audit.json`, JSON.stringify(audit, null, 2) + '\n');
-  console.log('GitHub stars passed: loading, mounted retention, zero, large count, failure, invalid response, cache, keyboard and mobile layouts in both consumers.');
+  console.log('GitHub stars passed: loading, mounted retention, zero, large count, failure, invalid response, cache expiry/future/corruption/storage failures, keyboard and mobile layouts in both browser-rendered consumers.');
 } finally { await browser.close(); }

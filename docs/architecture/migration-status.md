@@ -669,3 +669,13 @@ ownership, private frost/page normalization and the five existing barrel cycles.
 No component edits were made because current Figma context/screenshots remain
 unavailable. These recorded reviews do not mark affected files compliant or finish
 the remaining workflow/website/gallery/CSS/SQL/runtime review.
+
+### Application cache boundary verification
+
+Extended the shared-star browser verifier to cover the independent 15-minute cache
+contract, future/corrupt records and storage denial in web and built desktop renderer
+pages. All eight scenarios per consumer and existing behavior checks pass. Fresh
+output uses a temporary directory instead of overwriting dated evidence. Architecture
+tests (17) pass. Component changes remain pending current Figma access or the user's
+explicit decision on the requested narrowly scoped nonvisual exception; no exception
+has been assumed from elapsed time or automatic goal continuations.

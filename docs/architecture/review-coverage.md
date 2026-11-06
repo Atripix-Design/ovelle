@@ -430,3 +430,26 @@ all existing URL mappings/theme geometry, and add negative regressions for inher
 names alongside valid light/dark pairs. Component implementation is unchanged while
 fresh Figma context/screenshots are quota-blocked. This finding is unfinished work,
 not an accepted architectural exception or a passing test of correct behavior.
+
+## Shared GitHub-star cache verification
+
+`apps/shared/useGitHubStars.ts` remains the application data/cache owner; GitHubLink
+only formats and presents supplied state. The hook shares one in-flight request,
+keeps successful counts in optional localStorage, rejects invalid/future/stale
+records, bounds HTTP duration and ignores updates after effect cleanup. The cache
+is checked on mounting/reload, not continuously refreshed by an interval.
+
+Expanded `scripts/check-github-stars.mjs` with independent cache expectations: zero,
+one millisecond before the 15-minute expiry, exact expiry, a future timestamp,
+malformed JSON, negative count, nonnumeric timestamp and unavailable localStorage.
+Date.now is fixed in these isolated pages while network/render timers remain real.
+Expected network calls and displayed values are asserted in each consumer. Fresh
+captures now default to `/tmp/ovelle-github-stars`; an explicit output variable can
+select another location without overwriting historical evidence by default.
+
+Verification passed in current web source and the built desktop renderer served
+over HTTP: all eight cache scenarios per consumer plus existing delayed/loading,
+request-sharing, retained badge, invalid/error response, compact count, keyboard and
+320/390-pixel mobile checks. No actual GitHub response or native Electron bridge is
+claimed by these fixtures. Seventeen architecture tests and the current graph pass
+with six unchanged exceptions. No hook or component source was edited.
