@@ -12,7 +12,8 @@ function fixture() {
   } as unknown as ReleaseEnv
   return { env, head, get }
 }
-const request = (path: string, method = 'GET') => new Request(`https://dev.ovelle.org${path}`, { method })
+// These routes do not read edge cf metadata; model an incoming Worker request.
+const request = (path: string, method = 'GET') => new Request(`https://dev.ovelle.org${path}`, { method }) as Parameters<typeof worker.fetch>[0]
 
 it('derives the three catalog entries from metadata and preserves cache/version URLs', async () => {
   const { env, head, get } = fixture()
