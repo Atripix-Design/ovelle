@@ -646,3 +646,14 @@ run four generator/CLI tests and fail on drift without rewriting files. Workspac
 and backend checks, 17 architecture tests, UI build and 13 UI tests pass. This resolves
 local color duplication maintenance, not live Figma parity or all stylesheet ownership.
 Fresh Figma source retrieval remains quota-blocked; component work is still incomplete.
+
+### Entry points and CI review reconciliation
+
+Reconciled tracked paths with the explicit review ledger, then inspected native/web
+entry points, native/download verifiers and CI source/test/action boundaries. Retained
+these cohesive operations with documented authority and evidence limits. Removed
+unreferenced web App.css from the earlier app-shell implementation. Current entry
+points never imported it; the web build passed after removal. Thirteen local CI
+fixture tests passed, while the live current-SHA delivery check failed. CI sources,
+runner configuration and provider state remain unchanged under the read-only request.
+The whole migration is still active with the remaining source/design/runtime work.

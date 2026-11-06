@@ -371,3 +371,32 @@ Verification: four token-generator/CLI tests, all workspace/backend type checks,
 17 architecture tests, shared UI build and 13 shared UI tests passed. The architecture
 scan includes the two new tooling files, with six prior exceptions and zero errors.
 Broader component CSS and generated-artifact review remains incomplete.
+
+## Entry-point and CI source reconciliation
+
+The ledger was compared with tracked source paths to locate missing explicit review
+entries. A missing filename mention is an inventory signal, not proof that a file
+was never inspected; the decisions below are based on current source reads.
+
+| Source | Responsibility and decision | Evidence limits |
+| --- | --- | --- |
+| `apps/desktop/src/contracts/downloads.ts` | Retain the frozen two-channel vocabulary shared by main/preload; no native dependencies or generic invocation surface. | Source review and existing architecture boundary tests. |
+| `apps/desktop/src/main/index.ts` | Retain window lifecycle, trusted renderer selection, sandbox preferences and restricted external-navigation handoff. Handler registration occurs once; activation can recreate a window without registering handlers twice. | Current source review; native fixture evidence is recorded above, not an OS sandbox proof. |
+| `apps/desktop/src/preload/index.ts` | Retain two named contextBridge operations, importing channel names from the contract owner. | Does not expose ipcRenderer or arbitrary channels. |
+| `apps/desktop/src/renderer/src/main.tsx` | Retain renderer mounting, stylesheet order, gallery selection and injection of the narrow download bridge into Home. | Its asserted DesktopRelease type does not validate native service data; coordinated release-schema work remains open. |
+| `apps/web/src/main.tsx`, `apps/web/src/App.tsx` | Retain web mounting/style imports and path-based gallery/Home selection. Neither owns native capabilities. | Source review; web build passed. Removed unreferenced `apps/web/src/App.css`, which retained obsolete purple app-shell/download styling and was not imported by the current entry graph. |
+| `scripts/check-download-email.mjs` | Retain in-memory SQLite adapter and independent public-mail assertions together. The adapter exercises transaction rollback and quotas but does not model every D1 runtime behavior. | Source review; existing recorded behavior evidence remains fixture-only. |
+| `scripts/check-electron-downloads.mjs` | Retain separate live development catalog read, mocked email request and intercepted external handoff checks. | Source review only this tranche. Its successful catalog assertion would not prove downloadable artifact integrity; intercepted openExternal is not an actual OS launch. |
+| `scripts/check-electron-ipc.mjs` | Retain real preload/main IPC with main-process response fixtures, input/envelope failures, navigation revocation and preference assertions. | Fresh fixture execution recorded in the native-envelope tranche above. |
+| `scripts/ci/deliver.mjs` | Retain upload-before-deploy orchestration and environment/account admission. Version comes from desktop metadata. | Read-only review. Upload is sequential, not atomic; failure can leave earlier uploads. The wrapper is not itself a branch-authorization boundary. No deployment executed. |
+| `scripts/ci/deploy-worker.mjs` | Retain the reusable Worker deployment operation consumed by CLI and delivery; validate environment/account before invoking Wrangler. | Read-only review. Caller/workflow owns authority; an exported helper does not grant permission to deploy. |
+| `scripts/ci/verify-delivery-source.mjs` | Retain exact event/ref/current remote SHA/local checkout checks and environment output. | Read-only review. Checks are point-in-time; they do not lock the remote branch. Workflow rechecks immediately before publication. |
+| `scripts/ci/verify-network.mjs`, `scripts/ci/verify-network.test.mjs` | Retain bounded transient transport retries with response-body handling delegated to the callback and sanitized terminal transport errors. Validation errors do not retry. | Existing local HTTP fixtures passed for truncation, stalls, permanent validation failures and diagnostic privacy. |
+| `scripts/verify-ci-live.mjs` | Retain current-SHA delivery evidence separately from PR checks. Successful run and required job outcomes are checked, not merely a green badge. | Live read-only execution failed: no successful current-SHA development delivery. No runner/configuration fix attempted. |
+| `scripts/ci/ci.test.mjs` | Retain workflow isolation/secret restrictions, fixture command routing, source-SHA gates, vendored fingerprints and required-check wiring. | All 13 CI tests, including network fixtures, passed. These are not proof of available runner capacity or successful remote delivery. |
+
+Read-only workflow/action review confirmed self-hosted grouped routing, separate
+publisher credentials, checksum-pinned temporary GitHub CLI installation and no
+hosted fallback. No `.github` or CI script changes were made. File/function review
+of the remaining component/gallery sources, broader CSS/SQL and recorded-video
+coverage remains outstanding alongside the previously documented Figma blocker.
