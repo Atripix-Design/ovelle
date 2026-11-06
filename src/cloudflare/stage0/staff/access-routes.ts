@@ -45,7 +45,7 @@ export async function handleStaffAccessRequest(ctx:RequestContext,request:Reques
   if(matched.kind==='transfer')return authResponse(ctx,await getOwnershipTransfer(ctx,principal,matched.organizationId,matched.transferId))
   const fields=matched.kind==='grants'?['expectedVersion','grants','preset']:matched.kind==='request'?['targetMembershipId','expectedOwnerVersion','expectedTargetVersion']:['expectedVersion']
   const parsed=exactObject(await boundedJsonBody(request,16_384),fields,matched.kind!=='grants')
-  const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
+  const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??''}
   if(matched.kind==='grants')return authResponse(ctx,await changeMembershipGrants(command,{organizationId:matched.organizationId,membershipId:matched.membershipId,expectedVersion:parsed.expectedVersion as number,grants:grants(parsed.grants),...(Object.hasOwn(parsed,'preset')?{preset:parsed.preset as 'admin'|'coordinator'}:{})}))
   if(matched.kind==='revoke')return authResponse(ctx,await revokeMembership(command,{organizationId:matched.organizationId,membershipId:matched.membershipId,expectedVersion:parsed.expectedVersion as number}))
   if(matched.kind==='request')return authResponse(ctx,await requestOwnershipTransfer(command,{organizationId:matched.organizationId,targetMembershipId:parsed.targetMembershipId as string,expectedOwnerVersion:parsed.expectedOwnerVersion as number,expectedTargetVersion:parsed.expectedTargetVersion as number}),201)

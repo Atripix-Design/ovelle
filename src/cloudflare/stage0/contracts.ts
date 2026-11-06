@@ -9,7 +9,7 @@ export interface Clock { now(): number }
 export interface Ids { next(): string }
 export interface AuthEmail {
   to: string
-  kind: 'verification' | 'password_reset' | 'staff_invitation'
+  kind: 'verification' | 'staff_invitation'
   url: string
 }
 export type DeliveryResult = { status: 'accepted'; providerId: string } | { status: 'failed'; retryable: boolean }
@@ -35,10 +35,11 @@ export interface Principal {
   authenticatedAt: number
   passkeyVerifiedAt: number | null
 }
+// Receipt digests are derived from canonical command input by commands.ts.
+// Callers supply only the retry key, never a content digest.
 export interface CommandContext extends RequestContext {
   principal: Principal
   idempotencyKey: string
-  requestDigest: string
 }
 export interface AuthorizedContext extends RequestContext {
   principal: Principal

@@ -6,7 +6,7 @@ import {createStaffInvitation} from '../../../src/cloudflare/stage0/staff/invita
 import {changeMembershipGrants} from '../../../src/cloudflare/stage0/staff/memberships'
 it('upgrades populated invitation/session/receipt/audit state and retains sealed offers',async()=>{
  const f=await databaseFixture(10),issued=await issueSession(f.ctx,{accountId:'a',method:'passkey'},'browser')
- const ctx={...f.ctx,principal:issued.principal,idempotencyKey:'staff-migration-command-0001',requestDigest:''}
+ const ctx={...f.ctx,principal:issued.principal,idempotencyKey:'staff-migration-command-0001'}
  const input={organizationId:'org-a',email:'new@example.test',preset:'coordinator' as const,grants:[{action:'program.read' as const,scope:{kind:'program_location' as const,programId:'a1'}}]}
  const invitation=await createStaffInvitation(ctx,input,{ip:'127.0.0.1',budgetKey:new Uint8Array(32).fill(29)})
  const before=new Map<string,unknown>()

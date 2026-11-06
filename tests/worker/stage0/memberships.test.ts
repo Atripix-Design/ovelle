@@ -6,7 +6,7 @@ import {changeMembershipGrants,revokeMembership,listMemberships,getMembership} f
 import type {CommandContext,Grant,Principal} from '../../../src/cloudflare/stage0/contracts'
 let f:Awaited<ReturnType<typeof databaseFixture>>,owner:Principal,admin:Principal,target:Principal,native:Principal
 const grant:Grant={action:'program.read',scope:{kind:'program_location',programId:'a1',locationId:'ax'}}
-const cmd=(principal=owner,key='membership-command-0001'):CommandContext=>({...f.ctx,principal,idempotencyKey:key,requestDigest:''})
+const cmd=(principal=owner,key='membership-command-0001'):CommandContext=>({...f.ctx,principal,idempotencyKey:key})
 const input=(grants:Grant[]=[grant])=>({organizationId:'org-a',membershipId:'md-a',expectedVersion:1,grants})
 beforeEach(async()=>{
  f=await databaseFixture();owner=(await issueSession(f.ctx,{accountId:'a',method:'passkey'},'browser')).principal

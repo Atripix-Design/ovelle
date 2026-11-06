@@ -115,3 +115,20 @@ and generated-artifact review or the required final runtime evidence.
 
 These are server source and local fixture checks. They do not establish a shipped
 Electron authentication UI, live provider approval or final real-browser evidence.
+
+## Composition, mail and shared contracts
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `src/cloudflare/stage0/backend.ts` | Retain trusted resource capture, fixed transport namespaces, adapter dispatch and final private-response policy in the composition root. Browser/native selection never depends on credential presence. Canonical admission key and edge-owned IP remain required. Per-adapter route matching validates its own internal interface; root routing determines which capability is exposed. Construction does not enable public Worker routes. | Backend tests cover fixed namespaces, transport confusion, captured admission keys, headers and signed provider/passkey/recovery composition. |
+| `src/cloudflare/stage0/config.ts` | Retain environment/origin/RP/sender validation with the immutable hosted-origin table. Local fixture configuration is explicit. Runtime flags cannot grant rollout approval. | Configuration and backend tests cover malformed and cross-environment inputs. |
+| `src/cloudflare/stage0/auth/mail.ts` | Retain template/URL validation and Cloudflare delivery adaptation. Capture sender/origin/send capability at construction, validate supported fragment-token links, escape HTML and bound provider acknowledgements. Uncertain sends return failure without automatic retry. | Auth-mail tests cover invalid purposes/URLs, transport input, captured authority, acknowledgements and service composition. |
+| `src/cloudflare/stage0/auth/contact.ts` | Retain pure nominated contact/name normalization. Contact email is not identity-link authority; historical control rejection remains distinct from staff invitation validation. | Account, contact-flow and mail suites cover normalization and malformed input. |
+| `src/cloudflare/stage0/auth/contact-delivery.ts` | Retain contact-link delivery adaptation with explicit outcome. Persistence and resend/version policy stay with enrollment callers. The SAML marker selects an existing flow, not a caller-defined URL. | Auth-mail plus OIDC/SAML enrollment suites cover both links and delivery failures. |
+| `src/cloudflare/stage0/contracts.ts` | Retain explicit request capabilities and safe snapshots. Domain action/scope exports deliberately expose canonical domain types through this backend contract. Removed unused caller-supplied requestDigest and unsupported password-reset mail kind; neither represented implemented authority or capability. Receipt digests remain server-derived. | Full type checking migrates every caller; organization receipt tests explicitly inject an unsupported digest and still reject changed content. Mail tests still reject unsupported runtime kinds. |
+| `src/cloudflare/stage0/errors.ts` | Retain closed error/status vocabulary, including runtime refusal of unknown codes. Never use arbitrary provider messages as public error codes. | Error and HTTP response tests plus adapter failure tests. |
+| `src/cloudflare/stage0/http/response.ts` | Retain private header enforcement and bodyless response handling. Apply headers in place at composition to preserve independent cookies. | HTTP response and backend tests cover policy override resistance, bodyless responses and Set-Cookie preservation. |
+
+Remaining source coverage must be checked against the actual file inventory, not
+inferred from these group names. Application/UI and tooling/configuration/SQL
+reviews and final integration evidence remain open.

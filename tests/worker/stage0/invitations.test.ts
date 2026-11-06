@@ -8,7 +8,7 @@ let f: Awaited<ReturnType<typeof databaseFixture>>
 let owner: Principal, admin: Principal, recipient: Principal
 const admission = { ip:'127.0.0.1', budgetKey:new Uint8Array(32).fill(19) }
 const grants: Grant[] = [{action:'program.read',scope:{kind:'program_location',programId:'a1',locationId:'ax'}}]
-function command(principal=owner,key='invitation-command-0001'): CommandContext { return {...f.ctx,principal,idempotencyKey:key,requestDigest:'0'.repeat(64)} }
+function command(principal=owner,key='invitation-command-0001'): CommandContext { return {...f.ctx,principal,idempotencyKey:key} }
 async function create(email='new@example.test',principal=owner,key='invitation-command-0001',offered=grants,preset:'admin'|'coordinator'='coordinator') {
   return createStaffInvitation(command(principal,key),{organizationId:'org-a',email,preset,grants:offered},admission)
 }

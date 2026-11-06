@@ -488,3 +488,20 @@ active, including final source-wide, browser and exact-head CI evidence.
 - Server fixture coverage does not prove shipped Electron auth or live browser/
   provider flows. Remaining application/UI, tooling/configuration and final runtime
   evidence still apply. No CI settings or runner changes were made.
+
+### Composition/configuration and contract review
+
+- Reviewed backend composition, hosted configuration, mail/contact helpers,
+  shared capability contracts and safe response/error foundations.
+- Removed the unused caller requestDigest field from CommandContext and migrated
+  all callers. Receipt derivation remains exclusively in commands.ts. The replay
+  test still deliberately injects a runtime digest and rejects changed content.
+- Removed unsupported password_reset from the advertised AuthEmail kind union;
+  runtime rejection coverage remains intact. This does not enable password auth.
+- Full verification passed: 730 tests in 61 files, type checks, lint and 15
+  architecture tests. No CI/runner changes made.
+- Current source-to-ledger comparison leaves 12 backend files without explicit
+  rows: public Worker/releases/download-email; admission budgets/limits; OIDC
+  cookies; domain access/base64url/input; HTTP body/cookies/input. Earlier migration
+  notes exist for several, but must be reconciled with current source before
+  claiming complete backend review. Other source areas and final evidence remain.

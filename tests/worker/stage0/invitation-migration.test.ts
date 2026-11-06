@@ -7,7 +7,7 @@ import { createOrganization, updateOrganization } from '../../../src/cloudflare/
 it('preserves populated sessions, receipts and audit through the invitation migration',async()=>{
   const f=await databaseFixture(9)
   const issued=await issueSession(f.ctx,{accountId:'d',method:'passkey'},'browser')
-  const command={...f.ctx,principal:issued.principal,idempotencyKey:'migration-invitation-0001',requestDigest:'0'.repeat(64)}
+  const command={...f.ctx,principal:issued.principal,idempotencyKey:'migration-invitation-0001'}
   const input={name:'Before migration',contactEmail:'contact@example.test',timeZone:'UTC',firstProgram:'Program',firstLocation:'Location'}
   const created=await createOrganization(command,input)
   const receipts=(await f.execute('SELECT * FROM command_receipts ORDER BY id').all()).results

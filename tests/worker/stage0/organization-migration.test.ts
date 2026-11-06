@@ -19,7 +19,7 @@ it('upgrades populated organization/audit/session tables without inventing conta
   await expect(f.execute("DELETE FROM organizations WHERE id='org-a'").run()).rejects.toThrow('organization_retention_required')
   await expect(f.execute("UPDATE organizations SET created_at=2 WHERE id='org-a'").run()).rejects.toThrow('organization_identity_immutable')
   const creator=(await issueSession(f.ctx,{accountId:'d',method:'passkey'},'browser')).principal
-  const org=await createOrganization({...f.ctx,principal:creator,idempotencyKey:'migration-command-0001',requestDigest:'0'.repeat(64)},{name:'New',contactEmail:'new@example.test',timeZone:'UTC',firstProgram:'Program',firstLocation:'Location'})
+  const org=await createOrganization({...f.ctx,principal:creator,idempotencyKey:'migration-command-0001'},{name:'New',contactEmail:'new@example.test',timeZone:'UTC',firstProgram:'Program',firstLocation:'Location'})
   expect(org.contactEmail).toBe('new@example.test')
   await expect(f.execute('UPDATE command_receipts SET result=?','{}').run()).rejects.toThrow('command_receipt_immutable')
   await expect(f.execute('DELETE FROM command_receipts').run()).rejects.toThrow('command_receipt_immutable')

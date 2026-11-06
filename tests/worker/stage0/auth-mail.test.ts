@@ -170,7 +170,7 @@ describe('authentication mail binding', () => {
     }
     f.ctx.mailer = createAuthMailer(f.ctx.config, t.binding)
     const owner = (await issueSession(f.ctx, { accountId: 'a', method: 'passkey' }, 'browser')).principal
-    const invite = await createStaffInvitation({ ...f.ctx, principal: owner, idempotencyKey: 'mail-integration-0001', requestDigest: '0'.repeat(64) }, {
+    const invite = await createStaffInvitation({ ...f.ctx, principal: owner, idempotencyKey: 'mail-integration-0001' }, {
       organizationId: 'org-a', email: 'new@example.test', preset: 'coordinator', grants: [{ action: 'program.read', scope: { kind: 'program_location', programId: 'a1' } }],
     }, { ip: '127.0.0.1', budgetKey: new Uint8Array(32).fill(19) })
     expect(await getStaffInvitation(f.ctx, owner, 'org-a', invite.id)).toMatchObject({ state: 'pending', delivery: fail ? 'failed' : 'accepted' })

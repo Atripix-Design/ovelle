@@ -8,7 +8,7 @@ import { getLocation, listLocations, getProgram } from '../../../src/cloudflare/
 let f: Awaited<ReturnType<typeof databaseFixture>>
 let owner: Principal, scoped: Principal
 function command(principal = owner, key = 'structure-command-0001'): CommandContext {
-  return { ...f.ctx, principal, idempotencyKey:key, requestDigest:'0'.repeat(64) }
+  return { ...f.ctx, principal, idempotencyKey:key }
 }
 beforeEach(async () => {
   f = await databaseFixture()

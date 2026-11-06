@@ -41,7 +41,7 @@ export async function handleStaffInvitationRequest(ctx:RequestContext,request:Re
     const fields=matched.kind==='accept'?['token']:matched.kind==='list'?['email','preset','grants']:['expectedVersion']
     const parsed=exactObject(await boundedJsonBody(request,16_384),fields,true)
     if(matched.kind==='accept'&&typeof parsed.token!=='string')throw new Stage0Error('invalid_input')
-    const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
+    const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??''}
     const admission={ip:deps.trustedIp,budgetKey:deps.budgetKey}
     if(matched.kind==='accept')return authResponse(ctx,await acceptStaffInvitation(command,{token:parsed.token as string},admission))
     if(matched.kind==='list')return authResponse(ctx,await createStaffInvitation(command,{organizationId:matched.organizationId,email:parsed.email as string,preset:parsed.preset as 'admin'|'coordinator',grants:grants(parsed.grants)},admission),201)

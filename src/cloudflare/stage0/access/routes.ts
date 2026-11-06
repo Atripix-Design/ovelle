@@ -59,7 +59,7 @@ export async function handleOrganizationRequest(ctx:RequestContext,request:Reque
   }
   const fields=matched.kind==='create'?['name','contactEmail','timeZone','firstProgram','firstLocation']:matched.kind==='organization'?['name','contactEmail','timeZone','expectedVersion']:request.method==='POST'?['name']:['name','expectedVersion','archived']
   const parsed=exactObject(await boundedJsonBody(request,16_384),fields,request.method==='POST'||matched.kind==='organization')
-  const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
+  const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??''}
   const settings={name:parsed.name as string,contactEmail:parsed.contactEmail as string,timeZone:parsed.timeZone as string}
   if(matched.kind==='create')return authResponse(ctx,await createOrganization(command,{...settings,firstProgram:parsed.firstProgram as string,firstLocation:parsed.firstLocation as string}),201)
   if(matched.kind==='organization')return authResponse(ctx,await updateOrganization(command,{...settings,organizationId:matched.organizationId,expectedVersion:parsed.expectedVersion as number}))

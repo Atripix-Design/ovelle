@@ -4,7 +4,7 @@ import {issueSession,revokeSession} from '../../../src/cloudflare/stage0/auth/se
 import {requestOwnershipTransfer,acceptOwnershipTransfer,revokeOwnershipTransfer,getOwnershipTransfer} from '../../../src/cloudflare/stage0/staff/ownership'
 import type {CommandContext,Principal} from '../../../src/cloudflare/stage0/contracts'
 let f:Awaited<ReturnType<typeof databaseFixture>>,owner:Principal,target:Principal,other:Principal
-const cmd=(principal=owner,key='ownership-command-0001'):CommandContext=>({...f.ctx,principal,idempotencyKey:key,requestDigest:''})
+const cmd=(principal=owner,key='ownership-command-0001'):CommandContext=>({...f.ctx,principal,idempotencyKey:key})
 const input=()=>({organizationId:'org-a',targetMembershipId:'mc-a',expectedOwnerVersion:1,expectedTargetVersion:1})
 async function request(){return requestOwnershipTransfer(cmd(),input())}
 beforeEach(async()=>{

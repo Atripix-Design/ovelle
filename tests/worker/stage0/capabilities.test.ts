@@ -74,7 +74,7 @@ it('cannot use a previously returned or edited capability as authority after rev
  await grant('md-a','org-a','program.manage','a1');const snapshot=await getAdvisoryCapabilities(f.ctx,coordinator,'org-a')
  expect(snapshot.capabilities).toContainEqual({action:'program.manage',scope:{kind:'program_location',programId:'a1'}})
  await f.execute("DELETE FROM membership_grants WHERE membership_id='md-a'").run()
- await expect(saveProgram({...f.ctx,principal:{...coordinator,...snapshot},idempotencyKey:'cached-capability-command-001',requestDigest:'0'.repeat(64)},{organizationId:'org-a',id:'a1',name:'Forbidden',expectedVersion:1})).rejects.toMatchObject({code:'forbidden'})
+ await expect(saveProgram({...f.ctx,principal:{...coordinator,...snapshot},idempotencyKey:'cached-capability-command-001'},{organizationId:'org-a',id:'a1',name:'Forbidden',expectedVersion:1})).rejects.toMatchObject({code:'forbidden'})
  expect(await f.execute("SELECT name FROM programs WHERE id='a1'").first('name')).toBe('A1')
 })
 it('keeps one snapshot query inside documented D1 size/parameter limits and deduplicates identical candidates',async()=>{

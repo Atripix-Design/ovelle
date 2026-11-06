@@ -10,7 +10,7 @@ let f: Awaited<ReturnType<typeof databaseFixture>>
 let creator: Principal
 const input = { name: 'Community group', contactEmail: 'Contact@example.test', timeZone: 'America/New_York', firstProgram: 'Food support', firstLocation: 'Town center' }
 function command(principal = creator, key = 'organization-command-0001'): CommandContext {
-  return { ...f.ctx, principal, idempotencyKey: key, requestDigest: '0'.repeat(64) }
+  return { ...f.ctx, principal, idempotencyKey: key }
 }
 beforeEach(async () => {
   f = await databaseFixture()
@@ -29,10 +29,12 @@ it('creates one complete organization and returns its recorded identity without 
   expect(await f.execute("SELECT count(*) AS n FROM audit_events WHERE action='organization.create' AND organization_id=?", org.id).first('n')).toBe(1)
 })
 it('replays identical and concurrent retries once, rejects changed content even with the same supplied digest', async () => {
-  const outcomes = await Promise.all([createOrganization(command(), input), createOrganization(command(), input)])
+  // Unsupported runtime fields cannot override the server-derived receipt digest.
+  const injected = { ...command(), requestDigest: '0'.repeat(64) }
+  const outcomes = await Promise.all([createOrganization(injected, input), createOrganization(injected, input)])
   expect(outcomes[1]).toEqual(outcomes[0])
-  expect(await createOrganization(command(), { ...input, name: ' Community group ' })).toEqual(outcomes[0])
-  await expect(createOrganization(command(), { ...input, name: 'Changed' })).rejects.toMatchObject({ code: 'conflict' })
+  expect(await createOrganization(injected, { ...input, name: ' Community group ' })).toEqual(outcomes[0])
+  await expect(createOrganization(injected, { ...input, name: 'Changed' })).rejects.toMatchObject({ code: 'conflict' })
   expect(await f.execute("SELECT count(*) AS n FROM organizations WHERE created_by_account_id='d'").first('n')).toBe(1)
   expect(await f.execute("SELECT count(*) AS n FROM command_receipts WHERE actor_account_id='d'").first('n')).toBe(1)
 })

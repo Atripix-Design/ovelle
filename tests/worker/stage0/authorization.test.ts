@@ -10,7 +10,7 @@ import { passkeyFixture } from './passkey-fixture'
 let f: Awaited<ReturnType<typeof databaseFixture>>
 let a: Principal, c: Principal, d: Principal
 function renameProgram(ctx: RequestContext, principal: Principal, organizationId: string, programId: string, input: { name: string; expectedVersion: number; locationId?: string }) {
-  return saveProgram({ ...ctx, principal, idempotencyKey:`authorization-command-${ctx.ids.next()}`, requestDigest:'0'.repeat(64) },
+  return saveProgram({ ...ctx, principal, idempotencyKey:`authorization-command-${ctx.ids.next()}` },
     { organizationId, id:programId, name:input.name, expectedVersion:input.expectedVersion })
 }
 beforeEach(async () => {
