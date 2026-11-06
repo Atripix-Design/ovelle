@@ -171,3 +171,22 @@ is browser-local, lasts 15 minutes and rejects future timestamps; an in-flight
 request is shared within the loaded module, times out after five seconds and does
 not update unmounted subscribers. Complete application verification must exercise
 cache expiry/failure and consumer loading behavior, not infer them from this read.
+
+## Browser fixture transport tooling
+
+| Source | Responsibility and review decision | Behavior evidence |
+| --- | --- | --- |
+| `scripts/stage0-browser-harness.mjs` | Retain ephemeral certificate/workerd/D1/browser setup and cleanup as one fixture lifecycle. TLS captures real browser metadata before Node fetch can rewrite it. Fixed fixture origins, CONNECT routing, browser route blocking and denied Worker outbound requests bound the experiment. Provider URLs resolve to loopback fixtures, not real services. Cleanup settles all owned resources and removes temporary keys. | OIDC/SAML browser runs plus proxy tests; WebKit host prerequisites remain unmet. |
+| `scripts/stage0-browser-proxy.mjs` | Retain exact-authority CONNECT routing to a single loopback listener, byte forwarding and tracked-socket cleanup. Deny plain HTTP and unlisted authorities; neither requested hostname nor port selects an arbitrary upstream. Closing is repeat-safe and destroys active tunnels. | `stage0-browser-proxy.test.mjs`: exact/foreign authorities, byte preservation, active-tunnel shutdown and refusal after close. |
+
+On 2026-11-06, the current source passed Chromium passkey fixture verification
+with a CDP virtual authenticator and zero external Worker requests. OIDC passed
+Chromium 156.0.8078.4 and Firefox 157.0 with actual cross-site GET navigation,
+Lax binding and negative controls. SAML passed Chromium cross-site POST binding
+and enrollment controls. Full OIDC/SAML commands exited nonzero at WebKit launch:
+missing `libevent-2.1-7t64` and `libavif16`. No browser matrix completion claim.
+These checks do not prove physical authenticators, real IdPs/mail, public TLS or
+production readiness; source hashes are emitted by each verifier.
+
+SAML Firefox 157.0 was also verified in a separate successful run after the
+matrix interruption. WebKit remains unverified for the missing-library reason.

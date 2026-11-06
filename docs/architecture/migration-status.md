@@ -521,3 +521,22 @@ active, including final source-wide, browser and exact-head CI evidence.
   needs application-level verification. Details are in review-coverage.md.
 - UI cycles, broader tooling/configuration/SQL review and final runtime/CI evidence
   remain outstanding. No CI/runner or provider settings were changed.
+
+### Figma recheck and browser integration evidence
+
+- Rechecked Figma design context for manifest node 165:5351 with screenshot
+  requested. The service still returns Starter-plan MCP quota exhaustion. Session:
+  1ee7aad9-baff-4247-97d9-986e843fedb8. Required component context/screenshots remain
+  unavailable, so no component implementation was changed in this tranche.
+- Reviewed shared browser fixture harness/proxy responsibilities. Proxy contract
+  test passed. Real Chromium passkey verification passed using a virtual CTAP2
+  authenticator; OIDC passed Chromium and Firefox; SAML Chromium passed.
+- Full OIDC/SAML commands terminated at WebKit launch due to missing host libraries
+  libevent-2.1-7t64 and libavif16. The matrix is incomplete, not green. No runner,
+  host dependency, CI configuration or provider change was made.
+- Evidence uses loopback HTTPS, workerd and ephemeral D1 with fixture providers;
+  no real IdP/mail or production claims. Application/UI work remains pending its
+  source requirements; independent tooling/configuration review can continue.
+
+SAML Firefox 157.0 was also verified in a separate successful run after the
+matrix interruption. WebKit remains unverified for the missing-library reason.
