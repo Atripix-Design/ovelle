@@ -25,4 +25,3 @@ export async function deriveAuthBudgets(input: AuthBudgetSelectors, keyMaterial:
   return purpose === 'email' ? Promise.all([digest('email_address', [address]), digest('email_ip', [ip])])
     : Promise.all([digest('challenge_pair', [address, ip]), digest('challenge_ip', [ip])])
 }
-
