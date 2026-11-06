@@ -1,3 +1,4 @@
+import { encodeBase64Url as encode } from '../domain/base64url'
 import type {Principal,RequestContext} from '../contracts'
 import {auditStatement,guardedBatch} from '../db'
 import {Stage0Error} from '../errors'
@@ -10,7 +11,6 @@ export interface DesktopRequestInput {state:string;challenge:string;callbackUri:
 export interface DesktopApprovalInput {requestId:string;state:string;confirmation:true}
 export interface DesktopExchangeInput {requestId:string;state:string;code:string;verifier:string;callbackUri:string}
 interface HandoffRow {id:string;session_id:string;account_id:string;approved_at:number;code_expires_at:number;expires_at:number}
-const encode=(bytes:Uint8Array)=>btoa(String.fromCharCode(...bytes)).replaceAll('+','-').replaceAll('/','_').replaceAll('=','')
 async function challenge(verifier:string):Promise<string>{return encode(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier))))}
 function secret(value:unknown):asserts value is string {if(typeof value!=='string'||!secretPattern.test(value))throw new Stage0Error('invalid_input')}
 function identifier(value:unknown):asserts value is string {if(typeof value!=='string'||!value||value.length>256||/\p{Cc}/u.test(value))throw new Stage0Error('invalid_input')}

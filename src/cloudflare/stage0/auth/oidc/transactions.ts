@@ -3,6 +3,8 @@ import type { Stage0Config } from '../../config'
 import type { Principal, RequestContext } from '../../contracts'
 import { guardedBatch } from '../../db'
 import { Stage0Error } from '../../errors'
+import { randomSecret, secretDigest as digest, secretPattern } from '../secrets'
+import { encodeBase64Url as encode } from '../../domain/base64url'
 import { consumeOidcStartBudget } from '../limits'
 import { issueSession, principalFromRow, type IssuedSession, type SessionRow } from '../sessions'
 import { assertOidcLinkPrincipal, linkOidcIdentity, oidcLinkGuard, resolveOidcLogin, type IdentitySnapshot } from './identities'
@@ -13,11 +15,6 @@ import { beginOidcEnrollment } from './enrollment'
 interface Start { purpose: OidcSecrets['purpose']; principal?: Principal; ip: string }
 interface Transaction { purpose: OidcSecrets['purpose']; created_at: number; account_id: string | null; session_id: string | null }
 type Completion = { kind: 'recovery'; session: IssuedSession } | { kind: 'signed_in'; session: IssuedSession } | { kind: 'linked'; identity: IdentitySnapshot } | { kind: 'enrollment'; token: string }
-const secretPattern = /^[A-Za-z0-9_-]{43}$/
-const encode = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
-async function digest(value: string): Promise<string> {
-  return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))), byte => byte.toString(16).padStart(2, '0')).join('')
-}
 async function transactionSecrets(ctx: RequestContext, settings: OidcSettings, state: string, binding: string, purpose: OidcSecrets['purpose'], createdAt: number): Promise<OidcSecrets> {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(binding), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
   const derive = async (kind: string) => encode(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(JSON.stringify([
@@ -41,7 +38,7 @@ export async function startOidcTransaction(ctx: RequestContext, settings: OidcSe
   if (admission) await admission()
   const now = ctx.clock.now()
   const state = newOidcSecrets(ctx, start.purpose).state
-  const browserBinding = encode(crypto.getRandomValues(new Uint8Array(32)))
+  const browserBinding = randomSecret()
   const secrets = await transactionSecrets(ctx, settings, state, browserBinding, start.purpose, now)
   const authorizationUrl = (await createOidcAuthorization(ctx, settings, secrets, fetcher)).href
   const guard = start.principal ? oidcLinkGuard(start.principal, ctx.clock.now()) : { sql: '1', values: [] }

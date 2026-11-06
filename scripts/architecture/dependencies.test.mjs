@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { analyze, dependencies, resolveLocal } from './dependencies.mjs'
@@ -54,4 +55,20 @@ test('a domain carve-out has its own owner and cannot import I/O or its parent b
   assert.throws(() => analyze({ 'backend/orphan.ts': '' }, { zones: [
     { id: 'backend', roots: ['backend'], excludes: ['backend/orphan.ts'], allowed: [] },
   ] }), /expected one architecture owner/)
+})
+
+
+test('the repository service boundary rejects route and composition back-imports', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  const findings = analyze({
+    'src/cloudflare/stage0/auth/accounts.ts': "import './routes'; import '../backend'",
+    'src/cloudflare/stage0/auth/routes.ts': '',
+    'src/cloudflare/stage0/backend.ts': '',
+  }, contract)
+  assert.deepEqual(findings.map(v => v.rule), ['dependency-direction', 'dependency-direction'])
+  assert.deepEqual(analyze({
+    'src/cloudflare/stage0/auth/routes.ts': "import './accounts'; import '../http/response'",
+    'src/cloudflare/stage0/auth/accounts.ts': '',
+    'src/cloudflare/stage0/http/response.ts': '',
+  }, contract), [])
 })

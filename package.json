@@ -34,7 +34,8 @@
     "benchmark:stage0-password": "node --experimental-strip-types scripts/benchmark-stage0-password.ts",
     "check:stage0": "tsc -p tsconfig.stage0.json",
     "check:architecture": "node scripts/architecture/check.mjs",
-    "test:architecture": "node --test scripts/architecture/*.test.mjs"
+    "test:architecture": "node --test scripts/architecture/*.test.mjs",
+    "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",

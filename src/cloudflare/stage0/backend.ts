@@ -3,6 +3,8 @@ import type { CustomFetch } from 'openid-client'
 import { loadStage0Config } from './config'
 import type { Clock, Ids, Principal, RequestContext } from './contracts'
 import { Stage0Error } from './errors'
+import { secretPattern } from './auth/secrets'
+import { encodeBase64Url } from './domain/base64url'
 import { handleOrganizationRequest } from './access/routes'
 import { handleStaffAccessRequest } from './staff/access-routes'
 import { handleStaffInvitationRequest } from './staff/routes'
@@ -14,7 +16,7 @@ import { handlePasskeyRequest } from './auth/passkeys/routes'
 import { handleRecoveryCodeRequest, handleRecoveryRequest } from './auth/recovery-routes'
 import { handleDesktopAuthRequest } from './auth/desktop-routes'
 import { handleSessionRequest } from './auth/routes'
-import { authResponse } from './auth/web'
+import { authResponse, applyPrivateResponseHeaders } from './http/response'
 
 export interface Stage0BackendResources {
   db: D1Database
@@ -56,9 +58,9 @@ function route(path: string, transport: Principal['transport']): Kind | null {
 
 function admissionKey(input: unknown): Uint8Array {
   try {
-    if (typeof input !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(input)) throw new Error()
+    if (typeof input !== 'string' || !secretPattern.test(input)) throw new Error()
     const bytes = Uint8Array.from(atob(input.replaceAll('-', '+').replaceAll('_', '/')+'='), value => value.charCodeAt(0))
-    const canonical = btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
+    const canonical = encodeBase64Url(bytes)
     if (bytes.length !== 32 || canonical !== input) throw new Error()
     return bytes
   } catch { throw new Stage0Error('configuration') }
@@ -114,11 +116,7 @@ export function createStage0Backend(bindings: Record<string, unknown>, resources
     }
     // Preserve every Set-Cookie from the responsible adapter. Standardize policy
     // in place; rebuilding a header record can fold independent flow cookies.
-    response.headers.set('Cache-Control', 'no-store')
-    response.headers.set('Referrer-Policy', 'no-referrer')
-    response.headers.set('X-Content-Type-Options', 'nosniff')
-    response.headers.set('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'")
-    response.headers.set('X-Request-ID', ctx.requestId)
+    applyPrivateResponseHeaders(response.headers, ctx.requestId)
     return response
   }
   const backend: Stage0Backend = {

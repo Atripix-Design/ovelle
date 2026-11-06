@@ -18,6 +18,7 @@ function expectPrivate(response: Response) {
   expect(response.headers.get('Cache-Control')).toBe('no-store')
   expect(response.headers.get('Referrer-Policy')).toBe('no-referrer')
   expect(response.headers.get('X-Content-Type-Options')).toBe('nosniff')
+  expect(response.headers.get('Content-Security-Policy')).toBe("default-src 'none'; frame-ancestors 'none'")
   expect(response.headers.get('Access-Control-Allow-Origin')).toBeNull()
 }
 

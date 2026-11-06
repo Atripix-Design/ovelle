@@ -185,6 +185,7 @@ test('required typecheck job enforces architecture and exercises its negative fi
   assert.ok(pkg.scripts.check.startsWith('npm run check:architecture && '))
   assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run check'))
   assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:architecture'))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:browser-tooling'))
   assert.ok(jobs.deploy.needs.includes('typecheck'))
   assert.ok(!jobs.typecheck['continue-on-error'])
 })

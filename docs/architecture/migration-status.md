@@ -52,8 +52,9 @@ requirements for changed components.
 
 ## Tooling
 
-Three dynamic-provider imports are exact exceptions. Review their portability and
-capability contract rather than deleting configuration support blindly. Audit all
+The original three dynamic-provider imports have been consolidated into the
+validated installed-tool capability documented in `browser-tooling.md`. One exact
+dynamic-import exception remains deliberate; its tests run in self-hosted CI. Audit all
 verification, packaging, deployment and browser scripts for shared policy, error
 semantics and misleading evidence. Preserve self-hosted isolation and provider
 permissions. Extend checks to new aliases/import patterns with negative fixtures.
@@ -118,3 +119,33 @@ Domain-tranche local validation passed: all workspace/Worker/Stage 0 type checks
 workspace lint, eight architecture tests, thirteen CI-policy tests and the full
 Stage 0 suite (53 files, 683 tests). The architecture check reports eight unchanged
 UI/tooling migration exceptions. This is local evidence only.
+
+## HTTP, secret representation and tooling tranche
+
+- `http/response.ts` now owns private response headers for both adapters and the
+  composition boundary. Policy is applied in place, preserving separate flow and
+  session cookies. The direct internal session handler now emits the same CSP as
+  other adapters and composed responses; this is an intentional consistency fix.
+- `http/body.ts` owns bounded UTF-8 JSON stream decoding. Provider verification no
+  longer imports the browser transport helper just to decode JSON.
+- Current route adapters/browser helpers and backend composition have separate
+  architecture zones. Backend services cannot import them. HTTP foundations cannot
+  import backend services. A negative fixture exercises the actual repository map.
+- `domain/base64url.ts` owns byte encoding; `auth/secrets.ts` owns random secret
+  generation, format and stored hex digest. Sessions, OIDC transactions, desktop
+  PKCE, passkey encoding and admission-key canonicalization reuse these owners.
+  Domain-separated HMAC inputs remain protocol-owned: notably the existing raw
+  session-CSRF string is unchanged, and is checked against an independent vector.
+- Browser verification and recording use `scripts/browser-tooling.mjs`. Overrides
+  must resolve to installed `file:` modules and expose the requested interface.
+  Remote/inline/native module specifiers are rejected. Missing or malformed
+  providers fail explicitly. Default installed Playwright was launched and used
+  for a real local button interaction; the installed recording driver also loaded.
+- Local verification passed: all type checks; nine architecture tests; three
+  tooling-provider tests; workspace lint; thirteen CI tests; and 689 backend tests
+  across 55 files. The gate scans 191 code files and reports five UI cycle findings
+  plus one deliberate tooling capability exception. No UI implementation changed.
+
+Still outstanding: Figma-dependent UI cycles and variant/consumer evidence; full
+application/native and feature/persistence ownership review; non-JS/TS artifacts;
+final build/browser checks; and successful CI on the final published source.

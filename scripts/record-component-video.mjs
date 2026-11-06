@@ -2,8 +2,8 @@
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { homedir } from 'node:os';
-const { createInteractionDriver } = await import(process.env.OVELLE_VIDEO_INTERACTIONS_MODULE ?? resolve(homedir(), '.codex/skills/video-creator/scripts/recording-interactions.mjs'));
+import { loadInteractionDriver } from './browser-tooling.mjs';
+const createInteractionDriver = await loadInteractionDriver();
 const args=process.argv.slice(2), arg=(key,fallback)=>args.includes(key)?args[args.indexOf(key)+1]:fallback;
 const chapters=arg('--chapters','0,1,2,3,4,5,6,7,8,9,10,11,12').split(',').map(Number), out=resolve(arg('--output','/tmp/ovelle-video'));
 const appearancesOnly=args.includes('--appearance-only');

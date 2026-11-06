@@ -41,26 +41,10 @@
   },
   {
     "rule": "dynamic-import",
-    "from": "scripts/check-content-components.mjs",
-    "target": "line:7",
-    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
-    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
-    "tracking": "docs/architecture/migration-status.md#tooling"
-  },
-  {
-    "rule": "dynamic-import",
-    "from": "scripts/check-figma-fidelity.mjs",
-    "target": "line:6",
-    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
-    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
-    "tracking": "docs/architecture/migration-status.md#tooling"
-  },
-  {
-    "rule": "dynamic-import",
-    "from": "scripts/record-component-video.mjs",
-    "target": "line:6",
-    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
-    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
-    "tracking": "docs/architecture/migration-status.md#tooling"
+    "from": "scripts/browser-tooling.mjs",
+    "target": "line:13",
+    "reason": "Deliberate operator-selected local tooling capability; rejects non-file module URLs and validates the requested exported interface. Replaces three unvalidated call sites. This is not application runtime loading.",
+    "removal": "Remove only if external installed browser/recording providers are retired; changes to this capability require its contract tests and source review.",
+    "tracking": "docs/architecture/browser-tooling.md"
   }
 ]

@@ -1,6 +1,6 @@
 import type { RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
-import { boundedJsonBody } from './web'
+import { boundedJsonBody } from '../http/body'
 
 type Fetch = (url: string, init: RequestInit) => Promise<Response>
 /** No fixture bypass. Tests replace only this network dependency. The caller

@@ -30,4 +30,4 @@ for (const exception of exceptions) {
 }
 errors.push(...[...remaining.values()].map(item => `${item.rule}: ${item.from} -> ${item.target}`))
 if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1 }
-console.log(`Architecture: ${Object.keys(sources).filter(isCode).length} code files, ${findings.length} findings, ${exceptions.length} explicit migration exceptions, ${errors.length} errors.`)
+console.log(`Architecture: ${Object.keys(sources).filter(isCode).length} code files, ${findings.length} findings, ${exceptions.length} explicit exceptions, ${errors.length} errors.`)

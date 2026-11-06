@@ -1,6 +1,8 @@
 import type { Principal, RequestContext } from '../contracts'
 import { auditStatement, guardedBatch, type SqlValue } from '../db'
 import { Stage0Error } from '../errors'
+import { randomSecret as secret, secretDigest as digest, secretPattern } from './secrets'
+import { encodeBase64Url } from '../domain/base64url'
 
 type Transport = Principal['transport']
 type Method = Principal['method']
@@ -15,10 +17,6 @@ export interface IssuedSession { token: string; csrfToken: string | null; princi
  * This is not proof verification, and must never receive a deserialized request body.
  */
 export interface VerifiedAuthentication { accountId: string; method: Method; externalIdentityId?: string; identityVersion?: number; connectionVersion?: number }
-const secretPattern = /^[A-Za-z0-9_-]{43}$/
-function secret(): string {
-  return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
-}
 /** A domain-separated pseudorandom CSRF secret lets the server bootstrap the
  * same value after a reload using the HttpOnly cookie, without storing plaintext
  * secrets or rotating other tabs out of their sessions. It cannot recover the
@@ -28,10 +26,7 @@ export async function sessionCsrfSecret(token: string): Promise<string> {
   if (!secretPattern.test(token)) throw new Stage0Error('unauthenticated')
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(token), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
   const bytes = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode('ovelle:browser-csrf:v1')))
-  return btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
-}
-async function digest(value: string): Promise<string> {
-  return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))), byte => byte.toString(16).padStart(2, '0')).join('')
+  return encodeBase64Url(bytes)
 }
 export function principalFromRow(row: SessionRow): Principal {
   return { accountId: row.account_id, sessionId: row.id, transport: row.transport, method: row.method, assurance: row.assurance, connectionId: row.connection_id, connectionVersion: row.connection_version, authenticatedAt: row.authenticated_at, passkeyVerifiedAt: row.passkey_verified_at }

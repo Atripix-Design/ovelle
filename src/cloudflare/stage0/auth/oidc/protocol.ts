@@ -2,6 +2,7 @@ import * as client from 'openid-client'
 import { decodeProtectedHeader } from 'jose'
 import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
+import { secretPattern } from '../secrets'
 
 type Context = Pick<RequestContext, 'config' | 'clock'>
 export type OidcProvider = 'google' | 'microsoft'
@@ -31,7 +32,6 @@ export interface VerifiedOidcIdentity {
   readonly purpose: OidcSecrets['purpose']
 }
 const proofs = new WeakSet<VerifiedOidcIdentity>()
-const secretPattern = /^[A-Za-z0-9_-]{43}$/
 const tenantPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const microsoftTemplate = 'https://login.microsoftonline.com/{tenantid}/v2.0'
 const endpoints = {

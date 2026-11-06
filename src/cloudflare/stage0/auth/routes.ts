@@ -1,16 +1,9 @@
 import type { Principal, RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
+import { authResponse as response } from '../http/response'
 import { getOwnAccount } from './accounts'
 import { authenticateRequest, browserCsrfToken, browserSessionCookie, clearBrowserSessionCookie } from './http'
 import { revokeAllSessions, revokeSession, rotateSession } from './sessions'
-
-function response(ctx: RequestContext, body: unknown, status = 200, extra: Record<string, string> = {}): Response {
-  const headers = {
-    'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer',
-    'X-Content-Type-Options': 'nosniff', 'X-Request-ID': ctx.requestId, ...extra,
-  }
-  return status === 204 ? new Response(null, { status, headers }) : Response.json(body, { status, headers })
-}
 
 /** Internal session HTTP adapter. Deliberately not imported by the public Worker:
  * protocol verification, abuse controls and rollout prerequisites must be ready

@@ -46,9 +46,12 @@ cleanup. Preserve current live-session SQL guards and transactional invariants.
 The `backend-domain` zone owns pure action/scope classification, contact
 normalization and the closed error vocabulary. It cannot import backend
 implementations, external packages, Node or Electron. Backend consumers may use
-that zone. The remaining backend zone is still coarse during migration; it does
-not prove separation of all HTTP transport and D1 access inside Stage 0. Those
-internal boundaries remain part of the full-codebase migration.
+that zone. The `backend-transport` zone owns the current route adapters and browser
+transport helpers. `backend-composition` wires those adapters to resources.
+Backend services cannot import either zone. The `http-foundation` zone provides
+bounded JSON decoding and private response construction without dependencies on
+services or adapters. The remaining backend services still need finer feature and
+persistence review; these boundaries alone do not prove whole-codebase compliance.
 
 ## Function and file review
 
@@ -115,6 +118,9 @@ duplicate entries fail. There is no baseline-update command. Do not add exceptio
 weaken checks or expand allowed dependencies to make a change pass silently.
 Explain the architectural change and keep it inside the user's authorized scope.
 Existing debt remains incomplete migration work even when explicitly excepted.
+A deliberately retained runtime capability must identify its owner, input trust
+boundary, validation and tests; it is not interchangeable with migration debt.
+The installed browser-tooling capability is documented in `browser-tooling.md`.
 
 ## Research basis
 

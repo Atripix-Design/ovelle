@@ -1,7 +1,7 @@
 import { Stage0Error } from '../errors'
+import { encodeBase64Url as encode } from '../domain/base64url'
 
 export const secretPattern = /^[A-Za-z0-9_-]{43}$/
-const encode = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
 export const randomSecret = () => encode(crypto.getRandomValues(new Uint8Array(32)))
 export async function secretDigest(value: string): Promise<string> {
   return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))), byte => byte.toString(16).padStart(2, '0')).join('')

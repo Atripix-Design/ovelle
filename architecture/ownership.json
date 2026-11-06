@@ -79,14 +79,29 @@
         "src/cloudflare"
       ],
       "allowed": [
-        "backend-domain"
+        "backend-domain",
+        "http-foundation"
       ],
       "node": true,
       "electron": false,
       "excludes": [
         "src/cloudflare/stage0/domain",
         "src/cloudflare/stage0/errors.ts",
-        "src/cloudflare/stage0/auth/contact.ts"
+        "src/cloudflare/stage0/auth/contact.ts",
+        "src/cloudflare/stage0/access/routes.ts",
+        "src/cloudflare/stage0/auth/desktop-routes.ts",
+        "src/cloudflare/stage0/auth/http.ts",
+        "src/cloudflare/stage0/auth/oidc/routes.ts",
+        "src/cloudflare/stage0/auth/passkeys/routes.ts",
+        "src/cloudflare/stage0/auth/prelogin.ts",
+        "src/cloudflare/stage0/auth/recovery-routes.ts",
+        "src/cloudflare/stage0/auth/routes.ts",
+        "src/cloudflare/stage0/auth/saml/routes.ts",
+        "src/cloudflare/stage0/auth/web.ts",
+        "src/cloudflare/stage0/staff/access-routes.ts",
+        "src/cloudflare/stage0/staff/routes.ts",
+        "src/cloudflare/stage0/backend.ts",
+        "src/cloudflare/stage0/http"
       ]
     },
     {
@@ -97,7 +112,10 @@
       "allowed": [
         "backend",
         "tooling",
-        "backend-domain"
+        "backend-domain",
+        "http-foundation",
+        "backend-transport",
+        "backend-composition"
       ],
       "node": true,
       "electron": false
@@ -109,7 +127,10 @@
       ],
       "allowed": [
         "backend",
-        "backend-domain"
+        "backend-domain",
+        "http-foundation",
+        "backend-transport",
+        "backend-composition"
       ],
       "node": true,
       "electron": true
@@ -145,6 +166,56 @@
       "node": false,
       "electron": false,
       "external": []
+    },
+    {
+      "id": "http-foundation",
+      "roots": [
+        "src/cloudflare/stage0/http"
+      ],
+      "allowed": [
+        "backend-domain"
+      ],
+      "node": false,
+      "electron": false,
+      "external": []
+    },
+    {
+      "id": "backend-transport",
+      "roots": [
+        "src/cloudflare/stage0/access/routes.ts",
+        "src/cloudflare/stage0/auth/desktop-routes.ts",
+        "src/cloudflare/stage0/auth/http.ts",
+        "src/cloudflare/stage0/auth/oidc/routes.ts",
+        "src/cloudflare/stage0/auth/passkeys/routes.ts",
+        "src/cloudflare/stage0/auth/prelogin.ts",
+        "src/cloudflare/stage0/auth/recovery-routes.ts",
+        "src/cloudflare/stage0/auth/routes.ts",
+        "src/cloudflare/stage0/auth/saml/routes.ts",
+        "src/cloudflare/stage0/auth/web.ts",
+        "src/cloudflare/stage0/staff/access-routes.ts",
+        "src/cloudflare/stage0/staff/routes.ts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-domain",
+        "http-foundation"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "backend-composition",
+      "roots": [
+        "src/cloudflare/stage0/backend.ts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-domain",
+        "http-foundation",
+        "backend-transport"
+      ],
+      "node": false,
+      "electron": false
     }
   ],
   "concepts": [
@@ -187,6 +258,26 @@
     {
       "owner": "src/cloudflare/stage0/errors.ts",
       "reason": "Closed failure vocabulary and safe HTTP status mapping; never arbitrary provider messages."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/response.ts",
+      "reason": "Private-response security headers and bodyless response handling; applied in place to preserve separate cookies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/body.ts",
+      "reason": "Bounded UTF-8 JSON stream decoding for requests and provider responses, without route dependencies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/base64url.ts",
+      "reason": "Canonical unpadded URL-safe byte encoding shared by secret and protocol adapters."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/secrets.ts",
+      "reason": "Random secret generation, format and stored digest; domain-specific MAC inputs remain at their callers."
+    },
+    {
+      "owner": "scripts/browser-tooling.mjs",
+      "reason": "Installed browser and recording provider selection and interface validation for operator-run verification tools."
     }
   ],
   "sourceMappings": [

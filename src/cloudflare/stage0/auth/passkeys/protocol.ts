@@ -6,9 +6,10 @@ import { decodeAttestationObject } from '@simplewebauthn/server/helpers'
 import type { Stage0Config } from '../../config'
 import { Stage0Error } from '../../errors'
 import { secretDigest, secretPattern } from '../secrets'
+import { encodeBase64Url as encodeBytes } from '../../domain/base64url'
 
 const algorithms = [-7, -257] // ES256 and RS256; no runtime-dependent algorithm negotiation.
-export const encodeBytes = (bytes: Uint8Array) => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '')
+export { encodeBase64Url as encodeBytes } from '../../domain/base64url'
 export function decodeBytes(value: string, max: number): Uint8Array<ArrayBuffer> {
   if (typeof value !== 'string' || !value || value.length > max * 4 / 3 + 4 || !/^[A-Za-z0-9_-]+$/.test(value)) throw new Stage0Error('unauthenticated')
   const bytes = Uint8Array.from(atob(value.replaceAll('-', '+').replaceAll('_', '/')), char => char.charCodeAt(0))
