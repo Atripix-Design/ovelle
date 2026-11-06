@@ -26,3 +26,13 @@ it('denies cross-site, unsigned, duplicate, wrong-environment and wrong-csrf req
   const foreign = { ...f.ctx, config: { ...f.ctx.config, environment: 'development' as const, origin: 'https://dev.ovelle.org', rpId: 'dev.ovelle.org' } }
   await expect(verifyPrelogin(foreign, new Request(foreign.config.origin, { method: 'POST', headers: { ...headers, Origin: foreign.config.origin, Cookie: cookie.replace('ovelle_local_prelogin', '__Host-ovelle_prelogin') } }), key)).rejects.toMatchObject({ code: 'forbidden' })
 })
+
+it('accepts the existing cookie and CSRF encoding against independent HMAC vectors', async () => {
+  // Python stdlib HMAC-SHA256 with compact JSON, fixed clock/key/secret.
+  const ctx = { ...f.ctx, clock: { now: () => 1_800_000_000_000 } }
+  const cookie = `ovelle_local_prelogin=1800000000000.${'A'.repeat(43)}.ox6MbkBadaEdcvxciR16ZLomyTC7AyL4OeYPMbhJM7Q`
+  const csrfToken = 'y1VHvQlTIvBGxljfim9GdGHKozhtSO8gwT_efxGbC6M'
+  const request = new Request(ctx.config.origin, { method: 'POST', headers: { Cookie: cookie, Origin: ctx.config.origin, 'X-CSRF-Token': csrfToken } })
+  await expect(verifyPrelogin(ctx, request, key)).resolves.toBeUndefined()
+  expect(await beginPrelogin(ctx, request, key)).toEqual({ cookie: `${cookie}; Path=/; HttpOnly; SameSite=Strict; Max-Age=900`, csrfToken })
+})

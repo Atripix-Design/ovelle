@@ -35,3 +35,15 @@ it.each(['failure', 'hostname', 'action', 'expired', 'future', 'redirect', 'over
 it('rejects oversized or absent input before contacting the service', async () => {
   for (const token of ['', 'x'.repeat(2049)]) await expect(verifyTurnstile(ctx, 'fixture-secret', token, '127.0.0.1', 'oidc_login', async () => { throw new Error('Should not fetch') })).rejects.toMatchObject({ code: 'invalid_input' })
 })
+
+it.each(['oidc_login', 'oidc_link', 'oidc_recovery', 'passkey_login', 'saml_login', 'saml_link'] as const)('accepts only the matching provider action for %s', async action => {
+  await expect(verifyTurnstile(ctx, 'fixture-secret', 'fixture-token', '127.0.0.1', action,
+    async () => Response.json({ ...result(), action }))).resolves.toBeUndefined()
+})
+
+it('rejects unrecognized runtime actions before sending any provider request', async () => {
+  let calls = 0
+  await expect(verifyTurnstile(ctx, 'fixture-secret', 'fixture-token', '127.0.0.1', 'unknown' as never,
+    async () => { calls++; return Response.json(result()) })).rejects.toMatchObject({ code: 'configuration' })
+  expect(calls).toBe(0)
+})

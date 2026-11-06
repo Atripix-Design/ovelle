@@ -340,3 +340,21 @@ verification requirements above are not satisfied by this feature review.
 
 The remaining whole-repository reviews and final evidence requirements still
 apply. No UI, migration, deployment, provider or CI configuration changed here.
+
+## Account/session foundation source review
+
+- Added `review-coverage.md` to record full-source review decisions and concrete
+  behavior evidence, including why accounts, sessions and secret helpers retain
+  their existing coherent responsibilities instead of being split arbitrarily.
+- Pre-login now has one lifetime and one cookie signature definition for issuance
+  and validation. The versioned MAC inputs, cookie expiry and CSRF domain remain
+  unchanged; an independent HMAC vector checks existing-cookie compatibility.
+- Turnstile's closed action tuple now owns compile-time and runtime vocabulary.
+  Tests independently cover all six supported actions and reject an unknown action
+  before a provider request. Existing provider failure/size/time checks remain.
+- These reviews do not imply review completion for federation/recovery/passkey
+  internals, application/UI, tooling or non-JS/TS artifacts. Those remain in scope.
+
+Validation for this review passed: 56 focused tests in six authentication files,
+all repository type checks, workspace lint, fifteen architecture tests and diff
+checks. No provider requests, UI changes, migrations or CI changes were made.
