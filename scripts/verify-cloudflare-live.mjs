@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { assertReleaseSample } from './desktop-release-validation.mjs'
 
 const root = resolve(import.meta.dirname, '..')
 const config = JSON.parse(readFileSync(resolve(root, 'wrangler.jsonc'), 'utf8'))
@@ -25,15 +26,7 @@ if (mode === 'releases') {
         throw new Error(`${environment} release metadata failed: ${filename} (${metadata.status})`)
       }
       const sample = await fetch(url, { headers: { Range: 'bytes=0-1' }, signal: AbortSignal.timeout(15000) })
-      if (sample.status !== 206 || sample.headers.get('content-range') !== `bytes 0-1/${size}` ||
-          sample.headers.get('content-length') !== '2') {
-        await sample.body?.cancel()
-        throw new Error(`${environment} release range failed: ${filename} (${sample.status})`)
-      }
-      const magic = Buffer.from(await sample.arrayBuffer()).toString('ascii')
-      if (magic !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
-        throw new Error(`${environment} invalid release bytes: ${filename}`)
-      }
+      await assertReleaseSample(sample, { filename, size })
     }
   }
   console.log('ovelle public releases verified: development, production')

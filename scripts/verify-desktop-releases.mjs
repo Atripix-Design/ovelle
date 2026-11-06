@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { closeSync, openSync, readFileSync, readSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { verifyRemote } from './ci/verify-network.mjs'
-import { assertPresignedDownload } from './desktop-release-validation.mjs'
+import { assertPresignedDownload, assertReleaseSample } from './desktop-release-validation.mjs'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
 const filenames = [
@@ -53,15 +53,7 @@ for (const environment of environments) {
     })
     await verifyRemote(`${cdnHost} sample ${filename}`, async signal => {
       const cdn = await fetch(cdnUrl, { headers: { Range: 'bytes=0-1' }, signal })
-      const contentRange = cdn.headers.get('content-range')
-      if (cdn.status !== 206 || contentRange !== `bytes 0-1/${size}` ||
-          !cdn.headers.get('content-disposition')?.includes(filename)) {
-        throw new Error(`${cdnHost} download mismatch: ${filename} (${cdn.status})`)
-      }
-      const cdnHeader = Buffer.from(await cdn.arrayBuffer()).toString('ascii')
-      if (cdnHeader !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) {
-        throw new Error(`${cdnHost} served an invalid package header: ${filename}`)
-      }
+      await assertReleaseSample(cdn, { filename, size })
     })
     await verifyRemote(`${environment} download metadata ${filename}`, async signal => {
       const response = await fetch(`${base}/downloads/${filename}`, { method: 'HEAD', signal })

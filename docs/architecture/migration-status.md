@@ -605,3 +605,13 @@ Full Stage 0 verification passed: 733 tests in 61 files, plus workspace/backend
 type checks and 17 architecture tests. Six architecture exceptions remain unchanged.
 No CI, provider or production database changes. Broader SQL/CSS review and the
 previously listed application/UI migration and runtime evidence remain outstanding.
+
+### Shared release-sample verification
+
+Consolidated the two-byte CDN sample contract for three operator commands in
+`scripts/desktop-release-validation.mjs`. Fixed the domain verifier's NaN/missing
+range-total acceptance and bounded sample-body consumption. Added independent
+response fixtures for metadata, status, magic bytes, chunking and cancellation.
+Six validator tests, 17 architecture tests and command syntax checks pass. No live
+provider calls or CI configuration changes were made. Whole-codebase completion
+remains subject to the outstanding application/UI, non-JS/TS and runtime evidence.

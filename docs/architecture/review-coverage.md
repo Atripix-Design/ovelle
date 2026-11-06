@@ -280,3 +280,29 @@ coverage does not establish complete migration or whole-repository compliance.
 Verification: full Stage 0 suite passed (733 tests in 61 files), all workspace
 and backend type checks passed, and 17 architecture tests passed. The current
 architecture scan still reports six explicit exceptions and zero errors.
+
+## Live release verifier sample ownership
+
+- `scripts/desktop-release-validation.mjs` now also owns the two-byte CDN sample
+  contract shared by the domain, Cloudflare release and desktop release verifiers.
+  It requires a safe integer package size of at least one million bytes, HTTP 206,
+  the exact requested range and total, a declared two-byte response, attachment
+  disposition containing the filename, and ZIP/EXE magic bytes. The stream is
+  cancelled on metadata rejection or excess bytes; it is not buffered unboundedly.
+- `scripts/verify-domains-live.mjs` previously compared a parsed range total with
+  the minimum size without rejecting NaN. Missing/malformed totals could pass that
+  comparison. The shared validator now compares the exact range with HEAD size.
+- `scripts/verify-cloudflare-live.mjs` retains separate workers/resources/releases
+  entry modes. Resource inventory, public health/bundle checks and CDN samples
+  provide different evidence; sharing sample validation does not merge those modes
+  or authorize deployment. Its release mode and the desktop verifier now reuse the
+  same validator instead of maintaining separate sample implementations.
+- `scripts/verify-r2-key.mjs` was inspected only. It tests a signed one-byte range
+  request with operator credentials, not the public two-byte CDN contract. Keeping
+  its distinct operation avoids a flags-based abstraction that hides the difference.
+
+Six release-validator tests pass (three existing redirect tests and three sample
+fixture tests), as do all 17 architecture tests and syntax checks for the three
+changed commands. No live verification, signed URL generation, credentials, provider
+mutation or CI configuration changes occurred. Samples do not prove full artifact
+identity, signatures, extraction integrity or runtime behavior.
