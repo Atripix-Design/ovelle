@@ -498,3 +498,39 @@ Fresh local verification passed: 733 Stage 0 tests in 61 files, including popula
 migration, schema, live-authority, session and protocol/service fixtures. The SQL
 responsibility review is recorded for all 16 migrations; final published-state
 verification and the remaining non-SQL migration work are still required.
+
+## Workflow and gallery composition review
+
+| Source | Responsibility / decision | Remaining limitation |
+| --- | --- | --- |
+| `packages/ui/src/workflow.tsx` | Retain example workflow content, shared stage controls, responsive compositions and pinned-scroll lifecycle as presentation. Listeners, animation frames and incoming animations have effect cleanup; outgoing content is inert. HeroStageSheet and HeroWorkflowScene own their dialog lifecycle/focus. | Stage vocabulary/count is repeated across the stage type, list and progress/navigation arithmetic. Derive these from one stage owner when component editing is unblocked. Existing self-barrel imports remain unresolved. |
+| `packages/ui/src/website.tsx` | EmailDownloadLink owns local form validation, in-flight suppression and presentation states while onSend owns delivery. ProgramOverview is explicitly an example composition. DeviceAwareDownloadCTA presents supplied availability and delegates navigation through existing controls. | Release DTO ownership belongs in the coordinated transport/application work rather than defining backend truth in UI. Device detection and callbacks do not validate catalog provenance. |
+| `apps/shared/ComponentPreview.tsx` | Retain gallery selection, material controls, independent fixtures and paired mounted/skeleton compositions. It imports public UI exports and separates website/fidelity/loading/recording fixtures. | Gallery coverage is not product data or live feature completion. No independent skeleton component registry exists. |
+| `apps/shared/FidelityVariants.tsx` | Retain explicit variant/state fixtures as review/test inputs rather than derive their expected cases from component internals. Local dialog state is a demonstration. | Variant inclusion does not by itself prove every interactive state or Figma mapping. |
+| `apps/shared/LoadingPreview.tsx` | Retain arbitrary DOM/mutation fixture for loading masks and mounted input state; use the actual shared LoadingBoundary. | Example chart is fixture content, not a replacement design asset. |
+| `apps/shared/WebsiteSpecimens.tsx`, `apps/shared/WebsiteVariants.tsx` | Retain static specimen/stage/state inputs using public components. Dummy release links and successful callbacks are local illustration fixtures. | Do not merge this fixture availability with the real Home catalog fallback or treat it as storage evidence. |
+| `apps/shared/VideoWalkthrough.tsx` | Retain chapter-based local interactions, simulated dialog outcomes, provider controls and clear simulation labels. | Video/interaction coverage still needs recorder review; no server operation is proved by simulated outcomes. |
+
+`apps/shared/Home.tsx` still duplicates server release metadata and assigns fallback
+availability true without R2 evidence. That is unresolved application ownership work,
+not equivalent to deliberate gallery fixtures. Current code and verified fixtures
+do not satisfy whole-codebase SSoT while that path remains.
+
+### Automated fidelity pass is not visual parity
+
+Fresh runs of `scripts/check-figma-fidelity.mjs` passed in web and the built desktop
+renderer over HTTP: 31 stored source dimensions, 98 SVG hashes, selected geometry,
+typography, keyboard/focus and visible SVG geometry across 12 theme/material/frost
+settings. Outputs are in `/tmp/ovelle-fidelity-web-review` and
+`/tmp/ovelle-fidelity-desktop-review`. These use stored sources, not fresh Figma.
+
+A visual spot-check against the stored hero-sheet reference found a nested mismatch:
+[rendered sheet](evidence/hero-sheet-close-current.png) versus
+[stored source](../design-system/migration/website-2026-10-11/figma-201-6722.png).
+The rendered close surface measures 44×36 with an 8px radius, whereas the stored
+reference shows a circular close surface. The compact-button rule in `base.css`
+overrides the lower-specificity intended sheet surface styling in `website.css`.
+Overall sheet dimension assertions passed without detecting this. Required work:
+retrieve current source, correct the shared composition/variant with that evidence,
+and add an explicit nested geometry assertion. No CSS or component was changed;
+this mismatch remains unresolved and the automated pass is not reported as parity.

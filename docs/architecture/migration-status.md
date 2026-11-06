@@ -691,3 +691,15 @@ No SQL/provider changes. A fresh full Stage 0 run passed 733 tests in 61 files.
 This closes the migration-file responsibility inventory, not all security/remote
 schema evidence or the overall objective. Remaining component/application/gallery,
 CSS, recording and final browser/native/CI work remain active.
+
+### Workflow/gallery review and nested fidelity gap
+
+Recorded workflow, website and six gallery/demo composition responsibilities and
+separated intentional fixtures from Home's unresolved real-catalog fallback.
+Identified repeated workflow stage/count knowledge for the pending structural pass.
+Both browser-rendered consumers pass the existing fidelity command against stored
+sources, but visual inspection found the hero-sheet close surface is 44×36/radius8
+rather than the stored reference's circle. Persisted its current render and CSS
+specificity evidence. This remains an unresolved source-required correction, not a
+visual parity claim. No component/style edits were made; the Figma exception request
+remains pending. Recorder review, broader CSS and final runtime/CI evidence remain.
