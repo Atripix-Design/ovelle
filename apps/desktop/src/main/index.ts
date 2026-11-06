@@ -11,6 +11,11 @@ function createWindow(): void {
     height: 760,
     minWidth: 640,
     minHeight: 480,
+    backgroundColor: '#ffffff',
+    autoHideMenuBar: true,
+    // Keep the native macOS window controls and fullscreen behavior while
+    // letting the renderer provide the area used to move the window.
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden' as const } : {}),
     webPreferences: {
       preload: join(currentDir, '../preload/index.cjs'),
       contextIsolation: true,
