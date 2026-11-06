@@ -279,7 +279,7 @@
     },
     {
       "owner": "packages/ui/tokens.json",
-      "reason": "Design token source; CSS parity requires design-system checks."
+      "reason": "Maintained local semantic colors; sync-design-tokens.mjs derives tokens.css and package checks reject drift. Live Figma parity remains separately verified."
     },
     {
       "owner": "src/cloudflare/download-email.ts",

@@ -345,3 +345,29 @@ revocation and BrowserWindow preference checks also passed. Network responses we
 fixture-controlled; these results do not prove mail delivery, live release metadata
 or the OS sandbox beyond the checked preferences. The virtual display was stopped
 after verification; no runner or provider settings were changed.
+
+## Semantic token generation and CSS entry points
+
+- `packages/ui/tokens.json` is the maintained local semantic-color source.
+  `scripts/sync-design-tokens.mjs` deterministically derives `src/tokens.css` with
+  the existing layer, selectors, hex values and RGB channels. The current stylesheet
+  matches byte-for-byte: no component styles or design references changed.
+- Generation requires explicit `--write`. `--check` compares without writing, and
+  package checks/builds run it with the generator's regression tests. Invalid or
+  missing modes, mismatched theme keys, malformed names/colors and normalized or
+  derived-channel name collisions fail before output is written. The CLI fixture
+  proves stale CSS fails without being overwritten and invalid source preserves
+  the previous output.
+- `packages/ui/src/styles.css` owns font/style inclusion order and final reduced-
+  transparency rules. App Tailwind entries own their source-scan paths and explicit
+  layer order; the renderer's relative path differs because its stylesheet is deeper.
+  App root styles currently repeat base font/canvas declarations; that remains
+  composition styling to review with current design evidence, not a resolved owner.
+- JSON-to-CSS consistency does not synchronize Figma. A fresh design-context request
+  for DeviceAwareDownloadCTA (`165:5351`) still returned the Starter-plan MCP call
+  limit. Component/style refactors remain subject to the required current context.
+
+Verification: four token-generator/CLI tests, all workspace/backend type checks,
+17 architecture tests, shared UI build and 13 shared UI tests passed. The architecture
+scan includes the two new tooling files, with six prior exceptions and zero errors.
+Broader component CSS and generated-artifact review remains incomplete.

@@ -93,6 +93,14 @@ Section labels use content-based width, a 6px tone marker, an 8px internal gap, 
 
 `@ovelle/ui/tokens.json` exports all 25 semantic Figma colors in Light/Dark modes. The stylesheet uses matching `--ov-surface-*`, `--ov-text-*`, `--ov-border-*`, `--ov-action-*` and `--ov-status-*` CSS variables. Semantic colors were resolved directly from the Figma variable collection; spacing, radius and component dimensions are implemented in the component stylesheet.
 
+`tokens.json` is the maintained local color source. `src/tokens.css` is its
+checked-in generated artifact, including derived RGB channels. After an authorized
+token change with the required Figma evidence, run
+`npm run tokens:generate -w @ovelle/ui`. Do not edit the generated CSS separately.
+Package checks and builds run the generator's regression tests and compare its
+output byte-for-byte with the checked-in stylesheet; they never silently rewrite it.
+This local parity check does not synchronize or verify the current Figma variables.
+
 ## States and behavior
 
 Hover, pressed and focus-visible states come from CSS automatically. Native inputs provide keyboard behavior; Select uses a source-matched combobox/listbox with arrow, Home/End, Enter, Escape and type-ahead handling. Checked/selected values can be controlled or uncontrolled. Native `details` drives FAQ; the mobile menu supports controlled or uncontrolled open state. SegmentedControl uses radios, including native arrow-key navigation. ConfirmationDialog uses `showModal()`, providing browser focus containment, Escape handling and restoration; the caller owns its open state. Keep the dialog mounted while toggling `open`.

@@ -636,3 +636,13 @@ valid empty catalog, alongside existing sender/input/failure checks. Desktop bui
 type/lint and 17 architecture tests passed. Release-item DTO ownership/validation
 and the wider application/UI migration remain incomplete; no duplicate DTO schema
 was introduced to bypass that coordinated work.
+
+### Semantic color source of truth
+
+Added deterministic generation and drift enforcement for the existing semantic token
+CSS. Local tokens.json is authoritative; explicit generation derives CSS hex values
+and RGB channels. Existing CSS is unchanged byte-for-byte. Package checks/builds
+run four generator/CLI tests and fail on drift without rewriting files. Workspace
+and backend checks, 17 architecture tests, UI build and 13 UI tests pass. This resolves
+local color duplication maintenance, not live Figma parity or all stylesheet ownership.
+Fresh Figma source retrieval remains quota-blocked; component work is still incomplete.

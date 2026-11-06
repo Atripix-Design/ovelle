@@ -31,8 +31,10 @@
     "**/*.css"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "check": "tsc -p tsconfig.json --noEmit",
+    "build": "npm run tokens:check && tsc -p tsconfig.json",
+    "check": "npm run tokens:check && tsc -p tsconfig.json --noEmit",
+    "tokens:check": "node --test ../../scripts/sync-design-tokens.test.mjs && node ../../scripts/sync-design-tokens.mjs --check",
+    "tokens:generate": "node ../../scripts/sync-design-tokens.mjs --write",
     "lint": "oxlint src",
     "test": "npm run build && node --test test/*.test.mjs"
   },

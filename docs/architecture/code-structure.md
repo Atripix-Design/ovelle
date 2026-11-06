@@ -203,3 +203,10 @@ batches and audit statement construction. `access/policy.ts` consumes that binde
 as a type and owns only live authorization predicates. Receipt coordination uses
 the storage owner directly; it must not import authorization merely for parameter
 assembly. Predicate callbacks remain responsible for their live SQL conditions.
+
+`packages/ui/tokens.json` owns maintained local semantic colors. The deterministic
+`scripts/sync-design-tokens.mjs` renderer derives `packages/ui/src/tokens.css`,
+including RGB channels, without changing the theme selectors or CSS layer. Package
+checks/builds reject drift; only the explicit generation command writes the artifact.
+Generator tests cover independent color conversions and invalid/colliding names.
+This does not establish current Figma parity or permit skipping design-source review.
