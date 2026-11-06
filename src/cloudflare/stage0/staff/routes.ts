@@ -1,5 +1,5 @@
 import type {CommandContext, Principal, RequestContext} from '../contracts'
-import {segment,object,grants} from '../http-input'
+import {segment,exactObject,grants} from '../http/input'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse, boundedJsonBody} from '../auth/web'
@@ -37,7 +37,7 @@ export async function handleStaffInvitationRequest(ctx:RequestContext,request:Re
     if(matched.kind==='list'&&request.method==='GET')return authResponse(ctx,{invitations:await listStaffInvitations(ctx,principal,matched.organizationId)})
     if(matched.kind==='detail')return authResponse(ctx,await getStaffInvitation(ctx,principal,matched.organizationId,matched.invitationId!))
     const fields=matched.kind==='accept'?['token']:matched.kind==='list'?['email','preset','grants']:['expectedVersion']
-    const parsed=object(await boundedJsonBody(request,16_384),fields,true)
+    const parsed=exactObject(await boundedJsonBody(request,16_384),fields,true)
     if(matched.kind==='accept'&&typeof parsed.token!=='string')throw new Stage0Error('invalid_input')
     const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
     const admission={ip:deps.trustedIp,budgetKey:deps.budgetKey}

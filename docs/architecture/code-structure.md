@@ -171,3 +171,10 @@ ceilings and remain unchanged by this separation.
 `config.ts` owns the hosted auth-origin table. Mail setup consumes that table while
 independently validating its binding, sender and RP ID; sharing the origin policy
 does not remove validation at the mail capability boundary or enable public auth.
+
+`domain/input.ts` owns exact object-shape validation for command and adapter
+callers. It rejects unknown enumerable fields and can require named own fields;
+it neither coerces values nor proves their meaning. `http/input.ts` owns decoded
+path segments and transport grant shapes. Domain services import the shape owner
+directly, and retain their own value and authorization checks. Avoid coupling a
+service to HTTP solely to reuse a shape predicate.

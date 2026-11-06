@@ -1,6 +1,6 @@
 import type {RequestContext} from '../contracts'
 import {Stage0Error} from '../errors'
-import {object} from '../http-input'
+import {exactObject} from '../http/input'
 import {authenticateRequest} from './http'
 import {approveDesktopRequest,createDesktopRequest,exchangeDesktopCode,type DesktopApprovalInput,type DesktopExchangeInput,type DesktopRequestInput} from './desktop'
 import {authResponse,boundedJsonBody} from './web'
@@ -19,15 +19,15 @@ export async function handleDesktopAuthRequest(ctx:RequestContext,request:Reques
     const action=match[1]
     if(action==='approve'){
       const principal=await authenticateRequest(ctx,request,'browser')
-      const input=object(await boundedJsonBody(request,4096),['requestId','state','confirmation'],true) as unknown as DesktopApprovalInput
+      const input=exactObject(await boundedJsonBody(request,4096),['requestId','state','confirmation'],true) as unknown as DesktopApprovalInput
       return authResponse(ctx,await approveDesktopRequest(ctx,principal,input))
     }
     if(['Cookie','Origin','Authorization','Sec-Fetch-Site'].some(name=>request.headers.has(name)))throw new Stage0Error('forbidden')
     if(action==='requests'){
-      const input=object(await boundedJsonBody(request,4096),['state','challenge','callbackUri'],true) as unknown as DesktopRequestInput
+      const input=exactObject(await boundedJsonBody(request,4096),['state','challenge','callbackUri'],true) as unknown as DesktopRequestInput
       return authResponse(ctx,await createDesktopRequest(ctx,input,ip,budgetKey),201)
     }
-    const input=object(await boundedJsonBody(request,4096),['requestId','state','code','verifier','callbackUri'],true) as unknown as DesktopExchangeInput
+    const input=exactObject(await boundedJsonBody(request,4096),['requestId','state','code','verifier','callbackUri'],true) as unknown as DesktopExchangeInput
     const issued=await exchangeDesktopCode(ctx,input,ip,budgetKey)
     // This secret is returned solely to native main's exchange, never a browser
     // cookie, redirect, account snapshot or renderer-facing IPC response.

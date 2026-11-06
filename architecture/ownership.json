@@ -332,6 +332,14 @@
     {
       "owner": "src/cloudflare/stage0/config.ts",
       "reason": "Stage 0 environment validation and canonical hosted authentication origins; does not authorize rollout."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/input.ts",
+      "reason": "Exact object-shape checks shared by service commands and HTTP adapters; no URL or request dependencies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/input.ts",
+      "reason": "Decoded URL path segment and grant DTO shape parsing; domain values remain service-validated."
     }
   ],
   "sourceMappings": [

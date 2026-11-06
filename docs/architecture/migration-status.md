@@ -232,3 +232,22 @@ reviews do not establish the whole codebase's completion.
 The full local backend suite passed after the final start-path consolidation:
 695 tests across 57 files, plus Stage 0 type checking and workspace lint. No
 migrations, provider settings, UI code or CI configuration changed.
+
+## Command shape and HTTP input boundary tranche
+
+- Reviewed authentication transport helpers and found desktop handoff and SAML
+  transactions consuming `http-input.ts` for a transport-independent shape check.
+- Replaced that mixed module with `domain/input.ts` (exact object fields) and
+  `http/input.ts` (URL segment decoding and grant DTO shape). Updated every service
+  and adapter caller and removed the old module; feature documentation now points
+  to the current owners. Domain shape validation cannot import HTTP or services.
+- Kept value validation at services: transport grant parsing does not validate
+  action eligibility or dimensional scope. Tests demonstrate that distinction,
+  exact required-own-field handling, unknown-field rejection and single URL decode.
+- Cookie readers were also inspected; session/strict-flow/OIDC/SAML policies still
+  need a dedicated semantic review before consolidation. Their SameSite policies
+  differ intentionally and are not candidates for a single default cookie policy.
+- Verification passed: all repository type checks, workspace lint, thirteen
+  architecture tests and the full backend suite (698 tests in 58 files). The gate
+  scans 200 source files with six unchanged exceptions. No UI, provider, migration
+  or CI configuration changed. Whole-codebase completion remains unproven.

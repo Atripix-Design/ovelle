@@ -2,7 +2,7 @@ import type {CommandContext,Principal,RequestContext} from '../contracts'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse,boundedJsonBody} from '../auth/web'
-import {segment,object} from '../http-input'
+import {segment,exactObject} from '../http/input'
 import {createOrganization,updateOrganization,saveProgram,saveLocation} from './commands'
 import {getOrganization,getProgram,getLocation,listPrograms,listLocations} from './organizations'
 import {getOrganizationPolicies,listAccessAudit,listAccessibleOrganizations,type PageInput} from './reads'
@@ -56,7 +56,7 @@ export async function handleOrganizationRequest(ctx:RequestContext,request:Reque
    return authResponse(ctx,id?await getLocation(ctx,principal,org,id,{programId:selectors.programId}):{locations:await listLocations(ctx,principal,org,{programId:selectors.programId})})
   }
   const fields=matched.kind==='create'?['name','contactEmail','timeZone','firstProgram','firstLocation']:matched.kind==='organization'?['name','contactEmail','timeZone','expectedVersion']:request.method==='POST'?['name']:['name','expectedVersion','archived']
-  const parsed=object(await boundedJsonBody(request,16_384),fields,request.method==='POST'||matched.kind==='organization')
+  const parsed=exactObject(await boundedJsonBody(request,16_384),fields,request.method==='POST'||matched.kind==='organization')
   const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
   const settings={name:parsed.name as string,contactEmail:parsed.contactEmail as string,timeZone:parsed.timeZone as string}
   if(matched.kind==='create')return authResponse(ctx,await createOrganization(command,{...settings,firstProgram:parsed.firstProgram as string,firstLocation:parsed.firstLocation as string}),201)

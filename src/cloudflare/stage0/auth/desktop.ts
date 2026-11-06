@@ -2,7 +2,7 @@ import { encodeBase64Url as encode } from '../domain/base64url'
 import type {Principal,RequestContext} from '../contracts'
 import {auditStatement,guardedBatch} from '../db'
 import {Stage0Error} from '../errors'
-import {object} from '../http-input'
+import {exactObject} from '../domain/input'
 import {consumeDesktopStartBudget,finishAuthAttempt,reserveAuthAttempt} from './limits'
 import {randomSecret,secretDigest,secretPattern} from './secrets'
 import {loadLiveSession,prepareSessionIssuance,type SessionRow} from './sessions'
@@ -22,7 +22,7 @@ function callback(value:unknown):asserts value is string {
   if(!match||Number(match[1])<1024||Number(match[1])>65535)throw new Stage0Error('invalid_input')
 }
 export async function createDesktopRequest(ctx:RequestContext,input:DesktopRequestInput,ip:string,budgetKey:Uint8Array):Promise<{requestId:string;expiresAt:number}>{
-  object(input,['state','challenge','callbackUri'],true);secret(input.state);callback(input.callbackUri)
+  exactObject(input,['state','challenge','callbackUri'],true);secret(input.state);callback(input.callbackUri)
   if(typeof input.challenge!=='string'||!(/^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$/).test(input.challenge))throw new Stage0Error('invalid_input')
   await consumeDesktopStartBudget(ctx,ip,budgetKey)
   const now=ctx.clock.now(),id=ctx.ids.next(),expiresAt=now+300_000
@@ -34,7 +34,7 @@ export async function createDesktopRequest(ctx:RequestContext,input:DesktopReque
   return{requestId:id,expiresAt}
 }
 export async function approveDesktopRequest(ctx:RequestContext,principal:Principal,input:DesktopApprovalInput):Promise<{callbackUrl:string}>{
-  object(input,['requestId','state','confirmation'],true);identifier(input.requestId);secret(input.state)
+  exactObject(input,['requestId','state','confirmation'],true);identifier(input.requestId);secret(input.state)
   if(input.confirmation!==true)throw new Stage0Error('invalid_input')
   const source=await loadLiveSession(ctx,principal)
   if(source.transport!=='browser'||source.assurance==='enrollment')throw new Stage0Error('forbidden')
@@ -51,7 +51,7 @@ export async function approveDesktopRequest(ctx:RequestContext,principal:Princip
   return{callbackUrl:url.href}
 }
 export async function exchangeDesktopCode(ctx:RequestContext,input:DesktopExchangeInput,ip:string,budgetKey:Uint8Array){
-  object(input,['requestId','state','code','verifier','callbackUri'],true);identifier(input.requestId);secret(input.state);secret(input.code);callback(input.callbackUri)
+  exactObject(input,['requestId','state','code','verifier','callbackUri'],true);identifier(input.requestId);secret(input.state);secret(input.code);callback(input.callbackUri)
   if(typeof input.verifier!=='string'||!/^[A-Za-z0-9._~-]{43,128}$/.test(input.verifier))throw new Stage0Error('invalid_input')
   const lease=await reserveAuthAttempt(ctx,{email:'desktop-exchange',ip},budgetKey)
   let success=false

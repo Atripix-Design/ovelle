@@ -107,3 +107,12 @@ test('admission counter derivation cannot import persistence', () => {
     'src/cloudflare/stage0/auth/limits.ts': '',
   }, contract).map(finding => finding.rule), ['dependency-direction'])
 })
+
+test('command shape validation cannot depend on HTTP parsing or service capabilities', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({
+    'src/cloudflare/stage0/domain/input.ts': "import '../http/input'; import '../auth/desktop'",
+    'src/cloudflare/stage0/http/input.ts': '',
+    'src/cloudflare/stage0/auth/desktop.ts': '',
+  }, contract).map(finding => finding.rule), ['dependency-direction', 'dependency-direction'])
+})

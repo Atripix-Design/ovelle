@@ -2,7 +2,7 @@ import type {CommandContext,Principal,RequestContext} from '../contracts'
 import {Stage0Error} from '../errors'
 import {authenticateRequest} from '../auth/http'
 import {authResponse,boundedJsonBody} from '../auth/web'
-import {segment,object,grants} from '../http-input'
+import {segment,exactObject,grants} from '../http/input'
 import {changeMembershipGrants,getMembership,listMemberships,revokeMembership} from './memberships'
 import {acceptOwnershipTransfer,getOwnershipTransfer,requestOwnershipTransfer,revokeOwnershipTransfer} from './ownership'
 
@@ -42,7 +42,7 @@ export async function handleStaffAccessRequest(ctx:RequestContext,request:Reques
   if(matched.kind==='membership')return authResponse(ctx,await getMembership(ctx,principal,matched.organizationId,matched.membershipId))
   if(matched.kind==='transfer')return authResponse(ctx,await getOwnershipTransfer(ctx,principal,matched.organizationId,matched.transferId))
   const fields=matched.kind==='grants'?['expectedVersion','grants','preset']:matched.kind==='request'?['targetMembershipId','expectedOwnerVersion','expectedTargetVersion']:['expectedVersion']
-  const parsed=object(await boundedJsonBody(request,16_384),fields,matched.kind!=='grants')
+  const parsed=exactObject(await boundedJsonBody(request,16_384),fields,matched.kind!=='grants')
   const command:CommandContext={...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??'',requestDigest:''}
   if(matched.kind==='grants')return authResponse(ctx,await changeMembershipGrants(command,{organizationId:matched.organizationId,membershipId:matched.membershipId,expectedVersion:parsed.expectedVersion as number,grants:grants(parsed.grants),...(Object.hasOwn(parsed,'preset')?{preset:parsed.preset as 'admin'|'coordinator'}:{})}))
   if(matched.kind==='revoke')return authResponse(ctx,await revokeMembership(command,{organizationId:matched.organizationId,membershipId:matched.membershipId,expectedVersion:parsed.expectedVersion as number}))

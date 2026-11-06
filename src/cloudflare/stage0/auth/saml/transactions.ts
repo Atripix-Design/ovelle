@@ -1,7 +1,7 @@
 import type { Principal, RequestContext } from '../../contracts'
 import { auditStatement, guardedBatch, type SqlValue } from '../../db'
 import { Stage0Error } from '../../errors'
-import { object } from '../../http-input'
+import { exactObject } from '../../domain/input'
 import { assertIdentityLinkPrincipal, identityLinkGuard } from '../linking'
 import { consumeSamlStartBudget, reserveAuthAttempt, finishAuthAttempt } from '../limits'
 import { randomSecret, secretDigest, secretPattern } from '../secrets'
@@ -49,7 +49,7 @@ export async function startSamlTransaction(ctx: RequestContext, inputSettings: S
  * email matching, immediate account creation, membership provisioning or public routing.
  * Unlinked login proof becomes a pending contact enrollment in the same batch. */
 export async function completeSamlTransaction(ctx: RequestContext, inputSettings: SamlConnectionSettings, input: SamlCallback, ip: string, budgetKey: Uint8Array): Promise<Completion> {
-  object(input, ['relayState', 'browserBinding', 'response'], true)
+  exactObject(input, ['relayState', 'browserBinding', 'response'], true)
   const { relayState, browserBinding, response } = input
   if (typeof relayState !== 'string' || !secretPattern.test(relayState) || typeof browserBinding !== 'string' || !secretPattern.test(browserBinding)
     || typeof response !== 'string' || !response || response.length > 87_384) throw new Stage0Error('unauthenticated')

@@ -99,7 +99,9 @@ environment-checked rollout with recovery evidence; delivery never applies them.
 `access/routes.ts` exposes the following internal contracts using a trusted,
 server-selected browser/desktop transport. The public Worker does not import it.
 All writes call the existing guarded commands above. Shared strict DTO/path parsing
-now lives at `stage0/http-input.ts` and is also used by staff invitation/access routes.
+lives at `stage0/http/input.ts` and is also used by staff invitation/access routes.
+Reusable exact object-shape validation lives at `stage0/domain/input.ts`; services
+consume it without importing URL or request parsing.
 
 | Route | Contract |
 | --- | --- |
