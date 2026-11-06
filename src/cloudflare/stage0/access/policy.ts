@@ -1,23 +1,12 @@
 import type { Action, Principal, Scope } from '../contracts'
-import { parseAction } from '../contracts'
+import { parseAction, actionPolicies, validateScope } from '../domain/access'
 import type { SqlValue } from '../db'
-import { Stage0Error } from '../errors'
 
 // Numbered parameters let a correlated policy reuse the same bound scope safely.
 // Only fixed repository SQL may supply identifiers; callers supply values only.
 export class Bindings {
   readonly values: SqlValue[] = []
   add(value: SqlValue): string { this.values.push(value); return `?${this.values.length}` }
-}
-export function validateScope(scope: Scope): void {
-  if (!scope || (scope.kind !== 'organization' && scope.kind !== 'program_location')) throw new Stage0Error('invalid_input')
-  const ids = scope as { programId?: unknown; locationId?: unknown }
-  if (scope.kind === 'organization') {
-    if (ids.programId !== undefined || ids.locationId !== undefined) throw new Stage0Error('invalid_input')
-  } else {
-    if (ids.programId === undefined && ids.locationId === undefined) throw new Stage0Error('invalid_input')
-    for (const value of [ids.programId, ids.locationId]) if (value !== undefined && (typeof value !== 'string' || value.length < 1 || value.length > 256)) throw new Stage0Error('invalid_input')
-  }
 }
 /** Central row policy used by SELECT predicates and transactional write guards.
  * A cached principal/capability is only a selector. All authority is read in SQL.
@@ -37,9 +26,10 @@ export function accessPredicate(b: Bindings, principal: Principal, organizationI
   const program = rowKind === 'capability' ? 'capability.program_id' : rowKind === 'program' ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
   const location = rowKind === 'capability' ? 'capability.location_id' : rowKind === 'location' ? 'l.id' : scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
   const requestedAction = b.add(action)
-  const reserved = action === 'staff.manage_admins' || action === 'ownership.transfer'
-  const write = ['organization.update', 'program.manage', 'location.manage', 'staff.manage_coordinators', 'staff.manage_admins', 'ownership.transfer'].includes(action)
-  const coordinatorAction = ['program.read', 'program.manage', 'location.read', 'location.manage'].includes(action)
+  const classification = actionPolicies[action]
+  const reserved = classification.grant === 'owner-only'
+  const write = classification.write
+  const coordinatorAction = classification.grant === 'coordinator'
   const grant = `EXISTS(SELECT 1 FROM membership_grants g WHERE g.membership_id=m.id AND g.organization_id=o.id AND g.action=${requestedAction}
     AND (g.scope_kind='organization' OR ((g.program_id IS NULL OR g.program_id=${program}) AND (g.location_id IS NULL OR g.location_id=${location}))))`
   return `EXISTS(SELECT 1 FROM organizations o

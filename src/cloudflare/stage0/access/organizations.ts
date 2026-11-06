@@ -1,8 +1,8 @@
 import type { Action, AuthorizedContext, OrganizationSnapshot, Principal, RequestContext, Scope } from '../contracts'
-import { parseAction } from '../contracts'
+import { parseAction, validateScope } from '../domain/access'
 import { Stage0Error } from '../errors'
 import { loadLiveSession, principalFromRow } from '../auth/sessions'
-import { accessPredicate, Bindings, validateScope } from './policy'
+import { accessPredicate, Bindings } from './policy'
 
 const organizationScope: Scope = { kind: 'organization' }
 export interface ProgramSnapshot { id: string; name: string; version: number }

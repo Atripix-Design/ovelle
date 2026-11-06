@@ -1,5 +1,6 @@
 import type { Action, CommandContext, OrganizationSnapshot, Scope } from '../contracts'
 import { auditStatement } from '../db'
+import { grantableActions } from '../domain/access'
 import { Stage0Error } from '../errors'
 import { loadLiveSession } from '../auth/sessions'
 import { withReceipt, commit } from '../commands'
@@ -12,7 +13,6 @@ export interface SaveProgramInput { organizationId: string; id?: string; expecte
 export type SaveLocationInput = SaveProgramInput
 export interface StructureSnapshot { id: string; name: string; version: number; archivedAt: number | null }
 const orgScope: Scope = { kind: 'organization' }
-const ordinaryActions: Action[] = ['organization.read','organization.update','program.read','program.manage','location.read','location.manage','staff.read','staff.manage_coordinators','audit.read']
 
 // Canonicalization happens at this service boundary. HTTP request digests are
 // correlation data, never authority for deciding whether content is identical.
@@ -59,7 +59,7 @@ export async function createOrganization(ctx: CommandContext, input: CreateOrgan
     const guard = `${creationPolicy(ctx, bindings)} AND NOT EXISTS(SELECT 1 FROM organizations WHERE created_by_account_id=${bindings.add(ctx.principal.accountId)})`
     return commit(ctx, 'organization.create', id, '', digest, bindings, guard, [
       ctx.db.prepare('INSERT INTO organizations(id,name,contact_email,time_zone,owner_account_id,created_by_account_id,created_at) VALUES(?,?,?,?,?,?,?)').bind(id, result.name, result.contactEmail, result.timeZone, ctx.principal.accountId, ctx.principal.accountId, ctx.clock.now()),
-      ...ordinaryActions.map(action => ctx.db.prepare("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind) VALUES(?,?,?,?,'organization')").bind(ctx.ids.next(), `owner:${id}`, id, action)),
+      ...grantableActions.map(action => ctx.db.prepare("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind) VALUES(?,?,?,?,'organization')").bind(ctx.ids.next(), `owner:${id}`, id, action)),
       ctx.db.prepare("INSERT INTO organization_policies(organization_id,status,assignment_review,eligibility_bypass,automatic_hour_approval,created_at) VALUES(?,'proposed','staff_reviewed',0,0,?)").bind(id, ctx.clock.now()),
       ctx.db.prepare('INSERT INTO programs(id,organization_id,name) VALUES(?,?,?)').bind(ctx.ids.next(), id, normalized.firstProgram),
       ctx.db.prepare('INSERT INTO locations(id,organization_id,name) VALUES(?,?,?)').bind(ctx.ids.next(), id, normalized.firstLocation),

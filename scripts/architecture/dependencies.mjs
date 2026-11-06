@@ -37,7 +37,8 @@ export function resolveLocal(from, specifier, files, mappings = []) {
 }
 
 export function classify(path, zones) {
-  const matches = zones.filter(zone => zone.roots.some(root => path === root || path.startsWith(root.endsWith('/') ? root : root + '/')))
+  const contains = root => path === root || path.startsWith(root.endsWith('/') ? root : root + '/')
+  const matches = zones.filter(zone => zone.roots.some(contains) && !(zone.excludes ?? []).some(contains))
   if (matches.length !== 1) throw new Error(`${path}: expected one architecture owner, found ${matches.length}`)
   return matches[0]
 }
@@ -63,6 +64,7 @@ export function analyze(sources, config, packageExports = {}) {
         if (other.id !== zone.id && !zone.allowed.includes(other.id)) report('dependency-direction', from, target)
         if (other.id !== zone.id && other.public && !other.public.includes(target)) report('private-import', from, target)
       } else {
+        if (zone.external && !zone.external.some(name => specifier === name || specifier.startsWith(name + '/'))) report('external-dependency', from, specifier)
         if (!zone.node && (specifier.startsWith('node:') || builtins.has(specifier))) report('node-in-browser', from, specifier)
         if (!zone.electron && (specifier === 'electron' || specifier.startsWith('electron/'))) report('native-boundary', from, specifier)
         for (const [name, exports] of Object.entries(packageExports)) {

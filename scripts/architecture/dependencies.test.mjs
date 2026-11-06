@@ -39,3 +39,19 @@ test('unknown ownership, unresolved imports and dynamic imports fail closed', ()
 test('overlapping ownership cannot silently change a boundary', () => {
   assert.throws(() => analyze({ 'ui/a.ts': '' }, { zones: [...config.zones, config.zones[0]] }), /found 2/)
 })
+
+test('a domain carve-out has its own owner and cannot import I/O or its parent backend', () => {
+  const domain = { zones: [
+    { id: 'backend', roots: ['backend'], excludes: ['backend/domain'], allowed: ['domain'], node: true },
+    { id: 'domain', roots: ['backend/domain'], allowed: [], external: [], node: false },
+  ] }
+  const findings = analyze({
+    'backend/service.ts': "import './domain/policy'",
+    'backend/storage.ts': '',
+    'backend/domain/policy.ts': "import '../storage'; import '@vendor/database'",
+  }, domain)
+  assert.deepEqual(findings.map(v => v.rule), ['dependency-direction', 'external-dependency'])
+  assert.throws(() => analyze({ 'backend/orphan.ts': '' }, { zones: [
+    { id: 'backend', roots: ['backend'], excludes: ['backend/orphan.ts'], allowed: [] },
+  ] }), /expected one architecture owner/)
+})

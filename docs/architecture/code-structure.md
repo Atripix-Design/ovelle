@@ -43,9 +43,12 @@ cleanup. Preserve current live-session SQL guards and transactional invariants.
 - Interfaces are required where they hide a real capability boundary, not for
   every function, class or database operation.
 
-The current backend zone is intentionally coarse during migration. It does not
-prove separation of domain policy, HTTP transport and D1 access inside Stage 0.
-Those internal boundaries remain part of the full-codebase migration.
+The `backend-domain` zone owns pure action/scope classification, contact
+normalization and the closed error vocabulary. It cannot import backend
+implementations, external packages, Node or Electron. Backend consumers may use
+that zone. The remaining backend zone is still coarse during migration; it does
+not prove separation of all HTTP transport and D1 access inside Stage 0. Those
+internal boundaries remain part of the full-codebase migration.
 
 ## Function and file review
 

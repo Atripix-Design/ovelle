@@ -1,21 +1,10 @@
 import type { D1Database } from '@cloudflare/workers-types'
 import type { Stage0Config } from './config'
-import { Stage0Error } from './errors'
 
-export const stage0Actions = [
-  'organization.read', 'organization.update', 'program.read', 'program.manage',
-  'location.read', 'location.manage', 'staff.read', 'staff.manage_coordinators',
-  'staff.manage_admins', 'audit.read', 'ownership.transfer',
-] as const
-export type Action = typeof stage0Actions[number]
-export function parseAction(value: unknown): Action {
-  if (typeof value !== 'string' || !stage0Actions.includes(value as Action)) throw new Stage0Error('forbidden')
-  return value as Action
-}
+import type { Action, Scope } from './domain/access'
+export { stage0Actions, parseAction } from './domain/access'
+export type { Action, Scope } from './domain/access'
 
-export type Scope = { kind: 'organization' } | ({ kind: 'program_location' } & (
-  { programId: string; locationId?: string } | { programId?: string; locationId: string }
-))
 export interface Grant { action: Action; scope: Scope }
 export interface Clock { now(): number }
 export interface Ids { next(): string }

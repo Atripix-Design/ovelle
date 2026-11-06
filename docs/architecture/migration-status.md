@@ -14,9 +14,10 @@ current maintained code, not only new-code enforcement.
 - Removed duplicate account contact/name normalization from account creation;
   `auth/contact.ts` now owns that behavior for account and federated contact flows.
 
-The ownership map currently lists seven important concepts, not every business
-concept. Its zones cover source locations, not proof of responsibility separation.
-The scan now includes the three checker files as well (181 files).
+The initial ownership map listed seven important concepts; subsequent tranches
+expand it, but it is not yet a complete business-concept inventory. Its zones cover source locations, not proof of responsibility separation.
+The first-tranche scan included the three checker files as well (181 files).
+The domain tranche expands the current scan to 184 files.
 
 ## UI composition
 
@@ -80,3 +81,40 @@ parity, remote CI, deployment or the outstanding whole-codebase review.
 The full local Stage 0 suite also passed: 52 files, 670 tests. This covers existing
 backend behavior after contact normalization consolidation; it does not prove the
 remaining architectural migration is complete.
+
+## Domain tranche: action policy and contact delivery
+
+- `domain/access.ts` owns action names, write classifications, grant eligibility
+  and scope validation. SQL access predicates, grant validation and initial
+  organization grants consume it. The existing `contracts.ts` export surface
+  re-exports the vocabulary without independently defining it.
+- SQL guards still recheck live session, tenant, membership, scope and assurance.
+  No preflight permission result replaces transactional enforcement.
+- Contact normalization remains in `auth/contact.ts`; verification email
+  construction and delivery outcomes now live in `auth/contact-delivery.ts`.
+- `backend-domain` ownership excludes the corresponding paths from the backend
+  zone and forbids back-imports and external dependencies. A negative test proves
+  this boundary fails when a domain module imports storage or an external client.
+- Action tests independently specify all eleven actions, exercise both staff
+  grant presets, reject inherited/unknown names and malformed scopes, and verify
+  the policy table cannot be mutated at runtime.
+
+## Figma source-context dependency
+
+Fresh source retrieval was attempted on 2026-11-06 before UI edits. Figma returned
+its Starter-plan MCP tool-call limit for WorkflowPreview, PinnedWorkflow,
+HeroWorkflowScene, HeroStageSheet, MobileWorkflow, EmailDownloadLink and
+ProgramOverview. DatePicker returned sparse metadata requiring child contexts and
+a screenshot. Other retrieved component-set responses do not satisfy those missing
+requirements. No UI code was edited in this tranche. Resume required source
+retrieval when tool capacity is available; do not bypass it by assuming historical
+captures prove current Figma state. Raw temporary responses are in
+`/tmp/ovelle-figma-context` in this working environment and may not persist.
+
+The earlier exact-head CI run for `7f4fe6e` was still queued on isolated self-hosted
+capacity when checked during this tranche. No hosted fallback was introduced.
+
+Domain-tranche local validation passed: all workspace/Worker/Stage 0 type checks,
+workspace lint, eight architecture tests, thirteen CI-policy tests and the full
+Stage 0 suite (53 files, 683 tests). The architecture check reports eight unchanged
+UI/tooling migration exceptions. This is local evidence only.

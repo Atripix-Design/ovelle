@@ -3,7 +3,7 @@ import type { EmailMessage, EmailMessageBuilder, SendEmail } from '@cloudflare/w
 import type { AuthEmail } from '../../../src/cloudflare/stage0/contracts'
 import type { Stage0Config } from '../../../src/cloudflare/stage0/config'
 import { createAuthMailer } from '../../../src/cloudflare/stage0/auth/mail'
-import { sendContactVerification } from '../../../src/cloudflare/stage0/auth/contact'
+import { sendContactVerification } from '../../../src/cloudflare/stage0/auth/contact-delivery'
 import { randomSecret } from '../../../src/cloudflare/stage0/auth/secrets'
 import { databaseFixture } from './database'
 import { issueSession } from '../../../src/cloudflare/stage0/auth/sessions'

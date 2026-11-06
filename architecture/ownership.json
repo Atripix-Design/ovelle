@@ -78,9 +78,16 @@
       "roots": [
         "src/cloudflare"
       ],
-      "allowed": [],
+      "allowed": [
+        "backend-domain"
+      ],
       "node": true,
-      "electron": false
+      "electron": false,
+      "excludes": [
+        "src/cloudflare/stage0/domain",
+        "src/cloudflare/stage0/errors.ts",
+        "src/cloudflare/stage0/auth/contact.ts"
+      ]
     },
     {
       "id": "tests",
@@ -89,7 +96,8 @@
       ],
       "allowed": [
         "backend",
-        "tooling"
+        "tooling",
+        "backend-domain"
       ],
       "node": true,
       "electron": false
@@ -100,7 +108,8 @@
         "scripts"
       ],
       "allowed": [
-        "backend"
+        "backend",
+        "backend-domain"
       ],
       "node": true,
       "electron": true
@@ -124,6 +133,18 @@
       "allowed": [],
       "node": true,
       "electron": false
+    },
+    {
+      "id": "backend-domain",
+      "roots": [
+        "src/cloudflare/stage0/domain",
+        "src/cloudflare/stage0/errors.ts",
+        "src/cloudflare/stage0/auth/contact.ts"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false,
+      "external": []
     }
   ],
   "concepts": [
@@ -154,6 +175,18 @@
     {
       "owner": "src/cloudflare/download-email.ts",
       "reason": "Public download email validation and delivery, separate from account identity."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/access.ts",
+      "reason": "Closed action vocabulary, grant classification, write classification and scope validation; consumed by SQL enforcement and grant issuance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/contact-delivery.ts",
+      "reason": "Verification email construction and explicit delivery outcome; separate from pure normalization."
+    },
+    {
+      "owner": "src/cloudflare/stage0/errors.ts",
+      "reason": "Closed failure vocabulary and safe HTTP status mapping; never arbitrary provider messages."
     }
   ],
   "sourceMappings": [
