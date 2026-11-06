@@ -51,7 +51,8 @@ provider, connection/version and random state separation. D1 holds neither raw
 state, binding, nonce nor verifier; no encryption key or plaintext secret table is
 needed. These are random-token operations, unrelated to password hashing.
 
-The temporary hosted cookie is `__Host-ovelle_oidc`, Secure, HttpOnly, Path=/,
+`auth/oidc/cookies.ts` owns the transport representation independently of D1
+transaction handling. The temporary hosted cookie is `__Host-ovelle_oidc`, Secure, HttpOnly, Path=/,
 SameSite=Lax and Max-Age=300, without Domain. Lax permits the IdP's top-level GET
 callback. The ordinary account cookie remains Strict; this transaction cookie
 cannot authenticate an account or call protected commands. Local fixtures use a

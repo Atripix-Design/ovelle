@@ -107,7 +107,8 @@
         "src/cloudflare/stage0/backend.ts",
         "src/cloudflare/stage0/http",
         "src/cloudflare/stage0/staff/validation.ts",
-        "src/cloudflare/stage0/auth/budgets.ts"
+        "src/cloudflare/stage0/auth/budgets.ts",
+        "src/cloudflare/stage0/auth/oidc/cookies.ts"
       ]
     },
     {
@@ -201,7 +202,8 @@
         "src/cloudflare/stage0/auth/saml/routes.ts",
         "src/cloudflare/stage0/auth/web.ts",
         "src/cloudflare/stage0/staff/access-routes.ts",
-        "src/cloudflare/stage0/staff/routes.ts"
+        "src/cloudflare/stage0/staff/routes.ts",
+        "src/cloudflare/stage0/auth/oidc/cookies.ts"
       ],
       "allowed": [
         "backend",
@@ -340,6 +342,14 @@
     {
       "owner": "src/cloudflare/stage0/http/input.ts",
       "reason": "Decoded URL path segment and grant DTO shape parsing; domain values remain service-validated."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/cookies.ts",
+      "reason": "Unique cookie selection without secret decoding; protocol value/attribute policy stays at callers."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/cookies.ts",
+      "reason": "Short-lived OIDC Lax binding serialization and strict callback cookie parsing, separate from transaction persistence."
     }
   ],
   "sourceMappings": [

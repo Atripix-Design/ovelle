@@ -3,7 +3,8 @@ import * as client from 'openid-client'
 import { databaseFixture } from './database'
 import { callback, oidcProviderFixture, settings } from './oidc-protocol-fixture'
 import { issueSession, resolveSession } from '../../../src/cloudflare/stage0/auth/sessions'
-import { startOidcTransaction, completeOidcTransaction, oidcBindingCookie, readOidcBindingCookie } from '../../../src/cloudflare/stage0/auth/oidc/transactions'
+import { startOidcTransaction, completeOidcTransaction } from '../../../src/cloudflare/stage0/auth/oidc/transactions'
+import { oidcBindingCookie, readOidcBindingCookie } from '../../../src/cloudflare/stage0/auth/oidc/cookies'
 
 let f: Awaited<ReturnType<typeof databaseFixture>>
 const budgetKey = new Uint8Array(32).fill(17)

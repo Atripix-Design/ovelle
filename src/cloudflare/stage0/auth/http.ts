@@ -1,3 +1,4 @@
+import { readUniqueCookie } from '../http/cookies'
 import type { Stage0Config } from '../config'
 import type { Principal, RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
@@ -27,20 +28,9 @@ export function clearBrowserSessionCookie(config: Stage0Config): string {
  */
 export async function browserCsrfToken(ctx: RequestContext, request: Request): Promise<string> {
   const principal = await authenticateRequest(ctx, request, 'browser')
-  const csrfToken = await sessionCsrfSecret(readCookie(request, cookieName(ctx.config)))
+  const csrfToken = await sessionCsrfSecret(readUniqueCookie(request, cookieName(ctx.config)))
   if (!await verifyCsrf(ctx, principal, csrfToken)) throw new Stage0Error('unauthenticated')
   return csrfToken
-}
-
-function readCookie(request: Request, name: string): string {
-  const values = (request.headers.get('Cookie') ?? '').split(';').flatMap(part => {
-    const separator = part.indexOf('=')
-    return separator !== -1 && part.slice(0, separator).trim() === name ? [part.slice(separator + 1).trim()] : []
-  })
-  // Cookie ordering is not authority. Fail closed if a proxy or cookie shadowing
-  // makes the selected session ambiguous; do not URL-decode or unquote secrets.
-  if (values.length !== 1) throw new Stage0Error('unauthenticated')
-  return values[0]
 }
 
 /** Call only from a fixed route with a server-selected transport. An absent
@@ -60,7 +50,7 @@ export async function authenticateRequest(ctx: RequestContext, request: Request,
   if (transport !== 'browser' || request.headers.has('Authorization')) throw new Stage0Error('unauthenticated')
   const origin = request.headers.get('Origin')
   if ((origin !== null && origin !== ctx.config.origin) || request.headers.get('Sec-Fetch-Site') === 'cross-site') throw new Stage0Error('forbidden')
-  const principal = await resolveSession(ctx, readCookie(request, cookieName(ctx.config)), 'browser')
+  const principal = await resolveSession(ctx, readUniqueCookie(request, cookieName(ctx.config)), 'browser')
   if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method)) {
     if (origin !== ctx.config.origin || !await verifyCsrf(ctx, principal, request.headers.get('X-CSRF-Token') ?? '')) throw new Stage0Error('forbidden')
   }

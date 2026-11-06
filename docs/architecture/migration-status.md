@@ -251,3 +251,23 @@ migrations, provider settings, UI code or CI configuration changed.
   architecture tests and the full backend suite (698 tests in 58 files). The gate
   scans 200 source files with six unchanged exceptions. No UI, provider, migration
   or CI configuration changed. Whole-codebase completion remains unproven.
+
+## Cookie transport ownership tranche
+
+- Reviewed all four cookie readers and attribute policies. Shared only the
+  equivalent unique-cookie selection used by session, strict-flow and SAML. Kept
+  OIDC's stricter whitespace parsing, and left each protocol's attribute/expiry
+  policy explicit. No secret is decoded or unquoted by the common reader.
+- Moved OIDC binding-cookie parsing/serialization out of its transaction service
+  into `auth/oidc/cookies.ts`. Routes and tests consume the new owner directly;
+  no compatibility re-export remains. Architecture rejects service back-imports.
+- Added regression coverage for absent/duplicate cookies, embedded equals,
+  non-decoding, protocol-specific whitespace, local/hosted names, Strict/Lax
+  attributes and clear-cookie expiry. Existing SAML/session integration tests
+  exercise the actual adapters; serializers retain their prior behavior.
+- Repository type checks, workspace lint and fourteen architecture tests passed.
+  This remains part of the active whole-repository migration, not completion.
+
+The complete backend suite passed: 701 tests across 59 files. Architecture scans
+203 source files with six unchanged exceptions. No UI, migration, provider or CI
+configuration changed; browser-wide final verification remains outstanding.

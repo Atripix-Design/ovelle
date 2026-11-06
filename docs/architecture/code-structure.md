@@ -178,3 +178,11 @@ it neither coerces values nor proves their meaning. `http/input.ts` owns decoded
 path segments and transport grant shapes. Domain services import the shape owner
 directly, and retain their own value and authorization checks. Avoid coupling a
 service to HTTP solely to reuse a shape predicate.
+
+`http/cookies.ts` owns unique named-cookie selection shared by session, strict-flow
+and SAML readers. It rejects duplicates without decoding or unquoting values;
+callers retain secret validation. OIDC keeps its stricter whitespace parser in
+`auth/oidc/cookies.ts`, which is a transport owner and cannot be imported by OIDC
+transaction services. Cookie naming, expiry and SameSite remain protocol-owned:
+Strict sessions/flows, Lax OIDC redirects and Secure/None SAML POST bindings are
+different policies, not interchangeable serializer defaults.

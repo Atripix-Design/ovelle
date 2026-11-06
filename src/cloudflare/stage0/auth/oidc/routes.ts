@@ -9,7 +9,8 @@ import { verifyTurnstile } from '../turnstile'
 import { authResponse, boundedJsonBody, readFlowCookie, requireBrowserOrigin, strictFlowCookie } from '../web'
 import { confirmOidcContact, enrollmentCsrf, getOidcEnrollment, submitOidcContact } from './enrollment'
 import type { OidcProvider, OidcSettings } from './protocol'
-import { completeOidcTransaction, oidcBindingCookie, readOidcBindingCookie, startOidcTransaction } from './transactions'
+import { completeOidcTransaction, startOidcTransaction } from './transactions'
+import { oidcBindingCookie, readOidcBindingCookie } from './cookies'
 
 export interface OidcHttpDependencies {
   budgetKey: Uint8Array

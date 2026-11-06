@@ -1,3 +1,4 @@
+import { readUniqueCookie } from '../../http/cookies'
 import type { RequestContext } from '../../contracts'
 import { Stage0Error } from '../../errors'
 import { authenticateRequest, browserSessionCookie } from '../http'
@@ -26,11 +27,7 @@ function bindingCookie(ctx: RequestContext, value: string, seconds: number): str
   return `${name(ctx)}=${value}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=${seconds}`
 }
 function readBinding(ctx: RequestContext, request: Request) {
-  const values = (request.headers.get('Cookie') ?? '').split(';').flatMap(part => {
-    const i = part.indexOf('=')
-    return i >= 0 && part.slice(0, i).trim() === name(ctx) ? [part.slice(i + 1).trim()] : []
-  })
-  return selection(values.length === 1 ? values[0] : '')
+  return selection(readUniqueCookie(request, name(ctx)))
 }
 function selection(value: string) {
   const parts = value.split('.')

@@ -116,3 +116,11 @@ test('command shape validation cannot depend on HTTP parsing or service capabili
     'src/cloudflare/stage0/auth/desktop.ts': '',
   }, contract).map(finding => finding.rule), ['dependency-direction', 'dependency-direction'])
 })
+
+test('OIDC persistence cannot import its cookie transport', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  assert.deepEqual(analyze({
+    'src/cloudflare/stage0/auth/oidc/transactions.ts': "import './cookies'",
+    'src/cloudflare/stage0/auth/oidc/cookies.ts': '',
+  }, contract).map(finding => finding.rule), ['dependency-direction'])
+})
