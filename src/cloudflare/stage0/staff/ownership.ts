@@ -1,8 +1,8 @@
 import type {CommandContext,OrganizationSnapshot,Principal,RequestContext,Scope} from '../contracts'
 import {Stage0Error} from '../errors'
-import {auditStatement} from '../db'
+import { Bindings,auditStatement} from '../db'
 import {withReceipt,commit} from '../commands'
-import {Bindings,accessPredicate} from '../access/policy'
+import { accessPredicate } from '../access/policy'
 import {getOrganization} from '../access/organizations'
 import {identifier,version} from './validation'
 

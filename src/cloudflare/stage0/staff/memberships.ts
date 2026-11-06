@@ -1,9 +1,9 @@
 import type {CommandContext,Grant,Principal,RequestContext,Scope} from '../contracts'
 import {Stage0Error} from '../errors'
-import {auditStatement} from '../db'
+import { Bindings,auditStatement} from '../db'
 import {withReceipt,commit} from '../commands'
 import {getOrganization,authorizeOrganization} from '../access/organizations'
-import {Bindings,accessPredicate} from '../access/policy'
+import { accessPredicate } from '../access/policy'
 import {identifier,version,normalizedGrants} from './validation'
 
 export interface MembershipSnapshot {id:string;organizationId:string;accountId:string;preset:'admin'|'coordinator';state:'active'|'revoked';version:number}

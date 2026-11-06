@@ -3,6 +3,13 @@ import type { Principal, RequestContext } from './contracts'
 import { Stage0Error } from './errors'
 
 export type SqlValue = string | number | null
+
+// Numbered parameters let correlated SQL reuse the same bound values safely.
+// Only fixed repository SQL may supply identifiers; callers supply values only.
+export class Bindings {
+  readonly values: SqlValue[] = []
+  add(value: SqlValue): string { this.values.push(value); return `?${this.values.length}` }
+}
 export type AuditAction = 'account.create' | 'session.issue' | 'session.rotate' | 'session.revoke' | 'session.revoke_all' | 'program.update' | 'identity.link' | 'passkey.register' | 'passkey.authenticate'
   | 'organization.create' | 'organization.update' | 'program.create' | 'program.archive' | 'location.create' | 'location.update' | 'location.archive'
   | 'invitation.create' | 'invitation.resend' | 'invitation.revoke' | 'invitation.accept' | 'invitation.expire'

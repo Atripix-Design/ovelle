@@ -324,3 +324,19 @@ review's completion.
 
 The whole-codebase migration remains active; the remaining areas and final
 verification requirements above are not satisfied by this feature review.
+
+## SQL binding ownership review
+
+- Found `Bindings` exported from authorization policy despite having no permission
+  semantics. Moved it beside `SqlValue` in `db.ts` and updated all eight consumers;
+  no legacy re-export remains. Access policy imports the type from storage.
+- Receipt coordination no longer imports access policy to assemble parameters.
+  Existing policies, parameter values/order, guarded batch sequencing and audit
+  SQL are unchanged. This moves a real shared storage concern to its owner without
+  introducing repository interfaces or hiding SQL authority behind preflight checks.
+- Verification passed: full backend suite, 708 tests in 60 files; all repository
+  type checks; workspace lint; fifteen architecture tests; and diff checks.
+  Graph coverage remains 205 files with six existing exceptions.
+
+The remaining whole-repository reviews and final evidence requirements still
+apply. No UI, migration, deployment, provider or CI configuration changed here.

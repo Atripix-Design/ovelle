@@ -371,6 +371,10 @@
     {
       "owner": "src/cloudflare/releases.ts",
       "reason": "Release catalog availability, R2 archive reads and signed download transport. No cross-request cache."
+    },
+    {
+      "owner": "src/cloudflare/stage0/db.ts",
+      "reason": "SQL value/binding assembly, guarded D1 batches and audit statements; independent of feature authorization predicates."
     }
   ],
   "sourceMappings": [

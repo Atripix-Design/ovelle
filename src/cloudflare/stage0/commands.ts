@@ -1,10 +1,9 @@
 import type { D1PreparedStatement } from '@cloudflare/workers-types'
 import type { CommandContext } from './contracts'
-import { guardedBatch } from './db'
+import { Bindings, guardedBatch } from './db'
 import { Stage0Error } from './errors'
 import { loadLiveSession } from './auth/sessions'
 import { secretDigest } from './auth/secrets'
-import { Bindings } from './access/policy'
 
 type Command = 'organization.create' | 'organization.update' | 'program.save' | 'location.save'
   | 'membership.grants' | 'membership.revoke' | 'ownership.request' | 'ownership.accept' | 'ownership.revoke'

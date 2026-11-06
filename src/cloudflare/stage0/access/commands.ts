@@ -1,10 +1,10 @@
 import type { Action, CommandContext, OrganizationSnapshot, Scope } from '../contracts'
-import { auditStatement } from '../db'
+import { Bindings, auditStatement } from '../db'
 import { grantableActions } from '../domain/access'
 import { Stage0Error } from '../errors'
 import { loadLiveSession } from '../auth/sessions'
 import { withReceipt, commit } from '../commands'
-import { accessPredicate, Bindings } from './policy'
+import { accessPredicate } from './policy'
 import { authorizeOrganization, getOrganization } from './organizations'
 
 export interface CreateOrganizationInput { name: string; contactEmail: string; timeZone: string; firstProgram: string; firstLocation: string }

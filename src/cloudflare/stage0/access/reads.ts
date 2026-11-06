@@ -1,7 +1,8 @@
+import { Bindings } from '../db'
 import type {OrganizationSnapshot,Principal,RequestContext,Scope} from '../contracts'
 import {Stage0Error} from '../errors'
 import {loadLiveSession} from '../auth/sessions'
-import {Bindings,accessPredicate} from './policy'
+import { accessPredicate } from './policy'
 import {authorizeOrganization,getOrganization} from './organizations'
 
 export interface PageInput {limit?:number;cursor?:string}

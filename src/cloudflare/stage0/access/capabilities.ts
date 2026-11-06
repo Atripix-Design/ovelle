@@ -1,7 +1,8 @@
+import { Bindings } from '../db'
 import {stage0Actions,type Action,type Grant,type Principal,type RequestContext,type Scope} from '../contracts'
 import {Stage0Error} from '../errors'
 import {getOrganization} from './organizations'
-import {accessPredicate,Bindings} from './policy'
+import { accessPredicate } from './policy'
 
 export interface CapabilitySnapshot {
   readonly organizationId:string

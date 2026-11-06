@@ -1,13 +1,7 @@
 import type { Action, Principal, Scope } from '../contracts'
 import { parseAction, actionPolicies, validateScope } from '../domain/access'
-import type { SqlValue } from '../db'
+import type { Bindings } from '../db'
 
-// Numbered parameters let a correlated policy reuse the same bound scope safely.
-// Only fixed repository SQL may supply identifiers; callers supply values only.
-export class Bindings {
-  readonly values: SqlValue[] = []
-  add(value: SqlValue): string { this.values.push(value); return `?${this.values.length}` }
-}
 /** Central row policy used by SELECT predicates and transactional write guards.
  * A cached principal/capability is only a selector. All authority is read in SQL.
  * allowArchived is only for replaying an already committed command receipt;

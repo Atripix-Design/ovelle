@@ -194,3 +194,9 @@ releases. HEAD does not read bodies or sign URLs. Clients and signed URLs are
 request-scoped, with no cross-request cache. UI fallback catalog/type ownership
 still requires the shared-application review; this server boundary alone does not
 resolve that separate concern.
+
+`db.ts` owns SQL value types and numbered binding assembly alongside guarded D1
+batches and audit statement construction. `access/policy.ts` consumes that binder
+as a type and owns only live authorization predicates. Receipt coordination uses
+the storage owner directly; it must not import authorization merely for parameter
+assembly. Predicate callbacks remain responsible for their live SQL conditions.
