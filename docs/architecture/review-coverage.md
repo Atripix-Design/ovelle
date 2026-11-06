@@ -219,3 +219,34 @@ hosted measurement, production password readiness or a change to CI configuratio
 | `scripts/architecture/check.mjs` | Retain Git-aware source inventory, ownership/config loading and exact exception reconciliation as the CLI. Includes nonignored untracked source; absent deleted files are omitted. Concept owners must exist. Duplicate/stale exceptions fail rather than silently widening a baseline. It does not inspect ignored source or prove semantic abstraction quality. | Current repository scan and source review. |
 | `scripts/architecture/dependencies.mjs` | Retain syntax dependency extraction, relative resolution, ownership/direction checks and cycle traversal as the pure analyzer. Unsupported absolute/URL/package-alias specifiers now fail instead of being treated as npm packages. Exact runtime virtual modules are zone-scoped; only test fixtures declare cloudflare:test. No wildcard exception was added. | 17 positive/negative tests, including 45 import-form/specifier combinations and virtual-module scope rejection. |
 | `scripts/architecture/dependencies.test.mjs` | Retain synthetic graphs and real repository-map fixtures as independent checker tests. Assertions require specific violations and permitted cases rather than mirroring implementation traversal. | All 17 tests pass; current repository graph remains 209 files and six prior exceptions. |
+
+## Build and runtime configuration review
+
+- `apps/web/tsconfig.app.json` and `apps/web/tsconfig.node.json` now explicitly
+  enable strict checking, matching the other maintained runtime/compiler targets.
+  Application DOM/bundler settings remain separate from Node Vite configuration.
+- `apps/web/tsconfig.json` owns project references. Desktop main/preload uses
+  NodeNext while its renderer uses DOM/bundler semantics. Worker config owns
+  Worker/Node ambient types; Stage 0 extends it to include fixture/runtime types.
+  These differing target contracts should not be flattened into one broad config.
+- `packages/ui/tsconfig.json` owns emitted JS/declarations; its package manifest
+  exposes the deliberate JS/CSS/token/manifest surface and marks CSS side effects.
+  Generated dist files are build outputs, not parallel maintained implementations.
+- Web/Electron Vite configurations own their consumer plugins and local API proxy.
+  Electron preload explicitly emits CJS. Local proxy settings do not establish
+  production host routing or enable internal auth.
+- `vitest.stage0.config.mts` owns ephemeral test DB bindings and test discovery.
+  Corrected its comment: repository migration content is reused, deployed database
+  state and credentials are not. Historical migrations were not rewritten.
+- Workspace package manifests own runtime dependencies and build/packaging commands.
+  Desktop metadata owns packaging version/name and unsigned platform targets.
+  Release metadata duplication across app/server/packaging still needs coordinated
+  review; identical version strings alone are not proof of one executable owner.
+- `wrangler.jsonc` keeps development and production bindings explicit. Development
+  has Worker-first routes and sender bindings that production does not; source
+  inspection does not prove remote parity. No deployment/routing/binding edits made.
+
+Verification: all workspace and backend type checks, workspace lint and workspace
+builds passed; 13 shared-UI behavior tests passed against the rebuilt package.
+These tests do not replace source Figma/rendered fidelity or real Electron checks.
+SQL, CSS and broader configuration/artifact coverage remain unfinished.

@@ -3,7 +3,8 @@ import { defineConfig } from 'vitest/config'
 
 const migrations = await readD1Migrations('./migrations')
 
-// Deliberately independent of deployed bindings, credentials and migrations.
+// Ephemeral test bindings use repository migrations without accessing deployed
+// databases or credentials. Migration content is shared; database state is not.
 export default defineConfig({
   plugins: [cloudflareTest({
     miniflare: {

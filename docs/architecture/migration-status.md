@@ -581,3 +581,16 @@ matrix interruption. WebKit remains unverified for the missing-library reason.
   scan: 209 files, six prior exceptions, zero errors. CI config remains unchanged.
 - Recorded checker source responsibilities and limits. UI/application, remaining
   tooling/non-code review and final evidence still prevent whole-goal completion.
+
+### Strict web compiler configuration
+
+- Configuration review found strict checking omitted from both web TypeScript
+  targets while UI/Electron/Worker enable it. Enabled strict for web application
+  and Vite configuration; no component edits or weakened checks were needed.
+- Corrected the Stage 0 test-config comment to distinguish shared repository
+  migrations from isolated database state/credentials. No SQL or remote settings
+  changed. Recorded target/build/package/Wrangler responsibility distinctions.
+- All type checks, workspace lint and workspace builds passed. Rebuilt UI passed
+  13 behavior tests. No signed desktop packaging/deployment or visual parity claim.
+- CI/runner configuration remains unchanged; application release ownership, UI
+  source access, SQL/CSS/tooling review and final runtime evidence remain open.
