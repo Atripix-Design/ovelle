@@ -1,22 +1,47 @@
-import type {Grant,Scope} from '../contracts'
-import {parseAction,actionPolicies,validateScope} from '../domain/access'
-import {Stage0Error} from '../errors'
-const orgScope:Scope={kind:'organization'}
+import type { Grant, Scope } from '../domain/access'
+import { parseAction, actionPolicies, validateScope } from '../domain/access'
+import { Stage0Error } from '../errors'
+
+const orgScope: Scope = { kind: 'organization' }
 function invalid(): never { throw new Stage0Error('invalid_input') }
-export function identifier(value: unknown): string { if(typeof value!=='string'||!value||value.length>256||/\p{Cc}/u.test(value))return invalid();return value }
-export function version(value: unknown): number { if(!Number.isSafeInteger(value)||(value as number)<1||(value as number)>=Number.MAX_SAFE_INTEGER)return invalid();return value as number }
-export function normalizedGrants(value: unknown, preset: 'admin'|'coordinator'): Grant[] {
-  if(!Array.isArray(value)||value.length>32)return invalid()
-  const grants=value.map((entry: Grant)=>{
-    if(!entry||typeof entry!=='object')return invalid()
+
+export function identifier(value: unknown): string {
+  if (typeof value !== 'string' || !value || value.length > 256 || /\p{Cc}/u.test(value)) return invalid()
+  return value
+}
+
+export function version(value: unknown): number {
+  if (!Number.isSafeInteger(value) || (value as number) < 1 || (value as number) >= Number.MAX_SAFE_INTEGER) return invalid()
+  return value as number
+}
+
+/** Staff invitations reject the entire Unicode control category before trimming.
+ * Account contact normalization has a different historical C0/DEL rule; do not
+ * merge these policies merely because their mailbox syntax currently matches.
+ */
+export function invitationEmail(value: unknown): string {
+  if (typeof value !== 'string' || /\p{Cc}/u.test(value)) return invalid()
+  const address = value.trim().toLowerCase()
+  if (address.length > 254 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(address)) return invalid()
+  return address
+}
+
+export function normalizedGrants(value: unknown, preset: 'admin' | 'coordinator'): Grant[] {
+  if (!Array.isArray(value) || value.length > 32) return invalid()
+  const grants = value.map((entry: Grant) => {
+    if (!entry || typeof entry !== 'object') return invalid()
     let action: Grant['action']
-    try { action=parseAction(entry.action) } catch { return invalid() }
-    const classification=actionPolicies[action]
-    if(classification.grant==='owner-only'||(preset==='coordinator'&&classification.grant!=='coordinator'))return invalid()
+    try { action = parseAction(entry.action) } catch { return invalid() }
+    const classification = actionPolicies[action]
+    if (classification.grant === 'owner-only' || (preset === 'coordinator' && classification.grant !== 'coordinator')) return invalid()
     validateScope(entry.scope)
-    const scope: Scope=entry.scope.kind==='organization'?orgScope:{kind:'program_location',...('programId' in entry.scope&&entry.scope.programId!==undefined?{programId:identifier(entry.scope.programId)}:{}),...('locationId' in entry.scope&&entry.scope.locationId!==undefined?{locationId:identifier(entry.scope.locationId)}:{})} as Scope
-    return {action,scope}
-  }).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)))
-  if(new Set(grants.map(grant=>JSON.stringify(grant))).size!==grants.length)return invalid()
+    const scope: Scope = entry.scope.kind === 'organization' ? orgScope : {
+      kind: 'program_location',
+      ...('programId' in entry.scope && entry.scope.programId !== undefined ? { programId: identifier(entry.scope.programId) } : {}),
+      ...('locationId' in entry.scope && entry.scope.locationId !== undefined ? { locationId: identifier(entry.scope.locationId) } : {}),
+    } as Scope
+    return { action, scope }
+  }).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
+  if (new Set(grants.map(grant => JSON.stringify(grant))).size !== grants.length) return invalid()
   return grants
 }

@@ -151,3 +151,10 @@ after navigation. It does not prove upstream delivery or OS-level sandboxing:
 Playwright launches Electron with its automation flags. The separate existing
 `check:electron-downloads` checks the live development catalog and native external
 handoff; its email HTTP response is also a fixture, not a sent message.
+
+Staff validation is part of `backend-domain` even though its file remains beside
+its feature consumers. Its `Grant` type comes from the domain owner, not the
+request capability contracts. Invitation delivery is a backend effect: it combines
+post-commit sending with version/token-guarded outcome persistence. Keep that
+operation separate from contact verification's non-persistent delivery helper;
+sharing their similar mail calls would conceal different failure semantics.

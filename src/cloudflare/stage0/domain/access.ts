@@ -44,3 +44,6 @@ export function validateScope(scope: Scope): void {
     for (const value of [ids.programId, ids.locationId]) if (value !== undefined && (typeof value !== 'string' || value.length < 1 || value.length > 256)) throw new Stage0Error('invalid_input')
   }
 }
+
+/** A grant is domain policy data, independent of request or storage capabilities. */
+export interface Grant { action: Action; scope: Scope }

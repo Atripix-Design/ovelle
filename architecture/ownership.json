@@ -105,7 +105,8 @@
         "src/cloudflare/stage0/staff/access-routes.ts",
         "src/cloudflare/stage0/staff/routes.ts",
         "src/cloudflare/stage0/backend.ts",
-        "src/cloudflare/stage0/http"
+        "src/cloudflare/stage0/http",
+        "src/cloudflare/stage0/staff/validation.ts"
       ]
     },
     {
@@ -164,7 +165,8 @@
       "roots": [
         "src/cloudflare/stage0/domain",
         "src/cloudflare/stage0/errors.ts",
-        "src/cloudflare/stage0/auth/contact.ts"
+        "src/cloudflare/stage0/auth/contact.ts",
+        "src/cloudflare/stage0/staff/validation.ts"
       ],
       "allowed": [],
       "node": false,
@@ -304,6 +306,18 @@
     {
       "owner": "apps/desktop/src/main/index.ts",
       "reason": "Native window lifecycle, sandbox configuration and external navigation allowlist."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/validation.ts",
+      "reason": "Pure staff identifier/version validation, strict invitation address normalization and canonical grant offers."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/invitation-delivery.ts",
+      "reason": "Post-commit staff invitation mail and version/token-guarded delivery outcome persistence."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/invitations.ts",
+      "reason": "Invitation transitions and live issuer/recipient authority, kept with atomic guarded SQL and receipts."
     }
   ],
   "sourceMappings": [

@@ -3,9 +3,8 @@ import type { Stage0Config } from './config'
 
 import type { Action, Scope } from './domain/access'
 export { stage0Actions, parseAction } from './domain/access'
-export type { Action, Scope } from './domain/access'
+export type { Action, Scope, Grant } from './domain/access'
 
-export interface Grant { action: Action; scope: Scope }
 export interface Clock { now(): number }
 export interface Ids { next(): string }
 export interface AuthEmail {

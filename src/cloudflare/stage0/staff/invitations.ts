@@ -3,7 +3,8 @@ import type { CommandContext, Grant, Principal, RequestContext, Scope } from '..
 import { auditStatement } from '../db'
 import { withReceipt, commit } from '../commands'
 import { Stage0Error } from '../errors'
-import {identifier,version,normalizedGrants} from './validation'
+import {identifier,version,normalizedGrants,invitationEmail} from './validation'
+import { deliverInvitation } from './invitation-delivery'
 import { loadLiveSession } from '../auth/sessions'
 import { consumeAuthEmailBudget, reserveAuthAttempt, finishAuthAttempt } from '../auth/limits'
 import { randomSecret, secretDigest, secretPattern } from '../auth/secrets'
@@ -23,7 +24,6 @@ interface GrantRow { action: Grant['action']; scope_kind: Scope['kind']; program
 const lifetime = 259_200_000
 const orgScope: Scope = {kind:'organization'}
 function invalid(): never { throw new Stage0Error('invalid_input') }
-function email(value: unknown): string { if(typeof value!=='string'||/\p{Cc}/u.test(value))return invalid();const address=value.trim().toLowerCase();if(address.length>254||!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(address))return invalid();return address }
 function snapshot(row: InvitationRow, now: number): InvitationSnapshot { return {id:row.id,organizationId:row.organization_id,email:row.email,preset:row.preset,state:row.state==='pending'&&row.expires_at<=now?'expired':row.state,version:row.version,expiresAt:row.expires_at,delivery:row.delivery} }
 function request(input: InvitationCommandInput) { if(!input||typeof input!=='object')return invalid();return {organizationId:identifier(input.organizationId),invitationId:identifier(input.invitationId),expectedVersion:version(input.expectedVersion)} }
 async function offered(ctx: RequestContext,id: string): Promise<Grant[]> {
@@ -80,15 +80,9 @@ function assertion(ctx: RequestContext,b: Bindings,condition: string): D1Prepare
   const id=ctx.ids.next()
   return [ctx.db.prepare(`INSERT INTO stage0_guards(allowed,id) VALUES(CASE WHEN (${condition}) THEN 1 ELSE 0 END,${b.add(id)})`).bind(...b.values),ctx.db.prepare('DELETE FROM stage0_guards WHERE id=?').bind(id)]
 }
-async function deliver(ctx: RequestContext,id: string,issuedVersion: number,address: string,secret: string): Promise<void> {
-  let status:'accepted'|'failed'='failed'
-  try { const outcome=await ctx.mailer.send({to:address,kind:'staff_invitation',url:`${ctx.config.origin}/account/staff-invitation#token=${secret}`});status=outcome.status } catch { /* Provider detail never enters receipts, audit or API errors. */ }
-  await ctx.db.prepare('UPDATE staff_invitations SET delivery=?,delivery_finished_at=? WHERE id=? AND delivery_version=? AND token_digest=? AND delivery=?')
-    .bind(status,ctx.clock.now(),id,issuedVersion,await secretDigest(secret),'pending').run()
-}
 export async function createStaffInvitation(ctx: CommandContext,input: CreateInvitationInput,admission: Admission): Promise<InvitationSnapshot> {
   if(!input||typeof input!=='object'||(input.preset!=='admin'&&input.preset!=='coordinator'))return invalid()
-  const normalized={organizationId:identifier(input.organizationId),email:email(input.email),preset:input.preset,grants:normalizedGrants(input.grants,input.preset)}
+  const normalized={organizationId:identifier(input.organizationId),email:invitationEmail(input.email),preset:input.preset,grants:normalizedGrants(input.grants,input.preset)}
   const org=normalized.organizationId
   await getOrganization(ctx,ctx.principal,org)
   return withReceipt(ctx,'invitation.create',org,normalized,b=>manager(ctx,b,org,normalized.preset,normalized.email),async digest=>{
@@ -113,7 +107,7 @@ export async function createStaffInvitation(ctx: CommandContext,input: CreateInv
       auditStatement(ctx,'invitation.create',id,ctx.principal,org),
     ]
     await commit(ctx,'invitation.create',org,org,digest,b,guard,statements,result)
-    await deliver(ctx,id,1,normalized.email,secret)
+    await deliverInvitation(ctx,id,1,normalized.email,secret)
     return result
   })
 }
@@ -157,7 +151,7 @@ export async function resendStaffInvitation(ctx: CommandContext,input: Invitatio
       ...assertion(ctx,final,issuerAuthority(final,invite.id)),
       auditStatement(ctx,'invitation.resend',invite.id,ctx.principal,org),
     ],result)
-    await deliver(ctx,invite.id,nextVersion,invite.email,secret)
+    await deliverInvitation(ctx,invite.id,nextVersion,invite.email,secret)
     return result
   })
 }

@@ -175,3 +175,35 @@ release catalog, including the restricted external download handoff. Its email
 HTTP call was intercepted, so no message was sent. Local native checks used a
 temporary Xvfb display with GLX disabled after this host's graphics driver crashed
 with GLX; no CI service or host package installation was changed.
+
+## Staff validation and invitation delivery tranche
+
+- `Grant` now belongs beside `Action` and `Scope` in `domain/access.ts`; the
+  existing `contracts.ts` surface re-exports it. Staff validation no longer needs
+  to depend on the request/storage contract module for a pure policy type.
+- `staff/validation.ts` is enforced as backend-domain code. It owns staff
+  identifiers, versions, canonical grant offers and invitation email normalization.
+  Invitation normalization still rejects all Unicode Cc controls; account contact
+  normalization retains its existing C0/DEL rule, and mail transport retains its
+  additional mailbox restrictions. Independent tests preserve these distinctions,
+  length/version boundaries, semantic duplicate rejection and caller immutability.
+- `staff/invitation-delivery.ts` owns post-commit mail and persisted outcomes. Both
+  create and resend call it after commit; its version/token/pending guard prevents
+  old delivery completion from overwriting a newer token's outcome. Provider
+  diagnostics remain excluded from API errors, audit and receipts.
+- Invitation manager, issuer and recipient SQL authority remains local to
+  `invitations.ts`. These predicates implement different authorities and lifetimes;
+  they were not combined into a generic permission abstraction. Atomic checks,
+  sealing, receipt replay and admission budgets are unchanged.
+- Focused validation passed: 113 tests across staff normalization, action policy,
+  invitation transactions and auth mail. All repository type checks, workspace
+  lint and eleven architecture tests passed. The gate scans 196 source files with
+  six unchanged exceptions. No UI, migrations, provider state or CI configuration
+  changed in this tranche.
+
+This review does not complete the remaining backend features or the repository-wide
+completion requirements above.
+
+The complete local backend suite passed after this tranche: 692 tests in 56 files.
+This includes staff membership/ownership, HTTP boundaries, migrations, sessions and
+federation regression coverage. It is local evidence, not remote CI or deployment.

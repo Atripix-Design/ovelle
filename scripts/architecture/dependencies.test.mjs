@@ -89,3 +89,13 @@ test('desktop contracts stay platform independent and cannot grant renderer nati
     assert.ok(findings.some(finding => finding.rule === rule))
   }
 })
+
+test('staff normalization cannot acquire request or delivery capabilities', () => {
+  const contract = JSON.parse(readFileSync(new URL('../../architecture/ownership.json', import.meta.url), 'utf8'))
+  const findings = analyze({
+    'src/cloudflare/stage0/staff/validation.ts': "import type { RequestContext } from '../contracts'; import './invitation-delivery'",
+    'src/cloudflare/stage0/contracts.ts': '',
+    'src/cloudflare/stage0/staff/invitation-delivery.ts': '',
+  }, contract)
+  assert.deepEqual(findings.map(finding => finding.rule), ['dependency-direction', 'dependency-direction'])
+})
