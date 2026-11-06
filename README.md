@@ -61,3 +61,7 @@ The repository Actions allowlist must include the exact checkout, setup-node, up
 After checks succeed on a push to `development` or `main`, a routed build job packages the desktop apps, then a hosted delivery job uploads them to R2 and deploys the corresponding Cloudflare Worker. Secret-bearing publishing remains hosted under the platform contract. Pull requests run checks without deploying. Delivery checks that its source is still the branch head before publishing.
 
 Configure `CLOUDFLARE_ACCOUNT_ID` as a GitHub Actions variable and `CLOUDFLARE_API_TOKEN` as an Actions secret. The runner platform also requires the `ATRIPIX_RUNNER_APP_ID` variable and `ATRIPIX_RUNNER_APP_PRIVATE_KEY` secret. No deployment credentials enter self-hosted jobs. See [infrastructure operations](infra/README.md) for setup, recovery and verification.
+
+### Website image optimization
+
+Both website builds run `npm run optimize:images` on the generated `apps/web/dist` output. It converts emitted PNG and JPEG images to WebP at quality 85 (preserving transparency), updates references and cache-safe bundle names, and keeps the original design assets. Existing WebP and SVG files are left intact; animated or unsupported raster formats fail the build for manual review. Run the command after a website build to process an alternate output directory with `npm run optimize:images -- /path/to/dist`. Review visual quality when adding assets; this does not resize images or optimize remote images.

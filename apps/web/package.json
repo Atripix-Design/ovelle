@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run optimize:images --prefix ../..",
     "check": "tsc -b",
     "lint": "oxlint",
     "preview": "vite preview",
-    "build:development": "tsc -b && vite build --mode development"
+    "build:development": "tsc -b && vite build --mode development && npm run optimize:images --prefix ../.."
   },
   "dependencies": {
     "react": "^19.2.8",

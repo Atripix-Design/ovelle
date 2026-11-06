@@ -36,7 +36,8 @@
     "check:architecture": "node scripts/architecture/check.mjs",
     "test:architecture": "node --test scripts/architecture/*.test.mjs",
     "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs",
-    "check:electron-ipc": "node scripts/check-electron-ipc.mjs"
+    "check:electron-ipc": "node scripts/check-electron-ipc.mjs",
+    "optimize:images": "node scripts/optimize-website-images.mjs"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",
@@ -46,6 +47,7 @@
     "js-yaml": "^4.3.2",
     "miniflare": "5.20261019.2-beta",
     "playwright": "^1.64.0",
+    "sharp": "0.35.5",
     "typescript": "5.9.3",
     "vitest": "4.1.12",
     "wrangler": "4.152.0",
