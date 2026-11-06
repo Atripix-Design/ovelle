@@ -1,0 +1,66 @@
+[
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/index.tsx",
+    "target": "packages/ui/src/composites.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/date-picker.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/pagination.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/website.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/workflow.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "dynamic-import",
+    "from": "scripts/check-content-components.mjs",
+    "target": "line:7",
+    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
+    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
+    "tracking": "docs/architecture/migration-status.md#tooling"
+  },
+  {
+    "rule": "dynamic-import",
+    "from": "scripts/check-figma-fidelity.mjs",
+    "target": "line:6",
+    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
+    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
+    "tracking": "docs/architecture/migration-status.md#tooling"
+  },
+  {
+    "rule": "dynamic-import",
+    "from": "scripts/record-component-video.mjs",
+    "target": "line:6",
+    "reason": "Existing configurable external browser/recording tool provider cannot be resolved statically.",
+    "removal": "Review provider loading and either use a static dependency or define an explicitly validated tooling capability.",
+    "tracking": "docs/architecture/migration-status.md#tooling"
+  }
+]

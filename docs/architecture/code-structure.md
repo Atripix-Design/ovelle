@@ -1,0 +1,126 @@
+# Code structure contract
+
+This contract applies to all maintained Ovelle code: applications, shared packages,
+Worker backend, scripts, tests and design tooling. Existing Figma and runtime
+verification requirements still apply. Passing the automated gate proves only the
+mechanical properties it checks, not that the whole codebase has good abstractions.
+
+## Authority and ownership
+
+`architecture/ownership.json` owns the module boundary map and important concept
+locations. Implementations own executable policy. This document owns the review
+criteria. The coding skill routes to these sources instead of copying their rules.
+
+Before adding behavior, read its owner, callers, tests and relevant architecture
+notes. Extend that owner when the concept is the same. Share implementations only
+when they express the same knowledge; matching text is insufficient. Derived data
+must identify authoritative inputs. Caches must document lifetime, invalidation and
+failure semantics. Client hints never replace server authorization. Tests must
+express independent expected behavior, not calculate expectations through the
+implementation under test.
+
+Do not change provider settings, data or deployment authority as part of structural
+cleanup. Preserve current live-session SQL guards and transactional invariants.
+
+## Dependency boundaries
+
+- Shared UI owns presentation, interactions, accessibility and material behavior.
+  It must not import app code, backend policy, Node or Electron capabilities.
+- Shared app code owns routing-independent application composition and data loading.
+  Web and renderer code may consume it; it cannot depend on either consumer.
+- Desktop main and preload own native capabilities. Renderer code cannot import
+  them, even through type-only imports. Shared transport contracts should be
+  platform-independent when extracted.
+- Worker code cannot import frontend, test or tooling implementations.
+- Public package imports must use declared package exports. Relative imports into
+  UI implementation files from apps are prohibited.
+- Feature modules should expose deliberate public entry points. Package-private
+  implementation imports inside the same package are appropriate; importing the
+  package's own barrel from its implementation creates avoidable cycles.
+- Domain calculations and policy must be independent of runtime I/O. Existing
+  Stage 0 SQL authorization is coupled to atomic database enforcement by design;
+  do not replace it with stale in-memory preflight checks merely to resemble layers.
+- Interfaces are required where they hide a real capability boundary, not for
+  every function, class or database operation.
+
+The current backend zone is intentionally coarse during migration. It does not
+prove separation of domain policy, HTTP transport and D1 access inside Stage 0.
+Those internal boundaries remain part of the full-codebase migration.
+
+## Function and file review
+
+A function must express a coherent operation, expose understandable inputs,
+outputs, side effects and failures, and simplify its caller. Private helpers stay
+near their consumers. Do not export speculative helpers, add meaningless forwarding
+layers, silently convert errors into success, or conceal required mutable global
+state. Positional booleans selecting unrelated behavior require redesign; an
+options object alone does not cure mixed responsibility. A policy option such as
+archived-receipt replay must document its narrow semantics and preserve guards.
+
+Files group coherent responsibilities, not arbitrary line counts. Organize by
+feature and expected change. Split independent responsibilities or hide a meaningful
+decision; retain code together when splitting leaks private knowledge. Do not add
+broad `utils`, `misc` or `common` dumping grounds. Line count, complexity and clone
+reports are review signals, never automatic instructions to fragment code.
+
+For each new shared abstraction identify its concept, real consumers, private
+decisions and why using it requires less knowledge. One consumer is sufficient
+when encapsulation provides value. Reconsider abstractions that accumulate caller
+flags, bypasses, unrelated branches or repetitive forwarding layers.
+
+Comments explain intent, constraints, side effects and non-obvious decisions. Do
+not restate implementation line by line or duplicate changeable policy constants.
+
+## Changes and verification
+
+Declare behavior versus structural scope before implementation. Preserve public
+contracts, errors, permissions, loading behavior and side effects unless the task
+explicitly changes them. Update consumers together with intentional contract
+changes. Remove obsolete task-related paths after migration; temporary compatibility
+requires a removal condition. Preserve unrelated work.
+
+Run `npm run check:architecture` and `npm run test:architecture` for structural
+changes. Run relevant type checks and behavior tests; use integration tests for
+storage/native boundaries and existing Figma/loaded/skeleton checks for components.
+A refactor must retain observable behavior, not merely compile. Never weaken tests
+or mock away the boundary used to claim success. Distinguish local, fixture, CI and
+live evidence. All CI remains self-hosted.
+
+Before completion verify owner, absence of competing policy, dependency direction,
+minimal public interface, meaningful abstraction, explicit effects/errors, relevant
+behavior tests, removal of obsolete code and disclosure of exceptions. Report the
+actual checks and their scope. A passing architecture check is not whole-goal
+completion. Follow the existing development publishing instructions.
+
+## Mechanical enforcement and exceptions
+
+The syntax-based checker covers all tracked and nonignored untracked JavaScript and
+TypeScript files. It checks unique zone ownership, local import resolution, static,
+re-export, require, import-type and dynamic-import forms, output-to-source extension
+mapping, direction, native/browser boundaries, UI external imports, package export
+subpaths and dependency cycles (including type dependencies).
+
+Limitations: it does not analyze CSS imports, dataflow, hidden global I/O, aliases
+configured outside this map, transitive dependency internals, duplicate business
+meaning or abstraction quality. It is not a security sandbox. Type checking, tests
+and source review remain required. New import aliases need explicit resolution
+support and negative tests before adoption.
+
+`architecture/exceptions.json` is an exact finding list, never a wildcard ignore.
+Each entry needs a reason, removal condition and tracking reference. Stale and
+duplicate entries fail. There is no baseline-update command. Do not add exceptions,
+weaken checks or expand allowed dependencies to make a change pass silently.
+Explain the architectural change and keep it inside the user's authorized scope.
+Existing debt remains incomplete migration work even when explicitly excepted.
+
+## Research basis
+
+These are engineering policies synthesized from primary sources, not universal
+scientific laws or arbitrary size limits:
+
+- [Hunt and Thomas: knowledge duplication](https://media.pragprog.com/titles/tpp20/dry.pdf)
+- [Parnas: information hiding](https://www.cs.lafayette.edu/~gexia/cs301/resources/parnas.html)
+- [Fowler: intention-revealing functions](https://martinfowler.com/bliki/FunctionLength.html)
+- [Ousterhout: deep modules](https://web.stanford.edu/~ouster/cgi-bin/cs190-winter18/lecture.php?topic=modularDesign)
+- [Metz: wrong abstractions](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)
+- [Bogard: feature/use-case organization](https://www.jimmybogard.com/vertical-slice-architecture/)

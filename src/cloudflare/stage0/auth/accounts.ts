@@ -1,5 +1,6 @@
 import type { AccountSnapshot, Principal, RequestContext } from '../contracts'
 import { Stage0Error } from '../errors'
+import { normalizedEmail, normalizedContactName } from './contact'
 import { loadLiveSession, liveSessionCondition } from './sessions'
 
 type AccountRow = { id: string; email: string; display_name: string; email_verified_at: number | null }
@@ -8,10 +9,8 @@ const snapshot = (row: AccountRow): AccountSnapshot => ({ id: row.id, email: row
  * acknowledgments, durable abuse limits and delivery; creation grants no access.
  */
 export async function createAccount(ctx: RequestContext, input: { email: string; displayName: string }): Promise<AccountSnapshot> {
-  if (typeof input.email !== 'string' || typeof input.displayName !== 'string') throw new Stage0Error('invalid_input')
-  const email = input.email.trim().toLowerCase()
-  const displayName = input.displayName.trim()
-  if (email.length > 254 || /[\r\n\u0000-\u001f\u007f]/.test(input.email) || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email) || displayName.length < 1 || displayName.length > 120) throw new Stage0Error('invalid_input')
+  const email = normalizedEmail(input.email)
+  const displayName = normalizedContactName(input.displayName)
   const id = ctx.ids.next()
   try {
     await ctx.db.batch([

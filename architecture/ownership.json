@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "packages": [
+    "packages/ui/package.json"
+  ],
+  "zones": [
+    {
+      "id": "ui",
+      "roots": [
+        "packages/ui/src"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "ui-tests",
+      "roots": [
+        "packages/ui/test"
+      ],
+      "allowed": [
+        "ui"
+      ],
+      "node": true,
+      "electron": false
+    },
+    {
+      "id": "shared-app",
+      "roots": [
+        "apps/shared"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "web",
+      "roots": [
+        "apps/web/src"
+      ],
+      "allowed": [
+        "shared-app"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "desktop-renderer",
+      "roots": [
+        "apps/desktop/src/renderer"
+      ],
+      "allowed": [
+        "shared-app"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "desktop-main",
+      "roots": [
+        "apps/desktop/src/main"
+      ],
+      "allowed": [],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "desktop-preload",
+      "roots": [
+        "apps/desktop/src/preload"
+      ],
+      "allowed": [],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "backend",
+      "roots": [
+        "src/cloudflare"
+      ],
+      "allowed": [],
+      "node": true,
+      "electron": false
+    },
+    {
+      "id": "tests",
+      "roots": [
+        "tests"
+      ],
+      "allowed": [
+        "backend",
+        "tooling"
+      ],
+      "node": true,
+      "electron": false
+    },
+    {
+      "id": "tooling",
+      "roots": [
+        "scripts"
+      ],
+      "allowed": [
+        "backend"
+      ],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "design-tooling",
+      "roots": [
+        "docs/design-system/glass-tuner"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "configuration",
+      "roots": [
+        "apps/web/vite.config.ts",
+        "apps/desktop/electron.vite.config.ts",
+        "vitest.stage0.config.mts"
+      ],
+      "allowed": [],
+      "node": true,
+      "electron": false
+    }
+  ],
+  "concepts": [
+    {
+      "owner": "src/cloudflare/stage0/access/policy.ts",
+      "reason": "Live tenant and scope policy for reads and transactional write guards."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/contact.ts",
+      "reason": "Account contact normalization; email does not establish identity linking."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/sessions.ts",
+      "reason": "Session issuance, live authority and revocation."
+    },
+    {
+      "owner": "src/cloudflare/stage0/commands.ts",
+      "reason": "Command receipt and idempotent commit coordination."
+    },
+    {
+      "owner": "packages/ui/src/material.tsx",
+      "reason": "Shared material settings and normalization."
+    },
+    {
+      "owner": "packages/ui/tokens.json",
+      "reason": "Design token source; CSS parity requires design-system checks."
+    },
+    {
+      "owner": "src/cloudflare/download-email.ts",
+      "reason": "Public download email validation and delivery, separate from account identity."
+    }
+  ],
+  "sourceMappings": [
+    {
+      "output": "packages/ui/dist/",
+      "source": "packages/ui/src/"
+    }
+  ]
+}

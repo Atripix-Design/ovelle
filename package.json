@@ -13,7 +13,7 @@
     "dev:web": "npm run dev -w @ovelle/web",
     "dev:desktop": "npm run dev -w @ovelle/desktop",
     "build": "npm run build --workspaces",
-    "check": "npm run check --workspaces && npm run check:worker && npm run check:stage0",
+    "check": "npm run check:architecture && npm run check --workspaces && npm run check:worker && npm run check:stage0",
     "lint": "npm run lint --workspaces",
     "check:worker": "tsc -p tsconfig.worker.json",
     "cf:deploy:dev": "npm run build -w @ovelle/ui && npm run build:development -w @ovelle/web && node scripts/ci/deploy-worker.mjs development",
@@ -32,7 +32,9 @@
     "test:stage0-oidc-browser": "node scripts/verify-stage0-oidc-browser.mjs",
     "test:stage0-saml-browser": "node scripts/verify-stage0-saml-browser.mjs",
     "benchmark:stage0-password": "node --experimental-strip-types scripts/benchmark-stage0-password.ts",
-    "check:stage0": "tsc -p tsconfig.stage0.json"
+    "check:stage0": "tsc -p tsconfig.stage0.json",
+    "check:architecture": "node scripts/architecture/check.mjs",
+    "test:architecture": "node --test scripts/architecture/*.test.mjs"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",
@@ -42,6 +44,7 @@
     "js-yaml": "^4.3.2",
     "miniflare": "5.20261019.2-beta",
     "playwright": "^1.64.0",
+    "typescript": "5.9.3",
     "vitest": "4.1.12",
     "wrangler": "4.152.0",
     "xml-crypto": "6.4.0"

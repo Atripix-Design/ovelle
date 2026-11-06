@@ -92,6 +92,7 @@ jobs:
       - run: npm ci
       - run: npm run build -w @ovelle/ui
       - run: npm run check
+      - run: npm run test:architecture
       - run: npm run check:download-email
       - run: npm run test:stage0
       - run: node scripts/check-repository-privacy.mjs

@@ -22,3 +22,18 @@ it('reads only the session account and rejects fabricated account/session combin
   expect((await getOwnAccount(f.ctx,a.principal)).email).toBe('a@example.test')
   await expect(getOwnAccount(f.ctx,{...a.principal,accountId:'b'})).rejects.toMatchObject({code:'unauthenticated'})
 })
+
+it('rejects invalid contact inputs before writing an account or audit event', async () => {
+  const before = await f.execute('SELECT count(*) AS n FROM accounts').first('n')
+  const auditBefore = await f.execute('SELECT count(*) AS n FROM audit_events').first('n')
+  for (const input of [
+    { email: '\tperson@example.test', displayName: 'Person' },
+    { email: 'person@example.test\u007f', displayName: 'Person' },
+    { email: 'person@example.test', displayName: '   ' },
+    { email: 'person@example.test', displayName: 'x'.repeat(121) },
+    { email: null, displayName: 'Person' },
+    { email: 'person@example.test', displayName: null },
+  ]) await expect(createAccount(f.ctx, input as never)).rejects.toMatchObject({ code: 'invalid_input' })
+  expect(await f.execute('SELECT count(*) AS n FROM accounts').first('n')).toBe(before)
+  expect(await f.execute('SELECT count(*) AS n FROM audit_events').first('n')).toBe(auditBefore)
+})

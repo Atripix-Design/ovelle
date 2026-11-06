@@ -177,3 +177,14 @@ esac
     assert.notEqual(run(false).status, 0)
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
+
+test('required typecheck job enforces architecture and exercises its negative fixtures', async () => {
+  const { load } = await import('js-yaml')
+  const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
+  assert.ok(pkg.scripts.check.startsWith('npm run check:architecture && '))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run check'))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:architecture'))
+  assert.ok(jobs.deploy.needs.includes('typecheck'))
+  assert.ok(!jobs.typecheck['continue-on-error'])
+})

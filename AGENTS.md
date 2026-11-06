@@ -37,3 +37,12 @@
 ## Finish
 
 - Follow the user's global development-branch publishing instructions. Stage only task files, verify changes, and invoke `push-development-on-finish` before committing/pushing to `origin/development`. Never publish directly to `main` or `master`.
+
+## Mandatory code structure contract
+
+- For code changes, use `.agents/skills/ovelle-code-structure/SKILL.md` and follow
+  `docs/architecture/code-structure.md`; `architecture/ownership.json` owns boundaries.
+- Run `npm run check:architecture` and relevant behavior checks before publishing.
+- Never silently expand architecture exceptions, allowed dependencies or suppressions
+  to pass checks. Describe the reason, scope and removal condition for any exception.
+- Existing migration exceptions are unfinished work, not proof of full compliance.

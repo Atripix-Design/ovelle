@@ -1,0 +1,41 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { analyze, dependencies, resolveLocal } from './dependencies.mjs'
+
+const config = { zones: [
+  { id: 'ui', roots: ['ui'], allowed: [], node: false, electron: false, public: ['ui/index.ts'] },
+  { id: 'app', roots: ['app'], allowed: ['ui'], node: false, electron: false },
+  { id: 'native', roots: ['native'], allowed: [], node: true, electron: true },
+] }
+const rules = sources => analyze(sources, config, { '@ovelle/ui': ['.', './styles.css'] }).map(v => v.rule)
+test('extracts static, dynamic, type, re-export and require dependencies without comment false positives', () => {
+  const result = dependencies('a.ts', `// import 'fake'
+    import type { T } from './types.js'; export { a } from './a';
+    const a = import('./lazy'); const b = require('node:fs');
+    type C = import('./contract').C; const dynamic = import(path);`)
+  assert.deepEqual(result.map(v => v.specifier), ['./types.js', './a', './lazy', 'node:fs', './contract', null])
+})
+test('resolves output extension imports and generated UI test targets to source', () => {
+  const files = new Set(['ui/a.tsx'])
+  assert.equal(resolveLocal('ui/b.ts', './a.js', files), 'ui/a.tsx')
+  assert.equal(resolveLocal('test/a.mjs', '../dist/a.js', files, [{ output: 'dist/', source: 'ui/' }]), 'ui/a.tsx')
+})
+test('detects barrel cycles even when source uses JS output extensions', () => {
+  assert.deepEqual(rules({ 'ui/index.ts': "export * from './button.js'", 'ui/button.ts': "import { x } from './index.js'" }), ['cycle'])
+})
+test('enforces direction and public entry points, including type-only imports', () => {
+  assert.ok(rules({ 'ui/index.ts': "import type { X } from '../native/a'", 'native/a.ts': '' }).includes('dependency-direction'))
+  assert.ok(rules({ 'app/a.ts': "import '../ui/private'", 'ui/private.ts': '' }).includes('private-import'))
+  assert.deepEqual(rules({ 'app/a.ts': "import '../ui/index'", 'ui/index.ts': '' }), [])
+})
+test('blocks package internals, native access and Node builtins in browser code', () => {
+  assert.deepEqual(rules({ 'app/a.ts': "import '@ovelle/ui/src/button'; import 'electron'; import 'fs/promises'" }).sort(), ['native-boundary', 'node-in-browser', 'private-package-import'].sort())
+  assert.deepEqual(rules({ 'native/a.ts': "import 'electron'; import 'node:fs'" }), [])
+})
+test('unknown ownership, unresolved imports and dynamic imports fail closed', () => {
+  assert.throws(() => rules({ 'unknown/a.ts': '' }), /expected one architecture owner/)
+  assert.deepEqual(rules({ 'app/a.ts': "import './missing'; import(variable)" }), ['unresolved-local-import', 'dynamic-import'])
+})
+test('overlapping ownership cannot silently change a boundary', () => {
+  assert.throws(() => analyze({ 'ui/a.ts': '' }, { zones: [...config.zones, config.zones[0]] }), /found 2/)
+})
