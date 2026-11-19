@@ -37,6 +37,10 @@
     "test:architecture": "node --test scripts/architecture/*.test.mjs",
     "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs",
     "check:electron-ipc": "node scripts/check-electron-ipc.mjs",
+    "test:desktop-handoff": "node --experimental-strip-types --test apps/desktop/src/main/handoff.test.mjs apps/desktop/src/main/workflow-service.test.mjs apps/desktop/src/main/session-vault.test.mjs",
+    "check:electron-workflow-ipc": "node scripts/check-electron-workflow-ipc.mjs",
+    "check:electron-workflow-backend": "node scripts/check-electron-workflow-backend.mjs",
+    "check:desktop-approval": "node scripts/check-desktop-approval.mjs",
     "optimize:images": "node scripts/optimize-website-images.mjs"
   },
   "devDependencies": {

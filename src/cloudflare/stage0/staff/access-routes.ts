@@ -7,20 +7,22 @@ import {segment,grants} from '../http/input'
 import {exactObject} from '../domain/input'
 import {changeMembershipGrants,getMembership,listMemberships,revokeMembership} from './memberships'
 import {acceptOwnershipTransfer,getOwnershipTransfer,requestOwnershipTransfer,revokeOwnershipTransfer} from './ownership'
+import {getVolunteerGrants,replaceVolunteerGrants} from '../volunteer/grants'
 
 type Route = {kind:'memberships';organizationId:string}
  | {kind:'membership';organizationId:string;membershipId:string}
  | {kind:'grants';organizationId:string;membershipId:string}
+ | {kind:'volunteer-grants';organizationId:string;membershipId:string}
  | {kind:'revoke';organizationId:string;membershipId:string}
  | {kind:'request';organizationId:string}
  | {kind:'transfer';organizationId:string;transferId:string}
  | {kind:'accept';organizationId:string;transferId:string}
  | {kind:'cancel';organizationId:string;transferId:string}
 function route(path:string):Route|null {
- const member=/^\/api\/v1\/organizations\/([^/]+)\/memberships(?:\/([^/]+)(?:\/(grants|revoke))?)?$/.exec(path)
+ const member=/^\/api\/v1\/organizations\/([^/]+)\/memberships(?:\/([^/]+)(?:\/(grants|volunteer-grants|revoke))?)?$/.exec(path)
  if(member){
   const organizationId=segment(member[1])
-  return member[2]?{kind:(member[3] as 'grants'|'revoke'|undefined)??'membership',organizationId,membershipId:segment(member[2])}:{kind:'memberships',organizationId}
+  return member[2]?{kind:(member[3] as 'grants'|'volunteer-grants'|'revoke'|undefined)??'membership',organizationId,membershipId:segment(member[2])}:{kind:'memberships',organizationId}
  }
  const transfer=/^\/api\/v1\/organizations\/([^/]+)\/ownership-transfer(?:\/([^/]+)(?:\/(accept|revoke))?)?$/.exec(path)
  if(!transfer)return null
@@ -36,10 +38,15 @@ export async function handleStaffAccessRequest(ctx:RequestContext,request:Reques
   const url=new URL(request.url),matched=route(url.pathname)
   if(!matched)return authResponse(ctx,{error:'not_found'},404)
   const read=['memberships','membership','transfer'].includes(matched.kind)
-  const method=read?'GET':matched.kind==='grants'?'PATCH':'POST'
-  if(request.method!==method)return authResponse(ctx,{error:'method_not_allowed'},405,{Allow:method})
+  const methods=matched.kind==='volunteer-grants'?['GET','PATCH']:[read?'GET':matched.kind==='grants'?'PATCH':'POST']
+  if(!methods.includes(request.method))return authResponse(ctx,{error:'method_not_allowed'},405,{Allow:methods.join(', ')})
   if(url.search)throw new Stage0Error('invalid_input')
   const principal=await authenticateRequest(ctx,request,transport)
+  if(matched.kind==='volunteer-grants' && request.method==='GET')return authResponse(ctx,await getVolunteerGrants(ctx,principal,matched.organizationId,matched.membershipId))
+  if(matched.kind==='volunteer-grants'){
+   const parsed=exactObject(await boundedJsonBody(request,16_384),['expectedVersion','grants'],true)
+   return authResponse(ctx,await replaceVolunteerGrants({...ctx,principal,idempotencyKey:request.headers.get('Idempotency-Key')??''},{...parsed,organizationId:matched.organizationId,membershipId:matched.membershipId}))
+  }
   if(matched.kind==='memberships')return authResponse(ctx,{memberships:await listMemberships(ctx,principal,matched.organizationId)})
   if(matched.kind==='membership')return authResponse(ctx,await getMembership(ctx,principal,matched.organizationId,matched.membershipId))
   if(matched.kind==='transfer')return authResponse(ctx,await getOwnershipTransfer(ctx,principal,matched.organizationId,matched.transferId))

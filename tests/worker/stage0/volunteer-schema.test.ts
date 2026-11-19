@@ -1,0 +1,68 @@
+import { expect, it } from 'vitest'
+import { databaseFixture } from './database'
+
+it('keeps occurrence, assignment and readiness references inside the organization', async () => {
+  const f = await databaseFixture()
+  await f.execute("INSERT INTO volunteer_people VALUES('p','org-a','Volunteer',1)").run()
+  await f.execute("INSERT INTO volunteer_occurrences VALUES('s','org-a','a1','ax','Shift',100,200,2,'published')").run()
+  await expect(f.execute("INSERT INTO volunteer_occurrences VALUES('bad','org-a','b1','ax','Shift',100,200,2,'published')").run()).rejects.toThrow()
+  await expect(f.execute("INSERT INTO volunteer_assignments VALUES('bad','org-b','s','p','lead','confirmed',1)").run()).rejects.toThrow()
+  await f.execute("INSERT INTO volunteer_role_requirements VALUES('org-a','s','lead','Lead',1)").run()
+  await expect(f.execute("INSERT INTO volunteer_readiness VALUES('org-a','s','lead','p','ready',NULL,NULL)").run()).rejects.toThrow()
+  await f.execute("INSERT INTO volunteer_readiness VALUES('org-a','s','lead','p','ready','a',1)").run()
+  await f.execute("INSERT INTO volunteer_assignments VALUES('a','org-a','s','p','lead','confirmed',1)").run()
+  await expect(f.execute("INSERT INTO volunteer_assignments VALUES('b','org-a','s','p','lead','confirmed',1)").run()).rejects.toThrow()
+  await f.execute("INSERT INTO volunteer_attendance VALUES('org-a','a',100,200)").run()
+  await expect(f.execute("INSERT INTO volunteer_attendance VALUES('org-a','a',100,200)").run()).rejects.toThrow()
+  await expect(f.execute("INSERT INTO volunteer_hours_submissions VALUES('h','org-a','a',100,200,1,'pending')").run()).rejects.toThrow()
+})
+
+it('rechecks readiness, role capacity and overlapping commitments on insertion', async () => {
+  const f = await databaseFixture()
+  for (const person of ['p', 'q', 'r']) await f.execute("INSERT INTO volunteer_people VALUES(?, 'org-a', ?, 1)", person, person).run()
+  await f.execute("INSERT INTO volunteer_occurrences VALUES('s','org-a','a1','ax','Shift',100,200,2,'published')").run()
+  await f.execute("INSERT INTO volunteer_occurrences VALUES('t','org-a','a1','ax','Other',150,250,2,'published')").run()
+  for (const occurrence of ['s', 't']) await f.execute("INSERT INTO volunteer_role_requirements VALUES('org-a',?,'lead','Lead',1)", occurrence).run()
+  await expect(f.execute("INSERT INTO volunteer_assignments VALUES('no','org-a','s','p','lead','confirmed',1)").run()).rejects.toThrow()
+  for (const [occurrence, person] of [['s','p'], ['s','q'], ['t','p']]) await f.execute("INSERT INTO volunteer_readiness VALUES('org-a',?,'lead',?,'ready','a',1)", occurrence, person).run()
+  const insert = (id: string, occurrence: string, person: string) => f.execute("INSERT INTO volunteer_assignments VALUES(?,'org-a',?,?,'lead','confirmed',1)", id, occurrence, person).run()
+  const outcomes = await Promise.allSettled([insert('a','s','p'), insert('b','s','q')])
+  expect(outcomes.filter(result => result.status === 'fulfilled')).toHaveLength(1)
+  const assigned = await f.execute("SELECT person_id FROM volunteer_assignments WHERE occurrence_id='s' AND status='confirmed'").first<string>('person_id')
+  await f.execute("INSERT INTO volunteer_readiness VALUES('org-a','t','lead',?,'ready','a',1) ON CONFLICT DO NOTHING", assigned!).run()
+  await expect(insert('overlap','t',assigned!)).rejects.toThrow()
+  await f.execute("UPDATE volunteer_assignments SET status='canceled' WHERE occurrence_id='s'").run()
+  await expect(f.execute("UPDATE volunteer_assignments SET status='confirmed' WHERE occurrence_id='s'").run()).rejects.toThrow()
+})
+
+it('prevents edits that silently overbook or conflict with confirmed assignments', async () => {
+  const f = await databaseFixture()
+  await f.execute("INSERT INTO volunteer_people VALUES('p','org-a','Volunteer',1)").run()
+  for (const [id,start,end] of [['s',100,200], ['t',200,300]] as const) {
+    await f.execute("INSERT INTO volunteer_occurrences VALUES(?,'org-a','a1','ax','Shift',?,?,2,'published')", id, start, end).run()
+    await f.execute("INSERT INTO volunteer_role_requirements VALUES('org-a',?,'role','Volunteer',2)", id).run()
+    await f.execute("INSERT INTO volunteer_readiness VALUES('org-a',?,'role','p','ready','a',1)", id).run()
+    await f.execute("INSERT INTO volunteer_assignments VALUES(?,'org-a',?,'p','role','confirmed',1)", id, id).run()
+  }
+  await expect(f.execute("UPDATE volunteer_occurrences SET capacity=0 WHERE id='s'").run()).rejects.toThrow()
+  await expect(f.execute("UPDATE volunteer_role_requirements SET capacity=0 WHERE occurrence_id='s'").run()).rejects.toThrow()
+  await expect(f.execute("UPDATE volunteer_occurrences SET ends_at=201 WHERE id='s'").run()).rejects.toThrow()
+  await expect(f.execute("UPDATE volunteer_occurrences SET status='canceled' WHERE id='s'").run()).rejects.toThrow()
+  expect(await f.execute("SELECT ends_at FROM volunteer_occurrences WHERE id='s'").first('ends_at')).toBe(200)
+})
+
+it('retains review decisions and separates approved time from attendance', async () => {
+  const f = await databaseFixture()
+  await f.execute("INSERT INTO volunteer_people VALUES('p','org-a','Volunteer',1)").run()
+  await f.execute("INSERT INTO volunteer_occurrences VALUES('s','org-a','a1','ax','Shift',100,200,1,'published')").run()
+  await f.execute("INSERT INTO volunteer_role_requirements VALUES('org-a','s','role','Volunteer',1)").run()
+  await f.execute("INSERT INTO volunteer_readiness VALUES('org-a','s','role','p','ready','a',1)").run()
+  await f.execute("INSERT INTO volunteer_assignments VALUES('a','org-a','s','p','role','confirmed',1)").run()
+  await f.execute("INSERT INTO volunteer_hours_submissions VALUES('h','org-a','a',0,7200000,0,'pending')").run()
+  await expect(f.execute("INSERT INTO volunteer_hours_decisions VALUES('bad','org-a','h','a','adjust',90,NULL,1)").run()).rejects.toThrow()
+  await f.execute("INSERT INTO volunteer_hours_decisions VALUES('d','org-a','h','a','approve',120,NULL,1)").run()
+  await f.execute("INSERT INTO volunteer_hours_decisions VALUES('e','org-a','h','a','adjust',90,'Break correction',2)").run()
+  await expect(f.execute("UPDATE volunteer_hours_decisions SET approved_minutes=90 WHERE id='d'").run()).rejects.toThrow()
+  await expect(f.execute("DELETE FROM volunteer_hours_decisions WHERE id='d'").run()).rejects.toThrow()
+  expect((await f.execute("SELECT approved_minutes FROM volunteer_hours_decisions WHERE submission_id='h' ORDER BY created_at,id").all()).results).toEqual([{ approved_minutes: 120 }, { approved_minutes: 90 }])
+})

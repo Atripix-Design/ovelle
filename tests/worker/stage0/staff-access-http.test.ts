@@ -4,6 +4,7 @@ import {issueSession,type IssuedSession} from '../../../src/cloudflare/stage0/au
 import {passkeyFixture} from './passkey-fixture'
 import {beginPasskeyRegistration,finishPasskeyRegistration} from '../../../src/cloudflare/stage0/auth/passkeys/service'
 import {handleStaffAccessRequest} from '../../../src/cloudflare/stage0/staff/access-routes'
+import {handleOrganizationRequest} from '../../../src/cloudflare/stage0/access/routes'
 let f:Awaited<ReturnType<typeof databaseFixture>>,owner:IssuedSession,admin:IssuedSession,coordinator:IssuedSession,native:IssuedSession,otherNative:IssuedSession
 let key=0
 const root='/api/v1/organizations/org-a',members=`${root}/memberships`,transfers=`${root}/ownership-transfer`
@@ -34,6 +35,46 @@ it('composes authorized list/detail and versioned grant replacement with safe re
  expect((await send(retry)).status).toBe(200)
  expect(await f.execute("SELECT count(*) AS n FROM audit_events WHERE action='membership.grants'").first('n')).toBe(1)
  expect((await send(request(`${members}/md-a/grants`,'PATCH',{expectedVersion:1,grants:[]}))).status).toBe(409)
+})
+it('lets only the owner grant scoped workflow access and invalidates it on membership changes',async()=>{
+ await f.execute("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind,program_id,location_id) VALUES('read-work','md-a','org-a','program.read','program_location','a1','ax')").run()
+ const path=`${members}/md-a/volunteer-grants`,entry={action:'schedule.manage',programId:'a1',locationId:'ax'},body={expectedVersion:1,grants:[entry]}
+ const schedule=()=>request(`${root}/volunteer-schedule`,'POST',{programId:'a1',locationId:'ax',title:'Shift',startsAt:100,endsAt:200,capacity:1},coordinator)
+ expect((await handleOrganizationRequest(f.ctx,schedule(),'browser')).status).toBe(409)
+ expect((await send(request(path,'PATCH',body,admin))).status).toBe(409)
+ const noCsrf=request(path,'PATCH',body);noCsrf.headers.delete('X-CSRF-Token');expect((await send(noCsrf)).status).toBe(403)
+ expect((await send(request(path,'PATCH',{...body,grants:[{...entry,locationId:'ay'}]}))).status).toBe(409)
+ expect((await send(request(path,'PATCH',{...body,grants:[entry,entry]}))).status).toBe(400)
+ const original=request(path,'PATCH',body),retry=original.clone(),applied=await send(original);expect(applied.status).toBe(200)
+ expect(await applied.json()).toEqual({membershipId:'md-a',version:2});expect(await (await send(retry)).json()).toEqual({membershipId:'md-a',version:2})
+ expect((await handleOrganizationRequest(f.ctx,schedule(),'browser')).status).toBe(201)
+ expect(await (await send(request(path,'GET',undefined,coordinator))).json()).toMatchObject({version:2,grants:[entry]})
+ expect((await send(request(`${members}/mc-a/volunteer-grants`,'GET',undefined,coordinator))).status).toBe(404)
+ expect((await send(request(path,'PATCH',body))).status).toBe(409)
+ expect(await f.execute('SELECT count(*) AS n FROM volunteer_grant_events').first('n')).toBe(1)
+ const baseGrant={action:'program.read',scope:{kind:'program_location',programId:'a1',locationId:'ax'}}
+ expect((await send(request(`${members}/md-a/grants`,'PATCH',{expectedVersion:2,grants:[baseGrant]}))).status).toBe(200)
+ expect(await (await send(request(path,'GET',undefined,coordinator))).json()).toMatchObject({version:3,grants:[]})
+ expect((await handleOrganizationRequest(f.ctx,schedule(),'browser')).status).toBe(409)
+ expect((await send(request(path,'PATCH',{expectedVersion:3,grants:[entry]}))).status).toBe(200)
+ expect((await send(request(`${members}/md-a/revoke`,'POST',{expectedVersion:4}))).status).toBe(200)
+ await f.execute("UPDATE organization_memberships SET state='active',version=version+1 WHERE id='md-a'").run()
+ expect(await f.execute("SELECT count(*) AS n FROM volunteer_grants WHERE membership_id='md-a'").first('n')).toBe(0)
+})
+it('requires a recent owner passkey and rejects stale workflow grant authority',async()=>{
+ await f.execute("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind,program_id,location_id) VALUES('read-work','md-a','org-a','program.read','program_location','a1','ax')").run()
+ const body={expectedVersion:1,grants:[{action:'hours.review',programId:'a1',locationId:'ax'}]}
+ f.advance(300001)
+ expect((await send(request(`${members}/md-a/volunteer-grants`,'PATCH',body))).status).toBe(409)
+ expect(await f.execute('SELECT count(*) AS n FROM volunteer_grants').first('n')).toBe(0)
+})
+it('commits only one concurrent workflow grant replacement for a membership version',async()=>{
+ await f.execute("INSERT INTO membership_grants(id,membership_id,organization_id,action,scope_kind,program_id,location_id) VALUES('read-work','md-a','org-a','program.read','program_location','a1','ax')").run()
+ const path=`${members}/md-a/volunteer-grants`,grant=(action:string)=>({expectedVersion:1,grants:[{action,programId:'a1',locationId:'ax'}]})
+ const results=await Promise.all([send(request(path,'PATCH',grant('hours.review'))),send(request(path,'PATCH',grant('attendance.manage')))])
+ expect(results.map(result=>result.status).sort()).toEqual([200,409])
+ expect(await f.execute("SELECT count(*) AS n FROM volunteer_grants WHERE membership_id='md-a'").first('n')).toBe(1)
+ expect(await f.execute('SELECT count(*) AS n FROM volunteer_grant_events').first('n')).toBe(1)
 })
 it('revokes existing browser/native organization access on their next request, retaining other organizations',async()=>{
  for(const [session,transport] of [[coordinator,'browser'],[otherNative,'desktop']] as const)expect((await send(request(members,'GET',undefined,session),transport)).status).toBe(200)

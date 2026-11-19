@@ -2,10 +2,14 @@ import { app, BrowserWindow, shell } from 'electron'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { registerDownloadHandlers } from './downloads.js'
+import { registerWorkflowHandlers } from './workflow-ipc.js'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 declare const __OVELLE_LIVE_URL__: string
+declare const __OVELLE_STAGE0_ORIGIN__: string
 const liveURL = __OVELLE_LIVE_URL__
+const workflowEnabled=!liveURL && !!__OVELLE_STAGE0_ORIGIN__ && !process.env.ELECTRON_RENDERER_URL
+const primaryInstance=!workflowEnabled || app.requestSingleInstanceLock()
 
 function createWindow(): void {
   const window = new BrowserWindow({
@@ -42,11 +46,21 @@ function createWindow(): void {
   }
 }
 
-void app.whenReady().then(() => {
-  if (!liveURL) registerDownloadHandlers(process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href)
+if (!primaryInstance) app.quit()
+else void app.whenReady().then(() => {
+  if (!liveURL) {
+    const rendererURL=process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href
+    registerDownloadHandlers(rendererURL)
+    // Native workflow authority belongs only to the bundled file renderer.
+    if (workflowEnabled) registerWorkflowHandlers(rendererURL,__OVELLE_STAGE0_ORIGIN__)
+  }
   createWindow()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+  app.on('second-instance',()=>{
+    const window=BrowserWindow.getAllWindows()[0]
+    if(window){if(window.isMinimized())window.restore();window.focus()}
   })
 })
 

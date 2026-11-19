@@ -3,8 +3,9 @@
 The internal Task 9 backend implements a first-party request, explicit browser
 approval and one-time native exchange. It reuses current session validation,
 issuance, SQL guards, safe HTTP responses and durable auth quotas. The public
-Worker does not import these routes. This is backend evidence; Electron main,
-preload, system-browser UI, OS storage and packaged restart behavior remain open.
+Worker does not import these routes. An opt-in development build now contains a
+native main-process handoff and a restricted workflow bridge. The browser UI,
+OS storage is implemented but packaged restart behavior remains unverified.
 
 ## Protocol and boundaries
 
@@ -102,10 +103,68 @@ and local D1 fixtures, without live providers or remote migrations.
 
 ## Still unfinished
 
-Original Task 9 is incomplete: no Electron listener, browser approval page,
-safeStorage implementation, allowlisted IPC, renderer credential inspection,
-Windows/macOS package sign-in/restart tests or live identity rollout is provided
-by this backend slice. No UI/Figma changes were made. Original Task 5's advisory
+The new `apps/desktop/src/main/handoff.ts` binds an exclusive IPv4 loopback
+listener, checks the method, host, callback path, state and parameter cardinality,
+then exchanges a one-time code with an S256 verifier. Its token stays in the
+main-process return value. Tests use a real local listener and fixture HTTP
+responses; they do not prove the browser approval page, live server or OS
+persistence. The intended `/desktop/authorize` page is not implemented.
+
+`OVELLE_STAGE0_ORIGIN=https://dev.ovelle.org` at build time enables named
+workflow IPC operations for the packaged renderer. The main process optionally
+persists the session with Electron safeStorage on macOS and Windows, falling
+back to memory when encryption is unavailable. Linux currently uses memory only
+because keyring discovery can block startup in headless environments. A restored
+session requires online server validation before use. If the app starts offline,
+requesting sign-in retries validation of the saved session after reconnecting.
+Sign-out reports local
+deletion and remote revocation separately; an in-flight sign-in makes revocation
+unconfirmed until its resulting token can be revoked. The bridge rejects unknown operations and renderer-supplied URLs,
+limits response size, checks the sender on each call, and clears an invalidated
+session. A fixture-driven real Electron test checks the handoff, bearer isolation
+and navigation revocation. The live remote renderer receives no preload or native
+bridge, even when the development origin is configured. These checks do not
+establish a working service or sign-in on the installed Mac application.
+
+On November 19, an isolated instance of the installed Mac development app was
+inspected through its local Chromium debugging endpoint. It loaded the Tailnet
+preview URL and its root contained only the empty `desktop-shell`; the workflow
+bridge was absent. This confirms the current installed app cannot run the
+workflow. It does not verify native window dragging, Keychain persistence, or
+the appearance of a completed interface. The temporary debugging instance was
+closed after inspection.
+
+On November 19, a separately ad-hoc-signed temporary copy of that Mac app ran
+the current vault module with a synthetic session. Electron reported secure
+storage available; the saved bytes did not contain the token, and decrypt/load
+and deletion succeeded. A separate three-launch test saved a synthetic session,
+restored it after a simulated server response, signed out, and confirmed the
+next launch remained signed out. An initial 204 validation response exposed a
+contract mismatch; after requiring the native `/me` JSON response, the same
+three-launch check passed using a contract-correct fixture. The copies, test
+profiles and data were removed. These checks do not establish real account
+sign-in or prove that the installed release includes the new module.
+
+`apps/shared/desktop-approval.ts` supplies the browser-side controller: it
+removes the fragment, checks the signed-in account and CSRF token, requires an
+explicit approval action, and validates the loopback destination before navigation.
+An ambiguous submission cannot be retried with the same request. The designed
+page and its sign-in/recovery experience are still absent.
+
+The local integration harness uses Electron, Chromium, the real Stage 0
+composition and an ephemeral D1 database to exercise explicit browser approval,
+creation, requirements, readiness, assignment, roster, attendance, hours approval
+and service history through the named IPC operations. It injects a synthetic browser
+session and uses a blank fixture page; no designed approval page, provider login,
+live service, durable user data or Mac packaging is covered. Run it after an
+opt-in desktop build with `npm run check:electron-workflow-backend` (use a
+virtual display when no graphical session is available).
+
+Original Task 9 is incomplete: there is no browser approval page,
+full renderer credential inspection,
+Windows/macOS package sign-in/restart tests or live identity rollout. The listener
+is registered only in opt-in packaged builds and no sign-in UI is exposed to users
+yet. No UI/Figma changes were made. Original Task 5's advisory
 capability snapshot is still absent; live authorization and grant containment
 already exist and must not be reimplemented just to match an old helper name.
 Task 4/8 recovery, password runtime selection and the broader Stage 0 volunteer,
