@@ -15,9 +15,8 @@ function createWindow(): void {
     minHeight: 480,
     backgroundColor: '#ffffff',
     autoHideMenuBar: true,
-    // Keep the native macOS window controls and fullscreen behavior while
-    // letting the renderer provide the area used to move the window.
-    ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden' as const } : {}),
+    // Keep the native title bar available even when a renderer has no drag region.
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'default' as const } : {}),
     webPreferences: {
       // The remote development renderer does not receive native capabilities.
       preload: liveURL ? undefined : join(currentDir, '../preload/index.cjs'),
