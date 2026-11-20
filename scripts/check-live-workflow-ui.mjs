@@ -90,5 +90,12 @@ try {
   const decision = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'reviewHours')
   assert.equal(decision.organizationId, 'org'); assert.equal(decision.approvedMinutes, 60)
   assert.deepEqual(errors, [])
+  const unavailable = await browser.newPage()
+  await unavailable.addInitScript(() => { window.ovelleWorkflow = { status: async () => { throw Error('No handler') } } })
+  await unavailable.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
+  await unavailable.getByRole('button', { name: 'Live workspace' }).click()
+  await unavailable.getByRole('heading', { name: 'Native connection unavailable' }).waitFor()
+  assert.equal(await unavailable.getByRole('button', { name: 'Sign in' }).count(), 0)
+  await unavailable.close()
   console.log('Live workflow renderer: scoped fixture data, check-in and explicit approval confirmation passed.')
 } finally { await browser.close() }

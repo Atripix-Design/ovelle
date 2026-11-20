@@ -82,6 +82,7 @@ export default function LiveWorkspace({
   onPreview: () => void;
 }) {
   const api = window.ovelleWorkflow;
+  const [bridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
   const [signedIn, setSignedIn] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
@@ -127,9 +128,9 @@ export default function LiveWorkspace({
       api
         .status()
         .then((status) => {
-          if (active) setSignedIn(status.signedIn);
+          if (active) { setSignedIn(status.signedIn); setBridgeAvailable(true); }
         })
-        .catch(() => {});
+        .catch(() => { if (active) setBridgeAvailable(false); });
     return () => {
       active = false;
     };
@@ -389,7 +390,7 @@ export default function LiveWorkspace({
             hours.
           </p>
         </div>
-        {!api ? (
+        {!api || bridgeAvailable === false ? (
           <section className="workflow-card">
             <h2>Native connection unavailable</h2>
             <p>
@@ -397,6 +398,8 @@ export default function LiveWorkspace({
               packaged Ovelle build with the native workflow bridge enabled.
             </p>
           </section>
+        ) : bridgeAvailable === null ? (
+          <p>Checking native connection…</p>
         ) : !signedIn ? (
           <section className="workflow-card">
             <h2>Sign in to Ovelle</h2>
