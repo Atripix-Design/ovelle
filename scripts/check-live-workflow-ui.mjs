@@ -11,6 +11,7 @@ try {
     window.fixtureCalls = []
     window.fixtureDraft = null
     window.fixtureRoles = []
+    window.fixtureCriteria = []
     window.ovelleWorkflow = {
       status: async () => ({ signedIn: true }),
       signIn: async () => ({ signedIn: true }),
@@ -23,8 +24,9 @@ try {
           case 'locations': return { locations: [{ id: 'l', name: 'Location' }] }
           case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }, ...(window.fixtureDraft ? [window.fixtureDraft] : [])], nextCursor: null }
           case 'createOccurrence': window.fixtureDraft = { id: 'draft', title: input.title, startsAt: input.startsAt, endsAt: input.endsAt, capacity: input.capacity, assigned: 0, held: 0, status: 'draft' }; return { id: 'draft' }
-          case 'occurrence': return { roles: window.fixtureRoles, criteria: [], truncated: false, criteriaTruncated: false }
+          case 'occurrence': return { roles: window.fixtureRoles, criteria: window.fixtureCriteria, truncated: false, criteriaTruncated: false }
           case 'createRole': window.fixtureRoles.push({ id: 'role', name: input.name, capacity: input.capacity }); return { id: 'role' }
+          case 'createCriterion': window.fixtureCriteria.push({ id: 'criterion', roleId: input.roleId, name: input.name }); return { id: 'criterion' }
           case 'publishOccurrence': window.fixtureDraft.status = 'published'; return { id: 'draft', status: 'published' }
           case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
           case 'checkIn': return {}
@@ -36,8 +38,9 @@ try {
           case 'hoursHistory': return { decisions: [], nextCursor: null }
           case 'reviewHours': return { id: 'd' }
           case 'readiness': return { cases: [{ occurrenceId: 's', roleId: 'r', personId: 'person', name: 'Avery', role: 'Volunteer', title: 'Shift', state: 'pending', latestDecisionId: null }], nextCursor: null }
-          case 'criterionEvidence': return { criteria: [{ id: 'c', name: 'Waiver', state: 'verified', validUntil: null, note: null }], truncated: false }
+          case 'criterionEvidence': return { criteria: [{ id: 'c', name: 'Waiver', evidenceId: null, state: 'verified', validUntil: null, note: null }], truncated: false }
           case 'decideReadiness': return { id: 'decision' }
+          case 'recordEvidence': if (window.fixtureCalls.filter(call => call.operation === 'recordEvidence').length === 1) throw Error('Connection lost'); return { id: 'evidence' }
           default: throw Error(`Unexpected operation: ${input.operation}`)
         }
       },
@@ -64,6 +67,10 @@ try {
   await page.getByRole('button', { name: /New shift.*Set up draft/ }).click()
   await page.getByLabel('Role name').fill('Packer')
   await page.getByRole('button', { name: 'Add role' }).click()
+  await page.getByLabel('Role for requirement').selectOption('role')
+  await page.getByLabel('Requirement name').fill('Safety briefing')
+  await page.getByRole('button', { name: 'Add requirement' }).click()
+  await page.getByText('Safety briefing', { exact: false }).waitFor()
   await page.getByRole('button', { name: 'Review publication' }).click()
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'publishOccurrence').length, 0)
   await page.getByRole('button', { name: 'Confirm publication' }).click()
@@ -71,6 +78,19 @@ try {
   await page.getByRole('button', { name: 'Readiness' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
   await checkWidths()
+  await page.getByRole('button', { name: 'Record evidence for Waiver' }).click()
+  await page.getByLabel('Valid from').fill('2026-01-01T10:00')
+  await page.getByLabel('Evidence note').fill('Reviewed waiver')
+  await page.getByRole('button', { name: 'Review evidence' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'recordEvidence').length, 0)
+  await page.getByRole('button', { name: 'Confirm evidence' }).click()
+  await page.getByRole('button', { name: 'Retry evidence' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.filter(call => call.operation === 'recordEvidence').length === 2)
+  const attempts = (await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'recordEvidence')
+  assert.equal(attempts[0].idempotencyKey, attempts[1].idempotencyKey)
+  const evidence = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'recordEvidence')
+  assert.equal(evidence.expectedEvidenceId, null); assert.equal(evidence.criterionId, 'c')
+  await page.getByRole('button', { name: /Avery.*Shift/ }).click()
   await page.getByLabel('Review note').fill('Evidence reviewed')
   await page.getByRole('button', { name: 'Review ready decision' }).click()
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'decideReadiness').length, 0)

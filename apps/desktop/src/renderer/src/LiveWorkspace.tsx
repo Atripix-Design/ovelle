@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, LoadingBoundary } from "@ovelle/ui";
 import ScheduleEditor from "./ScheduleEditor";
+import ReadinessEvidence from "./ReadinessEvidence";
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -38,6 +39,7 @@ type RosterPerson = {
 };
 type Criterion = {
   id: string;
+  evidenceId: string | null;
   name: string;
   state: string | null;
   validUntil: number | null;
@@ -113,6 +115,7 @@ export default function LiveWorkspace({
   const [offerConfirmation, setOfferConfirmation] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const [criteria, setCriteria] = useState<Criterion[] | null>(null);
+  const [evidenceCriterion, setEvidenceCriterion] = useState<Criterion | null>(null);
   const [criteriaComplete, setCriteriaComplete] = useState(false);
   const [readinessNote, setReadinessNote] = useState("");
   const [readinessDecision, setReadinessDecision] = useState<
@@ -191,6 +194,7 @@ export default function LiveWorkspace({
   useEffect(() => {
     let active = true;
     setCriteria(null);
+    setEvidenceCriterion(null);
     setCriteriaComplete(false);
     setReadinessDecision(null);
     if (!api || !selectedCase || !org || !program || !location) return;
@@ -578,16 +582,17 @@ export default function LiveWorkspace({
                             <p>No role requirements are configured.</p>
                           ) : (
                             criteria.map((item) => (
-                              <p key={item.id}>
-                                <strong>{item.name}:</strong>{" "}
-                                {item.state ?? "No evidence"}
-                                {item.validUntil !== null
-                                  ? ` · valid until ${displayTime(item.validUntil)}`
-                                  : ""}
-                                {item.note ? ` · ${item.note}` : ""}
-                              </p>
+                              <div key={item.id}>
+                                <p><strong>{item.name}:</strong>{" "}
+                                  {item.state ?? "No evidence"}
+                                  {item.validUntil !== null ? ` · valid until ${displayTime(item.validUntil)}` : ""}
+                                  {item.note ? ` · ${item.note}` : ""}
+                                </p>
+                                <Button variant="secondary" size="compact" onClick={() => setEvidenceCriterion(item)}>Record evidence for {item.name}</Button>
+                              </div>
                             ))
                           )}
+                          {evidenceCriterion && <ReadinessEvidence key={`${selectedCase.personId}:${evidenceCriterion.id}`} request={api!.request} identity={{ organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId }} criterion={evidenceCriterion} onRecorded={() => { setEvidenceCriterion(null); setRevision(v => v + 1) }} onCancel={() => setEvidenceCriterion(null)} />}
                           {criteria !== null && !criteriaComplete && (
                             <p>
                               More requirements exist than this view can safely
