@@ -22,6 +22,8 @@ try {
           case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }], nextCursor: null }
           case 'roster': return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: 'ready', presence: 'expected' }], nextCursor: null }
           case 'checkIn': return {}
+          case 'waitlist': return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: 'waiting', offerId: null, offerExpiresAt: null }], nextCursor: null }
+          case 'offerWaitlist': return { id: 'offer' }
           case 'hours': return { submissions: [{ id: 'h', name: 'Avery', title: 'Shift', state: 'pending', startAt: 0, endAt: 3600000, breakMinutes: 0, checkedInAt: 0, checkedOutAt: 3600000 }], nextCursor: null }
           case 'hoursHistory': return { decisions: [], nextCursor: null }
           case 'reviewHours': return { id: 'd' }
@@ -48,6 +50,16 @@ try {
   await page.getByRole('button', { name: 'Schedule' }).click()
   await page.getByRole('button', { name: /Shift.*Open roster/ }).click()
   await page.getByRole('button', { name: 'Check in' }).click()
+  await page.getByRole('button', { name: 'Coverage' }).click()
+  await page.getByText('1/2 assigned', { exact: false }).waitFor()
+  await page.getByRole('button', { name: 'Prepare offer' }).click()
+  const deadline = new Date(Date.now() + 86400000)
+  const local = new Date(deadline.getTime() - deadline.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+  await page.getByLabel('Offer deadline').fill(local)
+  await page.getByRole('button', { name: 'Review offer' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'offerWaitlist').length, 0)
+  await page.getByRole('button', { name: 'Confirm offer' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'offerWaitlist'))
   await page.getByRole('button', { name: 'Hours review' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
   await page.getByRole('button', { name: 'Review approval' }).click()

@@ -52,7 +52,16 @@ type Hours = {
   checkedInAt: number | null;
   checkedOutAt: number | null;
 };
-type Screen = "schedule" | "readiness" | "roster" | "hours";
+type WaitlistEntry = {
+  id: string;
+  name: string;
+  role: string;
+  readiness: string | null;
+  state: "waiting" | "offered" | "assigned" | "withdrawn";
+  offerId: string | null;
+  offerExpiresAt: number | null;
+};
+type Screen = "schedule" | "readiness" | "roster" | "coverage" | "hours";
 
 declare global {
   interface Window {
@@ -83,15 +92,21 @@ export default function LiveWorkspace({
     [program, setProgram] = useState(""),
     [location, setLocation] = useState("");
   const [screen, setScreen] = useState<Screen>("schedule"),
-    [shift, setShift] = useState("");
+    [shift, setShift] = useState(""),
+    [selectedShift, setSelectedShift] = useState<Shift | null>(null);
   const [shifts, setShifts] = useState<Shift[]>([]),
     [cases, setCases] = useState<Case[]>([]),
     [roster, setRoster] = useState<RosterPerson[]>([]),
-    [hours, setHours] = useState<Hours[]>([]);
+    [hours, setHours] = useState<Hours[]>([]),
+    [waitlist, setWaitlist] = useState<WaitlistEntry[]>([]);
   const [cursor, setCursor] = useState<string | null>(null),
     [selected, setSelected] = useState<Hours | null>(null),
     [reason, setReason] = useState("");
   const [revision, setRevision] = useState(0);
+  const [offerEntry, setOfferEntry] = useState<WaitlistEntry | null>(null);
+  const [offerDeadline, setOfferDeadline] = useState("");
+  const [offerNote, setOfferNote] = useState("");
+  const [offerConfirmation, setOfferConfirmation] = useState(false);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const [criteria, setCriteria] = useState<Criterion[] | null>(null);
   const [criteriaComplete, setCriteriaComplete] = useState(false);
@@ -245,6 +260,9 @@ export default function LiveWorkspace({
     setCases([]);
     setRoster([]);
     setHours([]);
+    setWaitlist([]);
+    setOfferEntry(null);
+    setOfferConfirmation(false);
     setSelected(null);
     setSelectedCase(null);
     if (
@@ -252,7 +270,7 @@ export default function LiveWorkspace({
       !org ||
       !program ||
       !location ||
-      (screen === "roster" && !shift)
+      ((screen === "roster" || screen === "coverage") && !shift)
     )
       return;
     const scope = {
@@ -269,8 +287,12 @@ export default function LiveWorkspace({
             from: now - 30 * 86400000,
             until: now + 90 * 86400000,
           }
-        : screen === "roster"
-          ? { operation: "roster", ...scope, occurrenceId: shift }
+        : screen === "roster" || screen === "coverage"
+          ? {
+              operation: screen === "coverage" ? "waitlist" : "roster",
+              ...scope,
+              occurrenceId: shift,
+            }
           : { operation: screen, ...scope };
     setBusy(true);
     setError("");
@@ -282,6 +304,8 @@ export default function LiveWorkspace({
         else if (screen === "readiness") setCases(data.cases as Case[]);
         else if (screen === "roster")
           setRoster(data.volunteers as RosterPerson[]);
+        else if (screen === "coverage")
+          setWaitlist(data.entries as WaitlistEntry[]);
         else setHours(data.submissions as Hours[]);
       })
       .catch((e) => {
@@ -392,6 +416,7 @@ export default function LiveWorkspace({
                   onChange={(e) => {
                     setOrg(e.target.value);
                     setShift("");
+                    setSelectedShift(null);
                   }}
                 >
                   <option value="">Choose organization</option>
@@ -410,6 +435,7 @@ export default function LiveWorkspace({
                   onChange={(e) => {
                     setProgram(e.target.value);
                     setShift("");
+                    setSelectedShift(null);
                   }}
                 >
                   <option value="">Choose program</option>
@@ -428,6 +454,7 @@ export default function LiveWorkspace({
                   onChange={(e) => {
                     setLocation(e.target.value);
                     setShift("");
+                    setSelectedShift(null);
                   }}
                 >
                   <option value="">Choose location</option>
@@ -440,22 +467,28 @@ export default function LiveWorkspace({
               </label>
             </section>
             <nav className="workflow-tabs" aria-label="Live workflow">
-              {(["schedule", "readiness", "roster", "hours"] as Screen[]).map(
-                (item) => (
-                  <button
-                    key={item}
-                    aria-current={screen === item ? "page" : undefined}
-                    disabled={busy}
-                    onClick={() => setScreen(item)}
-                  >
-                    {item === "roster"
-                      ? "Day-of roster"
-                      : item === "hours"
-                        ? "Hours review"
-                        : item[0].toUpperCase() + item.slice(1)}
-                  </button>
-                ),
-              )}
+              {(
+                [
+                  "schedule",
+                  "readiness",
+                  "roster",
+                  "coverage",
+                  "hours",
+                ] as Screen[]
+              ).map((item) => (
+                <button
+                  key={item}
+                  aria-current={screen === item ? "page" : undefined}
+                  disabled={busy}
+                  onClick={() => setScreen(item)}
+                >
+                  {item === "roster"
+                    ? "Day-of roster"
+                    : item === "hours"
+                      ? "Hours review"
+                      : item[0].toUpperCase() + item.slice(1)}
+                </button>
+              ))}
             </nav>
             {!org || !program || !location ? (
               <p>Select an organization, program and location to continue.</p>
@@ -483,6 +516,7 @@ export default function LiveWorkspace({
                             key={item.id}
                             onClick={() => {
                               setShift(item.id);
+                              setSelectedShift(item);
                               setScreen("roster");
                             }}
                           >
@@ -665,6 +699,182 @@ export default function LiveWorkspace({
                           )}
                         </div>
                       ))
+                    ))}
+                  {screen === "coverage" &&
+                    (!shift ? (
+                      <p>
+                        Choose an occurrence from Schedule, then open Coverage.
+                      </p>
+                    ) : (
+                      <>
+                        {selectedShift && (
+                          <p>
+                            <strong>{selectedShift.title}</strong> · {selectedShift.assigned}/{selectedShift.capacity} assigned · {selectedShift.held} held when schedule was loaded. Refresh Schedule for current capacity.
+                          </p>
+                        )}
+                        <p>
+                          Waitlist offers hold a place until the deadline.
+                          Contact volunteers separately; Ovelle does not send an
+                          offer message.
+                        </p>
+                        {waitlist.length === 0 ? (
+                          <p>No waitlist entries for this occurrence.</p>
+                        ) : (
+                          waitlist.map((item) => (
+                            <div className="table-row" key={item.id}>
+                              <strong>{item.name}</strong>
+                              <span>
+                                {item.role} · readiness:{" "}
+                                {item.readiness ?? "not recorded"}
+                              </span>
+                              <span>
+                                {item.state}
+                                {item.offerExpiresAt
+                                  ? ` until ${displayTime(item.offerExpiresAt)}`
+                                  : ""}
+                              </span>
+                              {(item.state === "waiting" ||
+                                (item.state === "offered" && item.offerId)) && (
+                                <Button
+                                  size="compact"
+                                  variant="secondary"
+                                  onClick={() => {
+                                    setOfferEntry(item);
+                                    setOfferDeadline("");
+                                    setOfferNote("");
+                                    setOfferConfirmation(false);
+                                  }}
+                                >
+                                  {item.state === "waiting"
+                                    ? "Prepare offer"
+                                    : "Record acceptance"}
+                                </Button>
+                              )}
+                            </div>
+                          ))
+                        )}
+                        {offerEntry && (
+                          <div className="workflow-card">
+                            <h3>
+                              {offerEntry.state === "waiting"
+                                ? "Prepare offer"
+                                : "Record acceptance"}
+                              : {offerEntry.name}
+                            </h3>
+                            {offerEntry.state === "waiting" ? (
+                              <>
+                                <p>
+                                  Contact the volunteer separately. Recording
+                                  this offer holds capacity but does not send a
+                                  message. The deadline must be within seven
+                                  days and no later than the occurrence end.
+                                </p>
+                                <label>
+                                  Offer deadline{" "}
+                                  <input
+                                    type="datetime-local"
+                                    value={offerDeadline}
+                                    onChange={(e) => {
+                                      setOfferDeadline(e.target.value);
+                                      setOfferConfirmation(false);
+                                    }}
+                                  />
+                                </label>
+                              </>
+                            ) : (
+                              <>
+                                <p>
+                                  Record acceptance only after the volunteer has
+                                  agreed through another channel.
+                                </p>
+                                <label>
+                                  Acceptance note{" "}
+                                  <input
+                                    value={offerNote}
+                                    onChange={(e) => {
+                                      setOfferNote(e.target.value);
+                                      setOfferConfirmation(false);
+                                    }}
+                                  />
+                                </label>
+                              </>
+                            )}
+                            {!offerConfirmation ? (
+                              <Button
+                                disabled={
+                                  busy ||
+                                  (offerEntry.state === "waiting"
+                                    ? !offerDeadline ||
+                                      !Number.isFinite(
+                                        new Date(offerDeadline).getTime(),
+                                      ) ||
+                                      new Date(offerDeadline).getTime() <=
+                                        Date.now() ||
+                                      new Date(offerDeadline).getTime() >
+                                        Date.now() + 7 * 86400000
+                                    : !offerNote.trim())
+                                }
+                                onClick={() => setOfferConfirmation(true)}
+                              >
+                                Review{" "}
+                                {offerEntry.state === "waiting"
+                                  ? "offer"
+                                  : "acceptance"}
+                              </Button>
+                            ) : (
+                              <>
+                                <p>
+                                  Confirm{" "}
+                                  {offerEntry.state === "waiting"
+                                    ? `an offer expiring ${displayTime(new Date(offerDeadline).getTime())}`
+                                    : "the volunteer accepted this offer"}
+                                  .
+                                </p>
+                                <Button
+                                  disabled={busy}
+                                  onClick={() =>
+                                    void action(
+                                      offerEntry.state === "waiting"
+                                        ? "offerWaitlist"
+                                        : "confirmOffer",
+                                      offerEntry.state === "waiting"
+                                        ? {
+                                            waitlistId: offerEntry.id,
+                                            expiresAt: new Date(
+                                              offerDeadline,
+                                            ).getTime(),
+                                          }
+                                        : {
+                                            offerId: offerEntry.offerId,
+                                            confirmationNote: offerNote.trim(),
+                                          },
+                                    )
+                                  }
+                                >
+                                  Confirm{" "}
+                                  {offerEntry.state === "waiting"
+                                    ? "offer"
+                                    : "acceptance"}
+                                </Button>
+                                <Button
+                                  variant="secondary"
+                                  disabled={busy}
+                                  onClick={() => setOfferConfirmation(false)}
+                                >
+                                  Back
+                                </Button>
+                              </>
+                            )}
+                            <Button
+                              variant="secondary"
+                              disabled={busy}
+                              onClick={() => setOfferEntry(null)}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     ))}
                   {screen === "hours" && (
                     <>
