@@ -22,8 +22,9 @@ try {
           case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }], nextCursor: null }
           case 'roster': return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: 'ready', presence: 'expected' }], nextCursor: null }
           case 'checkIn': return {}
-          case 'waitlist': return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: 'waiting', offerId: null, offerExpiresAt: null }], nextCursor: null }
+          case 'waitlist': { const offered = window.fixtureCalls.some(call => call.operation === 'offerWaitlist'); return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: offered ? 'offered' : 'waiting', offerId: offered ? 'offer' : null, offerExpiresAt: offered ? Date.now() + 86400000 : null }], nextCursor: null } }
           case 'offerWaitlist': return { id: 'offer' }
+          case 'confirmOffer': return { id: 'assignment' }
           case 'hours': return { submissions: [{ id: 'h', name: 'Avery', title: 'Shift', state: 'pending', startAt: 0, endAt: 3600000, breakMinutes: 0, checkedInAt: 0, checkedOutAt: 3600000 }], nextCursor: null }
           case 'hoursHistory': return { decisions: [], nextCursor: null }
           case 'reviewHours': return { id: 'd' }
@@ -60,6 +61,14 @@ try {
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'offerWaitlist').length, 0)
   await page.getByRole('button', { name: 'Confirm offer' }).click()
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'offerWaitlist'))
+  await page.getByRole('button', { name: 'Record acceptance' }).click()
+  await page.getByLabel('Acceptance note').fill('Accepted by phone')
+  await page.getByRole('button', { name: 'Review acceptance' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'confirmOffer').length, 0)
+  await page.getByRole('button', { name: 'Confirm acceptance' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'confirmOffer'))
+  const acceptance = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'confirmOffer')
+  assert.equal(acceptance.offerId, 'offer'); assert.equal(acceptance.confirmationNote, 'Accepted by phone')
   await page.getByRole('button', { name: 'Hours review' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
   await page.getByRole('button', { name: 'Review approval' }).click()
