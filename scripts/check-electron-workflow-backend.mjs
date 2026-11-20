@@ -143,7 +143,7 @@ try {
   await write('openReadiness',walkIdentity);await write('decideReadiness',{...walkIdentity,state:'ready',evidenceNote:'Reviewed'})
   await write('registerWalkIn',walkIdentity)
   const walkRoster=await api.request({operation:'roster',...scope,occurrenceId:walkShift.id})
-  return {organizations,grants,search,roster,before,after,reviewHistory,queue,amended,replacementRoster,walkRoster,signedOut:await api.signOut()}
+  return {organizations,grants,search,roster,before,after,reviewHistory,queue,amended,replacementRoster,walkRoster}
  })
  assert.equal(result.organizations.organizations[0].id,'org-a')
  assert.deepEqual(result.grants.grants,[{action:'assignment.manage',programId:'program',locationId:'site'}])
@@ -154,7 +154,18 @@ try {
  assert.equal(result.queue.corrections[0].latestDecisionId,result.after.records[0].decisionId);assert.equal(result.amended.records[0].approvedMinutes,2)
  assert.equal(result.replacementRoster.volunteers[0].name,'Replacement volunteer')
  assert.equal(result.walkRoster.summary.onSite,1);assert.equal(result.walkRoster.volunteers[0].presence,'on_site')
- assert.deepEqual(result.signedOut,{revoked:true,localCleared:true})
+ await page.getByRole('button',{name:'Live workspace'}).click()
+ await page.getByLabel('Organization').selectOption('org-a')
+ await page.getByLabel('Program').selectOption('program')
+ await page.getByLabel('Location').selectOption('site')
+ await page.getByRole('button',{name:/Walk-in shift.*Open roster/}).click()
+ await page.getByText('on site',{exact:true}).waitFor()
+ await page.getByRole('button',{name:'Readiness'}).click()
+ await page.getByRole('button',{name:/Fixture volunteer.*Walk-in shift/}).waitFor()
+ await page.getByRole('button',{name:'Hours review'}).click()
+ await page.getByRole('button',{name:/Fixture volunteer.*Fixture shift/}).waitFor()
+ await page.getByRole('button',{name:'Sign out'}).click()
+ await page.getByRole('heading',{name:'Sign in to Ovelle'}).waitFor()
  assert.equal(await db.prepare('SELECT count(*) AS n FROM volunteer_hours_decisions').first('n'),3)
  console.log('Electron + Chromium + local Stage 0 fixture: explicit browser approval, schedule, eligibility, roster, hours correction and replacement passed; synthetic browser session and disposable data.')
 } finally {

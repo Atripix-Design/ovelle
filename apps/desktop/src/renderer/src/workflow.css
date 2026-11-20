@@ -344,3 +344,59 @@
     font-size: 10px;
   }
 }
+.workflow-live-link {
+  border: 0;
+  background: transparent;
+  color: #005c8f;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+.live-selectors {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.live-selectors label,
+.live-review label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #536d80;
+  font-weight: 600;
+}
+.live-selectors select,
+.live-review textarea {
+  border: 1px solid #cddde5;
+  border-radius: 8px;
+  background: white;
+  padding: 9px;
+  color: #172b3d;
+  font: inherit;
+  min-width: 160px;
+}
+.live-review {
+  border-top: 1px solid #d3e0e7;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+.live-review textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+.live-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.live-error {
+  color: #a03125;
+  margin-top: 20px;
+}
+.workflow-topbar .text-action {
+  margin: 0;
+  -webkit-app-region: no-drag;
+}

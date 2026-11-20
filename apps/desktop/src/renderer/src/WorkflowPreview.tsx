@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@ovelle/ui";
 import "./workflow.css";
+import LiveWorkspace from "./LiveWorkspace";
 
 type Page =
   | "schedule"
@@ -63,6 +64,7 @@ const time = (minutes: number) => `${(minutes / 60).toFixed(1)} h`;
 
 /** Interactive design preview; no preview action writes to a real organization. */
 export default function WorkflowPreview() {
+  const [live, setLive] = useState(false);
   const [page, setPage] = useState<Page>("schedule");
   const [people, setPeople] = useState(initialPeople);
   const [selected, setSelected] = useState("Avery Kim");
@@ -89,6 +91,7 @@ export default function WorkflowPreview() {
     departed: people.filter((p) => p.attendance === "departed").length,
     noShow: people.filter((p) => p.attendance === "no_show").length,
   };
+  if (live) return <LiveWorkspace onPreview={() => setLive(false)} />;
   return (
     <div className="workflow-app">
       <header className="workflow-topbar">
@@ -97,6 +100,9 @@ export default function WorkflowPreview() {
         <span className="workflow-preview-label">
           Preview data · changes are temporary
         </span>
+        <button className="workflow-live-link" onClick={() => setLive(true)}>
+          Live workspace
+        </button>
         <span className="workflow-account">Jordan Smith</span>
       </header>
       <div className="workflow-layout">

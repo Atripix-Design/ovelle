@@ -41,7 +41,8 @@
     "check:electron-workflow-ipc": "node scripts/check-electron-workflow-ipc.mjs",
     "check:electron-workflow-backend": "node scripts/check-electron-workflow-backend.mjs",
     "check:desktop-approval": "node scripts/check-desktop-approval.mjs",
-    "optimize:images": "node scripts/optimize-website-images.mjs"
+    "optimize:images": "node scripts/optimize-website-images.mjs",
+    "check:live-workflow-ui": "node scripts/check-live-workflow-ui.mjs"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",
