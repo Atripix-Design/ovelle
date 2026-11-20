@@ -20,8 +20,9 @@ try {
           case 'programs': return { programs: [{ id: 'p', name: 'Program' }] }
           case 'locations': return { locations: [{ id: 'l', name: 'Location' }] }
           case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }], nextCursor: null }
-          case 'roster': return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: 'ready', presence: 'expected' }], nextCursor: null }
+          case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
           case 'checkIn': return {}
+          case 'checkOut': return {}
           case 'waitlist': { const offered = window.fixtureCalls.some(call => call.operation === 'offerWaitlist'); return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: offered ? 'offered' : 'waiting', offerId: offered ? 'offer' : null, offerExpiresAt: offered ? Date.now() + 86400000 : null }], nextCursor: null } }
           case 'offerWaitlist': return { id: 'offer' }
           case 'confirmOffer': return { id: 'assignment' }
@@ -61,6 +62,8 @@ try {
   await page.getByRole('button', { name: /Shift.*Open roster/ }).click()
   await checkWidths()
   await page.getByRole('button', { name: 'Check in' }).click()
+  await page.getByRole('button', { name: 'Check out' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'checkOut'))
   await page.getByRole('button', { name: 'Coverage' }).click()
   await page.getByText('1/2 assigned', { exact: false }).waitFor()
   await page.getByRole('button', { name: 'Prepare offer' }).click()

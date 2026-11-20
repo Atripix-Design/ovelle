@@ -685,7 +685,7 @@ export default function LiveWorkspace({
                             <Button
                               size="compact"
                               variant="secondary"
-                              disabled={busy || item.readiness !== "ready"}
+                              disabled={busy || (item.presence === "expected" && item.readiness !== "ready")}
                               onClick={() =>
                                 action(
                                   item.presence === "expected"
