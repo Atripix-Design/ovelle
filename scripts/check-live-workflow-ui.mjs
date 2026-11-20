@@ -9,6 +9,8 @@ try {
   page.on('pageerror', error => errors.push(error.message))
   await page.addInitScript(() => {
     window.fixtureCalls = []
+    window.fixtureDraft = null
+    window.fixtureRoles = []
     window.ovelleWorkflow = {
       status: async () => ({ signedIn: true }),
       signIn: async () => ({ signedIn: true }),
@@ -19,7 +21,11 @@ try {
           case 'organizations': return { organizations: [{ id: 'org', name: 'Org' }], nextCursor: null }
           case 'programs': return { programs: [{ id: 'p', name: 'Program' }] }
           case 'locations': return { locations: [{ id: 'l', name: 'Location' }] }
-          case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }], nextCursor: null }
+          case 'schedule': return { occurrences: [{ id: 's', title: 'Shift', startsAt: 1700000000000, endsAt: 1700003600000, capacity: 2, assigned: 1, held: 0 }, ...(window.fixtureDraft ? [window.fixtureDraft] : [])], nextCursor: null }
+          case 'createOccurrence': window.fixtureDraft = { id: 'draft', title: input.title, startsAt: input.startsAt, endsAt: input.endsAt, capacity: input.capacity, assigned: 0, held: 0, status: 'draft' }; return { id: 'draft' }
+          case 'occurrence': return { roles: window.fixtureRoles, criteria: [], truncated: false, criteriaTruncated: false }
+          case 'createRole': window.fixtureRoles.push({ id: 'role', name: input.name, capacity: input.capacity }); return { id: 'role' }
+          case 'publishOccurrence': window.fixtureDraft.status = 'published'; return { id: 'draft', status: 'published' }
           case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
           case 'checkIn': return {}
           case 'checkOut': return {}
@@ -50,6 +56,18 @@ try {
   await page.getByLabel('Program').selectOption('p')
   await page.getByLabel('Location').selectOption('l')
   await checkWidths()
+  await page.getByLabel('Title', { exact: true }).fill('New shift')
+  await page.getByLabel('Start', { exact: true }).fill('2027-01-10T10:00')
+  await page.getByLabel('End', { exact: true }).fill('2027-01-10T12:00')
+  await page.getByLabel('Capacity', { exact: true }).fill('2')
+  await page.getByRole('button', { name: 'Create draft' }).click()
+  await page.getByRole('button', { name: /New shift.*Set up draft/ }).click()
+  await page.getByLabel('Role name').fill('Packer')
+  await page.getByRole('button', { name: 'Add role' }).click()
+  await page.getByRole('button', { name: 'Review publication' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'publishOccurrence').length, 0)
+  await page.getByRole('button', { name: 'Confirm publication' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'publishOccurrence'))
   await page.getByRole('button', { name: 'Readiness' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
   await checkWidths()

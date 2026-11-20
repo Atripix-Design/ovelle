@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, LoadingBoundary } from "@ovelle/ui";
+import ScheduleEditor from "./ScheduleEditor";
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -16,6 +17,7 @@ type Shift = {
   assigned: number;
   capacity: number;
   held: number;
+  status: string;
 };
 type Case = {
   occurrenceId: string;
@@ -94,7 +96,8 @@ export default function LiveWorkspace({
     [location, setLocation] = useState("");
   const [screen, setScreen] = useState<Screen>("schedule"),
     [shift, setShift] = useState(""),
-    [selectedShift, setSelectedShift] = useState<Shift | null>(null);
+    [selectedShift, setSelectedShift] = useState<Shift | null>(null),
+    [draft, setDraft] = useState<Shift | null>(null);
   const [shifts, setShifts] = useState<Shift[]>([]),
     [cases, setCases] = useState<Case[]>([]),
     [roster, setRoster] = useState<RosterPerson[]>([]),
@@ -420,6 +423,7 @@ export default function LiveWorkspace({
                     setOrg(e.target.value);
                     setShift("");
                     setSelectedShift(null);
+                    setDraft(null);
                   }}
                 >
                   <option value="">Choose organization</option>
@@ -439,6 +443,7 @@ export default function LiveWorkspace({
                     setProgram(e.target.value);
                     setShift("");
                     setSelectedShift(null);
+                    setDraft(null);
                   }}
                 >
                   <option value="">Choose program</option>
@@ -458,6 +463,7 @@ export default function LiveWorkspace({
                     setLocation(e.target.value);
                     setShift("");
                     setSelectedShift(null);
+                    setDraft(null);
                   }}
                 >
                   <option value="">Choose location</option>
@@ -507,6 +513,7 @@ export default function LiveWorkspace({
                   </h2>
                   {screen === "schedule" && (
                     <>
+                      <ScheduleEditor key={`${org}:${program}:${location}`} request={api!.request} scope={{ organizationId: org, programId: program, locationId: location }} draft={draft} refresh={() => setRevision(v => v + 1)} onPublished={() => setDraft(null)} />
                       {shifts.length === 0 ? (
                         <p>
                           No occurrences in the next 90 days or previous 30
@@ -518,6 +525,7 @@ export default function LiveWorkspace({
                             className="row-button"
                             key={item.id}
                             onClick={() => {
+                              if (item.status === "draft") { setDraft(item); return; }
                               setShift(item.id);
                               setSelectedShift(item);
                               setScreen("roster");
@@ -529,7 +537,7 @@ export default function LiveWorkspace({
                               {item.assigned}/{item.capacity} assigned ·{" "}
                               {item.held} held
                             </span>
-                            <span>Open roster →</span>
+                            <span>{item.status === "draft" ? "Set up draft →" : "Open roster →"}</span>
                           </button>
                         ))
                       )}
