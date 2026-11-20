@@ -4,7 +4,7 @@ The internal Task 9 backend implements a first-party request, explicit browser
 approval and one-time native exchange. It reuses current session validation,
 issuance, SQL guards, safe HTTP responses and durable auth quotas. The public
 Worker does not import these routes. An opt-in development build now contains a
-native main-process handoff and a restricted workflow bridge. OS storage is implemented; the designed browser approval UI and an installed-package restart test remain unverified.
+native main-process handoff and a restricted workflow bridge. OS storage and a browser approval page are implemented; real provider login and an installed-package restart test remain unverified.
 
 ## Protocol and boundaries
 
@@ -151,23 +151,24 @@ sign-in or prove that the installed release includes the new module.
 `apps/shared/desktop-approval.ts` supplies the browser-side controller: it
 removes the fragment, checks the signed-in account and CSRF token, requires an
 explicit approval action, and validates the loopback destination before navigation.
-An ambiguous submission cannot be retried with the same request. The designed
-page and its sign-in/recovery experience are still absent.
+An ambiguous submission cannot be retried with the same request. The web approval
+page displays the signed-in account, requires an explicit action, and clears the
+fragment before rendering. Browser sign-in and recovery screens remain absent.
 
 The local integration harness uses Electron, Chromium, the real Stage 0
 composition and an ephemeral D1 database to exercise explicit browser approval,
 creation, requirements, readiness, assignment, roster, attendance, hours approval
 and service history through the named IPC operations. It injects a synthetic browser
-session and uses a blank fixture page; no designed approval page, provider login,
-live service, durable user data or Mac packaging is covered. Run it after an
+session and exercises the rendered approval page; no real provider login, live
+service, durable user data or Mac packaging is covered. Run it after an
 opt-in desktop build with `npm run check:electron-workflow-backend` (use a
 virtual display when no graphical session is available).
 
-Original Task 9 is incomplete: there is no browser approval page,
-full renderer credential inspection,
-Windows/macOS package sign-in/restart tests or live identity rollout. The listener is registered only when the packaged build has the development
-bridge enabled. A desktop sign-in entry is present, but the designed browser
-approval page and public service are not available. No UI/Figma changes were made. Original Task 5's advisory
+Original Task 9 is incomplete: full renderer credential inspection,
+Windows/macOS package sign-in/restart tests and live identity rollout remain.
+The listener is registered only when the packaged build has the development
+bridge enabled. The approval page exists, but browser sign-in and the public
+identity service are unavailable. Original Task 5's advisory
 capability snapshot is still absent; live authorization and grant containment
 already exist and must not be reimplemented just to match an old helper name.
 Task 4/8 recovery, password runtime selection and the broader Stage 0 volunteer,

@@ -68,7 +68,7 @@ try {
    if(!opened.ok)throw new Error('fixture browser launch failed')
   }
  },{local,control,origin})
- const approvalBundle=await build({entryPoints:['apps/shared/desktop-approval.ts'],bundle:true,format:'iife',globalName:'approvalModule',platform:'browser',write:false})
+ const approvalBundle=await build({stdin:{contents:`import React from 'react'; import {createRoot} from 'react-dom/client'; import Approval from './apps/web/src/DesktopApprovalPage'; createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(Approval)));`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,format:'esm',platform:'browser',jsx:'automatic',loader:{'.css':'empty'},write:false})
  browserApp=await chromium.launch({headless:true})
  const context=await browserApp.newContext({serviceWorkers:'block'})
  await context.addCookies([{name:'__Host-ovelle_session',value:browser.token,domain:'dev.ovelle.org',path:'/',secure:true,httpOnly:true,sameSite:'Strict'}])
@@ -76,19 +76,18 @@ try {
   const request=route.request(),url=new URL(request.url())
   if(url.hostname==='127.0.0.1' && url.pathname==='/ovelle-auth/callback')return route.continue()
   if(url.origin!==origin)return route.abort()
-  if(url.pathname==='/desktop/authorize')return route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Approval test fixture</title>'})
+  if(url.pathname==='/desktop/authorize')return route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Approval test fixture</title><div id="root"></div><script type="module" src="/__fixture/approval.js"></script>'})
+  if(url.pathname==='/__fixture/approval.js')return route.fulfill({status:200,contentType:'text/javascript',body:approvalBundle.outputFiles[0].text})
   const response=await fetch(local+url.pathname+url.search,{method:request.method(),headers:await request.allHeaders(),...(request.postDataBuffer()?{body:request.postDataBuffer()}:{})})
   return route.fulfill({status:response.status,headers:Object.fromEntries(response.headers),body:Buffer.from(await response.arrayBuffer())})
  })
- const signIn=page.evaluate(()=>window.ovelleWorkflow.signIn())
- const browserPage=await context.newPage()
+ const signIn=page.evaluate(()=>window.ovelleWorkflow.signIn()); signIn.catch(()=>{})
+ const browserPage=await context.newPage(); browserPage.on('pageerror', error=>console.error('Approval page error:',error.message))
  const approvalUrl=await approvalOpened
  await browserPage.goto(approvalUrl)
- await browserPage.addScriptTag({content:approvalBundle.outputFiles[0].text})
- await browserPage.evaluate(()=>{window.approval=window.approvalModule.prepareDesktopApproval({currentUrl:location.href,clearFragment:url=>history.replaceState(null,'',url),navigateToCallback:url=>location.assign(url)})})
+ await browserPage.getByRole('button',{name:'Approve device'}).waitFor({timeout:8000}).catch(async error=>{console.error('Approval page:',await browserPage.locator('body').innerText());throw error})
  assert.equal(new URL(browserPage.url()).hash,'')
- assert.equal((await browserPage.evaluate(()=>window.approval.load())).kind,'ready')
- await browserPage.evaluate(()=>window.approval.approve())
+ await browserPage.getByRole('button',{name:'Approve device'}).click()
  await signIn
  const result=await page.evaluate(async()=>{
   const api=window.ovelleWorkflow,scope={organizationId:'org-a',programId:'program',locationId:'site'}

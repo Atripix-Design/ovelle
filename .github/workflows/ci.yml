@@ -139,6 +139,9 @@ jobs:
       - run: node --version
       - run: npm ci
       - run: npx playwright install chromium firefox webkit
+      - run: npm run build -w @ovelle/ui
+      - run: npm run check:desktop-approval
+      - run: npm run check:desktop-approval-page
       - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
       - run: npm run test:stage0-oidc-browser
