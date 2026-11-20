@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Button } from '@ovelle/ui'
 
 type Scope = { organizationId: string; programId: string; locationId: string }
-type Props = { request: (value: unknown) => Promise<unknown>; scope: Scope; draft: { id: string; title: string } | null; refresh: () => void; onPublished: () => void }
+type Props = { request: (value: unknown) => Promise<unknown>; scope: Scope; draft: { id: string; title: string } | null; refresh: () => void; onPublished: () => void; onBusyChange: (busy: boolean) => void }
 
 /** Draft creation, role setup and publication are separate server operations. */
-export default function ScheduleEditor({ request, scope, draft, refresh, onPublished }: Props) {
+export default function ScheduleEditor({ request, scope, draft, refresh, onPublished, onBusyChange }: Props) {
   const [title, setTitle] = useState(''), [start, setStart] = useState(''), [end, setEnd] = useState(''), [capacity, setCapacity] = useState('1')
   const [role, setRole] = useState(''), [roleCapacity, setRoleCapacity] = useState('1')
   const [criterionRole, setCriterionRole] = useState(''), [criterionName, setCriterionName] = useState('')
@@ -25,7 +25,7 @@ export default function ScheduleEditor({ request, scope, draft, refresh, onPubli
   const [pending, setPending] = useState<{ operation: string; fields: Record<string, unknown>; key: string } | null>(null)
   const send = async (operation: string, fields: Record<string, unknown>) => {
     const command = pending ?? { operation, fields, key: crypto.randomUUID() }
-    setPending(command); setBusy(true); setError(''); setNotice('')
+    setPending(command); setBusy(true); onBusyChange(true); setError(''); setNotice('')
     try {
       await request({ operation: command.operation, ...scope, ...command.fields, idempotencyKey: command.key })
       setPending(null); setConfirmPublish(false)
@@ -37,7 +37,7 @@ export default function ScheduleEditor({ request, scope, draft, refresh, onPubli
       refresh()
     } catch {
       setError('The result could not be confirmed. Retry the same operation to avoid creating a duplicate, or refresh the schedule before starting over.')
-    } finally { setBusy(false) }
+    } finally { setBusy(false); onBusyChange(false) }
   }
   const startAt = new Date(start).getTime(), endAt = new Date(end).getTime(), seats = Number(capacity), roleSeats = Number(roleCapacity)
   const validDraft = title.trim().length > 0 && title.trim().length <= 200 && Number.isSafeInteger(startAt) && startAt >= 0 && Number.isSafeInteger(endAt) && endAt > startAt && Number.isSafeInteger(seats) && seats > 0 && seats <= 100000

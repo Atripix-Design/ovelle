@@ -7,10 +7,11 @@ type Props = {
   criterion: { id: string; name: string; evidenceId: string | null }
   onRecorded: () => void
   onCancel: () => void
+  onBusyChange: (busy: boolean) => void
 }
 
 /** Evidence revisions are append-only and compare the previously observed ID. */
-export default function ReadinessEvidence({ request, identity, criterion, onRecorded, onCancel }: Props) {
+export default function ReadinessEvidence({ request, identity, criterion, onRecorded, onCancel, onBusyChange }: Props) {
   const [state, setState] = useState<'verified' | 'revoked'>('verified')
   const [validFrom, setValidFrom] = useState(''), [validUntil, setValidUntil] = useState(''), [note, setNote] = useState('')
   const [confirm, setConfirm] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState('')
@@ -19,12 +20,12 @@ export default function ReadinessEvidence({ request, identity, criterion, onReco
   const valid = !!note.trim() && note.trim().length <= 2000 && (state === 'revoked' || (Number.isSafeInteger(from) && from >= 0 && (until === null || (Number.isSafeInteger(until) && until > from))))
   const submit = async () => {
     const command = pending ?? { key: crypto.randomUUID(), fields: { ...identity, criterionId: criterion.id, state, validFrom: state === 'verified' ? from : null, validUntil: state === 'verified' ? until : null, note: note.trim(), expectedEvidenceId: criterion.evidenceId } }
-    setPending(command); setBusy(true); setError('')
+    setPending(command); setBusy(true); onBusyChange(true); setError('')
     try {
       await request({ operation: 'recordEvidence', ...command.fields, idempotencyKey: command.key })
       onRecorded()
     } catch { setError('The result could not be confirmed. Retry this same request or return to the case and reload its evidence before starting over.') }
-    finally { setBusy(false) }
+    finally { setBusy(false); onBusyChange(false) }
   }
   return <div className="workflow-card" role="region" aria-label={`Evidence for ${criterion.name}`}>
     <h3>Record evidence: {criterion.name}</h3>

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Button } from '@ovelle/ui'
 
 type Scope = { organizationId: string; programId: string; locationId: string }
-type Props = { request: (input: unknown) => Promise<unknown>; scope: Scope; occurrenceId: string; onOpened: () => void }
+type Props = { request: (input: unknown) => Promise<unknown>; scope: Scope; occurrenceId: string; onOpened: () => void; onBusyChange: (busy: boolean) => void }
 type Option = { id: string; name: string }
 
 /** Opening a case does not assign a person or assert their eligibility. */
-export default function ReadinessIntake({ request, scope, occurrenceId, onOpened }: Props) {
+export default function ReadinessIntake({ request, scope, occurrenceId, onOpened, onBusyChange }: Props) {
   const [roles, setRoles] = useState<Option[]>([]), [people, setPeople] = useState<Option[]>([])
   const [role, setRole] = useState(''), [person, setPerson] = useState('')
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState(false), [error, setError] = useState(''), [partial, setPartial] = useState(false)
@@ -25,10 +25,10 @@ export default function ReadinessIntake({ request, scope, occurrenceId, onOpened
     return () => { active = false }
   }, [request, scope.organizationId, scope.programId, scope.locationId, occurrenceId])
   const open = async () => {
-    setBusy(true); setError('')
+    setBusy(true); onBusyChange(true); setError('')
     try { await request({ operation: 'openReadiness', ...scope, occurrenceId, roleId: role, personId: person, idempotencyKey: crypto.randomUUID() }); onOpened() }
     catch { setError('Could not open the case. Check access and retry; opening an existing case is safe.') }
-    finally { setBusy(false) }
+    finally { setBusy(false); onBusyChange(false) }
   }
   return <div className="workflow-card">
     <h3>Start a readiness review</h3>

@@ -4,6 +4,7 @@ import ScheduleEditor from "./ScheduleEditor";
 import ReadinessEvidence from "./ReadinessEvidence";
 import ReadinessIntake from "./ReadinessIntake";
 import ReadinessAssignment from "./ReadinessAssignment";
+import HoursSubmission from "./HoursSubmission";
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -90,8 +91,10 @@ export default function LiveWorkspace({
   const api = window.ovelleWorkflow;
   const [bridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
   const [signedIn, setSignedIn] = useState(false),
-    [busy, setBusy] = useState(false),
+    [mutating, setMutating] = useState(false),
+    [loading, setLoading] = useState(false),
     [error, setError] = useState("");
+  const busy = mutating || loading;
   const [organizations, setOrganizations] = useState<Named[]>([]),
     [programs, setPrograms] = useState<Named[]>([]),
     [locations, setLocations] = useState<Named[]>([]);
@@ -111,6 +114,7 @@ export default function LiveWorkspace({
     [selected, setSelected] = useState<Hours | null>(null),
     [reason, setReason] = useState("");
   const [revision, setRevision] = useState(0);
+  const [hoursPerson, setHoursPerson] = useState<RosterPerson | null>(null);
   const [offerEntry, setOfferEntry] = useState<WaitlistEntry | null>(null);
   const [offerDeadline, setOfferDeadline] = useState("");
   const [offerNote, setOfferNote] = useState("");
@@ -265,10 +269,12 @@ export default function LiveWorkspace({
   }, [api, org, program]);
   useEffect(() => {
     let active = true;
+    setLoading(false);
     setCursor(null);
     setShifts([]);
     setCases([]);
     setRoster([]);
+    setHoursPerson(null);
     setHours([]);
     setWaitlist([]);
     setOfferEntry(null);
@@ -304,7 +310,7 @@ export default function LiveWorkspace({
               occurrenceId: shift,
             }
           : { operation: screen, ...scope };
-    setBusy(true);
+    setLoading(true);
     setError("");
     request<Record<string, unknown>>(input)
       .then((data) => {
@@ -322,7 +328,7 @@ export default function LiveWorkspace({
         if (active) setError(message(e));
       })
       .finally(() => {
-        if (active) setBusy(false);
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -330,19 +336,19 @@ export default function LiveWorkspace({
   }, [api, org, program, location, screen, shift, revision]);
   const signIn = async () => {
     if (!api) return;
-    setBusy(true);
+    setMutating(true);
     setError("");
     try {
       setSignedIn((await api.signIn()).signedIn);
     } catch (e) {
       setError(message(e));
     } finally {
-      setBusy(false);
+      setMutating(false);
     }
   };
   const signOut = async () => {
     if (!api) return;
-    setBusy(true);
+    setMutating(true);
     try {
       const result = await api.signOut();
       setSignedIn(false);
@@ -354,12 +360,12 @@ export default function LiveWorkspace({
     } catch (e) {
       setError(message(e));
     } finally {
-      setBusy(false);
+      setMutating(false);
     }
   };
   const action = async (operation: string, fields: Record<string, unknown>) => {
     if (!api) return;
-    setBusy(true);
+    setMutating(true);
     setError("");
     try {
       await api.request({
@@ -374,7 +380,7 @@ export default function LiveWorkspace({
     } catch (e) {
       setError(message(e));
     } finally {
-      setBusy(false);
+      setMutating(false);
     }
   };
   return (
@@ -519,7 +525,7 @@ export default function LiveWorkspace({
                   </h2>
                   {screen === "schedule" && (
                     <>
-                      <ScheduleEditor key={`${org}:${program}:${location}`} request={api!.request} scope={{ organizationId: org, programId: program, locationId: location }} draft={draft} refresh={() => setRevision(v => v + 1)} onPublished={() => setDraft(null)} />
+                      <ScheduleEditor key={`${org}:${program}:${location}`} request={api!.request} scope={{ organizationId: org, programId: program, locationId: location }} draft={draft} refresh={() => setRevision(v => v + 1)} onPublished={() => setDraft(null)} onBusyChange={setMutating} />
                       {shifts.length === 0 ? (
                         <p>
                           No occurrences in the next 90 days or previous 30
@@ -551,7 +557,7 @@ export default function LiveWorkspace({
                   )}
                   {screen === "readiness" && (
                     <>
-                      {shift ? <ReadinessIntake key={`${org}:${program}:${location}:${shift}`} request={api!.request} scope={{organizationId: org, programId: program, locationId: location}} occurrenceId={shift} onOpened={() => setRevision(v => v + 1)} /> : <p>Select an occurrence from Schedule to start a new review.</p>}
+                      {shift ? <ReadinessIntake key={`${org}:${program}:${location}:${shift}`} request={api!.request} scope={{organizationId: org, programId: program, locationId: location}} occurrenceId={shift} onOpened={() => setRevision(v => v + 1)} onBusyChange={setMutating} /> : <p>Select an occurrence from Schedule to start a new review.</p>}
                       {cases.length === 0 ? (
                         <p>No readiness cases in this scope.</p>
                       ) : (
@@ -595,14 +601,14 @@ export default function LiveWorkspace({
                               </div>
                             ))
                           )}
-                          {evidenceCriterion && <ReadinessEvidence key={`${selectedCase.personId}:${evidenceCriterion.id}`} request={api!.request} identity={{ organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId }} criterion={evidenceCriterion} onRecorded={() => { setEvidenceCriterion(null); setRevision(v => v + 1) }} onCancel={() => setEvidenceCriterion(null)} />}
+                          {evidenceCriterion && <ReadinessEvidence key={`${selectedCase.personId}:${evidenceCriterion.id}`} request={api!.request} identity={{ organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId }} criterion={evidenceCriterion} onRecorded={() => { setEvidenceCriterion(null); setRevision(v => v + 1) }} onCancel={() => setEvidenceCriterion(null)} onBusyChange={setMutating} />}
                           {criteria !== null && !criteriaComplete && (
                             <p>
                               More requirements exist than this view can safely
                               show.
                             </p>
                           )}
-                          {selectedCase.state === "ready" && <ReadinessAssignment key={`${selectedCase.occurrenceId}:${selectedCase.roleId}:${selectedCase.personId}`} request={api!.request} identity={{organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId}} name={selectedCase.name} onAssigned={() => { setShift(selectedCase.occurrenceId); setSelectedShift(previous => previous?.id === selectedCase.occurrenceId ? previous : null); setScreen("roster"); setRevision(v => v + 1) }} />}
+                          {selectedCase.state === "ready" && <ReadinessAssignment key={`${selectedCase.occurrenceId}:${selectedCase.roleId}:${selectedCase.personId}`} request={api!.request} identity={{organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId}} name={selectedCase.name} onAssigned={() => { setShift(selectedCase.occurrenceId); setSelectedShift(previous => previous?.id === selectedCase.occurrenceId ? previous : null); setScreen("roster"); setRevision(v => v + 1) }} onBusyChange={setMutating} />}
                           <p>
                             A ready decision does not override missing or
                             expired requirements.
@@ -690,7 +696,7 @@ export default function LiveWorkspace({
                     ) : roster.length === 0 ? (
                       <p>No volunteers on this roster.</p>
                     ) : (
-                      roster.map((item) => (
+                      <>{roster.map((item) => (
                         <div className="table-row" key={item.assignmentId}>
                           <strong>{item.name}</strong>
                           <span>
@@ -717,8 +723,10 @@ export default function LiveWorkspace({
                                 : "Check out"}
                             </Button>
                           )}
+                          {item.presence === "departed" && <Button size="compact" variant="secondary" onClick={() => setHoursPerson(item)}>Submit hours</Button>}
                         </div>
-                      ))
+                      ))}
+                      {hoursPerson && <HoursSubmission key={hoursPerson.assignmentId} request={api!.request} scope={{organizationId: org, programId: program, locationId: location}} assignmentId={hoursPerson.assignmentId} name={hoursPerson.name} onSubmitted={() => { setHoursPerson(null); setScreen("hours"); setRevision(v => v + 1) }} onCancel={() => setHoursPerson(null)} onBusyChange={setMutating} />}</>
                     ))}
                   {screen === "coverage" &&
                     (!shift ? (

@@ -28,16 +28,17 @@ try {
           case 'createRole': window.fixtureRoles.push({ id: 'role', name: input.name, capacity: input.capacity }); return { id: 'role' }
           case 'createCriterion': window.fixtureCriteria.push({ id: 'criterion', roleId: input.roleId, name: input.name }); return { id: 'criterion' }
           case 'publishOccurrence': window.fixtureDraft.status = 'published'; return { id: 'draft', status: 'published' }
-          case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
+          case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: window.fixtureCalls.some(call => call.operation === 'checkOut') ? 'departed' : checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
           case 'volunteers': return { volunteers: [{ id: 'person', displayName: 'Avery' }], truncated: false }
           case 'openReadiness': return { status: 'pending' }
           case 'assign': return { id: 'assignment' }
           case 'checkIn': return {}
           case 'checkOut': return {}
+          case 'submitHours': await new Promise(resolve => setTimeout(resolve, 300)); return { id: 'submission' }
           case 'waitlist': { const offered = window.fixtureCalls.some(call => call.operation === 'offerWaitlist'); return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: offered ? 'offered' : 'waiting', offerId: offered ? 'offer' : null, offerExpiresAt: offered ? Date.now() + 86400000 : null }], nextCursor: null } }
           case 'offerWaitlist': return { id: 'offer' }
           case 'confirmOffer': return { id: 'assignment' }
-          case 'hours': return { submissions: [{ id: 'h', name: 'Avery', title: 'Shift', state: 'pending', startAt: 0, endAt: 3600000, breakMinutes: 0, checkedInAt: 0, checkedOutAt: 3600000 }], nextCursor: null }
+          case 'hours': if (window.fixtureCalls.some(call => call.operation === 'submitHours')) { window.hoursRefreshing = true; await new Promise(resolve => setTimeout(resolve, 300)); window.hoursRefreshing = false }; return { submissions: [{ id: 'h', name: 'Avery', title: 'Shift', state: 'pending', startAt: 0, endAt: 3600000, breakMinutes: 0, checkedInAt: 0, checkedOutAt: 3600000 }], nextCursor: null }
           case 'hoursHistory': return { decisions: [], nextCursor: null }
           case 'reviewHours': return { id: 'd' }
           case 'readiness': return { cases: [{ occurrenceId: 's', roleId: 'r', personId: 'person', name: 'Avery', role: 'Volunteer', title: 'Shift', state: window.fixtureCalls.some(call => call.operation === 'decideReadiness') ? 'ready' : 'pending', latestDecisionId: null }], nextCursor: null }
@@ -110,6 +111,22 @@ try {
   await page.getByRole('button', { name: 'Check in' }).click()
   await page.getByRole('button', { name: 'Check out' }).click()
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'checkOut'))
+  await page.getByRole('button', { name: 'Submit hours' }).click()
+  await page.getByLabel('Hours start').fill('2026-01-01T10:00')
+  await page.getByLabel('Hours end').fill('2026-01-01T12:00')
+  await page.getByLabel('Unpaid break minutes').fill('')
+  assert.equal(await page.getByRole('button', { name: 'Review submission' }).isDisabled(), true)
+  await page.getByLabel('Unpaid break minutes').fill('15')
+  await checkWidths()
+  await page.getByRole('button', { name: 'Review submission' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'submitHours').length, 0)
+  await page.getByRole('button', { name: 'Confirm submission' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'submitHours'))
+  assert.equal(await page.getByRole('button', { name: 'Schedule' }).isDisabled(), true)
+  await page.waitForFunction(() => window.hoursRefreshing === true)
+  assert.equal(await page.getByRole('button', { name: 'Schedule' }).isDisabled(), true)
+  const submitted = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'submitHours')
+  assert.equal(submitted.breakMinutes, 15); assert.equal(submitted.endAt - submitted.startAt, 120 * 60000)
   await page.getByRole('button', { name: 'Readiness' }).click()
   await page.getByLabel('Volunteer').selectOption('person')
   await page.getByLabel('Review role').selectOption('role')
