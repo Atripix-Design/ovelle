@@ -55,6 +55,7 @@ jobs:
         if: github.event_name == 'push'
         env:
           VITE_RELEASE_SHA: ${{ github.sha }}
+          OVELLE_STAGE0_ORIGIN: ${{ github.ref == 'refs/heads/development' && 'https://dev.ovelle.org' || '' }}
         run: npm run package:all -w @ovelle/desktop
       - name: Verify local packages
         if: github.event_name == 'push'
