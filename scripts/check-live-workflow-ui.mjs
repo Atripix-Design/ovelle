@@ -36,13 +36,22 @@ try {
       },
     }
   })
+  async function checkWidths() {
+    for (const width of [320, 640, 1100, 1440]) {
+      await page.setViewportSize({ width, height: 850 })
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), true, `horizontal overflow at ${width}px`)
+    }
+    await page.setViewportSize({ width: 1100, height: 850 })
+  }
   await page.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
   await page.getByRole('button', { name: 'Live workspace' }).click()
   await page.getByLabel('Organization').selectOption('org')
   await page.getByLabel('Program').selectOption('p')
   await page.getByLabel('Location').selectOption('l')
+  await checkWidths()
   await page.getByRole('button', { name: 'Readiness' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
+  await checkWidths()
   await page.getByLabel('Review note').fill('Evidence reviewed')
   await page.getByRole('button', { name: 'Review ready decision' }).click()
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'decideReadiness').length, 0)
@@ -50,12 +59,14 @@ try {
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'decideReadiness'))
   await page.getByRole('button', { name: 'Schedule' }).click()
   await page.getByRole('button', { name: /Shift.*Open roster/ }).click()
+  await checkWidths()
   await page.getByRole('button', { name: 'Check in' }).click()
   await page.getByRole('button', { name: 'Coverage' }).click()
   await page.getByText('1/2 assigned', { exact: false }).waitFor()
   await page.getByRole('button', { name: 'Prepare offer' }).click()
   const deadline = new Date(Date.now() + 86400000)
   const local = new Date(deadline.getTime() - deadline.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+  await checkWidths()
   await page.getByLabel('Offer deadline').fill(local)
   await page.getByRole('button', { name: 'Review offer' }).click()
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'offerWaitlist').length, 0)
@@ -71,6 +82,7 @@ try {
   assert.equal(acceptance.offerId, 'offer'); assert.equal(acceptance.confirmationNote, 'Accepted by phone')
   await page.getByRole('button', { name: 'Hours review' }).click()
   await page.getByRole('button', { name: /Avery.*Shift/ }).click()
+  await checkWidths()
   await page.getByRole('button', { name: 'Review approval' }).click()
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'reviewHours').length, 0)
   await page.getByRole('button', { name: 'Confirm approval' }).click()
