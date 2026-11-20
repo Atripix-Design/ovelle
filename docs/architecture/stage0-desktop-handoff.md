@@ -4,8 +4,7 @@ The internal Task 9 backend implements a first-party request, explicit browser
 approval and one-time native exchange. It reuses current session validation,
 issuance, SQL guards, safe HTTP responses and durable auth quotas. The public
 Worker does not import these routes. An opt-in development build now contains a
-native main-process handoff and a restricted workflow bridge. The browser UI,
-OS storage is implemented but packaged restart behavior remains unverified.
+native main-process handoff and a restricted workflow bridge. OS storage is implemented; the designed browser approval UI and an installed-package restart test remain unverified.
 
 ## Protocol and boundaries
 
@@ -111,7 +110,11 @@ responses; they do not prove the browser approval page, live server or OS
 persistence. The intended `/desktop/authorize` page is not implemented.
 
 `OVELLE_STAGE0_ORIGIN=https://dev.ovelle.org` at build time enables named
-workflow IPC operations for the packaged renderer. The main process optionally
+workflow IPC operations for the packaged renderer. Development-branch packaging
+sets this fixed origin; production packaging does not. The renderer offers
+schedule, readiness, roster, coverage/waitlist and hours views using that bridge.
+The service remains disconnected from the public Worker, so inclusion in a
+package does not establish live sign-in or real organization access. The main process optionally
 persists the session with Electron safeStorage on macOS and Windows, falling
 back to memory when encryption is unavailable. Linux currently uses memory only
 because keyring discovery can block startup in headless environments. A restored
@@ -162,9 +165,9 @@ virtual display when no graphical session is available).
 
 Original Task 9 is incomplete: there is no browser approval page,
 full renderer credential inspection,
-Windows/macOS package sign-in/restart tests or live identity rollout. The listener
-is registered only in opt-in packaged builds and no sign-in UI is exposed to users
-yet. No UI/Figma changes were made. Original Task 5's advisory
+Windows/macOS package sign-in/restart tests or live identity rollout. The listener is registered only when the packaged build has the development
+bridge enabled. A desktop sign-in entry is present, but the designed browser
+approval page and public service are not available. No UI/Figma changes were made. Original Task 5's advisory
 capability snapshot is still absent; live authorization and grant containment
 already exist and must not be reimplemented just to match an old helper name.
 Task 4/8 recovery, password runtime selection and the broader Stage 0 volunteer,
