@@ -51,6 +51,8 @@ test('identity deployment gate requires protocol matrices and the existing passk
   assert.ok(browser.steps.some(step => step.run === 'npm run build -w @ovelle/ui'))
   assert.ok(browser.steps.some(step => step.run === 'npm run check:desktop-approval'))
   assert.ok(browser.steps.some(step => step.run === 'npm run check:desktop-approval-page'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:account-sign-in'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:account-enrollment'))
   assert.ok(browser.steps.some(step => step.run === 'node --test scripts/stage0-browser-proxy.test.mjs'))
   assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-saml-browser'))
   assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-oidc-browser'))

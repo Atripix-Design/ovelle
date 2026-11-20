@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
+import { build } from 'esbuild'
 import { browserEngines, createBrowserHarness } from './stage0-browser-harness.mjs'
 
+const signInBundle = await build({ stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import SignIn from './apps/web/src/AccountSignInPage'; createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(SignIn)));`, resolveDir: process.cwd(), loader: 'tsx' }, bundle: true, format: 'esm', platform: 'browser', jsx: 'automatic', loader: { '.css': 'empty' }, write: false })
+const enrollmentBundle = await build({ stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import Page from './apps/web/src/AccountEnrollmentPage'; createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(Page)));`, resolveDir: process.cwd(), loader: 'tsx' }, bundle: true, format: 'esm', platform: 'browser', jsx: 'automatic', loader: { '.css': 'empty' }, write: false })
+const verifyBundle = await build({ stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import Page from './apps/web/src/AccountVerifyContactPage'; createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(Page)));`, resolveDir: process.cwd(), loader: 'tsx' }, bundle: true, format: 'esm', platform: 'browser', jsx: 'automatic', loader: { '.css': 'empty' }, write: false })
 const requested = process.argv.slice(2)
 assert.ok(requested.length <= 1 && (!requested.length || Object.hasOwn(browserEngines, requested[0])), 'Expected optional chromium, firefox or webkit')
 async function runBrowser(engine) {
@@ -65,6 +69,57 @@ async function runBrowser(engine) {
       await login.context.close()
     }
 
+    // Exercise the actual sign-in page against the OIDC service. Only the
+    // external widget is simulated; the server still verifies its fixture token.
+    assert.equal((await controlRequest('selection', { provider: 'google', subject: 'exact-subject', email: 'person@gmail.com', purpose: 'login', fail: false })).status, 204)
+    const uiContext = await newContext()
+    await uiContext.route('**/account/sign-in', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><div id="root"></div><script type="module" src="/fixture-signin.js"></script>' }))
+    await uiContext.route('**/fixture-signin.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: signInBundle.outputFiles[0].text }))
+    await uiContext.route('https://challenges.cloudflare.com/**', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: "window.turnstile={render:(el,opts)=>{window.fixtureVerify=opts.callback;return 'fixture'},remove:()=>{},reset:()=>{}}" }))
+    const uiPage = await uiContext.newPage(); uiPage.setDefaultTimeout(10000)
+    await uiPage.goto(origin + '/account/sign-in')
+    await uiPage.waitForFunction(() => typeof window.fixtureVerify === 'function')
+    await uiPage.evaluate(() => window.fixtureVerify('fixture-only'))
+    await uiPage.getByRole('button', { name: 'Continue with Google' }).click()
+    await submit(uiPage, '/account')
+    assert.deepEqual(await me(uiPage), { status: 200, cookie: '' })
+    await uiContext.close()
+
+    const uiEnrollment = await start('google', { subject: 'ui-new-subject', email: 'ui-new@gmail.com' })
+    await uiEnrollment.context.route('**/account/enroll', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><div id="root"></div><script type="module" src="/fixture-enroll.js"></script>' }))
+    await uiEnrollment.context.route('**/fixture-enroll.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: enrollmentBundle.outputFiles[0].text }))
+    await submit(uiEnrollment.page, '/account/enroll')
+    await uiEnrollment.page.reload()
+    await uiEnrollment.page.getByLabel('Name', { exact: true }).fill('UI New Volunteer')
+    await uiEnrollment.page.getByLabel('Contact email').fill('ui-new@gmail.com')
+    await uiEnrollment.page.getByRole('button', { name: 'Continue' }).click()
+    await uiEnrollment.page.waitForURL(origin + '/account')
+    assert.equal((await me(uiEnrollment.page)).status, 200)
+    assert.ok(await db.prepare("SELECT id FROM accounts WHERE email='ui-new@gmail.com'").first())
+    await uiEnrollment.context.close()
+
+    const uiMailEnrollment = await start('microsoft', { subject: 'ui-mail-subject', email: 'ui-mail@example.test' })
+    await uiMailEnrollment.context.route('**/account/enroll', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><div id="root"></div><script type="module" src="/fixture-enroll.js"></script>' }))
+    await uiMailEnrollment.context.route('**/fixture-enroll.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: enrollmentBundle.outputFiles[0].text }))
+    await uiMailEnrollment.context.route('**/account/verify-contact', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><div id="root"></div><script type="module" src="/fixture-verify.js"></script>' }))
+    await uiMailEnrollment.context.route('**/fixture-verify.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: verifyBundle.outputFiles[0].text }))
+    await submit(uiMailEnrollment.page, '/account/enroll'); await uiMailEnrollment.page.reload()
+    await uiMailEnrollment.page.getByLabel('Name', { exact: true }).fill('UI Mail Volunteer')
+    await uiMailEnrollment.page.getByLabel('Contact email').fill('ui-mail@example.test')
+    await uiMailEnrollment.page.getByRole('button', { name: 'Continue' }).click()
+    await uiMailEnrollment.page.getByRole('status').waitFor()
+    assert.equal(await db.prepare("SELECT id FROM accounts WHERE email='ui-mail@example.test'").first(), null)
+    const mailItems = await (await controlRequest('mail')).json(), verifyUrl = mailItems.at(-1)?.url
+    assert.ok(verifyUrl)
+    const verifyPage = await uiMailEnrollment.context.newPage(); await verifyPage.goto(verifyUrl)
+    const confirm = verifyPage.getByRole('button', { name: 'Confirm email' }); await confirm.waitFor()
+    assert.equal(new URL(verifyPage.url()).hash, '')
+    assert.equal(await db.prepare("SELECT id FROM accounts WHERE email='ui-mail@example.test'").first(), null)
+    await confirm.click(); await verifyPage.waitForURL(origin + '/account')
+    assert.equal((await me(verifyPage)).status, 200)
+    assert.ok(await db.prepare("SELECT id FROM accounts WHERE email='ui-mail@example.test'").first())
+    await uiMailEnrollment.context.close()
+
     const owner = await start(), other = await newContext(), foreign = await other.newPage(), beforeForeign = await counts()
     await foreign.goto(idp('google') + '/replay'); await submit(foreign, '/account/sign-in?result=failed')
     assert.equal(callbacks().at(-1).binding, false); assert.deepEqual(await counts(), beforeForeign)
@@ -113,6 +168,7 @@ async function runBrowser(engine) {
       const pending = await counts()
       assert.equal(pending.accounts, before.accounts); assert.equal(pending.sessions, before.sessions)
       assert.equal(pending.oidc_enrollments, before.oidc_enrollments + 1)
+      const mailBefore = (await (await controlRequest('mail')).json()).length
       const contact = await enrollment.page.evaluate(async email => {
         const { csrfToken } = await (await fetch('/api/v1/auth/enrollment')).json()
         const post = csrf => fetch('/api/v1/auth/enrollment/contact', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf }, body: JSON.stringify({ email, displayName: 'Browser Fixture' }) })
@@ -120,12 +176,12 @@ async function runBrowser(engine) {
       }, email)
       assert.equal(contact.wrong, 403); assert.equal(contact.status, 202)
       const mail = await (await controlRequest('mail')).json()
-      if (provider === 'google') assert.equal(mail.length, 0, 'Matching authoritative Google contact needs no mail')
+      if (provider === 'google') assert.equal(mail.length, mailBefore, 'Matching authoritative Google contact needs no mail')
       else {
         assert.equal((await counts()).accounts, pending.accounts)
         assert.ok(!(await enrollment.context.cookies()).some(cookie => cookie.name === '__Host-ovelle_session'))
-        assert.equal(mail.length, 1)
-        const url = new URL(mail[0].url), token = new URLSearchParams(url.hash.slice(1)).get('token')
+        assert.equal(mail.length, mailBefore + 1)
+        const url = new URL(mail.at(-1).url), token = new URLSearchParams(url.hash.slice(1)).get('token')
         assert.equal(url.search, ''); assert.match(token, /^[A-Za-z0-9_-]{43}$/)
         const confirm = page => page.evaluate(async ({ token, csrfToken }) => (await fetch('/api/v1/auth/enrollment/confirm', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken }, body: JSON.stringify({ token }) })).status, { token, csrfToken: contact.csrfToken })
         const stranger = await newContext(), page = await stranger.newPage(); await page.goto(origin)
@@ -150,7 +206,7 @@ async function runBrowser(engine) {
     assert.deepEqual(harness.denied, ['https://outside.example.test']); await external.close()
     assert.deepEqual(harness.failures, [])
     const stats = await (await controlRequest('stats')).json(); assert.ok(stats.pkce > 0 && stats.exchanges > stats.pkce)
-    const sources = ['scripts/verify-stage0-oidc-browser.mjs', 'scripts/stage0-browser-harness.mjs', 'scripts/stage0-browser-proxy.mjs', 'tests/worker/stage0/browser-transport.ts', 'tests/worker/stage0/oidc-browser-worker.ts', 'tests/worker/stage0/oidc-protocol-fixture.ts', 'src/cloudflare/stage0/auth/oidc/protocol.ts', 'src/cloudflare/stage0/auth/oidc/transactions.ts', 'src/cloudflare/stage0/auth/oidc/routes.ts', 'src/cloudflare/stage0/auth/oidc/enrollment.ts', 'src/cloudflare/stage0/auth/sessions.ts', 'src/cloudflare/stage0/auth/http.ts', 'package-lock.json']
+    const sources = ['apps/web/src/AccountSignInPage.tsx', 'apps/web/src/AccountEnrollmentPage.tsx', 'apps/web/src/AccountVerifyContactPage.tsx', 'scripts/verify-stage0-oidc-browser.mjs', 'scripts/stage0-browser-harness.mjs', 'scripts/stage0-browser-proxy.mjs', 'tests/worker/stage0/browser-transport.ts', 'tests/worker/stage0/oidc-browser-worker.ts', 'tests/worker/stage0/oidc-protocol-fixture.ts', 'src/cloudflare/stage0/auth/oidc/protocol.ts', 'src/cloudflare/stage0/auth/oidc/transactions.ts', 'src/cloudflare/stage0/auth/oidc/routes.ts', 'src/cloudflare/stage0/auth/oidc/enrollment.ts', 'src/cloudflare/stage0/auth/sessions.ts', 'src/cloudflare/stage0/auth/http.ts', 'package-lock.json']
     const sourceHashes = Object.fromEntries(await Promise.all(sources.map(async path => [path, createHash('sha256').update(await readFile(path)).digest('hex')])))
     console.log('OIDC_BROWSER_VERIFIED ' + JSON.stringify({ engine, browser: browser.version(), scope: 'isolated loopback HTTPS + workerd + ephemeral D1', providers: ['google', 'microsoft'], observed: { method: callbacks()[0].method, mode: callbacks()[0].mode, dest: callbacks()[0].dest, site: callbacks()[0].site, binding: callbacks()[0].binding },
       linkingWithoutStrictCookie: true, authoritativeGoogleContact: true, separateMicrosoftContact: true, negativeControls: ['replay', 'foreign-browser', 'cors-fetch', 'wrong-state', 'provider-error', 'revoked-link-session', 'contact-csrf', 'foreign-mail', 'mail-reuse', 'external-network'], sourceHashes, realProvider: false, realMail: false, trustedPublicTls: false }))

@@ -142,6 +142,8 @@ jobs:
       - run: npm run build -w @ovelle/ui
       - run: npm run check:desktop-approval
       - run: npm run check:desktop-approval-page
+      - run: npm run check:account-sign-in
+      - run: npm run check:account-enrollment
       - run: node --test scripts/stage0-browser-proxy.test.mjs
       - run: npm run test:stage0-saml-browser
       - run: npm run test:stage0-oidc-browser

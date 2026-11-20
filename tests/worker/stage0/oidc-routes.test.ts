@@ -59,6 +59,16 @@ async function start(purpose: 'start' | 'recovery' = 'start') {
   const url = callback('google'); url.searchParams.set('state', authorization.searchParams.get('state')!)
   return url
 }
+it('exposes only the configured public Turnstile site key during prelogin', async () => {
+  const response = await handleOidcRequest(f.ctx, request('/api/v1/auth/prelogin'), { ...deps, turnstileSiteKey: 'public-site-key' })
+  expect(response.status).toBe(200)
+  const body = await response.json() as Record<string, unknown>
+  expect(body.siteKey).toBe('public-site-key')
+  expect(body.csrfToken).toMatch(/^[A-Za-z0-9_-]{43}$/)
+  expect(JSON.stringify(body)).not.toContain(deps.turnstileSecret)
+  const invalid = await handleOidcRequest(f.ctx, request('/api/v1/auth/prelogin'), { ...deps, turnstileSiteKey: 'bad key' })
+  expect(invalid.ok).toBe(false)
+})
 it('completes a real signed fixture flow with cookie-only credentials and a fixed clean redirect', async () => {
   const url = await start()
   const response = await handleOidcRequest(f.ctx, request(url.href, 'GET', undefined, { 'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Dest': 'document' }), deps)

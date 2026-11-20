@@ -21,6 +21,8 @@ export interface OidcHttpDependencies {
    * X-Forwarded-For or accept a body/header-selected IP in this adapter. */
   trustedIp: string
   turnstileSecret: string
+  /** Public widget site key, never the server verification secret. */
+  turnstileSiteKey?: string
   /** Controlled server configuration lookup, with no caller-selected endpoints. */
   getSettings(provider: OidcProvider): Promise<OidcSettings>
   providerFetch?: CustomFetch
@@ -60,7 +62,9 @@ export async function handleOidcRequest(ctx: RequestContext, request: Request, d
   try {
     if (url.pathname === '/api/v1/auth/prelogin') {
       const initial = await beginPrelogin(ctx, request, deps.budgetKey)
-      return authResponse(ctx, { csrfToken: initial.csrfToken }, 200, { 'Set-Cookie': initial.cookie })
+      const siteKey = deps.turnstileSiteKey
+      if (siteKey !== undefined && !/^[A-Za-z0-9_-]{1,256}$/.test(siteKey)) throw new Stage0Error('configuration')
+      return authResponse(ctx, { csrfToken: initial.csrfToken, ...(siteKey ? { siteKey } : {}) }, 200, { 'Set-Cookie': initial.cookie })
     }
     if (match) {
       const provider = match[1] as OidcProvider

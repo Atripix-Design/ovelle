@@ -60,7 +60,7 @@ export default { async fetch(request: Request, env: Env): Promise<Response> {
     clock: { now: Date.now }, ids: { next: () => crypto.randomUUID() }, requestId: crypto.randomUUID(),
     mailer: { async send(message) { mail.push({ url: message.url }); return { status: 'accepted', providerId: 'fixture-only' } } } }
   if (url.pathname.startsWith('/api/v1/auth/oidc/') || ['/api/v1/auth/prelogin', '/api/v1/auth/enrollment', '/api/v1/auth/enrollment/contact', '/api/v1/auth/enrollment/confirm'].includes(url.pathname)) {
-    return handleOidcRequest(ctx, request, { budgetKey: key, trustedIp: `192.0.2.${client}`, turnstileSecret: 'fixture-only', getSettings: async name => settings(name),
+    return handleOidcRequest(ctx, request, { budgetKey: key, trustedIp: `192.0.2.${client}`, turnstileSecret: 'fixture-only', turnstileSiteKey: 'fixture-site-key', getSettings: async name => settings(name),
       turnstileFetch: async () => Response.json({ success: true, hostname: 'dev.ovelle.org', action: `oidc_${selection.purpose}`, challenge_ts: new Date().toISOString() }),
       providerFetch: async (target, init) => {
         const name = target.startsWith('https://login.microsoftonline.com/') ? 'microsoft' : 'google'

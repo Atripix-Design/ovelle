@@ -112,7 +112,7 @@ export function createStage0Backend(bindings: Record<string, unknown>, resources
       if (url.hash || (url.search && !callbackQuery && !(kind === 'organization' && request.method === 'GET'))) throw new Stage0Error('invalid_input')
       const admission = { budgetKey, trustedIp }
       switch (kind) {
-        case 'oidc': response = await handleOidcRequest(ctx, request, { ...admission, turnstileSecret, getSettings, providerFetch, turnstileFetch }); break
+        case 'oidc': response = await handleOidcRequest(ctx, request, { ...admission, turnstileSecret, turnstileSiteKey: typeof bindings.TURNSTILE_SITE_KEY === 'string' ? bindings.TURNSTILE_SITE_KEY : undefined, getSettings, providerFetch, turnstileFetch }); break
         case 'saml': response = await handleSamlRequest(ctx, request, { ...admission, turnstileSecret, getSettings: getSamlSettings, turnstileFetch }); break
         case 'passkey': response = await handlePasskeyRequest(ctx, request, { ...admission, turnstileSecret, turnstileFetch }); break
         case 'recovery_codes': response = await handleRecoveryCodeRequest(ctx, request); break

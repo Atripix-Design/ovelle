@@ -108,6 +108,8 @@ it('keeps origin, no-CORS, no-store and server-generated request IDs consistent 
   const first = await app.browser(req('/api/v1/auth/prelogin', 'GET', { 'X-Request-ID': 'caller-secret' }), ip)
   const second = await app.browser(req('/api/v1/unknown'), ip)
   expect(first.status).toBe(200); expect(second.status).toBe(404)
+  const publicConfig = await first.clone().json() as Record<string, unknown>
+  expect(publicConfig.siteKey).toBe('fixture-site'); expect(JSON.stringify(publicConfig)).not.toContain('fixture-secret')
   expect(first.headers.get('X-Request-ID')).not.toBe('caller-secret')
   expect(first.headers.get('X-Request-ID')).not.toBe(second.headers.get('X-Request-ID'))
   for (const response of [first, second, await app.browser(new Request('https://ovelle.org/api/v1/auth/prelogin'), ip), await app.desktop(req('/api/v1/me'), '')]) {

@@ -42,6 +42,8 @@
     "check:electron-workflow-backend": "node scripts/check-electron-workflow-backend.mjs",
     "check:desktop-approval": "node scripts/check-desktop-approval.mjs",
     "check:desktop-approval-page": "node scripts/check-desktop-approval-page.mjs",
+    "check:account-sign-in": "node scripts/check-account-sign-in.mjs",
+    "check:account-enrollment": "node scripts/check-account-enrollment.mjs",
     "optimize:images": "node scripts/optimize-website-images.mjs",
     "check:live-workflow-ui": "node scripts/check-live-workflow-ui.mjs"
   },

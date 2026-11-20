@@ -153,7 +153,7 @@ removes the fragment, checks the signed-in account and CSRF token, requires an
 explicit approval action, and validates the loopback destination before navigation.
 An ambiguous submission cannot be retried with the same request. The web approval
 page displays the signed-in account, requires an explicit action, and clears the
-fragment before rendering. Browser sign-in and recovery screens remain absent.
+fragment before rendering. The web sign-in screen starts Google or Microsoft with prelogin CSRF and a Turnstile widget. OIDC first-time enrollment and explicit email confirmation pages are implemented. Recovery and SAML contact confirmation remain absent, and the public identity service is not enabled.
 
 The local integration harness uses Electron, Chromium, the real Stage 0
 composition and an ephemeral D1 database to exercise explicit browser approval,
@@ -167,8 +167,8 @@ virtual display when no graphical session is available).
 Original Task 9 is incomplete: full renderer credential inspection,
 Windows/macOS package sign-in/restart tests and live identity rollout remain.
 The listener is registered only when the packaged build has the development
-bridge enabled. The approval page exists, but browser sign-in and the public
-identity service are unavailable. Original Task 5's advisory
+bridge enabled. Approval, sign-in and OIDC enrollment pages exist, but the public
+identity service and real provider verification remain unavailable. Original Task 5's advisory
 capability snapshot is still absent; live authorization and grant containment
 already exist and must not be reimplemented just to match an old helper name.
 Task 4/8 recovery, password runtime selection and the broader Stage 0 volunteer,
