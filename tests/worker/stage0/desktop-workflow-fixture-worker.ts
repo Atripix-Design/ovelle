@@ -10,7 +10,7 @@ export default {
  async fetch(request:Request,env:{DB:D1Database;CONTROL:string}):Promise<Response> {
   if(new URL(request.url).pathname==='/__fixture/bootstrap') {
    if(request.method!=='POST' || request.headers.get('X-Fixture-Control')!==env.CONTROL)return new Response(null,{status:404})
-   const issued=await issueSession({db:env.DB,config:loadStage0Config(settings),clock:{now:Date.now},ids:{next:()=>crypto.randomUUID()},requestId:crypto.randomUUID(),mailer:{async send(){throw new Error('not used')}}},{accountId:'owner',method:'passkey'},'browser')
+   const issued=await issueSession({db:env.DB,config:loadStage0Config(settings),clock:{now:Date.now},ids:{next:()=>crypto.randomUUID()},requestId:crypto.randomUUID(),mailer:{async send(){throw new Error('not used')}}},{accountId:request.headers.get('X-Fixture-Account')==='new-owner'?'new-owner':'owner',method:'passkey'},'browser')
    return Response.json({token:issued.token,csrfToken:issued.csrfToken})
   }
   const app=createStage0Backend(settings,{db:env.DB,email:{async send(){throw new Error('no outbound mail')}}})

@@ -146,6 +146,11 @@ test('every workflow fails closed to isolated self-hosted capacity', async () =>
 
 test('development deployments preserve a separate sender-restricted authentication binding', () => {
   const config = JSON.parse(readFileSync(join(root, 'wrangler.jsonc'), 'utf8'))
+  assert.equal(config.main, 'src/cloudflare/worker.ts')
+  assert.equal(config.env.development.main, 'src/cloudflare/worker-development.ts')
+  assert.deepEqual(config.env.development.compatibility_flags, ['nodejs_compat'])
+  assert.equal(config.env.production.main, undefined)
+  assert.equal(config.env.production.compatibility_flags, undefined)
   const bindings = config.env.development.send_email
   assert.deepEqual(bindings.find(binding => binding.name === 'AUTH_EMAIL'), {
     name: 'AUTH_EMAIL', allowed_sender_addresses: ['accounts@dev.mail.ovelle.org'],

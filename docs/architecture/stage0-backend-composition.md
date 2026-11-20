@@ -6,8 +6,10 @@ organization, invitation, membership and ownership HTTP adapters. It owns their
 configuration and routing integration; their protocol verification, DTO checks,
 live authorization and final transactional guards remain in those modules.
 
-The public Worker does not import this root. Constructing it does not register
-routes, enable public auth, create providers or apply migrations. The initial
+The shared production Worker does not import this root. A separate development
+entry composes a restricted workflow surface as described in
+[the development surface record](../operations/volunteer-development-surface.md).
+Constructing the root alone does not create providers or apply migrations. The initial
 provider/passkey decision does not remove the broader
 [original Stage 0 obligations](../operations/stage0-status.md).
 
@@ -40,9 +42,9 @@ folding independent `Set-Cookie` values.
 
 The server must supply the trusted edge address separately to `fetch(request,
 trustedIp)`. The root bounds its shape and never reads `X-Forwarded-For` or
-`CF-Connecting-IP` itself. A future public Worker must obtain the canonical address
-from its reviewed Cloudflare ingress context, rather than forwarding a client
-override or substituting a shared default. Absence fails closed. The address is
+`CF-Connecting-IP` itself. The separate development Worker obtains the address
+from Cloudflare's direct ingress context under the restrictions documented in
+`docs/operations/volunteer-development-surface.md`. Absence fails closed. The address is
 used by the existing HMAC admission budgets; it is not stored as a raw quota key.
 
 ## Fixed transport routing
@@ -95,8 +97,8 @@ membership, audit, invitation failure/resend, idempotency, scoped denial, revoca
 and ownership assertions are retained. Primary establishment remains fixture setup.
 
 This does not verify actual providers/mail, hosted concurrency/CPU, remote schema,
-browser recovery, physical passkeys, native clients or product UI. Before importing
-the root into `worker.ts`, complete the separately authorized
-[development rollout acceptance](../operations/stage0-identity-access.md#separate-rollout-acceptance),
-including correct resources/secrets, protected backup/manual migrations and live
-acceptance. There is no enable flag or automatic migration in this implementation.
+browser recovery, physical passkeys, native clients or product UI. The separate development entry is a candidate rollout, not evidence of live
+provider, mail, passkey or Mac acceptance. The
+[development rollout record](../operations/volunteer-development-surface.md)
+describes its restricted surface and ingress assumptions. There is no automatic
+migration or production identity routing in this implementation.

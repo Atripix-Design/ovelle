@@ -5,6 +5,7 @@ import ReadinessEvidence from "./ReadinessEvidence";
 import ReadinessIntake from "./ReadinessIntake";
 import ReadinessAssignment from "./ReadinessAssignment";
 import HoursSubmission from "./HoursSubmission";
+import OrganizationSetup from "./OrganizationSetup";
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -95,6 +96,8 @@ export default function LiveWorkspace({
     [loading, setLoading] = useState(false),
     [error, setError] = useState("");
   const busy = mutating || loading;
+  const [organizationState, setOrganizationState] = useState<"loading" | "ready" | "error">("loading");
+  const [organizationRevision, setOrganizationRevision] = useState(0);
   const [organizations, setOrganizations] = useState<Named[]>([]),
     [programs, setPrograms] = useState<Named[]>([]),
     [locations, setLocations] = useState<Named[]>([]);
@@ -151,23 +154,26 @@ export default function LiveWorkspace({
     let active = true;
     if (!api || !signedIn) return;
     setError("");
+    setOrganizationState("loading");
+    setOrganizations([]);
     request<{ organizations: Named[]; nextCursor: string | null }>({
       operation: "organizations",
     })
       .then((data) => {
         if (active) {
           setOrganizations(data.organizations);
+          setOrganizationState("ready");
           if (data.nextCursor)
             setError("Only the first page of organizations is shown.");
         }
       })
       .catch((e) => {
-        if (active) setError(message(e));
+        if (active) { setOrganizationState("error"); setError(message(e)); }
       });
     return () => {
       active = false;
     };
-  }, [api, signedIn]);
+  }, [api, signedIn, organizationRevision]);
   useEffect(() => {
     let active = true;
     setDecisionId(undefined);
@@ -352,6 +358,8 @@ export default function LiveWorkspace({
     try {
       const result = await api.signOut();
       setSignedIn(false);
+      setOrganizations([]);
+      setOrganizationState("loading");
       setOrg("");
       if (!result.revoked || !result.localCleared)
         setError(
@@ -425,6 +433,8 @@ export default function LiveWorkspace({
           </section>
         ) : (
           <>
+            {organizationState === "loading" && <p role="status">Loading organizations…</p>}
+            {organizationState === "ready" && organizations.length === 0 && <OrganizationSetup request={api!.request} onBusyChange={setMutating} onCreated={() => setOrganizationRevision(v => v + 1)} />}
             <section className="workflow-card live-selectors">
               <label>
                 Organization

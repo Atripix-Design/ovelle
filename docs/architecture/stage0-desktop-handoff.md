@@ -2,8 +2,9 @@
 
 The internal Task 9 backend implements a first-party request, explicit browser
 approval and one-time native exchange. It reuses current session validation,
-issuance, SQL guards, safe HTTP responses and durable auth quotas. The public
-Worker does not import these routes. An opt-in development build now contains a
+issuance, SQL guards, safe HTTP responses and durable auth quotas. The production
+Worker does not import these routes; a separate development entry composes a
+restricted surface. An opt-in development build now contains a
 native main-process handoff and a restricted workflow bridge. OS storage and a browser approval page are implemented; real provider login and an installed-package restart test remain unverified.
 
 ## Protocol and boundaries
@@ -107,14 +108,15 @@ listener, checks the method, host, callback path, state and parameter cardinalit
 then exchanges a one-time code with an S256 verifier. Its token stays in the
 main-process return value. Tests use a real local listener and fixture HTTP
 responses; they do not prove the browser approval page, live server or OS
-persistence. The intended `/desktop/authorize` page is not implemented.
+persistence. A browser `/desktop/authorize` page is now implemented separately.
 
 `OVELLE_STAGE0_ORIGIN=https://dev.ovelle.org` at build time enables named
 workflow IPC operations for the packaged renderer. Development-branch packaging
 sets this fixed origin; production packaging does not. The renderer offers
 schedule, readiness, roster, coverage/waitlist and hours views using that bridge.
-The service remains disconnected from the public Worker, so inclusion in a
-package does not establish live sign-in or real organization access. The main process optionally
+The production Worker remains disconnected; a separate development Worker entry
+is prepared for the limited workflow routes. Inclusion in a package does not
+establish live sign-in or real organization access. The main process optionally
 persists the session with Electron safeStorage on macOS and Windows, falling
 back to memory when encryption is unavailable. Linux currently uses memory only
 because keyring discovery can block startup in headless environments. A restored
@@ -153,7 +155,7 @@ removes the fragment, checks the signed-in account and CSRF token, requires an
 explicit approval action, and validates the loopback destination before navigation.
 An ambiguous submission cannot be retried with the same request. The web approval
 page displays the signed-in account, requires an explicit action, and clears the
-fragment before rendering. The web sign-in screen starts Google or Microsoft with prelogin CSRF and a Turnstile widget. OIDC first-time enrollment and explicit email confirmation pages are implemented. Recovery and SAML contact confirmation remain absent, and the public identity service is not enabled.
+fragment before rendering. The web sign-in screen starts Google or Microsoft with prelogin CSRF and a Turnstile widget. OIDC first-time enrollment and explicit email confirmation pages are implemented. Recovery and SAML contact confirmation remain absent. The development Worker entry permits selected identity routes, but real provider operation has not yet been verified.
 
 The local integration harness uses Electron, Chromium, the real Stage 0
 composition and an ephemeral D1 database to exercise explicit browser approval,
@@ -168,7 +170,7 @@ Original Task 9 is incomplete: full renderer credential inspection,
 Windows/macOS package sign-in/restart tests and live identity rollout remain.
 The listener is registered only when the packaged build has the development
 bridge enabled. Approval, sign-in and OIDC enrollment pages exist, but the public
-identity service and real provider verification remain unavailable. Original Task 5's advisory
+development identity deployment and real provider verification remain to be verified. Original Task 5's advisory
 capability snapshot is still absent; live authorization and grant containment
 already exist and must not be reimplemented just to match an old helper name.
 Task 4/8 recovery, password runtime selection and the broader Stage 0 volunteer,

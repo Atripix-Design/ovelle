@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@ovelle/ui'
+import VolunteerSetup from './VolunteerSetup'
 
 type Scope = { organizationId: string; programId: string; locationId: string }
 type Props = { request: (input: unknown) => Promise<unknown>; scope: Scope; occurrenceId: string; onOpened: () => void; onBusyChange: (busy: boolean) => void }
@@ -9,6 +10,7 @@ type Option = { id: string; name: string }
 export default function ReadinessIntake({ request, scope, occurrenceId, onOpened, onBusyChange }: Props) {
   const [roles, setRoles] = useState<Option[]>([]), [people, setPeople] = useState<Option[]>([])
   const [role, setRole] = useState(''), [person, setPerson] = useState('')
+  const [peopleVersion, setPeopleVersion] = useState(0)
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState(false), [error, setError] = useState(''), [partial, setPartial] = useState(false)
   useEffect(() => {
     let active = true
@@ -23,7 +25,7 @@ export default function ReadinessIntake({ request, scope, occurrenceId, onOpened
     }).catch(() => { if (active) setError('Could not load available roles or volunteers for this scope.') })
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
-  }, [request, scope.organizationId, scope.programId, scope.locationId, occurrenceId])
+  }, [request, scope.organizationId, scope.programId, scope.locationId, occurrenceId, peopleVersion])
   const open = async () => {
     setBusy(true); onBusyChange(true); setError('')
     try { await request({ operation: 'openReadiness', ...scope, occurrenceId, roleId: role, personId: person, idempotencyKey: crypto.randomUUID() }); onOpened() }
@@ -37,6 +39,7 @@ export default function ReadinessIntake({ request, scope, occurrenceId, onOpened
     <label>Volunteer <select value={person} disabled={loading || busy} onChange={e => setPerson(e.target.value)}><option value="">Choose volunteer</option>{people.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
     <label>Review role <select value={role} disabled={loading || busy} onChange={e => setRole(e.target.value)}><option value="">Choose role</option>{roles.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
     <Button disabled={loading || busy || !person || !role} onClick={() => void open()}>Open review</Button>
+    <VolunteerSetup request={request} scope={scope} onBusyChange={onBusyChange} onCreated={() => setPeopleVersion(v => v + 1)} />
     {error && <p role="alert">{error}</p>}
   </div>
 }

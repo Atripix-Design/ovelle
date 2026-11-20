@@ -29,7 +29,9 @@ try {
           case 'createCriterion': window.fixtureCriteria.push({ id: 'criterion', roleId: input.roleId, name: input.name }); return { id: 'criterion' }
           case 'publishOccurrence': window.fixtureDraft.status = 'published'; return { id: 'draft', status: 'published' }
           case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: window.fixtureCalls.some(call => call.operation === 'checkOut') ? 'departed' : checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
-          case 'volunteers': return { volunteers: [{ id: 'person', displayName: 'Avery' }], truncated: false }
+          case 'volunteers': return { volunteers: [{ id: 'person', displayName: 'Avery' }, ...(window.fixtureCalls.some(call => call.operation === 'createVolunteer') ? [{ id: 'new-person', displayName: 'Jordan' }] : [])], truncated: false }
+          case 'searchVolunteers': return { volunteers: [], truncated: false }
+          case 'createVolunteer': return { id: 'new-person' }
           case 'openReadiness': return { status: 'pending' }
           case 'assign': return { id: 'assignment' }
           case 'checkIn': return {}
@@ -128,7 +130,14 @@ try {
   const submitted = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'submitHours')
   assert.equal(submitted.breakMinutes, 15); assert.equal(submitted.endAt - submitted.startAt, 120 * 60000)
   await page.getByRole('button', { name: 'Readiness' }).click()
-  await page.getByLabel('Volunteer').selectOption('person')
+  await page.getByLabel('Volunteer name').fill('Jordan')
+  await page.getByRole('button', { name: 'Search existing volunteers' }).click()
+  await page.getByText('No matches found in this scope.').waitFor()
+  await page.getByRole('button', { name: 'Review new volunteer' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'createVolunteer').length, 0)
+  await page.getByRole('button', { name: 'Confirm new volunteer' }).click()
+  await page.getByRole('option', { name: 'Jordan' }).waitFor({ state: 'attached' })
+  await page.getByRole('combobox', { name: /^Volunteer/ }).selectOption('person')
   await page.getByLabel('Review role').selectOption('role')
   await page.getByRole('button', { name: 'Open review' }).click()
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'openReadiness'))
@@ -161,6 +170,30 @@ try {
   const decision = (await page.evaluate(() => window.fixtureCalls)).find(call => call.operation === 'reviewHours')
   assert.equal(decision.organizationId, 'org'); assert.equal(decision.approvedMinutes, 60)
   assert.deepEqual(errors, [])
+  const newAccount = await browser.newPage({ viewport: { width: 640, height: 850 } })
+  await newAccount.addInitScript(() => {
+    window.setupCalls = []
+    window.ovelleWorkflow = { status: async () => ({ signedIn: true }), request: async input => {
+      window.setupCalls.push(input)
+      if (input.operation === 'organizations') return { organizations: window.setupCalls.some(call => call.operation === 'createOrganization') ? [{ id: 'new-org', name: 'New organization' }] : [], nextCursor: null }
+      if (input.operation === 'createOrganization') return { id: 'new-org' }
+      throw Error('Unexpected request')
+    } }
+  })
+  await newAccount.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
+  await newAccount.getByRole('button', { name: 'Live workspace' }).click()
+  await newAccount.getByLabel('Organization name').fill('New organization')
+  await newAccount.getByLabel('Organization contact email').fill('team@example.test')
+  await newAccount.getByLabel('Time zone').fill('America/New_York')
+  await newAccount.getByLabel('First program').fill('Food pantry')
+  await newAccount.getByLabel('First location').fill('Main site')
+  await newAccount.getByRole('button', { name: 'Review organization' }).click()
+  assert.equal((await newAccount.evaluate(() => window.setupCalls)).filter(call => call.operation === 'createOrganization').length, 0)
+  await newAccount.getByRole('button', { name: 'Confirm organization' }).click()
+  await newAccount.getByRole('option', { name: 'New organization' }).waitFor({ state: 'attached' })
+  const created = (await newAccount.evaluate(() => window.setupCalls)).find(call => call.operation === 'createOrganization')
+  assert.equal(created.firstProgram, 'Food pantry'); assert.equal(created.timeZone, 'America/New_York')
+  await newAccount.close()
   const unavailable = await browser.newPage()
   await unavailable.addInitScript(() => { window.ovelleWorkflow = { status: async () => { throw Error('No handler') } } })
   await unavailable.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })

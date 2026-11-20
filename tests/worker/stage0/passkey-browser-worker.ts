@@ -18,8 +18,8 @@ export default {
     if (path === '/') return new Response('<!doctype html><title>Ovelle passkey verification fixture</title>', { headers: { 'Content-Type': 'text/html', 'Cache-Control': 'no-store' } })
     // Synthetic primary authentication belongs only to this test fixture. The
     // browser must still complete the real WebAuthn and HTTP ceremony afterwards.
-    if (path === '/__fixture/bootstrap' && request.method === 'POST' && request.headers.get('Origin') === ctx.config.origin) {
-      const session = await issueSession(ctx, { accountId: 'browser-person', method: 'password' }, 'browser')
+    if ((path === '/__fixture/bootstrap' || path === '/__fixture/bootstrap-ui') && request.method === 'POST' && request.headers.get('Origin') === ctx.config.origin) {
+      const session = await issueSession(ctx, { accountId: path.endsWith('bootstrap-ui') ? 'browser-ui-person' : 'browser-person', method: 'password' }, 'browser')
       return authResponse(ctx, { csrfToken: session.csrfToken }, 200, { 'Set-Cookie': await browserSessionCookie(ctx, session) })
     }
     if (path === '/api/v1/auth/prelogin' && request.method === 'GET') {

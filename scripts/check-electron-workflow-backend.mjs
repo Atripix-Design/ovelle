@@ -25,6 +25,7 @@ try {
  await db.batch([
   db.prepare("INSERT INTO accounts(id,email,display_name,email_verified_at,created_at) VALUES('owner','owner@example.test','Owner',?,?)").bind(now,now),
   db.prepare("INSERT INTO accounts(id,email,display_name,email_verified_at,created_at) VALUES('coordinator','coordinator@example.test','Coordinator',?,?)").bind(now,now),
+  db.prepare("INSERT INTO accounts(id,email,display_name,email_verified_at,created_at) VALUES('new-owner','new-owner@example.test','New Owner',?,?)").bind(now,now),
   db.prepare("INSERT INTO organizations(id,name,owner_account_id,created_by_account_id,created_at) VALUES('org-a','Fixture','owner','owner',?)").bind(now),
   db.prepare("INSERT INTO programs(id,organization_id,name) VALUES('program','org-a','Program')"),
   db.prepare("INSERT INTO locations(id,organization_id,name) VALUES('site','org-a','Site')"),
@@ -34,7 +35,7 @@ try {
  const boot=await runtime.dispatchFetch(`${origin}/__fixture/bootstrap`,{method:'POST',headers:{'X-Fixture-Control':control}})
  assert.equal(boot.status,200);const browser=await boot.json()
  let receiveApproval
- const approvalOpened=new Promise(resolve=>{receiveApproval=resolve})
+ let approvalOpened=new Promise(resolve=>{receiveApproval=resolve})
  server=createServer(async(req,res)=>{
   try {
    if(req.socket.remoteAddress!=='127.0.0.1')throw new Error('outside fixture')
@@ -174,24 +175,29 @@ try {
  await page.getByRole('button',{name:'Confirm publication'}).click()
  await page.getByRole('button',{name:/UI-created shift.*Open roster/}).click()
  await page.getByRole('button',{name:'Readiness'}).click()
- await page.getByLabel('Volunteer').selectOption({label:'Fixture volunteer'})
+ await page.getByLabel('Volunteer name').fill('UI New Person')
+ await page.getByRole('button',{name:'Search existing volunteers'}).click()
+ await page.getByText('No matches found in this scope.').waitFor()
+ await page.getByRole('button',{name:'Review new volunteer'}).click()
+ await page.getByRole('button',{name:'Confirm new volunteer'}).click()
+ await page.getByRole('combobox', { name: /^Volunteer/ }).selectOption({label:'UI New Person'})
  await page.getByLabel('Review role').selectOption({label:'UI role'})
  await page.getByRole('button',{name:'Open review'}).click()
- await page.getByRole('button',{name:/Fixture volunteer.*UI-created shift/}).click()
+ await page.getByRole('button',{name:/UI New Person.*UI-created shift/}).click()
  await page.getByRole('button',{name:'Record evidence for UI briefing'}).click()
  await page.getByLabel('Valid from').fill(localInput(Date.now()-86400000))
  await page.getByLabel('Evidence note').fill('Briefing verified')
  await page.getByRole('button',{name:'Review evidence'}).click()
  await page.getByRole('button',{name:'Confirm evidence'}).click()
- await page.getByRole('button',{name:/Fixture volunteer.*UI-created shift/}).click()
+ await page.getByRole('button',{name:/UI New Person.*UI-created shift/}).click()
  await page.getByLabel('Review note').fill('Requirements reviewed')
  await page.getByRole('button',{name:'Review ready decision'}).click()
  await page.getByRole('button',{name:'Confirm decision'}).click()
- await page.getByRole('button',{name:/Fixture volunteer.*UI-created shift/}).click()
+ await page.getByRole('button',{name:/UI New Person.*UI-created shift/}).click()
  await page.getByRole('button',{name:'Review assignment'}).click()
  await page.getByRole('button',{name:'Confirm assignment'}).click()
  await page.getByRole('heading',{name:'Day-of roster'}).waitFor()
- await page.getByText('Fixture volunteer',{exact:true}).waitFor()
+ await page.getByText('UI New Person',{exact:true}).waitFor()
  await page.getByRole('button',{name:'Check in'}).click()
  await page.getByRole('button',{name:'Check out'}).click()
  await page.getByRole('button',{name:'Submit hours'}).click()
@@ -200,7 +206,7 @@ try {
  await page.getByLabel('Unpaid break minutes').fill('15')
  await page.getByRole('button',{name:'Review submission'}).click()
  await page.getByRole('button',{name:'Confirm submission'}).click()
- await page.getByRole('button',{name:/Fixture volunteer.*UI-created shift/}).click()
+ await page.getByRole('button',{name:/UI New Person.*UI-created shift/}).click()
  await page.getByRole('button',{name:'Review approval'}).click()
  await page.getByRole('button',{name:'Confirm approval'}).click()
  await page.getByRole('button',{name:'Schedule'}).click()
@@ -226,6 +232,23 @@ try {
  assert.equal(await db.prepare('SELECT count(*) AS n FROM volunteer_hours_decisions').first('n'),4)
  const uiApproved = await db.prepare(`SELECT d.approved_minutes FROM volunteer_hours_decisions d JOIN volunteer_hours_submissions h ON h.id=d.submission_id AND h.organization_id=d.organization_id JOIN volunteer_assignments a ON a.id=h.assignment_id AND a.organization_id=h.organization_id JOIN volunteer_occurrences o ON o.id=a.occurrence_id AND o.organization_id=a.organization_id WHERE o.title='UI-created shift' AND d.decision='approve'`).first('approved_minutes')
  assert.equal(uiApproved,45)
+ // A second synthetic passkey-verified account starts with no organizations.
+ const newBoot=await runtime.dispatchFetch(`${origin}/__fixture/bootstrap`,{method:'POST',headers:{'X-Fixture-Control':control,'X-Fixture-Account':'new-owner'}})
+ assert.equal(newBoot.status,200); const newBrowser=await newBoot.json()
+ await context.addCookies([{name:'__Host-ovelle_session',value:newBrowser.token,domain:'dev.ovelle.org',path:'/',secure:true,httpOnly:true,sameSite:'Strict'}])
+ approvalOpened=new Promise(resolve=>{receiveApproval=resolve})
+ await page.getByRole('button',{name:'Sign in'}).click()
+ await browserPage.goto(await approvalOpened)
+ await browserPage.getByRole('button',{name:'Approve device'}).click()
+ await page.getByLabel('Organization name').fill('UI New Organization')
+ await page.getByLabel('Organization contact email').fill('org@example.test')
+ await page.getByLabel('Time zone').fill('America/New_York')
+ await page.getByLabel('First program').fill('First program')
+ await page.getByLabel('First location').fill('First site')
+ await page.getByRole('button',{name:'Review organization'}).click()
+ await page.getByRole('button',{name:'Confirm organization'}).click()
+ await page.getByRole('option',{name:'UI New Organization'}).waitFor({state:'attached'})
+ assert.ok(await db.prepare("SELECT id FROM organizations WHERE name='UI New Organization' AND owner_account_id='new-owner'").first())
  console.log('Electron + Chromium + local Stage 0 fixture: explicit browser approval, schedule, eligibility, roster, hours correction and replacement passed; synthetic browser session and disposable data.')
 } finally {
  if(browserApp)await browserApp.close()

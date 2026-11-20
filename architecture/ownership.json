@@ -110,6 +110,7 @@
         "src/cloudflare/stage0/auth/budgets.ts",
         "src/cloudflare/stage0/auth/oidc/cookies.ts",
         "src/cloudflare/worker.ts",
+        "src/cloudflare/worker-development.ts",
         "src/cloudflare/stage0/auth/saml/form.ts"
       ]
     },
@@ -247,10 +248,12 @@
     {
       "id": "public-worker",
       "roots": [
-        "src/cloudflare/worker.ts"
+        "src/cloudflare/worker.ts",
+        "src/cloudflare/worker-development.ts"
       ],
       "allowed": [
-        "backend"
+        "backend",
+        "backend-composition"
       ],
       "node": false,
       "electron": false
@@ -371,7 +374,7 @@
     },
     {
       "owner": "src/cloudflare/worker.ts",
-      "reason": "Public Worker routing and health/asset composition; does not enable Stage 0 routes."
+      "reason": "Shared public routing and health/asset composition; development uses a separate entry point to admit a restricted Stage 0 workflow surface."
     },
     {
       "owner": "src/cloudflare/releases.ts",

@@ -32,6 +32,12 @@ cleanup. Preserve current live-session SQL guards and transactional invariants.
   them, even through type-only imports. Shared transport contracts should be
   platform-independent when extracted.
 - Worker code cannot import frontend, test or tooling implementations.
+- The `public-worker` zone may import `backend-composition` solely for the
+  development-only `worker-development.ts` entry point. This explicit dependency
+  lets development compose the reviewed identity/workflow adapters without
+  changing production routing. Remove it if that entry point is removed or the
+  ownership boundaries are redesigned; it is not permission for backend services
+  to import the public Worker.
 - Public package imports must use declared package exports. Relative imports into
   UI implementation files from apps are prohibited.
 - Feature modules should expose deliberate public entry points. Package-private

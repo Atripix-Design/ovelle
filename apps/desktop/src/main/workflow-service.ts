@@ -3,6 +3,7 @@ const scoped=['programId','locationId']
 const identity=[...scoped,'occurrenceId','roleId','personId']
 const specs:Record<string,Spec>={
   organizations:{path:'/me/organizations',method:'GET',optionalQuery:['limit','cursor']},
+  createOrganization:{path:'/organizations',method:'POST',body:['name','contactEmail','timeZone','firstProgram','firstLocation']},
   programs:{path:'/organizations/:organizationId/programs',method:'GET',optionalQuery:['locationId']},
   locations:{path:'/organizations/:organizationId/locations',method:'GET',optionalQuery:['programId']},
   schedule:{path:'/organizations/:organizationId/volunteer-schedule',method:'GET',query:[...scoped,'from','until'],optionalQuery:['cursor']},

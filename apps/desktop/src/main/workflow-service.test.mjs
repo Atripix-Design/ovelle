@@ -36,6 +36,11 @@ test('allows only named workflow calls and keeps the bearer in main',async()=>{
  await service.request({operation:'searchVolunteers',organizationId:'org-a',programId:'program',locationId:'site',search:'Alice'})
  assert.equal(calls[3].url,`${origin}/api/v1/native/organizations/org-a/volunteers/search`)
  assert.equal(calls[3].init.headers['Idempotency-Key'],undefined);assert.equal(JSON.parse(calls[3].init.body).search,'Alice')
+ const organization={operation:'createOrganization',name:'Fixture',contactEmail:'fixture@example.test',timeZone:'America/New_York',firstProgram:'Program',firstLocation:'Site',idempotencyKey:'organization-key-1234'}
+ await service.request(organization)
+ assert.equal(calls[4].url,`${origin}/api/v1/native/organizations`)
+ assert.deepEqual(JSON.parse(calls[4].init.body),{name:'Fixture',contactEmail:'fixture@example.test',timeZone:'America/New_York',firstProgram:'Program',firstLocation:'Site'})
+ await assert.rejects(service.request({...organization,ownerAccountId:'other'}),/Invalid/)
 })
 
 test('revocation and concurrent sign-out cannot revive a native session',async()=>{

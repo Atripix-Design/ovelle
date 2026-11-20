@@ -7,6 +7,8 @@
   "env": {
     "development": {
       "name": "ovelle-development",
+      "main": "src/cloudflare/worker-development.ts",
+      "compatibility_flags": ["nodejs_compat"],
       "routes": [
         {
           "pattern": "dev.ovelle.org",
