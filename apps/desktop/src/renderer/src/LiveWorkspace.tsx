@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button, LoadingBoundary } from "@ovelle/ui";
 import ScheduleEditor from "./ScheduleEditor";
 import ReadinessEvidence from "./ReadinessEvidence";
+import ReadinessIntake from "./ReadinessIntake";
+import ReadinessAssignment from "./ReadinessAssignment";
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -549,6 +551,7 @@ export default function LiveWorkspace({
                   )}
                   {screen === "readiness" && (
                     <>
+                      {shift ? <ReadinessIntake key={`${org}:${program}:${location}:${shift}`} request={api!.request} scope={{organizationId: org, programId: program, locationId: location}} occurrenceId={shift} onOpened={() => setRevision(v => v + 1)} /> : <p>Select an occurrence from Schedule to start a new review.</p>}
                       {cases.length === 0 ? (
                         <p>No readiness cases in this scope.</p>
                       ) : (
@@ -599,6 +602,7 @@ export default function LiveWorkspace({
                               show.
                             </p>
                           )}
+                          {selectedCase.state === "ready" && <ReadinessAssignment key={`${selectedCase.occurrenceId}:${selectedCase.roleId}:${selectedCase.personId}`} request={api!.request} identity={{organizationId: org, programId: program, locationId: location, occurrenceId: selectedCase.occurrenceId, roleId: selectedCase.roleId, personId: selectedCase.personId}} name={selectedCase.name} onAssigned={() => { setShift(selectedCase.occurrenceId); setSelectedShift(previous => previous?.id === selectedCase.occurrenceId ? previous : null); setScreen("roster"); setRevision(v => v + 1) }} />}
                           <p>
                             A ready decision does not override missing or
                             expired requirements.

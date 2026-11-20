@@ -29,6 +29,9 @@ try {
           case 'createCriterion': window.fixtureCriteria.push({ id: 'criterion', roleId: input.roleId, name: input.name }); return { id: 'criterion' }
           case 'publishOccurrence': window.fixtureDraft.status = 'published'; return { id: 'draft', status: 'published' }
           case 'roster': { const checkedIn = window.fixtureCalls.some(call => call.operation === 'checkIn'); return { volunteers: [{ assignmentId: 'a', name: 'Avery', role: 'Volunteer', readiness: checkedIn ? 'blocked' : 'ready', presence: checkedIn ? 'on_site' : 'expected' }], nextCursor: null } }
+          case 'volunteers': return { volunteers: [{ id: 'person', displayName: 'Avery' }], truncated: false }
+          case 'openReadiness': return { status: 'pending' }
+          case 'assign': return { id: 'assignment' }
           case 'checkIn': return {}
           case 'checkOut': return {}
           case 'waitlist': { const offered = window.fixtureCalls.some(call => call.operation === 'offerWaitlist'); return { entries: [{ id: 'w', name: 'Morgan', role: 'Volunteer', readiness: 'ready', state: offered ? 'offered' : 'waiting', offerId: offered ? 'offer' : null, offerExpiresAt: offered ? Date.now() + 86400000 : null }], nextCursor: null } }
@@ -37,7 +40,7 @@ try {
           case 'hours': return { submissions: [{ id: 'h', name: 'Avery', title: 'Shift', state: 'pending', startAt: 0, endAt: 3600000, breakMinutes: 0, checkedInAt: 0, checkedOutAt: 3600000 }], nextCursor: null }
           case 'hoursHistory': return { decisions: [], nextCursor: null }
           case 'reviewHours': return { id: 'd' }
-          case 'readiness': return { cases: [{ occurrenceId: 's', roleId: 'r', personId: 'person', name: 'Avery', role: 'Volunteer', title: 'Shift', state: 'pending', latestDecisionId: null }], nextCursor: null }
+          case 'readiness': return { cases: [{ occurrenceId: 's', roleId: 'r', personId: 'person', name: 'Avery', role: 'Volunteer', title: 'Shift', state: window.fixtureCalls.some(call => call.operation === 'decideReadiness') ? 'ready' : 'pending', latestDecisionId: null }], nextCursor: null }
           case 'criterionEvidence': return { criteria: [{ id: 'c', name: 'Waiver', evidenceId: null, state: 'verified', validUntil: null, note: null }], truncated: false }
           case 'decideReadiness': return { id: 'decision' }
           case 'recordEvidence': if (window.fixtureCalls.filter(call => call.operation === 'recordEvidence').length === 1) throw Error('Connection lost'); return { id: 'evidence' }
@@ -96,12 +99,22 @@ try {
   assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'decideReadiness').length, 0)
   await page.getByRole('button', { name: 'Confirm decision' }).click()
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'decideReadiness'))
+  await page.getByRole('button', { name: /Avery.*Shift/ }).click()
+  await page.getByRole('button', { name: 'Review assignment' }).click()
+  assert.equal((await page.evaluate(() => window.fixtureCalls)).filter(call => call.operation === 'assign').length, 0)
+  await page.getByRole('button', { name: 'Confirm assignment' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'assign'))
   await page.getByRole('button', { name: 'Schedule' }).click()
   await page.getByRole('button', { name: /Shift.*Open roster/ }).click()
   await checkWidths()
   await page.getByRole('button', { name: 'Check in' }).click()
   await page.getByRole('button', { name: 'Check out' }).click()
   await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'checkOut'))
+  await page.getByRole('button', { name: 'Readiness' }).click()
+  await page.getByLabel('Volunteer').selectOption('person')
+  await page.getByLabel('Review role').selectOption('role')
+  await page.getByRole('button', { name: 'Open review' }).click()
+  await page.waitForFunction(() => window.fixtureCalls.some(call => call.operation === 'openReadiness'))
   await page.getByRole('button', { name: 'Coverage' }).click()
   await page.getByText('1/2 assigned', { exact: false }).waitFor()
   await page.getByRole('button', { name: 'Prepare offer' }).click()
