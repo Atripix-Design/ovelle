@@ -15,6 +15,9 @@ declare global {
   }
 }
 
+const platform = navigator.userAgent.includes("Windows") ? "windows" : navigator.userAgent.includes("Macintosh") ? "macos" : "other";
+document.documentElement.dataset.desktopPlatform = platform;
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     {window.location.search.includes("components") ? (

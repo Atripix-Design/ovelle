@@ -7,6 +7,10 @@
 - Write useful comments that explain intent, non-obvious behavior and architectural decisions. Keep comments accurate as the code changes.
 - Do not invent rubric requirements before the user supplies them.
 
+## Iconography
+
+- Do not use Unicode glyphs, emoji, or text characters as interface icons. Use tailored SVG assets consistent with the Ovelle icon system; ordinary punctuation and text remain text.
+
 ## Shared website and desktop UI
 
 - Use `@ovelle/ui` in both the website and Electron renderer. Keep shared component implementations in `packages/ui`; app-specific routing, data and native desktop integrations belong in their apps.

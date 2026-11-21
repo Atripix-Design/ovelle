@@ -19,8 +19,9 @@ function createWindow(): void {
     minHeight: 480,
     backgroundColor: '#ffffff',
     autoHideMenuBar: true,
-    // Keep the native title bar available even when a renderer has no drag region.
-    ...(process.platform === 'darwin' ? { titleBarStyle: 'default' as const } : {}),
+    // Preserve native window controls while letting the app header occupy their title bar.
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 16, y: 21 } } : {}),
+    ...(process.platform === 'win32' ? { titleBarStyle: 'hidden' as const, titleBarOverlay: { color: '#ffffff', symbolColor: '#20394b', height: 58 } } : {}),
     webPreferences: {
       // The remote development renderer does not receive native capabilities.
       preload: liveURL ? undefined : join(currentDir, '../preload/index.cjs'),

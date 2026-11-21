@@ -559,7 +559,7 @@ export default function LiveWorkspace({
                               {item.assigned}/{item.capacity} assigned ·{" "}
                               {item.held} held
                             </span>
-                            <span>{item.status === "draft" ? "Set up draft →" : "Open roster →"}</span>
+                            <span>{item.status === "draft" ? "Set up draft" : "Open roster"}</span>
                           </button>
                         ))
                       )}

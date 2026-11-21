@@ -36,6 +36,7 @@
     "check:architecture": "node scripts/architecture/check.mjs",
     "test:architecture": "node --test scripts/architecture/*.test.mjs",
     "test:browser-tooling": "node --test scripts/browser-tooling.test.mjs",
+    "check:desktop-chrome": "node scripts/check-desktop-chrome.mjs",
     "check:electron-ipc": "node scripts/check-electron-ipc.mjs",
     "test:desktop-handoff": "node --experimental-strip-types --test apps/desktop/src/main/handoff.test.mjs apps/desktop/src/main/workflow-service.test.mjs apps/desktop/src/main/session-vault.test.mjs",
     "check:electron-workflow-ipc": "node scripts/check-electron-workflow-ipc.mjs",

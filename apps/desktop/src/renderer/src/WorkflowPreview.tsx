@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Button } from "@ovelle/ui";
 import "./workflow.css";
+import scheduleIcon from "./icons/schedule.svg";
+import readinessIcon from "./icons/readiness.svg";
+import coverageIcon from "./icons/coverage.svg";
+import rosterIcon from "./icons/roster.svg";
+import hoursIcon from "./icons/hours.svg";
 import LiveWorkspace from "./LiveWorkspace";
 
 type Page =
@@ -60,6 +65,7 @@ const pageNames: Record<Page, string> = {
   roster: "Day-of roster",
   hours: "Hours review",
 };
+const navigationIcons = [scheduleIcon, readinessIcon, coverageIcon, rosterIcon, hoursIcon];
 const time = (minutes: number) => `${(minutes / 60).toFixed(1)} h`;
 
 /** Interactive design preview; no preview action writes to a real organization. */
@@ -116,7 +122,7 @@ export default function WorkflowPreview() {
               onClick={() => navigate(item)}
               title={pageNames[item]}
             >
-              <span aria-hidden="true">{["▦", "✓", "♧", "☷", "▥"][i]}</span>
+              <img className="workflow-rail-icon" src={navigationIcons[i]} alt="" />
               <span className="workflow-rail-label">{pageNames[item]}</span>
             </button>
           ))}
@@ -146,7 +152,7 @@ export default function WorkflowPreview() {
                       className="text-action"
                       onClick={() => setNextWeek((value) => !value)}
                     >
-                      {nextWeek ? "← Previous week" : "Next week →"}
+                      {nextWeek ? "Previous week" : "Next week"}
                     </button>
                   </div>
                   <div className="calendar-days">
@@ -197,13 +203,13 @@ export default function WorkflowPreview() {
                   <p>Roles: General volunteer, site lead</p>
                   <div className="link-list">
                     <button onClick={() => navigate("occurrence")}>
-                      Open occurrence →
+                      Open occurrence
                     </button>
                     <button onClick={() => navigate("roster")}>
-                      View roster →
+                      View roster
                     </button>
                     <button onClick={() => navigate("coverage")}>
-                      Review coverage →
+                      Review coverage
                     </button>
                   </div>
                 </aside>
@@ -214,7 +220,7 @@ export default function WorkflowPreview() {
                     onClick={() => navigate("occurrence")}
                   >
                     <strong>Feb 1 · Riverside clean-up</strong>
-                    <span>18 / 20 assigned · {openPlaces} open →</span>
+                    <span>18 / 20 assigned · {openPlaces} open</span>
                   </button>
                 </section>
                 <aside className="workflow-card tint">
@@ -224,7 +230,7 @@ export default function WorkflowPreview() {
                     className="text-action"
                     onClick={() => navigate("coverage")}
                   >
-                    Review coverage →
+                    Review coverage
                   </button>
                 </aside>
               </div>
@@ -236,7 +242,7 @@ export default function WorkflowPreview() {
                 className="back-link"
                 onClick={() => navigate("schedule")}
               >
-                ← Schedule
+                Back to schedule
               </button>
               <div className="workflow-heading">
                 <h1>Riverside clean-up</h1>
@@ -269,13 +275,13 @@ export default function WorkflowPreview() {
                   <h2>Next actions</h2>
                   <div className="link-list">
                     <button onClick={() => navigate("readiness")}>
-                      Review readiness →
+                      Review readiness
                     </button>
                     <button onClick={() => navigate("coverage")}>
-                      Waitlist & coverage →
+                      Waitlist & coverage
                     </button>
                     <button onClick={() => navigate("roster")}>
-                      View roster →
+                      View roster
                     </button>
                   </div>
                 </aside>
@@ -299,7 +305,7 @@ export default function WorkflowPreview() {
                 className="back-link"
                 onClick={() => navigate("occurrence")}
               >
-                ← Riverside clean-up
+                Back to Riverside clean-up
               </button>
               <div className="workflow-heading">
                 <h1>Readiness</h1>
@@ -344,7 +350,7 @@ export default function WorkflowPreview() {
                     className="text-action"
                     onClick={() => navigate("coverage")}
                   >
-                    Open waitlist & coverage →
+                    Open waitlist & coverage
                   </button>
                 </aside>
               </div>
@@ -356,7 +362,7 @@ export default function WorkflowPreview() {
                 className="back-link"
                 onClick={() => navigate("occurrence")}
               >
-                ← Riverside clean-up
+                Back to Riverside clean-up
               </button>
               <div className="workflow-heading">
                 <h1>Waitlist & coverage</h1>
@@ -409,7 +415,7 @@ export default function WorkflowPreview() {
                     className="text-action"
                     onClick={() => navigate("occurrence")}
                   >
-                    Review occurrence →
+                    Review occurrence
                   </button>
                 </aside>
               </div>
@@ -421,7 +427,7 @@ export default function WorkflowPreview() {
                 className="back-link"
                 onClick={() => navigate("occurrence")}
               >
-                ← Riverside clean-up
+                Back to Riverside clean-up
               </button>
               <div className="workflow-heading">
                 <h1>Day-of roster</h1>
@@ -480,13 +486,13 @@ export default function WorkflowPreview() {
                     className="text-action"
                     onClick={() => navigate("hours")}
                   >
-                    Review submitted hours →
+                    Review submitted hours
                   </button>
                   <button
                     className="text-action"
                     onClick={() => navigate("readiness")}
                   >
-                    Review readiness →
+                    Review readiness
                   </button>
                 </aside>
               </div>
@@ -557,7 +563,7 @@ export default function WorkflowPreview() {
                       );
                     }}
                   >
-                    Request clarification →
+                    Request clarification
                   </button>
                 </aside>
               </div>
