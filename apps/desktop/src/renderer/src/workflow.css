@@ -1,11 +1,12 @@
 .workflow-app {
+  --workflow-header-height: 58px;
   min-height: 100vh;
   background: #f5f7f8;
   color: #172b3d;
   font-size: 14px;
 }
 .workflow-topbar {
-  height: 58px;
+  height: var(--workflow-header-height);
   background: #fff;
   display: flex;
   align-items: center;
@@ -27,7 +28,7 @@
 }
 .workflow-layout {
   display: flex;
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - var(--workflow-header-height));
 }
 .workflow-rail {
   width: 72px;
@@ -292,7 +293,7 @@
   }
   .workflow-rail {
     position: sticky;
-    top: 58px;
+    top: var(--workflow-header-height);
     z-index: 1;
     width: 100%;
     padding: 4px 10px;
@@ -387,6 +388,7 @@
 .workflow-app .account-fields input { box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #b8c8d2; border-radius: 8px; font: inherit; color: inherit; }
 
 /* Reserve space for OS-owned caption controls; the rest of the header remains draggable. */
+[data-desktop-platform="macos"] .workflow-app { --workflow-header-height: 36px; }
 [data-desktop-platform="macos"] .workflow-topbar { padding-left: 90px; }
 [data-desktop-platform="windows"] .workflow-topbar { padding-right: 150px; }
 .workflow-topbar button { -webkit-app-region: no-drag; }

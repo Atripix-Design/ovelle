@@ -46,7 +46,9 @@
     "check:account-sign-in": "node scripts/check-account-sign-in.mjs",
     "check:account-enrollment": "node scripts/check-account-enrollment.mjs",
     "optimize:images": "node scripts/optimize-website-images.mjs",
-    "check:live-workflow-ui": "node scripts/check-live-workflow-ui.mjs"
+    "check:live-workflow-ui": "node scripts/check-live-workflow-ui.mjs",
+    "test:macos-window-visual": "node --test scripts/check-macos-window-visual.test.mjs",
+    "check:macos-window-visual": "bash scripts/check-macos-window-live.sh"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.4.7",

@@ -18,11 +18,13 @@ try {
       const state = await page.evaluate(() => {
         const header = document.querySelector('.workflow-topbar');
         const brand = document.querySelector('.workflow-brand');
-        const box = node => { const r = node.getBoundingClientRect(); return { left: r.left, right: r.right }; };
-        return { platform: document.documentElement.dataset.desktopPlatform, brand: box(brand), scrollWidth: document.documentElement.scrollWidth, drag: getComputedStyle(header).webkitAppRegion, children: [...header.children].filter(node => getComputedStyle(node).display !== 'none').map(box) };
+        const box = node => { const r = node.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, height: r.height }; };
+        return { platform: document.documentElement.dataset.desktopPlatform, header: box(header), brand: box(brand), scrollWidth: document.documentElement.scrollWidth, drag: getComputedStyle(header).webkitAppRegion, children: [...header.children].filter(node => getComputedStyle(node).display !== 'none').map(box) };
       });
       assert.equal(state.platform, platform);
       assert.equal(state.drag, 'drag');
+      assert.equal(state.header.height, platform === 'macos' ? 37 : 59);
+      assert.ok(Math.abs((state.brand.top + state.brand.height / 2) -  (state.header.top + (state.header.height - 1) / 2)) < 1, JSON.stringify(state));
       assert.ok(state.scrollWidth <= width, JSON.stringify(state));
       assert.ok(state.brand.left >= (platform === 'macos' ? 90 : 16), JSON.stringify(state));
       assert.ok(state.children.every(child => child.right <= width - (platform === 'windows' ? 150 : 0)), JSON.stringify(state));
