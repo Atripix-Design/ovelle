@@ -60,7 +60,6 @@ try {
     await page.setViewportSize({ width: 1100, height: 850 })
   }
   await page.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
-  await page.getByRole('button', { name: 'Live workspace' }).click()
   await page.getByLabel('Organization').selectOption('org')
   await page.getByLabel('Program').selectOption('p')
   await page.getByLabel('Location').selectOption('l')
@@ -181,7 +180,6 @@ try {
     } }
   })
   await newAccount.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
-  await newAccount.getByRole('button', { name: 'Live workspace' }).click()
   await newAccount.getByLabel('Organization name').fill('New organization')
   await newAccount.getByLabel('Organization contact email').fill('team@example.test')
   await newAccount.getByLabel('Time zone').fill('America/New_York')
@@ -197,7 +195,6 @@ try {
   const unavailable = await browser.newPage()
   await unavailable.addInitScript(() => { window.ovelleWorkflow = { status: async () => { throw Error('No handler') } } })
   await unavailable.goto(process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/', { waitUntil: 'networkidle' })
-  await unavailable.getByRole('button', { name: 'Live workspace' }).click()
   await unavailable.getByRole('heading', { name: 'Native connection unavailable' }).waitFor()
   assert.equal(await unavailable.getByRole('button', { name: 'Sign in' }).count(), 0)
   await unavailable.close()

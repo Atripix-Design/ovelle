@@ -84,11 +84,7 @@ const displayTime = (value: number | null) =>
   value === null ? "Not recorded" : new Date(value).toLocaleString();
 
 /** Live data is always fetched through the fixed, main-process native bridge. */
-export default function LiveWorkspace({
-  onPreview,
-}: {
-  onPreview: () => void;
-}) {
+export default function LiveWorkspace() {
   const api = window.ovelleWorkflow;
   const [bridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
   const [signedIn, setSignedIn] = useState(false),
@@ -395,10 +391,6 @@ export default function LiveWorkspace({
     <div className="workflow-app">
       <header className="workflow-topbar">
         <strong className="workflow-brand">ovelle</strong>
-        <span className="workflow-org">Live workspace</span>
-        <button className="text-action" onClick={onPreview}>
-          Open preview
-        </button>
         {signedIn && (
           <button className="text-action" disabled={busy} onClick={signOut}>
             Sign out
@@ -407,18 +399,17 @@ export default function LiveWorkspace({
       </header>
       <main className="workflow-main">
         <div className="workflow-heading">
-          <h1>Live workspace</h1>
+          <h1>Workspace</h1>
           <p>
-            Use your organization’s actual schedule, readiness, roster and
-            hours.
+            Manage your organization’s schedule, readiness, roster and hours.
           </p>
         </div>
         {!api || bridgeAvailable === false ? (
           <section className="workflow-card">
             <h2>Native connection unavailable</h2>
             <p>
-              This preview connection cannot access organization data. Open a
-              packaged Ovelle build with the native workflow bridge enabled.
+              Ovelle couldn’t connect to your organization. Check your connection
+              and reopen the app.
             </p>
           </section>
         ) : bridgeAvailable === null ? (

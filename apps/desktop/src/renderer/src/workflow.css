@@ -25,18 +25,6 @@
   font-weight: 600;
   font-size: 13px;
 }
-.workflow-preview-label {
-  margin: auto;
-  color: #526b7e;
-  font-size: 12px;
-  padding: 7px 14px;
-  background: #f1f5f7;
-  border-radius: 20px;
-}
-.workflow-account {
-  font-size: 13px;
-  font-weight: 600;
-}
 .workflow-layout {
   display: flex;
   min-height: calc(100vh - 58px);
@@ -299,13 +287,6 @@
     padding: 0 16px;
     gap: 12px;
   }
-  .workflow-account {
-    display: none;
-  }
-  .workflow-preview-label {
-    margin-left: auto;
-    margin-right: 0;
-  }
   .workflow-layout {
     display: block;
   }
@@ -411,10 +392,3 @@
 .workflow-topbar button { -webkit-app-region: no-drag; }
 .workflow-rail button { display: flex; align-items: center; justify-content: center; }
 .workflow-rail-icon { width: 20px; height: 20px; display: block; }
-
-@media (max-width: 850px) {
-  [data-desktop-platform="macos"] .workflow-preview-label,
-  [data-desktop-platform="windows"] .workflow-preview-label { display: none; }
-  [data-desktop-platform="macos"] .workflow-live-link,
-  [data-desktop-platform="windows"] .workflow-live-link { margin-left: auto; }
-}

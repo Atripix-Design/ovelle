@@ -154,7 +154,8 @@ try {
  assert.equal(result.queue.corrections[0].latestDecisionId,result.after.records[0].decisionId);assert.equal(result.amended.records[0].approvedMinutes,2)
  assert.equal(result.replacementRoster.volunteers[0].name,'Replacement volunteer')
  assert.equal(result.walkRoster.summary.onSite,1);assert.equal(result.walkRoster.volunteers[0].presence,'on_site')
- await page.getByRole('button',{name:'Live workspace'}).click()
+ // The fixture authenticated through IPC; remount the renderer to observe that session.
+ await page.reload()
  await page.getByLabel('Organization').selectOption('org-a')
  await page.getByLabel('Program').selectOption('program')
  await page.getByLabel('Location').selectOption('site')

@@ -20,7 +20,7 @@ function createWindow(): void {
     backgroundColor: '#ffffff',
     autoHideMenuBar: true,
     // Preserve native window controls while letting the app header occupy their title bar.
-    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 16, y: 21 } } : {}),
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' as const } : {}),
     ...(process.platform === 'win32' ? { titleBarStyle: 'hidden' as const, titleBarOverlay: { color: '#ffffff', symbolColor: '#20394b', height: 58 } } : {}),
     webPreferences: {
       // The remote development renderer does not receive native capabilities.
