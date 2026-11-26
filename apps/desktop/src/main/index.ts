@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { registerDownloadHandlers } from './downloads.js'
 import { registerWorkflowHandlers } from './workflow-ipc.js'
+import { macFullScreenChanged } from '../contracts/window-chrome.js'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 declare const __OVELLE_LIVE_URL__: string
@@ -30,6 +31,14 @@ function createWindow(): void {
       sandbox: true,
     },
   })
+
+  if (process.platform === 'darwin' && !liveURL) {
+    // A zoomed window still has traffic lights. Only native full screen frees their inset.
+    const publishFullScreen = () => window.webContents.send(macFullScreenChanged, window.isFullScreen())
+    window.on('enter-full-screen', publishFullScreen)
+    window.on('leave-full-screen', publishFullScreen)
+    window.webContents.on('did-finish-load', publishFullScreen)
+  }
 
   window.webContents.setWindowOpenHandler(({ url }) => {
     if (url === 'https://github.com/Atripix-Design/ovelle' || /^https:\/\/cdn\.dev\.ovelle\.org\/releases\/desktop\/Ovelle-[\w.-]+\.(?:zip|exe)(?:\?v=[\w.-]+)?$/.test(url)) {

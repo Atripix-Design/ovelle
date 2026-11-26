@@ -389,7 +389,7 @@
 
 /* Reserve space for OS-owned caption controls; the rest of the header remains draggable. */
 [data-desktop-platform="macos"] .workflow-app { --workflow-header-height: 36px; }
-[data-desktop-platform="macos"] .workflow-topbar { padding-left: 90px; }
+[data-desktop-platform="macos"]:not([data-mac-full-screen]) .workflow-topbar { padding-left: 90px; }
 [data-desktop-platform="windows"] .workflow-topbar { padding-right: 150px; }
 .workflow-topbar button { -webkit-app-region: no-drag; }
 .workflow-rail button { display: flex; align-items: center; justify-content: center; }
