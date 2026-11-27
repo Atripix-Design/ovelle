@@ -3,7 +3,7 @@
 The Ovelle website serves its catalog through `/api/releases`. Development uses
 the newest published `desktop-dev-<source SHA>` GitHub prerelease. Production
 uses the stable release marked **Latest** on GitHub. The catalog returns the
-release's real asset URLs for Mac Apple silicon ZIP, Mac Intel ZIP and Windows
+release's real asset URLs for Mac Apple silicon DMG, Mac Intel DMG and Windows
 x64 EXE. Missing files are unavailable. A GitHub error never turns into a
 guessed download URL. The catalog can be cached for 60 seconds.
 
@@ -13,7 +13,7 @@ packages to a draft, compares GitHub's reported SHA-256 digests and sizes with
 the local packages, and rechecks the source before publishing. Production
 releases are marked Latest. Development releases are prereleases and cannot
 become the production download. CI then checks the site's catalog and reads
-the ZIP/EXE header bytes via each public download URL.
+the DMG trailer or EXE header bytes via each public download URL.
 
 The packaging artifact in GitHub Actions is temporary and deleted by cleanup.
 Published GitHub Release assets are durable and independent of Actions
@@ -21,7 +21,7 @@ retention. R2 uploads and old `/downloads/<filename>` routes are retained for
 existing links. The website no longer needs R2 to resolve the buttons, and it
 does not need a webhook when a new GitHub Release is published.
 
-The macOS ZIPs contain `Ovelle.app` and are not notarized. Download validation
+The macOS DMGs contain `Ovelle.app` and an Applications shortcut. They are not notarized. Older published ZIP assets remain available. Download validation
 does not by itself prove that an installer was launched on its target OS.
 
 ## Production promotions

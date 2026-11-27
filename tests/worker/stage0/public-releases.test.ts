@@ -158,3 +158,19 @@ it('propagates storage failures instead of reporting a missing or available rele
   head.mockRejectedValue(new Error('storage unavailable'))
   await expect(downloadRelease(request('/downloads/Ovelle-a.zip'), env)).rejects.toThrow('storage unavailable')
 })
+
+it('prefers an actual DMG over the ZIP for the same platform, and retains old ZIP-only releases', async () => {
+  const { env } = fixture()
+  env.APP_ENV = 'production'
+  const arm = asset(stableTag, 'Ovelle-2.3.4-mac-arm64.dmg')
+  const zip = asset(stableTag, 'Ovelle-2.3.4-mac-arm64.zip')
+  const intel = asset(stableTag, 'Ovelle-2.3.4-mac-x64.zip')
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce(Response.json({
+    tag_name: stableTag, draft: false, prerelease: false, assets: [zip, intel, arm],
+  })))
+  const { releases } = await (await releaseCatalog(request('/api/releases'), env)).json<{ releases: Array<Record<string, unknown>> }>()
+  expect(releases.slice(0, 2).map(row => [row.file, row.requirements, row.href])).toEqual([
+    [arm.name, 'DMG disk image', arm.browser_download_url],
+    [intel.name, 'ZIP archive', intel.browser_download_url],
+  ])
+})

@@ -15,13 +15,20 @@ export function assertPresignedDownload(url, { accountId, environment, filename 
   }
 }
 
-/** Consume only the requested two-byte release sample. Metadata and magic bytes
- * establish range behavior, not full artifact integrity or code signing.
- */
+export function releaseSample({ filename, size }) {
+  const marker = filename.endsWith('.dmg') ? 'koly' : filename.endsWith('.zip') ? 'PK' : 'MZ'
+  // Apple UDIF identifies the image in its 512-byte trailer, not its header.
+  const start = filename.endsWith('.dmg') ? size - 512 : 0
+  return { marker, start, range: `bytes=${start}-${start + marker.length - 1}` }
+}
+
+/** Validate the exact bounded sample, not the integrity of the entire file. */
 export async function assertReleaseSample(response, { filename, size }) {
+  const { marker, start } = releaseSample({ filename, size })
+  const end = start + marker.length - 1
   if (!Number.isSafeInteger(size) || size < 1_000_000 || response.status !== 206 ||
-      response.headers.get('content-range') !== `bytes 0-1/${size}` ||
-      response.headers.get('content-length') !== '2' ||
+      response.headers.get('content-range') !== `bytes ${start}-${end}/${size}` ||
+      response.headers.get('content-length') !== String(marker.length) ||
       !/^attachment(?:;|$)/i.test(response.headers.get('content-disposition') ?? '') ||
       !response.headers.get('content-disposition')?.includes(filename)) {
     await response.body?.cancel()
@@ -34,11 +41,10 @@ export async function assertReleaseSample(response, { filename, size }) {
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
-      if (bytes.length + value.length > 2) throw new Error(`Oversized release sample: ${filename}`)
+      if (bytes.length + value.length > marker.length) throw new Error(`Oversized release sample: ${filename}`)
       bytes.push(...value)
     }
-    const expected = filename.endsWith('.zip') ? [0x50, 0x4b] : [0x4d, 0x5a]
-    if (bytes.length !== 2 || bytes.some((byte, index) => byte !== expected[index])) {
+    if (Buffer.from(bytes).toString('ascii') !== marker) {
       throw new Error(`Invalid release sample bytes: ${filename}`)
     }
   } finally {

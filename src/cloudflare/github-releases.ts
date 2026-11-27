@@ -4,9 +4,9 @@ const developmentTag = /^desktop-dev-[a-f0-9]{40}$/
 const safeTag = /^[A-Za-z0-9][A-Za-z0-9._-]*$/
 
 const targets = [
-  { platform: 'macOS', title: 'Mac · Apple silicon', description: 'For Macs with an Apple silicon chip.', label: 'Download for Apple silicon', suffix: '-mac-arm64.zip', format: 'ZIP archive' },
-  { platform: 'macOS', title: 'Mac · Intel', description: 'For Macs with an Intel processor.', label: 'Download for Intel', suffix: '-mac-x64.zip', format: 'ZIP archive' },
-  { platform: 'Windows', title: 'Windows · x64', description: 'Run Ovelle on your Windows computer.', label: 'Download for Windows', suffix: '-win-x64.exe', format: 'Windows executable' },
+  { platform: 'macOS', title: 'Mac · Apple silicon', description: 'For Macs with an Apple silicon chip.', label: 'Download for Apple silicon', suffixes: ['-mac-arm64.dmg', '-mac-arm64.zip'] },
+  { platform: 'macOS', title: 'Mac · Intel', description: 'For Macs with an Intel processor.', label: 'Download for Intel', suffixes: ['-mac-x64.dmg', '-mac-x64.zip'] },
+  { platform: 'Windows', title: 'Windows · x64', description: 'Run Ovelle on your Windows computer.', label: 'Download for Windows', suffixes: ['-win-x64.exe'] },
 ]
 
 interface GitHubAsset {
@@ -66,14 +66,16 @@ export async function githubReleaseCatalog(environment: string) {
   const production = environment === 'production'
   const release = await latestRelease(production)
   if (release && (!safeTag.test(release.tag_name) || !Array.isArray(release.assets))) throw new Error('Invalid release metadata')
-  const releases = targets.map(({ suffix, format, ...target }) => {
+  const releases = targets.map(({ suffixes, ...target }) => {
     // Match assets actually uploaded to this release. Do not synthesize a link or
     // use a source archive, checksum, incomplete upload, or another repository.
     const matches = release?.assets.filter(asset =>
-      /^Ovelle-[A-Za-z0-9.+-]+-(?:mac-(?:arm64|x64)\.zip|win-x64\.exe)$/.test(asset.name) &&
-      asset.name.endsWith(suffix) && asset.state === 'uploaded' && asset.size > 0 &&
+      /^Ovelle-[A-Za-z0-9.+-]+-(?:mac-(?:arm64|x64)\.(?:dmg|zip)|win-x64\.exe)$/.test(asset.name) &&
+      suffixes.some(suffix => asset.name.endsWith(suffix)) && asset.state === 'uploaded' && asset.size > 0 &&
       asset.browser_download_url === `https://github.com/${repository}/releases/download/${release.tag_name}/${asset.name}`)
-    const asset = matches?.length === 1 ? matches[0] : undefined
+    const asset = suffixes.map(suffix => matches?.filter(match => match.name.endsWith(suffix)))
+      .find(candidates => candidates?.length === 1)?.[0]
+    const format = asset?.name.endsWith('.zip') ? 'ZIP archive' : target.platform === 'macOS' ? 'DMG disk image' : 'Windows executable'
     return { ...target, file: asset?.name, available: !!asset, href: asset?.browser_download_url ?? '',
       requirements: format }
   })
