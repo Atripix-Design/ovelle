@@ -110,7 +110,7 @@ jobs:
       - run: npm run test:macos-window-visual
       - run: npm run test:browser-tooling
       - run: npm run check:download-email
-      - run: npm run test:stage0
+      - run: npm run test:stage0 -- --maxWorkers=1
       - run: node scripts/check-repository-privacy.mjs
       - run: npm run check:ci
       - run: node --test scripts/optimize-website-images.test.mjs
@@ -206,7 +206,8 @@ jobs:
       - name: Receive packages from the build job
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: desktop-packages-${{ github.run_attempt }}
+          artifact-ids: ${{ needs.build.outputs.package_artifact_id }}
+          merge-multiple: true
           path: release/desktop
       - name: Verify local packages
         env:
@@ -255,11 +256,11 @@ jobs:
           APP_ENV: ${{ steps.source.outputs.environment }}
         run: node scripts/ci/verify-github-downloads.mjs "$APP_ENV"
 
-  # Remove transfer storage even when a check or deployment fails. One-day
-  # retention bounds leftovers if a cancellation prevents cleanup from starting.
+  # Keep a verified build available for failed-job retries. Upload retention
+  # expires unused packages after one day, including canceled runs.
   cleanup-packages:
     needs: [build, typecheck, lint, deploy]
-    if: ${{ always() && needs.build.outputs.package_artifact_id != '' }}
+    if: ${{ always() && needs.deploy.result == 'success' && needs.build.outputs.package_artifact_id != '' }}
     runs-on:
       group: atripix-ovelle-publishers
       labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]

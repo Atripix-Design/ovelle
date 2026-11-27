@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "fileId": "51f2d744-23b9-8138-8008-f3bdd65662b2",
+  "package": "@ovelle/ui",
+  "components": [
+    {
+      "name": "Ovelle / Site footer",
+      "export": "SiteFooter",
+      "source": "src/site-footer.tsx",
+      "type": "VARIANT_CONTAINER",
+      "containerId": "5e0c55a9-91f4-80a8-8009-025f31181120",
+      "page": {
+        "name": "01 Home",
+        "id": "2afdd151-2efd-80d3-8008-f3bd241faeae"
+      },
+      "intendedPage": {
+        "name": "05 Components",
+        "id": "2afdd151-2efd-80d3-8008-f3bd24d32ed7"
+      },
+      "propertyMapping": {
+        "Size": "CSS responsive layout at 700 px. Mobile and Compact are width samples of the same responsive layout.",
+        "Theme": "Ovelle settings provider theme.",
+        "Material": "material, glassFrost and reduceTransparency apply to SectionLabel and Switch. The tide and its sky remain opaque.",
+        "Motion": "Wave motion Switch / local preference, system and provider reduced motion."
+      },
+      "linkedComponents": {
+        "SectionLabel": "2d265e7b-9f2f-5123-b415-538873c81596",
+        "Switch": "6b4856c9-33fa-5821-856e-7945a3f4e503"
+      },
+      "variants": [
+        {
+          "properties": {
+            "Size": "Desktop",
+            "Theme": "Light",
+            "Material": "Solid",
+            "Motion": "Running"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-0257c3853f90",
+          "componentId": "77c95fc7-4c17-805c-8009-02581a6e8800"
+        },
+        {
+          "properties": {
+            "Size": "Mobile",
+            "Theme": "Light",
+            "Material": "Solid",
+            "Motion": "Running"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-0257c4148093",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dc74834"
+        },
+        {
+          "properties": {
+            "Size": "Compact",
+            "Theme": "Light",
+            "Material": "Solid",
+            "Motion": "Running"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-0258c8ee9f12",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dde6126"
+        },
+        {
+          "properties": {
+            "Size": "Desktop",
+            "Theme": "Dark",
+            "Material": "Solid",
+            "Motion": "Running"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-025858cc0a54",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dcde596"
+        },
+        {
+          "properties": {
+            "Size": "Desktop",
+            "Theme": "Light",
+            "Material": "Solid",
+            "Motion": "Paused"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-025859a30407",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dd2329e"
+        },
+        {
+          "properties": {
+            "Size": "Desktop",
+            "Theme": "Light",
+            "Material": "Solid",
+            "Motion": "System reduced"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-02585a120466",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dd6ad5c"
+        },
+        {
+          "properties": {
+            "Size": "Desktop",
+            "Theme": "Light",
+            "Material": "Liquid Glass",
+            "Motion": "Running"
+          },
+          "mainInstanceId": "77c95fc7-4c17-805c-8009-02585aa8116a",
+          "componentId": "77c95fc7-4c17-805c-8009-02592dda8e5e"
+        }
+      ]
+    }
+  ]
+}

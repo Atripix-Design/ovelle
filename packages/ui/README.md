@@ -183,3 +183,5 @@ The surface is deliberately opaque. The existing Section label and Switch receiv
 the provider or component material, frost and reduced-transparency settings.
 The decorative tide does no work offscreen and respects system reduced motion.
 The optional animation setting is saved in local storage and does not affect links.
+See the [native Penpot variant mapping](./penpot-manifest.json) and the
+[visual review](../../docs/design-system/migration/site-footer/README.md).

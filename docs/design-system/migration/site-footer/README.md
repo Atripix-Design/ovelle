@@ -25,7 +25,11 @@ The first pass had a crest behind the tagline, crowded wordmark tracking, and a 
 
 The editable [desktop board](https://design.penpot.app/?screen=viewer&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd241faeae&section=interactions&frame-id=f4b2b2fe-96aa-80e1-8009-0252e42be2e4) and [390 px mobile board](https://design.penpot.app/?screen=viewer&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd241faeae&section=interactions&frame-id=f4b2b2fe-96aa-80e1-8009-0252b29f2266) live on 01 Home. Each contains editable text, three vector ink layers, and linked Ovelle controls. The board IDs are Penpot references, not Figma nodes.
 
-[Browser capture: desktop and mobile](website-layouts.webp)
+The native `Ovelle / Site footer` variant set is also saved on 01 Home, separate from the composition boards. It contains seven vertical variants across Size, Theme, Material and Motion. The set reuses linked Section label and Switch instances. It remains on 01 Home because opening 05 Components for the move exhausted browser memory. The [Penpot manifest](../../../../packages/ui/penpot-manifest.json) records the verified location, intended sheet, individual component and board IDs, and runtime mappings.
+
+[Penpot desktop phase](penpot-preview.webp) · [Penpot dark variant](penpot-dark.webp) · [Browser desktop and mobile](website-layouts.webp)
+
+The Penpot evidence uses screenshots from the actual editor and viewer because native still export timed out. Compare composition, palette and spacing across the captures. The browser uses a procedural field, so glyph positions vary from the fixed Penpot phase. The dark screenshot verifies that the linked controls retain contrast against the dark variant. No static wave asset is shipped in the runtime.
 
 ## Runtime handoff
 

@@ -7,6 +7,7 @@
     "dist",
     "src/styles.css",
     "figma-manifest.json",
+    "penpot-manifest.json",
     "README.md",
     "src/tokens.css",
     "tokens.json",
@@ -26,6 +27,7 @@
     },
     "./styles.css": "./src/styles.css",
     "./figma-manifest.json": "./figma-manifest.json",
+    "./penpot-manifest.json": "./penpot-manifest.json",
     "./tokens.json": "./tokens.json"
   },
   "sideEffects": [
