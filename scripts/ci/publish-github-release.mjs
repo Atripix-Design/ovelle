@@ -39,8 +39,7 @@ function findRelease() {
     .flat().find(release => release.tag_name === tag)
 }
 function checkAsset(asset, file) {
-  if (!asset || asset.state !== 'uploaded' || asset.size !== file.size || asset.digest !== file.digest ||
-      asset.browser_download_url !== `https://github.com/${repository}/releases/download/${tag}/${file.name}`) {
+  if (!asset || asset.state !== 'uploaded' || asset.size !== file.size || asset.digest !== file.digest) {
     throw new Error(`GitHub asset does not match the verified package: ${file.name}`)
   }
 }
@@ -69,4 +68,14 @@ if (release.draft) {
   release = JSON.parse(gh('api', '--method', 'PATCH', `${releases}/${release.id}`, '-F', 'draft=false', '-f', `make_latest=${production}`))
 }
 if (release.draft || release.prerelease !== !production) throw new Error('GitHub did not publish the release in the expected channel')
+// GitHub uses synthetic untagged-* download URLs while the release is a draft.
+// The digest and size are verified before publication; the canonical public URL
+// is only assigned after publishing.
+for (const file of expected) {
+  const asset = release.assets.find(candidate => candidate.name === file.name)
+  checkAsset(asset, file)
+  if (asset.browser_download_url !== `https://github.com/${repository}/releases/download/${tag}/${file.name}`) {
+    throw new Error(`Published GitHub asset has an unexpected download URL: ${file.name}`)
+  }
+}
 console.log(`Published verified desktop assets: https://github.com/${repository}/releases/tag/${tag}`)

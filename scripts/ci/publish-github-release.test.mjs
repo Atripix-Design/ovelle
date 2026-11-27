@@ -34,15 +34,19 @@ const fs = require('node:fs')
 const args = process.argv.slice(2)
 fs.appendFileSync('calls', JSON.stringify(args) + '\\n')
 const release = JSON.parse(process.env.RELEASE)
-const snapshot = { ...release, assets: JSON.parse(process.env.ASSETS) }
+const published = { ...release, draft: false, assets: JSON.parse(process.env.ASSETS) }
+const snapshot = { ...release, assets: published.assets.map(asset => ({ ...asset,
+  browser_download_url: asset.browser_download_url.replace(release.tag_name, 'untagged-78b971dc8b10fa95f4da')
+})) }
 if (process.env.WRONG_DIGEST) snapshot.assets[0].digest = 'sha256:wrong'
+if (process.env.WRONG_PUBLIC_URL) published.assets[0].browser_download_url = snapshot.assets[0].browser_download_url
 const command = args.join(' ')
 if (command.includes('/git/ref/heads/')) console.log(process.env.REMOTE_SHA)
 else if (args.includes('--slurp')) console.log('[[]]')
 else if (command.includes('/git/matching-refs/')) console.log('[]')
 else if (command.includes('POST') && command.includes('/git/refs')) console.log('{}')
 else if (command.includes('POST') && command.includes('/releases')) console.log(JSON.stringify(release))
-else if (command.includes('PATCH') && command.includes('/releases/5')) console.log(JSON.stringify({ ...snapshot, draft: false }))
+else if (command.includes('PATCH') && command.includes('/releases/5')) console.log(JSON.stringify(published))
 else if (command.includes('/releases/5')) console.log(JSON.stringify(snapshot))
 else if (command.startsWith('release upload')) console.log('uploaded')
 else process.exit(1)
@@ -65,6 +69,10 @@ else process.exit(1)
       assert.notEqual(wrongDigest.status, 0)
       assert.match(wrongDigest.stderr, /does not match the verified package/)
       assert.doesNotMatch(calls(), /PATCH/)
+      writeFileSync(join(dir, 'calls'), '')
+      const wrongUrl = run({ WRONG_PUBLIC_URL: '1' })
+      assert.notEqual(wrongUrl.status, 0)
+      assert.match(wrongUrl.stderr, /unexpected download URL/)
       writeFileSync(join(dir, 'calls'), '')
       assert.notEqual(run({ REMOTE_SHA: 'b'.repeat(40) }).status, 0)
       assert.doesNotMatch(calls(), /POST|PATCH|upload/)
