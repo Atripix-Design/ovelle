@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { FocusEvent, PointerEvent } from 'react';
-import { SectionLabel, Switch } from './controls.js';
+import { Switch } from './controls.js';
 import { mountFooterTide } from './footer-tide.js';
 import { useMaterial, useOvelleSettings } from './material.js';
 import type { MaterialProps } from './material.js';
@@ -24,7 +24,7 @@ function pausedByChoice() {
 }
 
 export function SiteFooter({ className, tideClassName, contentClassName, groups, homeHref, ...material }: SiteFooterProps) {
-  // The ocean is an opaque palette surface. Material choices belong to its nested controls.
+  // The ocean is an opaque palette surface. The motion switch can use a different material.
   const visual = useMaterial({ material: 'solid', reduceTransparency: false, className }, 'site-footer');
   const tide = useRef<HTMLCanvasElement>(null);
   const animator = useRef<ReturnType<typeof mountFooterTide>>(null);
@@ -81,10 +81,8 @@ export function SiteFooter({ className, tideClassName, contentClassName, groups,
       <div className={['ov-footer-inner', contentClassName].filter(Boolean).join(' ')}>
         <div className="ov-footer-content">
           <div className="ov-footer-brand">
-            <SectionLabel {...material}>For volunteer teams</SectionLabel>
             <a className="ov-footer-wordmark" href={homeHref} aria-label="Ovelle home" onPointerEnter={wakeAtLink} onFocus={wakeAtLink}>ovelle</a>
-            <p>More time for the people who show up.</p>
-            <p className="ov-footer-description">Keep volunteers, opportunities, and follow-up together.</p>
+            <p className="ov-footer-tagline">More time for the people who show up.</p>
           </div>
           <nav className="ov-footer-nav" aria-label="Footer">
             {groups.map((group, index) => (

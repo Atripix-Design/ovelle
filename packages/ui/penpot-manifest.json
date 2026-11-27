@@ -16,7 +16,7 @@
       "propertyMapping": {
         "Size": "CSS responsive layout at 700 px. Mobile and Compact are width samples of the same responsive layout.",
         "Theme": "Ovelle settings provider theme.",
-        "Material": "material, glassFrost and reduceTransparency apply to SectionLabel and Switch. The tide and its sky remain opaque.",
+        "Material": "material, glassFrost and reduceTransparency apply to the motion Switch. The tide and its sky remain opaque.",
         "Motion": "Wave motion Switch / local preference, system and provider reduced motion."
       },
       "linkedComponents": {

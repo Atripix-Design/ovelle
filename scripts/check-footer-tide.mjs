@@ -18,6 +18,10 @@ try {
   const footer = page.getByRole('contentinfo');
   const motion = footer.getByRole('switch', { name: 'Wave motion' });
   await footer.getByRole('navigation', { name: 'Footer' }).waitFor();
+  const tagline = footer.getByText('More time for the people who show up.', { exact: true });
+  await tagline.waitFor();
+  assert.equal(await footer.getByText('For volunteer teams', { exact: true }).count(), 0);
+  assert.equal(await footer.getByText('Keep volunteers, opportunities, and follow-up together.', { exact: true }).count(), 0);
   assert.equal(await footer.getByRole('link').count(), 7);
   assert.ok((await footer.boundingBox()).height >= 540);
   const canvas = footer.locator('canvas');
@@ -68,6 +72,7 @@ try {
   for (const width of [320, 390, 768]) {
     await page.setViewportSize({ width, height: 844 });
     await footer.scrollIntoViewIfNeeded();
+    assert.ok(await tagline.isVisible(), `Footer tagline is missing at ${width}px`);
     const dimensions = await footer.evaluate(node => ({
       width: node.clientWidth,
       scrollWidth: node.scrollWidth,
