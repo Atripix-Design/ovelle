@@ -173,3 +173,13 @@ All visual compositions inherit Light/Dark and the provider's reduced-motion pre
 ```
 
 See [source captures and implementation evidence](../../docs/design-system/migration/website-2026-10-11/README.md). Source motion uses the authored 120/220/350/400ms transitions and FAQ spring; OS/provider reduced motion removes interpolation. Run `check:figma`, `check:loading` and `check:website` in both consumers, plus `check:electron-downloads` against the built native app. The fidelity inventory now checks 31 families and independent email/mobile state dimensions. Figma and React remain separately maintained; Code Connect publishing requires an eligible Figma plan/seat.
+
+### Site footer
+
+Use `SiteFooter` at the end of a marketing layout, outside the main landmark. Pass
+`homeHref` and the named `groups` of `{ label, href }` links owned by the app.
+`className`, `contentClassName`, and `tideClassName` style the section, content, and art.
+The surface is deliberately opaque. The existing Section label and Switch receive
+the provider or component material, frost and reduced-transparency settings.
+The decorative tide does no work offscreen and respects system reduced motion.
+The optional animation setting is saved in local storage and does not affect links.

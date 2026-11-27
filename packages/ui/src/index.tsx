@@ -62,3 +62,6 @@ export type { WorkflowStage, WorkflowPreviewProps, WorkflowSectionProps, PinnedW
 export { ProgramOverview, EmailDownloadLink, DeviceAwareDownloadCTA, programFeatures } from './website.js';
 export type { ProgramOverviewProps, EmailDownloadLinkProps, EmailDownloadState, DeviceAwareDownloadCTAProps, DesktopRelease } from './website.js';
 export { websiteImages } from './website-assets.js';
+
+export { SiteFooter } from './site-footer.js';
+export type { SiteFooterProps, SiteFooterLinkGroup, SiteFooterLink } from './site-footer.js';

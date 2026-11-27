@@ -1,0 +1,130 @@
+@layer components {
+  .ov-site-footer {
+    --ov-footer-sky: #e7f4fc;
+    --ov-footer-rule: #aac9dc;
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: var(--ov-footer-sky);
+    color: var(--ov-text-primary);
+    border: 0;
+    border-block-start: 1px solid var(--ov-footer-rule);
+    border-radius: 0;
+  }
+  .ov-site-footer[data-ovelle-theme="dark"] {
+    --ov-footer-sky: #12283a;
+    --ov-footer-rule: #41657d;
+  }
+  .ov-footer-tide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ov-footer-inner {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    width: min(100%, 1440px);
+    min-height: clamp(530px, 54svh, 700px);
+    margin-inline: auto;
+    padding-inline: clamp(24px, 5vw, 76px);
+  }
+  .ov-footer-content {
+    align-self: start;
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    align-items: start;
+    gap: 3rem;
+    position: relative;
+    padding-block: clamp(48px, 6vw, 78px) 38px;
+  }
+  .ov-footer-brand { display: grid; justify-items: start; gap: 12px; }
+  .ov-footer-brand > .ov-section-label { margin-block-end: 5px; }
+  .ov-site-footer .ov-footer-wordmark {
+    font-size: clamp(72px, 10vw, 130px);
+    font-weight: 600;
+    letter-spacing: -.066em;
+    line-height: .89;
+    text-decoration: none;
+    padding-inline-end: .09em;
+    margin-inline-start: -.045em;
+  }
+  .ov-footer-brand > p:first-of-type {
+    font-size: clamp(19px, 2.1vw, 28px);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -.04em;
+    margin-block-start: 5px;
+    text-wrap: balance;
+  }
+  .ov-footer-brand > p, .ov-footer-group a { text-shadow: 0 0 4px var(--ov-footer-sky), 0 0 7px var(--ov-footer-sky); }
+  .ov-footer-description {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ov-text-secondary);
+    text-wrap: pretty;
+  }
+  .ov-footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 4vw, 55px); }
+  .ov-site-footer .ov-footer-group h2 {
+    margin: 0 0 8px;
+    padding-block: 0 12px;
+    border-block-end: 1px solid var(--ov-footer-rule);
+    color: var(--ov-text-brand);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+  .ov-footer-group ul { margin: 0; padding: 0; list-style: none; }
+  .ov-site-footer a {
+    color: var(--ov-text-primary);
+    text-decoration-color: var(--ov-footer-rule);
+    text-underline-offset: .28em;
+    touch-action: manipulation;
+  }
+  .ov-footer-group a {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+  .ov-site-footer a:hover { color: var(--ov-text-brand); text-decoration: underline; }
+  .ov-site-footer :is(a, .ov-footer-motion):focus-visible,
+  .ov-site-footer .ov-footer-motion:has(input:focus-visible) {
+    outline: 2px solid var(--ov-border-focus);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+  .ov-footer-meta {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 0;
+    border-block-start: 1px solid var(--ov-footer-rule);
+    border-radius: 0;
+    background: var(--ov-footer-sky);
+    color: var(--ov-text-secondary);
+  }
+  .ov-footer-meta small, .ov-site-footer .ov-footer-motion { font-size: 12px; line-height: 1.5; }
+  .ov-site-footer .ov-footer-motion { min-height: 44px; touch-action: manipulation; }
+  @media (max-width: 700px) {
+    .ov-footer-inner { min-height: clamp(630px, 86svh, 780px); }
+    .ov-footer-content { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 40px 135px; }
+    .ov-footer-brand { gap: 10px; }
+    .ov-footer-nav { gap: 24px; }
+  }
+  @media (forced-colors: active) {
+    .ov-footer-tide { display: none; }
+    .ov-site-footer a { text-decoration: underline; }
+  }
+}

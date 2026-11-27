@@ -4,7 +4,7 @@
 .home h1,.home h2,.home p { margin:0; }
 .home .ov-device-download > p { font-size:16px; line-height:24px; }
 .home-connected-heading h2,.home-companion > header h2,.home-questions > h2 { font-size:36px; line-height:42px; font-weight:500; letter-spacing:-.7px; }
-.home-hero-copy > p,.home-connected-heading p,.home-companion > header p,.home-companion-evidence > p,.home-footer > p,.home-release-note { font-size:15px; line-height:22px; color:var(--ov-text-secondary); }
+.home-hero-copy > p,.home-connected-heading p,.home-companion > header p,.home-companion-evidence > p,.home-release-note { font-size:15px; line-height:22px; color:var(--ov-text-secondary); }
 .home-hero { position:relative; height:920px; border-radius:0 0 112px 112px; overflow:clip; }
 .home-coast-desktop { position:absolute; width:100%; height:100%; object-fit:cover; }
 .home-coast-mobile { display:none; }
@@ -42,10 +42,6 @@
 .home-download { max-width:1240px; margin:0 auto; }
 .home-download-mobile { display:none; }
 .home-release-note { text-align:center; padding:0 24px; }
-.home-footer { display:flex; gap:32px; width:min(1240px,100%); min-height:80px; padding:24px; margin:0 auto; }
-.home-footer > strong { width:320px; font-size:24px; line-height:30px; letter-spacing:-.4px; font-weight:600; }
-.home-footer > p { font-size:12px; line-height:18px; letter-spacing:.1px; }
-.home-footer > p:nth-child(2) { flex:1; }
 .home-workflow-anchor:focus,.home section:focus { outline:none; }
 @media (min-width:768px) and (max-width:1300px) {
   .home-hero-copy { width:44%; left:32px; }
@@ -106,8 +102,6 @@
   .home-download-options .ov-device-download { padding:0 0 32px; }
   .home-download-mobile { display:flex; width:100%; }
   .home-download-mobile > h2 { font-size:24px; line-height:30px; letter-spacing:-.7px; }
-  .home-footer { flex-direction:column; gap:12px; padding:32px 24px; min-height:154px; }
-  .home-footer > strong { width:100%; }
 }
 @media (max-width:350px) {
   .home-mobile-navigation .ov-brand { font-size:19.692308px; }

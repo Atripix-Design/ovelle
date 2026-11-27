@@ -16,7 +16,8 @@
     "src/composites.css",
     "src/content.css",
     "src/github-link.css",
-    "src/website.css"
+    "src/website.css",
+    "src/site-footer.css"
   ],
   "exports": {
     ".": {
