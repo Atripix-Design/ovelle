@@ -29,4 +29,17 @@ assert.equal((await sendDownloadEmail(request('third@example.com'),env)).status,
 assert.equal((await sendDownloadEmail(request('failed@example.com',{'CF-Connecting-IP':'192.0.2.2'}),{...env,EMAIL:{async send(){throw Error('provider unavailable')}}})).status,503);
 assert.equal((await sendDownloadEmail(request('unacknowledged@example.com',{'CF-Connecting-IP':'192.0.2.3'}),{...env,EMAIL:{async send(){return {}}}})).status,503);
 assert.ok(sqlite.prepare('SELECT key FROM download_email_limits').all().every(r=>!r.key.includes('@')),'D1 contains quota hashes, not addresses');
+const production = { ...env, APP_ENV: 'production', DOWNLOAD_EMAIL_FROM: 'downloads@mail.ovelle.org' };
+const prodOrigin = 'https://ovelle.org';
+const prodRequest = new Request(`${prodOrigin}/api/download-email`, {
+  method: 'POST', headers: { 'Content-Type': 'application/json', Origin: prodOrigin, 'CF-Connecting-IP': '192.0.2.4' },
+  body: JSON.stringify({ email: 'production-test@example.com' }),
+});
+assert.equal((await sendDownloadEmail(prodRequest, production)).status, 200);
+const prodMessage = messages.at(-1);
+assert.deepEqual(prodMessage.from, { email: 'downloads@mail.ovelle.org', name: 'Ovelle' });
+assert.ok(prodMessage.text.includes(`${prodOrigin}/#download`));
+assert.ok(prodMessage.html.includes(`href="${prodOrigin}/#download"`));
+assert.ok(prodMessage.html.includes(`src="${prodOrigin}/email/ovelle-volunteer-cleanup.jpg"`));
+assert.ok(!prodMessage.html.includes('dev.ovelle.org'));
 sqlite.close(); console.log('ovelle download email validation and quotas verified');
