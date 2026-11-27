@@ -1,0 +1,123 @@
+{
+  "scope": "local-workerd",
+  "compatibilityDate": "2026-10-06",
+  "node": "v26.7.0",
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": "AMD Ryzen 7 3700X 8-Core Processor",
+  "packages": {
+    "wrangler": "4.152.0",
+    "miniflare": "5.20261019.2-beta",
+    "workerd": "1.20261019.1",
+    "nobleHashes": "2.4.0"
+  },
+  "units": "external wall-clock milliseconds including local dispatch; not hosted CPU",
+  "hostedCpuMs": null,
+  "hostedCpuHeadroomMs": null,
+  "baseline": {
+    "elapsedMs": 16.468,
+    "result": {
+      "ok": true
+    }
+  },
+  "samples": 5,
+  "candidates": [
+    {
+      "candidate": "pbkdf2-webcrypto",
+      "cold": {
+        "elapsedMs": 68.691,
+        "result": {
+          "status": "ok",
+          "matches": true
+        }
+      },
+      "operations": [
+        {
+          "operation": "hash",
+          "timingsMs": [
+            68.777,
+            68.63,
+            68.61,
+            68.038,
+            67.974
+          ],
+          "medianMs": 68.61,
+          "maxMs": 68.777
+        },
+        {
+          "operation": "verify",
+          "timingsMs": [
+            68.2,
+            68.779,
+            70.321,
+            70.404,
+            67.803
+          ],
+          "medianMs": 68.779,
+          "maxMs": 70.404
+        },
+        {
+          "operation": "mismatch",
+          "timingsMs": [
+            67.83,
+            68.414,
+            68.328,
+            67.585,
+            67.433
+          ],
+          "medianMs": 67.83,
+          "maxMs": 68.414
+        }
+      ]
+    },
+    {
+      "candidate": "argon2id-noble",
+      "cold": {
+        "elapsedMs": 179.222,
+        "result": {
+          "status": "ok",
+          "matches": true
+        }
+      },
+      "operations": [
+        {
+          "operation": "hash",
+          "timingsMs": [
+            167.854,
+            165.714,
+            166.23,
+            166.285,
+            158.833
+          ],
+          "medianMs": 166.23,
+          "maxMs": 167.854
+        },
+        {
+          "operation": "verify",
+          "timingsMs": [
+            159.561,
+            160.194,
+            158.686,
+            160.999,
+            157.922
+          ],
+          "medianMs": 159.561,
+          "maxMs": 160.999
+        },
+        {
+          "operation": "mismatch",
+          "timingsMs": [
+            158.402,
+            161.44,
+            158.098,
+            159.008,
+            159.161
+          ],
+          "medianMs": 159.008,
+          "maxMs": 161.44
+        }
+      ]
+    }
+  ],
+  "capturedOn": "2026-10-22"
+}

@@ -47,6 +47,9 @@
       "package.json"
     ],
     "asar": true,
+    "toolsets": {
+      "wine": "1.0.1"
+    },
     "artifactName": "Ovelle-${version}-${os}-${arch}.${ext}",
     "mac": {
       "target": [

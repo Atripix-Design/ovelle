@@ -1,8 +1,16 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { registerDownloadHandlers } from './downloads.js'
+import { registerWorkflowHandlers } from './workflow-ipc.js'
+import { macFullScreenChanged } from '../contracts/window-chrome.js'
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
+declare const __OVELLE_LIVE_URL__: string
+declare const __OVELLE_STAGE0_ORIGIN__: string
+const liveURL = __OVELLE_LIVE_URL__
+const workflowEnabled=!liveURL && !!__OVELLE_STAGE0_ORIGIN__ && !process.env.ELECTRON_RENDERER_URL
+const primaryInstance=!workflowEnabled || app.requestSingleInstanceLock()
 
 function createWindow(): void {
   const window = new BrowserWindow({
@@ -10,50 +18,59 @@ function createWindow(): void {
     height: 760,
     minWidth: 640,
     minHeight: 480,
+    backgroundColor: '#ffffff',
+    autoHideMenuBar: true,
+    // Preserve native window controls while letting the app header occupy their title bar.
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' as const } : {}),
+    ...(process.platform === 'win32' ? { titleBarStyle: 'hidden' as const, titleBarOverlay: { color: '#ffffff', symbolColor: '#20394b', height: 58 } } : {}),
     webPreferences: {
-      preload: join(currentDir, '../preload/index.cjs'),
+      // The remote development renderer does not receive native capabilities.
+      preload: liveURL ? undefined : join(currentDir, '../preload/index.cjs'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
     },
   })
 
+  if (process.platform === 'darwin' && !liveURL) {
+    // A zoomed window still has traffic lights. Only native full screen frees their inset.
+    const publishFullScreen = () => window.webContents.send(macFullScreenChanged, window.isFullScreen())
+    window.on('enter-full-screen', publishFullScreen)
+    window.on('leave-full-screen', publishFullScreen)
+    window.webContents.on('did-finish-load', publishFullScreen)
+  }
+
   window.webContents.setWindowOpenHandler(({ url }) => {
-    if (url === 'https://github.com/Atripix-Design/ovelle' || /^https:\/\/cdn\.dev\.ovelle\.org\/releases\/desktop\/Ovelle-[\w.-]+\.(?:zip|exe)(?:\?v=[\w.-]+)?$/.test(url)) {
+    if (url === 'https://github.com/Atripix-Design/ovelle' || /^https:\/\/github\.com\/Atripix-Design\/ovelle\/releases\/download\/desktop-dev-[a-f0-9]{40}\/Ovelle-[\w.-]+-(?:mac-(?:arm64|x64)\.zip|win-x64\.exe)$/.test(url) || /^https:\/\/cdn\.dev\.ovelle\.org\/releases\/desktop\/Ovelle-[\w.-]+\.(?:zip|exe)(?:\?v=[\w.-]+)?$/.test(url)) {
       void shell.openExternal(url)
     }
     return { action: 'deny' }
   })
 
-  if (process.env.ELECTRON_RENDERER_URL) {
+  if (liveURL) {
+    void window.loadURL(liveURL)
+  } else if (process.env.ELECTRON_RENDERER_URL) {
     void window.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
     void window.loadFile(join(currentDir, '../renderer/index.html'))
   }
 }
 
-void app.whenReady().then(() => {
-  const trustedSender = (event: Electron.IpcMainInvokeEvent) => {
-    const window = BrowserWindow.fromWebContents(event.sender);
-    if (!window || event.senderFrame !== event.sender.mainFrame) throw new Error('Untrusted download request');
-    const expected = process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href;
-    if (event.senderFrame.url.split(/[?#]/)[0] !== expected.split(/[?#]/)[0]) throw new Error('Untrusted download request');
-  };
-  ipcMain.handle('ovelle:releases', async event => {
-    trustedSender(event);
-    const response = await fetch('https://dev.ovelle.org/api/releases');
-    if (!response.ok) throw new Error('Download catalog unavailable');
-    return (await response.json()).releases;
-  });
-  ipcMain.handle('ovelle:download-email', async (event, email: unknown) => {
-    trustedSender(event);
-    if (typeof email !== 'string' || email.length > 254) throw new Error('Invalid email');
-    const response = await fetch('https://dev.ovelle.org/api/download-email', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email}) });
-    if (!response.ok || !(await response.json()).sent) throw new Error('Email delivery unavailable');
-  });
+if (!primaryInstance) app.quit()
+else void app.whenReady().then(() => {
+  if (!liveURL) {
+    const rendererURL=process.env.ELECTRON_RENDERER_URL || new URL('../renderer/index.html', import.meta.url).href
+    registerDownloadHandlers(rendererURL)
+    // Native workflow authority belongs only to the bundled file renderer.
+    if (workflowEnabled) registerWorkflowHandlers(rendererURL,__OVELLE_STAGE0_ORIGIN__)
+  }
   createWindow()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+  app.on('second-instance',()=>{
+    const window=BrowserWindow.getAllWindows()[0]
+    if(window){if(window.isMinimized())window.restore();window.focus()}
   })
 })
 

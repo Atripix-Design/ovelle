@@ -1,0 +1,50 @@
+[
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/index.tsx",
+    "target": "packages/ui/src/composites.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/date-picker.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/pagination.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/website.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "cycle",
+    "from": "packages/ui/src/workflow.tsx",
+    "target": "packages/ui/src/index.tsx",
+    "reason": "Existing public-barrel cycle identified in initial whole-repository audit.",
+    "removal": "Move primitive implementations behind acyclic internal imports, retaining exports and required Figma evidence.",
+    "tracking": "docs/architecture/migration-status.md#ui-composition"
+  },
+  {
+    "rule": "dynamic-import",
+    "from": "scripts/browser-tooling.mjs",
+    "target": "line:13",
+    "reason": "Deliberate operator-selected local tooling capability; rejects non-file module URLs and validates the requested exported interface. Replaces three unvalidated call sites. This is not application runtime loading.",
+    "removal": "Remove only if external installed browser/recording providers are retired; changes to this capability require its contract tests and source review.",
+    "tracking": "docs/architecture/browser-tooling.md"
+  }
+]

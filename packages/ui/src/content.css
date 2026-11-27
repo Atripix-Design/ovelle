@@ -9,6 +9,9 @@
   .ov-date-group { display: flex; flex-direction: column; align-items: stretch; position: relative; gap: 8px; width: 320px; max-width: 100%; color: var(--ov-text-primary); }
   .ov-date-group > label { font: 500 14px/20px 'Inter', sans-serif; }
   .ov-date-picker { display: flex; align-items: center; justify-content: space-between; gap: 16px; text-align: start; width: 100%; height: 44px; min-height: 44px; padding: 0 16px; font: 400 15px/22px 'Inter', sans-serif; cursor: pointer; }
+  .ov-calendar-icon, .ov-calendar-chevron { display: block; flex: none; width: 20px; height: 20px; background-color: currentColor; mask: center / contain no-repeat url('../assets/calendar.svg'); }
+  .ov-calendar-chevron { mask-image: url('../assets/chevron.svg'); }
+  .ov-calendar-chevron[data-direction="previous"] { transform: rotate(180deg); }
   .ov-date-picker:hover:not(:disabled), .ov-date-picker:active:not(:disabled) { border-color: var(--ov-border-focus); }
   .ov-date-picker:focus-visible { outline: none; border: 3px solid var(--ov-border-focus); padding-inline: 14px; }
   .ov-date-picker[aria-invalid="true"] { border-color: var(--ov-border-error); }

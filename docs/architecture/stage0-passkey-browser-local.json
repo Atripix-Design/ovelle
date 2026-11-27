@@ -1,0 +1,29 @@
+{
+  "ranAt": "2026-10-23T17:00:37.283Z",
+  "scope": "local Chromium + workerd + ephemeral D1",
+  "authenticator": "CDP virtual CTAP2, resident key and UV",
+  "browser": "156.0.8078.4",
+  "registration": true,
+  "initialAssurance": "passkey",
+  "signedOut": 401,
+  "account": "browser-person",
+  "method": "passkey",
+  "assurance": "passkey",
+  "cookieHidden": true,
+  "productionProvider": false,
+  "physicalAuthenticator": false,
+  "recoveryVerified": false,
+  "sourceHashes": {
+    "src/cloudflare/stage0/auth/passkeys/protocol.ts": "62930198f3a89a042cd4893b263aeb75966ead19a2ca07cfc1f9d10573c04018",
+    "src/cloudflare/stage0/auth/passkeys/service.ts": "20d37852f895c4dabf61602371cbea56d789edb1f81ac4b15a3b337dea70a679",
+    "src/cloudflare/stage0/auth/passkeys/routes.ts": "be02512e0fa431e39b069d4a39cbf5512ec11341800891fe545b761e54f6f5d2",
+    "src/cloudflare/stage0/auth/sessions.ts": "6926ed7f8c952d20ad6d8a19d7b04916a377a8ba941468cf0c5a108ebd84ee63",
+    "src/cloudflare/stage0/auth/web.ts": "8a28c2f126d7c97316cea7766d9d839a8f0c4efea760a31a6257fa3b2bd1236b",
+    "src/cloudflare/stage0/auth/limits.ts": "16495d34b4ce02b8aa2347c8b4dd180c088759d7790120e5b20658d13bcec855",
+    "src/cloudflare/stage0/auth/turnstile.ts": "ead064b8535b4bb487f32118ac22c36a5474306578f3e69489d335ebf873fbbe",
+    "migrations/0008_passkeys.sql": "e073bf83675dac0589517778ce09c2af94bd77483ccc75755db9cf9ad767665e",
+    "package-lock.json": "1b428e1913a7d5fdb882e0914f297927345f29aac9570623631f1d4eee56356b",
+    "tests/worker/stage0/passkey-browser-worker.ts": "3f403ab2831c735e7adc8dd30a0978ad87362653fc6538b585a40ab4901aebb5",
+    "scripts/verify-stage0-passkey-browser.mjs": "ceef724c6f34127ef3b2d3a373c7920467e5eb9306e195281d7626299b5f9637"
+  }
+}

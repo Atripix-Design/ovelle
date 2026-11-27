@@ -1,0 +1,39 @@
+name: Stage 0 hosted password runtime probe
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.repository == 'Atripix-Design/ovelle' && github.ref == 'refs/heads/development'
+    runs-on:
+      group: atripix-ovelle-publishers
+      labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: ./.github/actions/setup-node-adaptive
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:stage0
+      - run: npm run test:stage0-probe
+      - name: Run isolated free-budget hosted probes
+        run: node scripts/stage0-hosted-probe.mjs
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: Confirm cleanup even after a failed probe
+        if: always()
+        run: node scripts/stage0-hosted-probe.mjs --cleanup
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: stage0-hosted-runtime
+          path: stage0-hosted-runtime.json
+          retention-days: 1
+          if-no-files-found: warn

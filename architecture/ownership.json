@@ -1,0 +1,502 @@
+{
+  "version": 1,
+  "packages": [
+    "packages/ui/package.json"
+  ],
+  "zones": [
+    {
+      "id": "ui",
+      "roots": [
+        "packages/ui/src"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "ui-tests",
+      "roots": [
+        "packages/ui/test"
+      ],
+      "allowed": [
+        "ui"
+      ],
+      "node": true,
+      "electron": false
+    },
+    {
+      "id": "shared-app",
+      "roots": [
+        "apps/shared"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "web",
+      "roots": [
+        "apps/web/src"
+      ],
+      "allowed": [
+        "shared-app"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "desktop-renderer",
+      "roots": [
+        "apps/desktop/src/renderer"
+      ],
+      "allowed": [
+        "shared-app"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "desktop-main",
+      "roots": [
+        "apps/desktop/src/main"
+      ],
+      "allowed": [
+        "desktop-contracts"
+      ],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "desktop-preload",
+      "roots": [
+        "apps/desktop/src/preload"
+      ],
+      "allowed": [
+        "desktop-contracts"
+      ],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "backend",
+      "roots": [
+        "src/cloudflare"
+      ],
+      "allowed": [
+        "backend-domain",
+        "http-foundation"
+      ],
+      "node": true,
+      "electron": false,
+      "excludes": [
+        "src/cloudflare/stage0/domain",
+        "src/cloudflare/stage0/errors.ts",
+        "src/cloudflare/stage0/auth/contact.ts",
+        "src/cloudflare/stage0/access/routes.ts",
+        "src/cloudflare/stage0/auth/desktop-routes.ts",
+        "src/cloudflare/stage0/auth/http.ts",
+        "src/cloudflare/stage0/auth/oidc/routes.ts",
+        "src/cloudflare/stage0/auth/passkeys/routes.ts",
+        "src/cloudflare/stage0/auth/prelogin.ts",
+        "src/cloudflare/stage0/auth/recovery-routes.ts",
+        "src/cloudflare/stage0/auth/routes.ts",
+        "src/cloudflare/stage0/auth/saml/routes.ts",
+        "src/cloudflare/stage0/auth/web.ts",
+        "src/cloudflare/stage0/staff/access-routes.ts",
+        "src/cloudflare/stage0/staff/routes.ts",
+        "src/cloudflare/stage0/backend.ts",
+        "src/cloudflare/stage0/http",
+        "src/cloudflare/stage0/staff/validation.ts",
+        "src/cloudflare/stage0/auth/budgets.ts",
+        "src/cloudflare/stage0/auth/oidc/cookies.ts",
+        "src/cloudflare/worker.ts",
+        "src/cloudflare/worker-development.ts",
+        "src/cloudflare/stage0/auth/saml/form.ts"
+      ]
+    },
+    {
+      "id": "tests",
+      "roots": [
+        "tests"
+      ],
+      "allowed": [
+        "backend",
+        "tooling",
+        "backend-domain",
+        "http-foundation",
+        "backend-transport",
+        "backend-composition",
+        "public-worker"
+      ],
+      "node": true,
+      "electron": false,
+      "virtualModules": [
+        "cloudflare:test"
+      ]
+    },
+    {
+      "id": "tooling",
+      "roots": [
+        "scripts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-domain",
+        "http-foundation",
+        "backend-transport",
+        "backend-composition"
+      ],
+      "node": true,
+      "electron": true
+    },
+    {
+      "id": "design-tooling",
+      "roots": [
+        "docs/design-system/glass-tuner"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "configuration",
+      "roots": [
+        "apps/web/vite.config.ts",
+        "apps/desktop/electron.vite.config.ts",
+        "vitest.stage0.config.mts"
+      ],
+      "allowed": [],
+      "node": true,
+      "electron": false
+    },
+    {
+      "id": "backend-domain",
+      "roots": [
+        "src/cloudflare/stage0/domain",
+        "src/cloudflare/stage0/errors.ts",
+        "src/cloudflare/stage0/auth/contact.ts",
+        "src/cloudflare/stage0/staff/validation.ts",
+        "src/cloudflare/stage0/auth/budgets.ts"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false,
+      "external": []
+    },
+    {
+      "id": "http-foundation",
+      "roots": [
+        "src/cloudflare/stage0/http"
+      ],
+      "allowed": [
+        "backend-domain"
+      ],
+      "node": false,
+      "electron": false,
+      "external": []
+    },
+    {
+      "id": "backend-transport",
+      "roots": [
+        "src/cloudflare/stage0/access/routes.ts",
+        "src/cloudflare/stage0/auth/desktop-routes.ts",
+        "src/cloudflare/stage0/auth/http.ts",
+        "src/cloudflare/stage0/auth/oidc/routes.ts",
+        "src/cloudflare/stage0/auth/passkeys/routes.ts",
+        "src/cloudflare/stage0/auth/prelogin.ts",
+        "src/cloudflare/stage0/auth/recovery-routes.ts",
+        "src/cloudflare/stage0/auth/routes.ts",
+        "src/cloudflare/stage0/auth/saml/routes.ts",
+        "src/cloudflare/stage0/auth/web.ts",
+        "src/cloudflare/stage0/staff/access-routes.ts",
+        "src/cloudflare/stage0/staff/routes.ts",
+        "src/cloudflare/stage0/auth/oidc/cookies.ts",
+        "src/cloudflare/stage0/auth/saml/form.ts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-domain",
+        "http-foundation"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "backend-composition",
+      "roots": [
+        "src/cloudflare/stage0/backend.ts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-domain",
+        "http-foundation",
+        "backend-transport"
+      ],
+      "node": false,
+      "electron": false
+    },
+    {
+      "id": "desktop-contracts",
+      "roots": [
+        "apps/desktop/src/contracts"
+      ],
+      "allowed": [],
+      "node": false,
+      "electron": false,
+      "external": []
+    },
+    {
+      "id": "public-worker",
+      "roots": [
+        "src/cloudflare/worker.ts",
+        "src/cloudflare/worker-development.ts"
+      ],
+      "allowed": [
+        "backend",
+        "backend-composition"
+      ],
+      "node": false,
+      "electron": false
+    }
+  ],
+  "concepts": [
+    {
+      "owner": "src/cloudflare/stage0/access/policy.ts",
+      "reason": "Live tenant and scope policy for reads and transactional write guards."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/contact.ts",
+      "reason": "Account contact normalization; email does not establish identity linking."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/sessions.ts",
+      "reason": "Session issuance, live authority and revocation."
+    },
+    {
+      "owner": "src/cloudflare/stage0/commands.ts",
+      "reason": "Command receipt and idempotent commit coordination."
+    },
+    {
+      "owner": "packages/ui/src/material.tsx",
+      "reason": "Shared material settings and normalization."
+    },
+    {
+      "owner": "packages/ui/tokens.json",
+      "reason": "Maintained local semantic colors; sync-design-tokens.mjs derives tokens.css and package checks reject drift. Live Figma parity remains separately verified."
+    },
+    {
+      "owner": "src/cloudflare/download-email.ts",
+      "reason": "Public download email validation and delivery, separate from account identity."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/access.ts",
+      "reason": "Closed action vocabulary, grant classification, write classification and scope validation; consumed by SQL enforcement and grant issuance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/contact-delivery.ts",
+      "reason": "Verification email construction and explicit delivery outcome; separate from pure normalization."
+    },
+    {
+      "owner": "src/cloudflare/stage0/errors.ts",
+      "reason": "Closed failure vocabulary and safe HTTP status mapping; never arbitrary provider messages."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/response.ts",
+      "reason": "Private-response security headers and bodyless response handling; applied in place to preserve separate cookies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/body.ts",
+      "reason": "Bounded UTF-8 JSON stream decoding for requests and provider responses, without route dependencies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/base64url.ts",
+      "reason": "Canonical unpadded URL-safe byte encoding shared by secret and protocol adapters."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/secrets.ts",
+      "reason": "Random secret generation, format and stored digest; domain-specific MAC inputs remain at their callers."
+    },
+    {
+      "owner": "scripts/browser-tooling.mjs",
+      "reason": "Installed browser and recording provider selection and interface validation for operator-run verification tools."
+    },
+    {
+      "owner": "apps/desktop/src/contracts/downloads.ts",
+      "reason": "Closed download IPC channel vocabulary shared by main and preload without native capabilities."
+    },
+    {
+      "owner": "apps/desktop/src/main/downloads.ts",
+      "reason": "Download IPC sender authorization and development service transport; rechecks the sender on every call."
+    },
+    {
+      "owner": "apps/desktop/src/main/index.ts",
+      "reason": "Native window lifecycle, sandbox configuration and external navigation allowlist."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/validation.ts",
+      "reason": "Pure staff identifier/version validation, strict invitation address normalization and canonical grant offers."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/invitation-delivery.ts",
+      "reason": "Post-commit staff invitation mail and version/token-guarded delivery outcome persistence."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/invitations.ts",
+      "reason": "Invitation transitions and live issuer/recipient authority, kept with atomic guarded SQL and receipts."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/budgets.ts",
+      "reason": "Versioned keyed admission-counter identities, selector normalization and window lifetimes; independent of D1."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/limits.ts",
+      "reason": "Atomic admission consumption, bounded retention, leases and window-aware refunds."
+    },
+    {
+      "owner": "src/cloudflare/stage0/config.ts",
+      "reason": "Stage 0 environment validation and canonical hosted authentication origins; does not authorize rollout."
+    },
+    {
+      "owner": "src/cloudflare/stage0/domain/input.ts",
+      "reason": "Exact object-shape checks shared by service commands and HTTP adapters; no URL or request dependencies."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/input.ts",
+      "reason": "Decoded URL path segment and grant DTO shape parsing; domain values remain service-validated."
+    },
+    {
+      "owner": "src/cloudflare/stage0/http/cookies.ts",
+      "reason": "Unique cookie selection without secret decoding; protocol value/attribute policy stays at callers."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/cookies.ts",
+      "reason": "Short-lived OIDC Lax binding serialization and strict callback cookie parsing, separate from transaction persistence."
+    },
+    {
+      "owner": "src/cloudflare/worker.ts",
+      "reason": "Shared public routing and health/asset composition; development uses a separate entry point to admit a restricted Stage 0 workflow surface."
+    },
+    {
+      "owner": "src/cloudflare/releases.ts",
+      "reason": "Release catalog availability, R2 archive reads and signed download transport. No cross-request cache."
+    },
+    {
+      "owner": "src/cloudflare/stage0/db.ts",
+      "reason": "SQL value/binding assembly, guarded D1 batches and audit statements; independent of feature authorization predicates."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/recovery.ts",
+      "reason": "Account-bound recovery codes, provider proof admission and atomic replacement authority/epoch changes."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/passkeys/protocol.ts",
+      "reason": "WebAuthn verifier adapter and Ovelle envelope, algorithm and attestation policy, without persistence."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/passkeys/service.ts",
+      "reason": "Passkey challenge lifecycle and atomic registration/login/step-up/recovery credential transitions."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/prelogin.ts",
+      "reason": "Signed pre-login browser cookie, fixed original lifetime and separate CSRF proof."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/turnstile.ts",
+      "reason": "Closed challenge-action vocabulary and bounded fail-closed Siteverify verification."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/protocol.ts",
+      "reason": "Bounded SAML verification, reviewed settings, independent proof freshness and one-use in-process provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/authorization.ts",
+      "reason": "SAML Redirect authorization generation/signing and settings identity, without durable transaction state."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/transactions.ts",
+      "reason": "Atomic SAML request/replay consumption with live identity/linking/session effects."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/enrollment.ts",
+      "reason": "SAML pending contact verification and atomic account/identity/session creation with original IdP deadlines."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/saml/form.ts",
+      "reason": "Bounded UTF-8 form decoding with exact SAML callback fields; no authentication or persistence effects."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/linking.ts",
+      "reason": "Shared live-session and recent local-passkey policy for identity linking; callers retain atomic SQL enforcement."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/settings.ts",
+      "reason": "Fixed credential snapshots and live connection preflight; never request-selected provider endpoints or secret aliases."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/protocol.ts",
+      "reason": "Pinned OIDC provider adapter, bounded network responses and single-use verified identity provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/identities.ts",
+      "reason": "Exact issuer/subject login resolution and guarded identity linking; email is never linking authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/transactions.ts",
+      "reason": "Durable browser binding and one-time OIDC callback claims before provider exchange, with explicit completion branches."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/oidc/enrollment.ts",
+      "reason": "Pending OIDC enrollment lifetime, contact verification and atomic account/identity creation; session issuance rechecks live authority after commit."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/memberships.ts",
+      "reason": "Membership visibility, grant replacement and explicit revocation with live delegated containment and atomic receipts."
+    },
+    {
+      "owner": "src/cloudflare/stage0/staff/ownership.ts",
+      "reason": "Two-party ownership-transfer request/accept/revoke lifecycle and live initiating/recipient authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/reads.ts",
+      "reason": "Live-authorized organization directory, proposed policy snapshots and bounded access-audit pagination."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/capabilities.ts",
+      "reason": "Bounded advisory capability projection through current SQL policy; never reusable authority."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/commands.ts",
+      "reason": "Organization bootstrap/settings and program/location changes with canonical command receipts and atomic authorization."
+    },
+    {
+      "owner": "src/cloudflare/stage0/access/organizations.ts",
+      "reason": "Authorized organization/program/location reads and operation preflight; final writes retain their own live guards."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/desktop.ts",
+      "reason": "One-time browser-approved native handoff, exact loopback callback and PKCE exchange preserving source session provenance."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/http.ts",
+      "reason": "Server-selected browser/native credential transport, browser CSRF and database-expiry session cookie construction."
+    },
+    {
+      "owner": "src/cloudflare/stage0/auth/web.ts",
+      "reason": "Browser flow origin checks and Strict flow-cookie transport, without generic HTTP helper forwarding."
+    },
+    {
+      "owner": "scripts/desktop-release-validation.mjs",
+      "reason": "Pure signed-download destination and lifetime checks used before the release verifier follows a Worker redirect."
+    },
+    {
+      "owner": "scripts/stage0-password-candidates.ts",
+      "reason": "Immutable research-only KDF sizes/work factors shared by exact profile validation and derivation; no production credential capability."
+    }
+  ],
+  "sourceMappings": [
+    {
+      "output": "packages/ui/dist/",
+      "source": "packages/ui/src/"
+    }
+  ]
+}

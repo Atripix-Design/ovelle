@@ -1,0 +1,99 @@
+{
+  "sourceSha": "d8bf684ff4081362797320c48232612dd681de8a",
+  "runId": "39864098017",
+  "compatibilityDate": "2026-10-06",
+  "requestedCpuLimitMs": 10,
+  "syntheticInputsOnly": true,
+  "measurements": [
+    {
+      "candidate": "pbkdf2-webcrypto",
+      "cpuLimitConfirmedMs": 10,
+      "samples": [
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 65,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        },
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 40,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        },
+        {
+          "operation": "mismatch",
+          "httpStatus": 200,
+          "elapsedMs": 45,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        }
+      ],
+      "cpuMetrics": {
+        "status": "available",
+        "raw": [
+          {
+            "quantiles": {
+              "cpuTimeP50": 424,
+              "cpuTimeP99": 831
+            },
+            "sum": {
+              "errors": 0,
+              "requests": 4
+            }
+          }
+        ],
+        "includesAuthenticatedHealthRequests": true
+      }
+    },
+    {
+      "candidate": "argon2id-noble",
+      "cpuLimitConfirmedMs": 10,
+      "samples": [
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 1517,
+          "body": "{\"status\":\"ok\",\"matches\":true}"
+        },
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 430,
+          "body": "{\"status\":\"ok\",\"matches\":true}"
+        },
+        {
+          "operation": "mismatch",
+          "httpStatus": 200,
+          "elapsedMs": 805,
+          "body": "{\"status\":\"ok\",\"matches\":false}"
+        }
+      ],
+      "cpuMetrics": {
+        "status": "available",
+        "raw": [
+          {
+            "quantiles": {
+              "cpuTimeP50": 350472,
+              "cpuTimeP99": 1257565
+            },
+            "sum": {
+              "errors": 0,
+              "requests": 4
+            }
+          }
+        ],
+        "includesAuthenticatedHealthRequests": true
+      }
+    }
+  ],
+  "cleanupConfirmed": true,
+  "limitation": "HTTP elapsed time is not CPU time. Passing requests alone do not prove sustained free-tier suitability.",
+  "unitsConfirmation": {
+    "source": "Cloudflare GraphQL live __type introspection, October 22 2026; supplemental to workflow artifact",
+    "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+    "fields": {
+      "cpuTimeP50": "CPU time 50th percentile - microseconds",
+      "cpuTimeP99": "CPU time 99th percentile - microseconds"
+    }
+  }
+}

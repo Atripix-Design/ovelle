@@ -1,0 +1,11 @@
+.desktop-approval { box-sizing:border-box; min-height:100vh; padding:32px clamp(20px,5vw,72px); }
+.desktop-approval-brand { font-size:22px; font-weight:700; letter-spacing:-.05em; }
+.desktop-approval-card { box-sizing:border-box; width:min(100%,540px); margin:clamp(48px,10vh,100px) auto; padding:clamp(24px,5vw,40px); background:#fff; border:1px solid #d8e2e8; border-radius:20px; box-shadow:0 12px 40px #172b3d0d; }
+.desktop-approval-card h1 { margin:0 0 20px; font-size:clamp(25px,5vw,32px); line-height:1.15; letter-spacing:-.04em; }
+.desktop-approval-card p { line-height:1.55; color:#4b6474; }
+.desktop-approval-account { display:grid; gap:5px; padding:16px; margin:24px 0; border:1px solid #d8e2e8; border-radius:12px; overflow-wrap:anywhere; }
+.desktop-approval-account span { color:#4b6474; }
+.desktop-approval-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+.account-fields { display:grid; gap:16px; margin:24px 0; }
+.account-fields label { display:grid; gap:6px; font-weight:600; }
+.account-fields input { box-sizing:border-box; width:100%; min-width:0; padding:10px 12px; border:1px solid #b8c8d2; border-radius:8px; font:inherit; color:inherit; }

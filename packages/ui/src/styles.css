@@ -9,6 +9,7 @@
 @import "./github-link.css";
 @import "./content.css";
 @import "./website.css";
+@import "./site-footer.css";
 
 @layer components {
   @media (prefers-reduced-transparency: reduce) {

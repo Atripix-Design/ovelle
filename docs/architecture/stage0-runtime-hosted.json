@@ -1,0 +1,59 @@
+{
+  "sourceSha": "3258bc6e4c80a5ea8a9228bf17e301b5d2104ebd",
+  "runId": "39863874464",
+  "compatibilityDate": "2026-10-06",
+  "requestedCpuLimitMs": 10,
+  "syntheticInputsOnly": true,
+  "measurements": [
+    {
+      "candidate": "pbkdf2-webcrypto",
+      "cpuLimitConfirmedMs": 10,
+      "samples": [
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 70,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        },
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 40,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        },
+        {
+          "operation": "mismatch",
+          "httpStatus": 200,
+          "elapsedMs": 48,
+          "body": "{\"status\":\"error\",\"name\":\"NotSupportedError\",\"message\":\"Pbkdf2 failed: iteration counts above 100000 are not supported (requested 600000).\"}"
+        }
+      ]
+    },
+    {
+      "candidate": "argon2id-noble",
+      "cpuLimitConfirmedMs": 10,
+      "samples": [
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 821,
+          "body": "{\"status\":\"ok\",\"matches\":true}"
+        },
+        {
+          "operation": "match",
+          "httpStatus": 200,
+          "elapsedMs": 1908,
+          "body": "{\"status\":\"ok\",\"matches\":true}"
+        },
+        {
+          "operation": "mismatch",
+          "httpStatus": 200,
+          "elapsedMs": 1020,
+          "body": "{\"status\":\"ok\",\"matches\":false}"
+        }
+      ]
+    }
+  ],
+  "cleanupConfirmed": true,
+  "limitation": "HTTP elapsed time is not CPU time. Passing requests alone do not prove sustained free-tier suitability."
+}

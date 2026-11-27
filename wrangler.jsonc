@@ -7,6 +7,8 @@
   "env": {
     "development": {
       "name": "ovelle-development",
+      "main": "src/cloudflare/worker-development.ts",
+      "compatibility_flags": ["nodejs_compat"],
       "routes": [
         {
           "pattern": "dev.ovelle.org",
@@ -15,7 +17,6 @@
       ],
       "vars": {
         "APP_ENV": "development",
-        "RELEASE_VERSION": "0.1.0",
         "DOWNLOAD_EMAIL_FROM": "downloads@dev.mail.ovelle.org",
         "R2_BUCKET_NAME": "ovelle-storage-development"
       },
@@ -48,6 +49,12 @@
           "allowed_sender_addresses": [
             "downloads@dev.mail.ovelle.org"
           ]
+        },
+        {
+          "name": "AUTH_EMAIL",
+          "allowed_sender_addresses": [
+            "accounts@dev.mail.ovelle.org"
+          ]
         }
       ]
     },
@@ -61,11 +68,13 @@
       ],
       "vars": {
         "APP_ENV": "production",
+        "DOWNLOAD_EMAIL_FROM": "downloads@mail.ovelle.org",
         "R2_BUCKET_NAME": "ovelle-storage-production"
       },
       "assets": {
         "binding": "ASSETS",
         "directory": "./apps/web/dist",
+        "run_worker_first": ["/api/*", "/health", "/downloads/*"],
         "not_found_handling": "single-page-application"
       },
       "d1_databases": [
@@ -79,6 +88,12 @@
         {
           "binding": "STORAGE",
           "bucket_name": "ovelle-storage-production"
+        }
+      ],
+      "send_email": [
+        {
+          "name": "EMAIL",
+          "allowed_sender_addresses": ["downloads@mail.ovelle.org"]
         }
       ]
     }

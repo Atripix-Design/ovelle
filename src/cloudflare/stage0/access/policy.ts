@@ -1,0 +1,42 @@
+import type { Action, Principal, Scope } from '../contracts'
+import { parseAction, actionPolicies, validateScope } from '../domain/access'
+import type { Bindings } from '../db'
+
+/** Central row policy used by SELECT predicates and transactional write guards.
+ * A cached principal/capability is only a selector. All authority is read in SQL.
+ * allowArchived is only for replaying an already committed command receipt;
+ * it preserves scope checks and does not permit new edits to archived rows.
+ */
+export function accessPredicate(b: Bindings, principal: Principal, organizationId: string, action: Action, scope: Scope, now: number, rowKind?: 'program' | 'location' | 'organization' | 'capability', allowArchived = false): string {
+  parseAction(action)
+  validateScope(scope)
+  // Directory reads use this fixed outer alias; no caller supplies SQL names.
+  const org = rowKind === 'organization' ? 'listed.id' : b.add(organizationId)
+  const session = b.add(principal.sessionId)
+  const account = b.add(principal.accountId)
+  const transport = b.add(principal.transport)
+  const time = b.add(now)
+  // Capability candidates keep each stored intersection intact in one SELECT.
+  const program = rowKind === 'capability' ? 'capability.program_id' : rowKind === 'program' ? 'p.id' : scope.kind === 'program_location' && scope.programId !== undefined ? b.add(scope.programId) : 'NULL'
+  const location = rowKind === 'capability' ? 'capability.location_id' : rowKind === 'location' ? 'l.id' : scope.kind === 'program_location' && scope.locationId !== undefined ? b.add(scope.locationId) : 'NULL'
+  const requestedAction = b.add(action)
+  const classification = actionPolicies[action]
+  const reserved = classification.grant === 'owner-only'
+  const write = classification.write
+  const coordinatorAction = classification.grant === 'coordinator'
+  const grant = `EXISTS(SELECT 1 FROM membership_grants g WHERE g.membership_id=m.id AND g.organization_id=o.id AND g.action=${requestedAction}
+    AND (g.scope_kind='organization' OR ((g.program_id IS NULL OR g.program_id=${program}) AND (g.location_id IS NULL OR g.location_id=${location}))))`
+  return `EXISTS(SELECT 1 FROM organizations o
+    JOIN organization_memberships m ON m.organization_id=o.id
+    JOIN stage0_live_sessions s ON s.account_id=m.account_id
+    LEFT JOIN identity_connections c ON c.id=s.connection_id
+    WHERE o.id=${org} AND s.id=${session} AND s.account_id=${account} AND s.transport=${transport}
+      AND s.expires_at>${time} AND s.created_at<=${time} AND s.assurance!='enrollment' AND m.state='active'
+      AND (s.connection_id IS NULL OR c.organization_id IS NULL OR c.organization_id=o.id)
+      AND (o.required_connection_id IS NULL OR (s.method='saml' AND s.connection_id=o.required_connection_id))
+      AND (${program} IS NULL OR EXISTS(SELECT 1 FROM programs sp WHERE sp.id=${program} AND sp.organization_id=o.id ${allowArchived ? '' : 'AND sp.archived_at IS NULL'}))
+      AND (${location} IS NULL OR EXISTS(SELECT 1 FROM locations sl WHERE sl.id=${location} AND sl.organization_id=o.id ${allowArchived ? '' : 'AND sl.archived_at IS NULL'}))
+      AND (${write ? "m.preset!='admin' OR s.assurance='passkey'" : '1'})
+      AND (${reserved ? `o.owner_account_id=s.account_id AND s.assurance='passkey' AND s.passkey_verified_at>=${b.add(now - 300_000)} AND s.passkey_verified_at<=${time}` : action === 'organization.read' ? '1' : `(o.owner_account_id=s.account_id OR (m.preset='admin' AND ${grant}) OR (${coordinatorAction ? '1' : '0'} AND m.preset='coordinator' AND ${grant}))`})
+  )`
+}

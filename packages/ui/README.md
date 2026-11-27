@@ -38,7 +38,7 @@ Import `@ovelle/ui/styles.css` once. For Tailwind 4, configure `@tailwindcss/vit
 @source "../node_modules/@ovelle/ui/dist";
 ```
 
-The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`, so Tailwind utilities override its defaults. `className` styles the public wrapper; action controls expose `surfaceClassName` for the inner surface. `Field` and `Select` expose `wrapperClassName` for layout; Field exposes `inputClassName`.
+The path is relative to that stylesheet; adjust it for your project. In this monorepo the app stylesheets scan `packages/ui/src`. Existing apps import only Tailwind theme and utilities, without Preflight, to preserve their current page styles. All component CSS is in `@layer components`. Ordinary Tailwind utilities in the later `utilities` layer override normal component declarations. Existing `!important` declarations protect transparent wrapper surfaces, reduced-motion/transparency behavior and skeleton fallbacks; ordinary utilities do not override those declarations. Apply action-surface styling through the surface slot rather than the transparent outer wrapper. `className` styles the public wrapper; action controls expose `surfaceClassName` for the inner surface. `Field` and `Select` expose `wrapperClassName` for layout; Field exposes `inputClassName`.
 
 ## Exports
 
@@ -92,6 +92,14 @@ Section labels use content-based width, a 6px tone marker, an 8px internal gap, 
 ## Design tokens
 
 `@ovelle/ui/tokens.json` exports all 25 semantic Figma colors in Light/Dark modes. The stylesheet uses matching `--ov-surface-*`, `--ov-text-*`, `--ov-border-*`, `--ov-action-*` and `--ov-status-*` CSS variables. Semantic colors were resolved directly from the Figma variable collection; spacing, radius and component dimensions are implemented in the component stylesheet.
+
+`tokens.json` is the maintained local color source. `src/tokens.css` is its
+checked-in generated artifact, including derived RGB channels. After an authorized
+token change with the required Figma evidence, run
+`npm run tokens:generate -w @ovelle/ui`. Do not edit the generated CSS separately.
+Package checks and builds run the generator's regression tests and compare its
+output byte-for-byte with the checked-in stylesheet; they never silently rewrite it.
+This local parity check does not synchronize or verify the current Figma variables.
 
 ## States and behavior
 
@@ -165,3 +173,13 @@ All visual compositions inherit Light/Dark and the provider's reduced-motion pre
 ```
 
 See [source captures and implementation evidence](../../docs/design-system/migration/website-2026-10-11/README.md). Source motion uses the authored 120/220/350/400ms transitions and FAQ spring; OS/provider reduced motion removes interpolation. Run `check:figma`, `check:loading` and `check:website` in both consumers, plus `check:electron-downloads` against the built native app. The fidelity inventory now checks 31 families and independent email/mobile state dimensions. Figma and React remain separately maintained; Code Connect publishing requires an eligible Figma plan/seat.
+
+### Site footer
+
+Use `SiteFooter` at the end of a marketing layout, outside the main landmark. Pass
+`homeHref` and the named `groups` of `{ label, href }` links owned by the app.
+`className`, `contentClassName`, and `tideClassName` style the section, content, and art.
+The surface is deliberately opaque. The existing Section label and Switch receive
+the provider or component material, frost and reduced-transparency settings.
+The decorative tide does no work offscreen and respects system reduced motion.
+The optional animation setting is saved in local storage and does not affect links.

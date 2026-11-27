@@ -2,9 +2,10 @@
 // OVELLE_PLAYWRIGHT_MODULE may point to an already installed Playwright module.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { loadChromium } from './browser-tooling.mjs';
 const manifest = JSON.parse(await readFile(new URL('../packages/ui/figma-manifest.json', import.meta.url)));
 const expectedPairs = manifest.components.length;
-const { chromium } = await import(process.env.OVELLE_PLAYWRIGHT_MODULE || 'playwright');
+const chromium = await loadChromium();
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const errors = []; page.on('pageerror', error => errors.push(error.message));

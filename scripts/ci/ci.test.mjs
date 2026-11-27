@@ -7,6 +7,105 @@ import { join, resolve } from 'node:path'
 const root = resolve(import.meta.dirname, '../..')
 const node = process.execPath
 
+test('only production initializes the download email quota schema before deployment', () => {
+  const dir = mkdtempSync(join(root, '.ci-email-db-test-'))
+  try {
+    for (const path of ['scripts/ci', 'node_modules/.bin']) mkdirSync(join(dir, path), { recursive: true })
+    copyFileSync(join(root, 'scripts/ci/deploy-worker.mjs'), join(dir, 'scripts/ci/deploy-worker.mjs'))
+    const wrangler = join(dir, 'node_modules/.bin/wrangler')
+    writeFileSync(wrangler, '#!/bin/sh\nprintf "%s\\n" "$*"\nif [ "$TEST_FAIL_D1" = 1 ] && [ "$1" = d1 ]; then exit 1; fi\n')
+    chmodSync(wrangler, 0o755)
+    const accountId = 'a'.repeat(32)
+    const run = (environment, fail = '0') => spawnSync(node, [join(dir, 'scripts/ci/deploy-worker.mjs'), environment], {
+      env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: accountId, TEST_FAIL_D1: fail }, encoding: 'utf8',
+    })
+    const quota = 'd1 execute DB --remote --env production --file migrations/0001_download_email_limits.sql --yes'
+    const prod = run('production')
+    assert.equal(prod.status, 0, prod.stderr)
+    assert.deepEqual(prod.stdout.trim().split('\n'), [quota, `deploy --env production --var R2_ACCOUNT_ID:${accountId}`])
+    const dev = run('development')
+    assert.equal(dev.status, 0, dev.stderr)
+    assert.equal(dev.stdout.trim(), `deploy --env development --var R2_ACCOUNT_ID:${accountId}`)
+    const failure = run('production', '1')
+    assert.notEqual(failure.status, 0)
+    assert.equal(failure.stdout.trim(), quota)
+  } finally { rmSync(dir, { recursive: true, force: true }) }
+})
+
+test('packaging stays secret-free while delivery and cleanup require a separate runner group', async () => {
+  const { load } = await import('js-yaml')
+  const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  assert.equal(jobs.build['runs-on'].group, 'atripix-private-builders')
+  const packaging = jobs.build.steps.find(step => step.name === 'Package desktop applications')
+  assert.equal(packaging.run, 'npm run package:all -w @ovelle/desktop')
+  assert.equal(packaging.if, "github.event_name == 'push'")
+  assert.equal(packaging.env.ELECTRON_BUILDER_COMPRESSION_LEVEL, '1')
+  assert.equal(packaging.env.OVELLE_STAGE0_ORIGIN, "${{ github.ref == 'refs/heads/development' && 'https://dev.ovelle.org' || '' }}")
+  assert.ok(!JSON.stringify(jobs.build).includes('secrets.'))
+  const transfer = jobs.build.steps.find(step => step.id === 'packages')
+  assert.match(transfer.uses, /^actions\/upload-artifact@[a-f0-9]{40}$/)
+  assert.equal(transfer.with['retention-days'], 1)
+  assert.equal(transfer.with['compression-level'], 0)
+  assert.equal(transfer.with['if-no-files-found'], 'error')
+  assert.equal(transfer.with.path.trim().split('\n').length, 3)
+  assert.equal(jobs.deploy['runs-on'].group, 'atripix-ovelle-publishers')
+  assert.ok(!jobs.deploy.steps.some(step => step.run?.includes('package:all')))
+  for (const job of [jobs.deploy, jobs['cleanup-packages']]) assert.ok(job.steps.some(step => step.uses === './.github/actions/setup-github-cli'))
+  assert.equal(jobs.deploy.permissions.contents, 'write')
+  const releaseSteps = jobs.deploy.steps.map(step => step.run ?? '')
+  assert.ok(releaseSteps.findIndex(step => step.includes('publish-github-release')) > releaseSteps.findIndex(step => step.includes('verify-desktop-releases.mjs local')))
+  assert.ok(releaseSteps.findIndex(step => step.includes('verify-github-downloads')) > releaseSteps.findIndex(step => step.includes('deliver.mjs')))
+  const download = jobs.deploy.steps.find(step => step.uses?.startsWith('actions/download-artifact@'))
+  assert.equal(download.with.name, transfer.with.name)
+  assert.equal(download.with.path, 'release/desktop')
+  assert.equal(jobs['cleanup-packages']['runs-on'].group, 'atripix-ovelle-publishers')
+  assert.ok(jobs['cleanup-packages'].if.includes('always()'))
+  assert.equal(jobs['cleanup-packages'].permissions.actions, 'write')
+  assert.ok(jobs['cleanup-packages'].needs.includes('deploy'))
+  assert.ok(jobs['cleanup-packages'].steps.find(step => step.name === 'Delete temporary package transfer').run.includes('--method DELETE'))
+})
+
+test('production promotions retain real exact-SHA checks from trusted branch pushes', async () => {
+  const { load } = await import('js-yaml')
+  const workflow = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  assert.deepEqual(workflow.on.pull_request.branches, ['development'])
+  assert.deepEqual(workflow.on.push.branches, ['development', 'main'])
+  const predecessors = { lint: undefined, typecheck: 'lint', build: 'typecheck', 'saml-browser': 'build' }
+  for (const [name, predecessor] of Object.entries(predecessors)) {
+    const job = workflow.jobs[name]
+    assert.equal(job.name, name === 'saml-browser' ? 'Identity browser acceptance' : name)
+    assert.equal(job.needs, predecessor)
+    assert.equal(job.if, predecessor ? '${{ !cancelled() }}' : undefined)
+    assert.equal(job['runs-on'].group, 'atripix-private-builders')
+    assert.match(job.steps.find(step => step.uses?.startsWith('actions/checkout@')).with.ref, /github\.sha/)
+  }
+  assert.deepEqual(new Set(workflow.jobs.deploy.needs), new Set(Object.keys(predecessors)))
+})
+
+test('identity deployment gate requires protocol matrices and the existing passkey ceremony', async () => {
+  const { load } = await import('js-yaml')
+  const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  const browser = jobs['saml-browser']
+  assert.equal(browser.name, 'Identity browser acceptance')
+  assert.equal(browser['runs-on'].group, 'atripix-private-builders')
+  assert.ok(browser['runs-on'].labels.includes('atripix-browser'))
+  assert.ok(browser.steps.some(step => step.with?.['node-version'] === '22.12.0'))
+  assert.deepEqual(browser.permissions, { contents: 'read' })
+  assert.ok(jobs.deploy.needs.includes('saml-browser'))
+  assert.ok(!browser['continue-on-error'])
+  assert.ok(!JSON.stringify(browser).includes('secrets.'))
+  assert.ok(browser.steps.some(step => step.run === 'npx playwright install chromium firefox webkit'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run build -w @ovelle/ui'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:desktop-approval'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:desktop-approval-page'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:account-sign-in'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run check:account-enrollment'))
+  assert.ok(browser.steps.some(step => step.run === 'node --test scripts/stage0-browser-proxy.test.mjs'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-saml-browser'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-oidc-browser'))
+  assert.ok(browser.steps.some(step => step.run === 'npm run test:stage0-passkey-browser'))
+})
+
 test('delivery accepts only the exact current SHA of an application-branch push', () => {
   const dir = mkdtempSync(join(root, '.ci-source-test-'))
   try {
@@ -55,48 +154,63 @@ test('publishing uploads all packages before deployment and injects account conf
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
 
-test('public selector fails hosted unless repository and runner group explicitly permit local work', () => {
-  const dir = mkdtempSync(join(root, '.ci-routing-test-'))
-  try {
-    const workflow = readFileSync(join(root, '.github/workflows/select-runners.yml'), 'utf8')
-    const script = workflow.split('        run: |\n')[1].split('\n').map(line => line.replace(/^          /, '')).join('\n')
-    writeFileSync(join(dir, 'select.sh'), script)
-    const curl = join(dir, 'curl')
-    writeFileSync(curl, `#!/bin/bash
-case "\${*: -1}" in
-  */installation) printf '%s' '{"id":1}' ;;
-  */access_tokens) printf '%s' '{"token":"test-only"}' ;;
-  *runner-groups\\?*) if [ "$TEST_GROUP_FAILURE" = 1 ]; then exit 1; fi; printf '%s' "$TEST_GROUPS" ;;
-  */repositories?*) printf '%s' "$TEST_REPOSITORIES" ;;
-  */runners?*) printf '%s' "$TEST_RUNNERS" ;;
-  *) exit 1 ;;
-esac
-`); chmodSync(curl, 0o755)
-    const key = execFileSync('openssl', ['genpkey', '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:2048'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-    const group = { id: 1, name: 'atripix-private-builders', allows_public_repositories: true, visibility: 'selected', restricted_to_workflows: true, selected_workflows: ['example/app/.github/workflows/ci.yml@refs/heads/development'] }
-    const runners = Array.from({ length: 3 }, (_, index) => ({ name: `atripix-jit-${index + 1}`, status: 'online', busy: false, ephemeral: true,
-      labels: ['self-hosted', 'linux', 'x64', 'atripix-build', 'atripix-ephemeral'].map(name => ({ name })) }))
-    const env = { ...process.env, PATH: `${dir}:${process.env.PATH}`, APP_ID: '1', APP_PRIVATE_KEY: key,
-      CALLER_WORKFLOW: 'example/app/.github/workflows/ci.yml@refs/heads/development', DESIRED_SLOTS: '3', FORCE_HOSTED: 'false', TRUSTED: 'true', ORGANIZATION: 'example', REPOSITORY_ID: '7',
-      LANE_NAMES_JSON: '["build","typecheck","lint"]', GITHUB_OUTPUT: join(dir, 'output'),
-      TEST_GROUPS: JSON.stringify({ runner_groups: [group] }), TEST_REPOSITORIES: '{"repositories":[{"id":7}]}', TEST_RUNNERS: JSON.stringify({ runners }) }
-    const run = changes => {
-      writeFileSync(env.GITHUB_OUTPUT, '')
-      const result = spawnSync('bash', [join(dir, 'select.sh')], { env: { ...env, ...changes }, encoding: 'utf8' })
-      assert.equal(result.status, 0, result.stderr)
-      return Object.fromEntries(readFileSync(env.GITHUB_OUTPUT, 'utf8').trim().split('\n').map(line => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]))
+test('every workflow fails closed to isolated self-hosted capacity', async () => {
+  const { load } = await import('js-yaml')
+  const { readdirSync } = await import('node:fs')
+  function validate(workflow) {
+    for (const job of Object.values(workflow.jobs)) {
+      const route = job['runs-on']
+      assert.ok(route && typeof route === 'object', 'explicit grouped routing required')
+      assert.ok(route.labels.includes('self-hosted'), 'hosted capacity forbidden')
+      assert.ok(route.labels.includes('atripix-ephemeral'), 'disposable capacity required')
+      const publisher = route.group === 'atripix-ovelle-publishers'
+      assert.ok(publisher || route.group === 'atripix-private-builders', 'unknown trust boundary')
+      if (!publisher) {
+        assert.ok(!JSON.stringify(job).includes('secrets.'), 'secrets forbidden on ordinary builders')
+        assert.ok(!Object.values(job.permissions || {}).includes('write'), 'write tokens require publisher isolation')
+      }
+      assert.ok(!JSON.stringify(job).includes('--with-deps'), 'OS dependencies must be provisioned in the runner image')
     }
-    const allocated = run({})
-    assert.equal(allocated.local_slot_count, '3', allocated.allocation_summary)
-    for (const changes of [
-      { TRUSTED: 'false' }, { FORCE_HOSTED: 'true' }, { TEST_GROUP_FAILURE: '1' },
-      { TEST_REPOSITORIES: '{"repositories":[{"id":8}]}' }, { TEST_RUNNERS: '{"runners":[]}' },
-      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, allows_public_repositories: false }] }) },
-      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, visibility: 'all' }] }) },
-      { TEST_GROUPS: JSON.stringify({ runner_groups: [{ ...group, restricted_to_workflows: false }] }) },
-      { CALLER_WORKFLOW: 'example/app/.github/workflows/ci.yml@refs/pull/1/merge' },
-    ]) { const result = run(changes); assert.equal(result.local_slot_count, '0'); assert.equal(result.slot_1, '"ubuntu-latest"') }
-  } finally { rmSync(dir, { recursive: true, force: true }) }
+  }
+  for (const file of readdirSync(join(root, '.github/workflows'))) {
+    const workflow = load(readFileSync(join(root, '.github/workflows', file), 'utf8'))
+    validate(workflow)
+    assert.ok(!JSON.stringify(workflow).includes('force_hosted'))
+    assert.ok(!JSON.stringify(workflow).includes('dispatch-hosted-fallback'))
+  }
+  const control = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  validate(control)
+  const hosted = structuredClone(control)
+  hosted.jobs.build['runs-on'] = 'ubuntu-latest'
+  assert.throws(() => validate(hosted), /grouped routing/)
+  const leaked = structuredClone(control)
+  leaked.jobs.build.steps.push({ env: { TOKEN: '${{ secrets.PROVIDER_TOKEN }}' }, run: 'publish' })
+  assert.throws(() => validate(leaked), /secrets forbidden/)
+  const privileged = structuredClone(control)
+  privileged.jobs.build.steps.push({ run: 'npx playwright install --with-deps' })
+  assert.throws(() => validate(privileged), /OS dependencies/)
+})
+
+test('deployment mail bindings isolate dev authentication and restrict download senders', () => {
+  const config = JSON.parse(readFileSync(join(root, 'wrangler.jsonc'), 'utf8'))
+  assert.equal(config.main, 'src/cloudflare/worker.ts')
+  assert.equal(config.env.development.main, 'src/cloudflare/worker-development.ts')
+  assert.deepEqual(config.env.development.compatibility_flags, ['nodejs_compat'])
+  assert.equal(config.env.production.main, undefined)
+  assert.equal(config.env.production.compatibility_flags, undefined)
+  const bindings = config.env.development.send_email
+  assert.deepEqual(bindings.find(binding => binding.name === 'AUTH_EMAIL'), {
+    name: 'AUTH_EMAIL', allowed_sender_addresses: ['accounts@dev.mail.ovelle.org'],
+  })
+  assert.deepEqual(bindings.find(binding => binding.name === 'EMAIL').allowed_sender_addresses, ['downloads@dev.mail.ovelle.org'])
+  assert.deepEqual(config.env.production.send_email, [
+    { name: 'EMAIL', allowed_sender_addresses: ['downloads@mail.ovelle.org'] },
+  ])
+  assert.equal(config.env.production.vars.DOWNLOAD_EMAIL_FROM, 'downloads@mail.ovelle.org')
+  assert.ok(config.env.production.assets.run_worker_first.includes('/api/*'))
+  for (const name of ['AUTH_ADMISSION_KEY', 'TURNSTILE_SECRET_KEY']) {
+    assert.ok(!(name in config.env.development.vars), 'secret values must stay out of deployment vars')
+  }
 })
 
 test('vendored CI components match their recorded reviewed source adaptations', async () => {
@@ -124,4 +238,16 @@ esac
     const valid = run(true); assert.equal(valid.status, 0, valid.stderr)
     assert.notEqual(run(false).status, 0)
   } finally { rmSync(dir, { recursive: true, force: true }) }
+})
+
+test('required typecheck job enforces architecture and exercises its negative fixtures', async () => {
+  const { load } = await import('js-yaml')
+  const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
+  assert.ok(pkg.scripts.check.startsWith('npm run check:architecture && '))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run check'))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:architecture'))
+  assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:browser-tooling'))
+  assert.ok(jobs.deploy.needs.includes('typecheck'))
+  assert.ok(!jobs.typecheck['continue-on-error'])
 })

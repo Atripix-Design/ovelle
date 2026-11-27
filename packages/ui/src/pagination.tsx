@@ -29,9 +29,9 @@ export function Pagination({ material, glassFrost, reduceTransparency, className
   const current = Math.max(1, Math.min(count, Math.floor(Number.isFinite(page) ? page : 1)));
   const appearance = { material, glassFrost, reduceTransparency };
   return <nav {...rest} {...visual} aria-label={label} data-size={size}>
-    <Button {...appearance} size="compact" variant="quiet" disabled={disabled || current === 1} onClick={() => onPageChange(current - 1)} aria-label="Previous page">‹</Button>
+    <Button {...appearance} size="compact" variant="quiet" disabled={disabled || current === 1} onClick={() => onPageChange(current - 1)} aria-label="Previous page"><span className="ov-calendar-chevron" data-direction="previous" aria-hidden="true"/></Button>
     <div className="ov-pagination-pages">{paginationItems(current, count).map((item, i) => item === 'gap' ? <span key={`gap-${i}`} aria-hidden="true">…</span> : <Button {...appearance} size="compact" key={item} variant={item === current ? 'primary' : 'quiet'} disabled={disabled} aria-label={`Page ${item}`} aria-current={item === current ? 'page' : undefined} onClick={() => onPageChange(item)}>{item}</Button>)}</div>
     <span className="ov-pagination-summary">{current} / {count}</span>
-    <Button {...appearance} size="compact" variant="quiet" disabled={disabled || current === count} onClick={() => onPageChange(current + 1)} aria-label="Next page">›</Button>
+    <Button {...appearance} size="compact" variant="quiet" disabled={disabled || current === count} onClick={() => onPageChange(current + 1)} aria-label="Next page"><span className="ov-calendar-chevron" aria-hidden="true"/></Button>
   </nav>;
 }
