@@ -18,7 +18,7 @@ for (const environment of ['development', 'production']) {
       mkdirSync(join(dir, 'release/desktop'), { recursive: true })
       writeFileSync(join(dir, 'apps/desktop/package.json'), '{"version":"7.8.9"}')
       const tag = `desktop-${environment === 'production' ? 'prod' : 'dev'}-${sha}`
-      const assets = ['mac-arm64.zip', 'mac-x64.zip', 'win-x64.exe'].map(suffix => {
+      const assets = ['mac-arm64.dmg', 'mac-x64.dmg', 'win-x64.exe'].map(suffix => {
         const name = `Ovelle-7.8.9-${suffix}`
         writeFileSync(join(dir, 'release/desktop', name), suffix)
         return { name, state: 'uploaded', size: suffix.length, digest: `sha256:${createHash('sha256').update(suffix).digest('hex')}`,

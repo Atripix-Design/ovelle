@@ -43,22 +43,17 @@ jobs:
       - run: npm ci
       - run: npm run build
       # Packaging is secret-free; keep it in the already allocated build slot.
-      - name: Prepare packaging tools without root
+      - name: Prepare DMG builder without root
         if: github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
-          if ! command -v zip >/dev/null; then
-            tools_dir="$(mktemp -d "$RUNNER_TEMP/ovelle-package-tools.XXXXXX")"
-            cd "$tools_dir"
-            mkdir -p "$tools_dir/lists/partial"
-            apt_options=(-o "Dir::State::lists=$tools_dir/lists" -o "APT::Sandbox::User=$(id -un)")
-            apt-get "${apt_options[@]}" update
-            apt-get "${apt_options[@]}" download zip libbz2-1.0
-            for package in ./*.deb; do dpkg-deb -x "$package" "$tools_dir/root"; done
-            echo "$tools_dir/root/usr/bin" >> "$GITHUB_PATH"
-            echo "LD_LIBRARY_PATH=$tools_dir/root/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
-          fi
+          tools_dir="$(mktemp -d "$RUNNER_TEMP/ovelle-package-tools.XXXXXX")"
+          archive="$tools_dir/zapp.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --proto '=https' --tlsv1.2 https://github.com/ironpark/zapp/releases/download/v1.7.1/zapp_Linux_x86_64.tar.gz --output "$archive"
+          echo "7ddd2945ed0ad6ac7822796a516daa3df8b4b76fdfa3dc1ad17d7f610796d7ef  $archive" | sha256sum --check --status
+          tar --extract --gzip --file "$archive" --directory "$tools_dir" zapp
+          echo "$tools_dir" >> "$GITHUB_PATH"
       - name: Package desktop applications
         if: github.event_name == 'push'
         env:
@@ -78,8 +73,8 @@ jobs:
         with:
           name: desktop-packages-${{ github.run_attempt }}
           path: |
-            release/desktop/Ovelle-*-mac-x64.zip
-            release/desktop/Ovelle-*-mac-arm64.zip
+            release/desktop/Ovelle-*-mac-x64.dmg
+            release/desktop/Ovelle-*-mac-arm64.dmg
             release/desktop/Ovelle-*-win-x64.exe
           if-no-files-found: error
           compression-level: 0

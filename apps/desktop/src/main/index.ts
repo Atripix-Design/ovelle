@@ -41,7 +41,7 @@ function createWindow(): void {
   }
 
   window.webContents.setWindowOpenHandler(({ url }) => {
-    if (url === 'https://github.com/Atripix-Design/ovelle' || /^https:\/\/github\.com\/Atripix-Design\/ovelle\/releases\/download\/desktop-dev-[a-f0-9]{40}\/Ovelle-[\w.-]+-(?:mac-(?:arm64|x64)\.zip|win-x64\.exe)$/.test(url) || /^https:\/\/cdn\.dev\.ovelle\.org\/releases\/desktop\/Ovelle-[\w.-]+\.(?:zip|exe)(?:\?v=[\w.-]+)?$/.test(url)) {
+    if (url === 'https://github.com/Atripix-Design/ovelle' || /^https:\/\/github\.com\/Atripix-Design\/ovelle\/releases\/download\/desktop-dev-[a-f0-9]{40}\/Ovelle-[\w.-]+-(?:mac-(?:arm64|x64)\.(?:dmg|zip)|win-x64\.exe)$/.test(url) || /^https:\/\/cdn\.dev\.ovelle\.org\/releases\/desktop\/Ovelle-[\w.-]+\.(?:dmg|zip|exe)(?:\?v=[\w.-]+)?$/.test(url)) {
       void shell.openExternal(url)
     }
     return { action: 'deny' }
