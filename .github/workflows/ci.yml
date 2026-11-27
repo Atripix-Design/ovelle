@@ -62,6 +62,9 @@ jobs:
       - name: Package desktop applications
         if: github.event_name == 'push'
         env:
+          # The Windows portable target otherwise defaults to 7-Zip ultra.
+          # Level 1 keeps the same EXE format with a smaller memory footprint.
+          ELECTRON_BUILDER_COMPRESSION_LEVEL: '1'
           VITE_RELEASE_SHA: ${{ github.sha }}
           OVELLE_STAGE0_ORIGIN: ${{ github.ref == 'refs/heads/development' && 'https://dev.ovelle.org' || '' }}
         run: npm run package:all -w @ovelle/desktop

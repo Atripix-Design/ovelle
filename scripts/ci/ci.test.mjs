@@ -39,6 +39,7 @@ test('packaging stays secret-free while delivery and cleanup require a separate 
   const packaging = jobs.build.steps.find(step => step.name === 'Package desktop applications')
   assert.equal(packaging.run, 'npm run package:all -w @ovelle/desktop')
   assert.equal(packaging.if, "github.event_name == 'push'")
+  assert.equal(packaging.env.ELECTRON_BUILDER_COMPRESSION_LEVEL, '1')
   assert.equal(packaging.env.OVELLE_STAGE0_ORIGIN, "${{ github.ref == 'refs/heads/development' && 'https://dev.ovelle.org' || '' }}")
   assert.ok(!JSON.stringify(jobs.build).includes('secrets.'))
   const transfer = jobs.build.steps.find(step => step.id === 'packages')
