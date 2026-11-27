@@ -41,6 +41,7 @@
     padding-block: clamp(48px, 6vw, 78px) 38px;
   }
   .ov-footer-brand { display: grid; justify-items: start; gap: 12px; }
+  .ov-footer-brand > .ov-section-label { margin-block-end: 5px; }
   .ov-site-footer .ov-footer-wordmark {
     font-size: clamp(72px, 10vw, 130px);
     font-weight: 600;
@@ -50,7 +51,7 @@
     padding-inline-end: .09em;
     margin-inline-start: -.045em;
   }
-  .ov-footer-tagline {
+  .ov-footer-brand > p:first-of-type {
     font-size: clamp(19px, 2.1vw, 28px);
     font-weight: 500;
     line-height: 1.25;
@@ -58,7 +59,13 @@
     margin-block-start: 5px;
     text-wrap: balance;
   }
-  .ov-footer-tagline, .ov-footer-group a { text-shadow: 0 0 4px var(--ov-footer-sky), 0 0 7px var(--ov-footer-sky); }
+  .ov-footer-brand > p, .ov-footer-group a { text-shadow: 0 0 4px var(--ov-footer-sky), 0 0 7px var(--ov-footer-sky); }
+  .ov-footer-description {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ov-text-secondary);
+    text-wrap: pretty;
+  }
   .ov-footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 4vw, 55px); }
   .ov-site-footer .ov-footer-group h2 {
     margin: 0 0 8px;
