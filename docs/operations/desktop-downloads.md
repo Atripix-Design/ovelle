@@ -32,3 +32,10 @@ promotion PR has the exact development head, and wait for that SHA's push run to
 pass the required build, typecheck, and lint checks plus browser acceptance.
 Main branch protection is unchanged. A push to main after the protected merge
 builds and publishes its separate stable release.
+
+## Database changes
+
+Desktop release and website deployment do not write database schemas. If a new
+environment needs download email, an authorized D1 operator applies
+`migrations/0001_download_email_limits.sql` separately using database-scoped
+credentials. Direct desktop downloads do not depend on email readiness.
