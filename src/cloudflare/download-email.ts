@@ -1,4 +1,11 @@
 import type { D1Database, SendEmail } from '@cloudflare/workers-types';
+import { downloadEmailContent } from './download-email-template';
+
+const delivery = {
+  development: { sender: 'downloads@dev.mail.ovelle.org', origin: 'https://dev.ovelle.org' },
+  production: { sender: 'downloads@mail.ovelle.org', origin: 'https://ovelle.org' },
+} as const;
+type Delivery = (typeof delivery)[keyof typeof delivery];
 
 export interface DownloadEmailEnv { APP_ENV: string; DB: D1Database; EMAIL?: SendEmail; DOWNLOAD_EMAIL_FROM?: string }
 const json = (body: object, status = 200, headers: Record<string, string> = {}) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store', ...headers } });
@@ -52,13 +59,11 @@ async function reserveDelivery(db: D1Database, ip: string, email: string): Promi
   return true;
 }
 
-async function deliverLink(mailer: SendEmail, sender: string, email: string): Promise<void> {
+async function deliverLink(mailer: SendEmail, target: Delivery, email: string): Promise<void> {
   const result = await mailer.send({
-    from: { email: sender, name: 'Ovelle' },
+    from: { email: target.sender, name: 'Ovelle' },
     to: email,
-    subject: 'Your Ovelle download link',
-    text: 'Get Ovelle on your computer.\n\nOpen https://dev.ovelle.org/#download on your Mac or Windows computer to choose your download.\n\nYou requested this link on the Ovelle website. No account or subscription was created.',
-    html: '<h1>Get Ovelle on your computer.</h1><p>Open this link on your Mac or Windows computer to choose your download.</p><p><a href="https://dev.ovelle.org/#download">Download Ovelle</a></p><p>You requested this link on the Ovelle website. No account or subscription was created.</p>',
+    ...downloadEmailContent(target.origin),
   });
   if (!result?.messageId) throw new Error('Missing email acknowledgement');
 }
@@ -66,12 +71,13 @@ async function deliverLink(mailer: SendEmail, sender: string, email: string): Pr
 export async function sendDownloadEmail(request: Request, env: DownloadEmailEnv): Promise<Response> {
   const email = await readRecipient(request);
   if (email instanceof Response) return email;
-  if (env.APP_ENV !== 'development' || !env.EMAIL || env.DOWNLOAD_EMAIL_FROM !== 'downloads@dev.mail.ovelle.org') return json({ error: 'Email delivery is unavailable. Please try again.' }, 503);
+  const target = env.APP_ENV === 'development' || env.APP_ENV === 'production' ? delivery[env.APP_ENV] : undefined;
+  if (!target || !env.EMAIL || env.DOWNLOAD_EMAIL_FROM !== target.sender) return json({ error: 'Email delivery is unavailable. Please try again.' }, 503);
   try {
     if (!await reserveDelivery(env.DB, request.headers.get('CF-Connecting-IP') || 'local', email)) {
       return json({ error: 'Please wait before requesting another link.' }, 429, { 'Retry-After': '600' });
     }
-    await deliverLink(env.EMAIL, env.DOWNLOAD_EMAIL_FROM, email);
+    await deliverLink(env.EMAIL, target, email);
     return json({ sent: true });
   } catch { return json({ error: 'We couldn’t send the link. Please try again.' }, 503); }
 }

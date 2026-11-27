@@ -68,11 +68,13 @@
       ],
       "vars": {
         "APP_ENV": "production",
+        "DOWNLOAD_EMAIL_FROM": "downloads@mail.ovelle.org",
         "R2_BUCKET_NAME": "ovelle-storage-production"
       },
       "assets": {
         "binding": "ASSETS",
         "directory": "./apps/web/dist",
+        "run_worker_first": ["/api/*", "/health", "/downloads/*"],
         "not_found_handling": "single-page-application"
       },
       "d1_databases": [
@@ -86,6 +88,12 @@
         {
           "binding": "STORAGE",
           "bucket_name": "ovelle-storage-production"
+        }
+      ],
+      "send_email": [
+        {
+          "name": "EMAIL",
+          "allowed_sender_addresses": ["downloads@mail.ovelle.org"]
         }
       ]
     }
