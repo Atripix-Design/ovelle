@@ -7,28 +7,21 @@ import { join, resolve } from 'node:path'
 const root = resolve(import.meta.dirname, '../..')
 const node = process.execPath
 
-test('only production initializes the download email quota schema before deployment', () => {
+test('website delivery never requires database write access', () => {
   const dir = mkdtempSync(join(root, '.ci-email-db-test-'))
   try {
     for (const path of ['scripts/ci', 'node_modules/.bin']) mkdirSync(join(dir, path), { recursive: true })
     copyFileSync(join(root, 'scripts/ci/deploy-worker.mjs'), join(dir, 'scripts/ci/deploy-worker.mjs'))
     const wrangler = join(dir, 'node_modules/.bin/wrangler')
-    writeFileSync(wrangler, '#!/bin/sh\nprintf "%s\\n" "$*"\nif [ "$TEST_FAIL_D1" = 1 ] && [ "$1" = d1 ]; then exit 1; fi\n')
-    chmodSync(wrangler, 0o755)
+    writeFileSync(wrangler, '#!/bin/sh\nprintf "%s\n" "$*"\n'); chmodSync(wrangler, 0o755)
     const accountId = 'a'.repeat(32)
-    const run = (environment, fail = '0') => spawnSync(node, [join(dir, 'scripts/ci/deploy-worker.mjs'), environment], {
-      env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: accountId, TEST_FAIL_D1: fail }, encoding: 'utf8',
-    })
-    const quota = 'd1 execute DB --remote --env production --file migrations/0001_download_email_limits.sql --yes'
-    const prod = run('production')
-    assert.equal(prod.status, 0, prod.stderr)
-    assert.deepEqual(prod.stdout.trim().split('\n'), [quota, `deploy --env production --var R2_ACCOUNT_ID:${accountId}`])
-    const dev = run('development')
-    assert.equal(dev.status, 0, dev.stderr)
-    assert.equal(dev.stdout.trim(), `deploy --env development --var R2_ACCOUNT_ID:${accountId}`)
-    const failure = run('production', '1')
-    assert.notEqual(failure.status, 0)
-    assert.equal(failure.stdout.trim(), quota)
+    for (const environment of ['development', 'production']) {
+      const result = spawnSync(node, [join(dir, 'scripts/ci/deploy-worker.mjs'), environment], {
+        env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: accountId }, encoding: 'utf8',
+      })
+      assert.equal(result.status, 0, result.stderr)
+      assert.equal(result.stdout.trim(), `deploy --env ${environment} --var R2_ACCOUNT_ID:${accountId}`)
+    }
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
 

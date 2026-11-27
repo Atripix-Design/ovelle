@@ -8,12 +8,8 @@
       "export": "SiteFooter",
       "source": "src/site-footer.tsx",
       "type": "VARIANT_CONTAINER",
-      "containerId": "5e0c55a9-91f4-80a8-8009-025f31181120",
+      "containerId": "247f3295-b1a6-8085-8009-026381499c94",
       "page": {
-        "name": "01 Home",
-        "id": "2afdd151-2efd-80d3-8008-f3bd241faeae"
-      },
-      "intendedPage": {
         "name": "05 Components",
         "id": "2afdd151-2efd-80d3-8008-f3bd24d32ed7"
       },
