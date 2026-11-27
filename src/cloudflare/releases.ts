@@ -12,7 +12,7 @@ export interface ReleaseEnv {
   R2_SECRET_ACCESS_KEY: string
 }
 
-const releasePath = /^\/downloads\/(Ovelle-[A-Za-z0-9._-]+\.(?:zip|exe))$/
+const releasePath = /^\/downloads\/(Ovelle-[A-Za-z0-9._-]+\.(?:dmg|zip|exe))$/
 
 export async function releaseCatalog(request: Request, env: ReleaseEnv): Promise<Response> {
   if (request.method !== 'GET') return new Response('Method not allowed', { status: 405 })
@@ -40,7 +40,7 @@ export async function downloadRelease(request: Request, env: ReleaseEnv): Promis
   if (!object) return new Response('Not found', { status: 404 })
 
   const headers = new Headers()
-  headers.set('content-type', match[1].endsWith('.zip') ? 'application/zip' : 'application/octet-stream')
+  headers.set('content-type', match[1].endsWith('.dmg') ? 'application/x-apple-diskimage' : match[1].endsWith('.zip') ? 'application/zip' : 'application/octet-stream')
   headers.set('content-disposition', `attachment; filename="${match[1]}"`)
   headers.set('content-length', String(object.size))
   if (request.method === 'HEAD') return new Response(null, { headers })

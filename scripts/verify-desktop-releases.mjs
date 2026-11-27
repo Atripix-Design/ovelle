@@ -1,13 +1,12 @@
-import { execFileSync } from 'node:child_process'
 import { closeSync, openSync, readFileSync, readSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { verifyRemote } from './ci/verify-network.mjs'
-import { assertPresignedDownload, assertReleaseSample } from './desktop-release-validation.mjs'
+import { assertPresignedDownload, assertReleaseSample, releaseSample } from './desktop-release-validation.mjs'
 
 const version = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/desktop/package.json'), 'utf8')).version
 const filenames = [
-  `Ovelle-${version}-mac-arm64.zip`,
-  `Ovelle-${version}-mac-x64.zip`,
+  `Ovelle-${version}-mac-arm64.dmg`,
+  `Ovelle-${version}-mac-x64.dmg`,
   `Ovelle-${version}-win-x64.exe`,
 ]
 
@@ -31,16 +30,14 @@ for (const environment of environments) {
     const path = join(releaseDir, filename)
     const size = statSync(path).size
     if (size < 1_000_000 || size > 300 * 1024 * 1024) throw new Error(`Unexpected package size: ${path}`)
+    const { marker, start, range } = releaseSample({ filename, size })
     const descriptor = openSync(path, 'r')
-    const header = Buffer.alloc(2)
-    readSync(descriptor, header, 0, 2, 0)
-    closeSync(descriptor)
-    const magic = header.toString('ascii')
-    if (magic !== (filename.endsWith('.zip') ? 'PK' : 'MZ')) throw new Error(`Invalid package header: ${path}`)
-    if (filename.endsWith('.zip')) {
-      const entries = execFileSync('unzip', ['-Z', '-1', path], { encoding: 'utf8' })
-      if (!entries.includes('Ovelle.app/Contents/MacOS/Ovelle')) throw new Error(`Missing macOS executable: ${path}`)
-    }
+    try {
+      const header = Buffer.alloc(marker.length)
+      if (readSync(descriptor, header, 0, header.length, start) !== header.length || header.toString('ascii') !== marker) {
+        throw new Error(`Invalid package signature: ${path}`)
+      }
+    } finally { closeSync(descriptor) }
     if (environment === 'local') continue
     const base = environment === 'production' ? 'https://ovelle.org' : 'https://dev.ovelle.org'
     const cdnUrl = `https://${cdnHost}/releases/desktop/${filename}?v=${Date.now()}`
@@ -52,7 +49,7 @@ for (const environment of environments) {
       await metadata.body?.cancel()
     })
     await verifyRemote(`${cdnHost} sample ${filename}`, async signal => {
-      const cdn = await fetch(cdnUrl, { headers: { Range: 'bytes=0-1' }, signal })
+      const cdn = await fetch(cdnUrl, { headers: { Range: range }, signal })
       await assertReleaseSample(cdn, { filename, size })
     })
     await verifyRemote(`${environment} download metadata ${filename}`, async signal => {

@@ -1,6 +1,6 @@
 import { readFileSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { assertReleaseSample } from '../desktop-release-validation.mjs'
+import { assertReleaseSample, releaseSample } from '../desktop-release-validation.mjs'
 import { verifyRemote } from './verify-network.mjs'
 
 const environment = process.argv[2]
@@ -12,7 +12,7 @@ const production = environment === 'production'
 const base = production ? 'https://ovelle.org' : 'https://dev.ovelle.org'
 const tag = `desktop-${production ? 'prod' : 'dev'}-${sha}`
 const version = JSON.parse(readFileSync('apps/desktop/package.json', 'utf8')).version
-const filenames = ['mac-arm64.zip', 'mac-x64.zip', 'win-x64.exe'].map(suffix => `Ovelle-${version}-${suffix}`)
+const filenames = ['mac-arm64.dmg', 'mac-x64.dmg', 'win-x64.exe'].map(suffix => `Ovelle-${version}-${suffix}`)
 const assetUrl = filename => `https://github.com/Atripix-Design/ovelle/releases/download/${tag}/${filename}`
 
 // A previous catalog may remain at the edge for up to 60 seconds.
@@ -33,7 +33,7 @@ for (;;) {
 for (const filename of filenames) {
   const size = statSync(resolve('release/desktop', filename)).size
   await verifyRemote(`GitHub asset ${filename}`, async signal => {
-    const response = await fetch(assetUrl(filename), { signal, headers: { Range: 'bytes=0-1' } })
+    const response = await fetch(assetUrl(filename), { signal, headers: { Range: releaseSample({ filename, size }).range } })
     await assertReleaseSample(response, { filename, size })
   })
 }

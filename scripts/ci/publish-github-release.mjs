@@ -24,7 +24,7 @@ assertCurrentSource()
 const version = JSON.parse(readFileSync('apps/desktop/package.json', 'utf8')).version
 if (!/^\d+\.\d+\.\d+(?:[-+][\w.+-]+)?$/.test(version)) throw new Error('Invalid desktop version')
 const tag = `desktop-${production ? 'prod' : 'dev'}-${sha}`
-const expected = await Promise.all(['mac-arm64.zip', 'mac-x64.zip', 'win-x64.exe'].map(async suffix => {
+const expected = await Promise.all(['mac-arm64.dmg', 'mac-x64.dmg', 'win-x64.exe'].map(async suffix => {
   const name = `Ovelle-${version}-${suffix}`
   const path = resolve('release/desktop', name)
   const hash = createHash('sha256')
@@ -52,7 +52,7 @@ if (!tagRef) gh('api', '--method', 'POST', `${refs}/refs`, '-f', `ref=refs/tags/
 if (!release) {
   release = JSON.parse(gh('api', '--method', 'POST', releases, '-f', `tag_name=${tag}`,
     '-f', `name=Ovelle ${version} ${production ? '' : 'Preview ' }(${sha.slice(0, 7)})`,
-    '-f', `body=Desktop packages built from ${branch} at ${sha}. macOS packages are unsigned ZIP archives.`,
+    '-f', `body=Desktop packages built from ${branch} at ${sha}. macOS packages are DMG disk images containing unsigned applications.`,
     '-F', 'draft=true', '-F', `prerelease=${!production}`))
 }
 if (release.prerelease !== !production) throw new Error('Desktop release has the wrong publication channel')

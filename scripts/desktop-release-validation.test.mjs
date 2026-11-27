@@ -89,3 +89,14 @@ test('rejects altered authority, transport, environment or artifact before follo
   }
   assert.throws(() => assertPresignedDownload(valid(), { ...options, accountId: '' }), /required/)
 })
+
+test('uses the bounded Apple UDIF trailer instead of the start of a disk image', async () => {
+  const filename = 'Ovelle-0.1.0-mac-arm64.dmg'
+  const response = (body, range = 'bytes 1999488-1999491/2000000') => new Response(body, {
+    status: 206, headers: { 'content-range': range, 'content-length': '4',
+      'content-disposition': `attachment; filename="${filename}"` },
+  })
+  await assertReleaseSample(response('koly'), { ...sampleOptions, filename })
+  await assert.rejects(assertReleaseSample(response('koly', 'bytes 0-3/2000000'), { ...sampleOptions, filename }), /range metadata/)
+  await assert.rejects(assertReleaseSample(response('fake'), { ...sampleOptions, filename }), /sample bytes/)
+})
