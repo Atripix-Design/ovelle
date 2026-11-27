@@ -25,11 +25,13 @@ The first pass had a crest behind the tagline, crowded wordmark tracking, and a 
 
 The editable [desktop board](https://design.penpot.app/?screen=viewer&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd241faeae&section=interactions&frame-id=f4b2b2fe-96aa-80e1-8009-0252e42be2e4) and [390 px mobile board](https://design.penpot.app/?screen=viewer&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd241faeae&section=interactions&frame-id=f4b2b2fe-96aa-80e1-8009-0252b29f2266) live on 01 Home. Each contains editable text, three vector ink layers, and linked Ovelle controls. The board IDs are Penpot references, not Figma nodes.
 
-The native `Ovelle / Site footer` variant set is also saved on 01 Home, separate from the composition boards. It contains seven vertical variants across Size, Theme, Material and Motion. The set reuses linked Section label and Switch instances. It remains on 01 Home because opening 05 Components for the move exhausted browser memory. The [Penpot manifest](../../../../packages/ui/penpot-manifest.json) records the verified location, intended sheet, individual component and board IDs, and runtime mappings.
+The native `Ovelle / Site footer` variant set is saved on [05 Components](https://design.penpot.app/?screen=workspace&team-id=51f2d744-23b9-8138-8008-f26e22c5d30e&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd24d32ed7&board-id=77c95fc7-4c17-805c-8009-0257c3853f90), separate from the Home compositions. Seven native main instances occupy one vertical column across Size, Theme, Material and Motion. Each uses a linked Section label instance. The system-reduced variant replaces the Switch with explanatory text, as the runtime does. The other six variants use the linked Switch. The [Penpot manifest](../../../../packages/ui/penpot-manifest.json) records the verified sheet, component and board IDs, and runtime mappings.
 
 [Penpot desktop phase](penpot-preview.webp) · [Penpot dark variant](penpot-dark.webp) · [Browser desktop and mobile](website-layouts.webp)
 
-The Penpot evidence uses screenshots from the actual editor and viewer because native still export timed out. Compare composition, palette and spacing across the captures. The browser uses a procedural field, so glyph positions vary from the fixed Penpot phase. The dark screenshot verifies that the linked controls retain contrast against the dark variant. No static wave asset is shipped in the runtime.
+Exact source exports from Penpot retain their native dimensions. [Desktop SVG (1440 × 584)](penpot-desktop-exact.svg) · [Mobile SVG (390 × 727)](penpot-mobile-exact.svg)
+
+Compare composition, palette and spacing across the editor, viewer and browser captures. The browser uses a procedural field, so glyph positions vary from the fixed Penpot phase. The dark variant uses an editor capture because Penpot’s dark export timed out in text rendering. The capture shows the linked controls against the dark palette. No static wave asset is shipped in the runtime.
 
 ## Runtime handoff
 
