@@ -16,6 +16,8 @@ interface GitHubAsset {
   browser_download_url: string
 }
 interface GitHubRelease {
+  id: number
+  published_at: string | null
   tag_name: string
   draft: boolean
   prerelease: boolean
@@ -40,16 +42,23 @@ async function latestRelease(production: boolean): Promise<GitHubRelease | undef
     if (release.draft === false && release.prerelease === false && !developmentTag.test(release.tag_name)) return release
     return
   }
-  // GitHub reserves /latest for stable releases. Follow its release ordering and
-  // pagination, but only accept published builds from our development channel.
-  for (let page = 1; page <= 10; page++) {
-    const response = await getRelease(`${api}?per_page=30&page=${page}`)
+  // The release list is not ordered by publication time. An older draft can
+  // be published later, and an earlier page can contain an older prerelease.
+  let newest: GitHubRelease | undefined
+  let newestAt = Number.NEGATIVE_INFINITY
+  for (let page = 1; ; page++) {
+    const response = await getRelease(`${api}?per_page=100&page=${page}`)
     if (!response.ok) throw new Error('GitHub prerelease lookup failed')
-    const releases = await response.json<GitHubRelease[]>()
-    const release = releases.find(item => item.draft === false && item.prerelease === true && developmentTag.test(item.tag_name))
-    if (release || !response.headers.get('link')?.includes('rel="next"')) return release
+    for (const release of await response.json<GitHubRelease[]>()) {
+      if (release.draft !== false || release.prerelease !== true || !developmentTag.test(release.tag_name) || !release.published_at) continue
+      const publishedAt = Date.parse(release.published_at)
+      if (publishedAt > newestAt || (publishedAt === newestAt && newest && release.id > newest.id)) {
+        newest = release
+        newestAt = publishedAt
+      }
+    }
+    if (!response.headers.get('link')?.includes('rel="next"')) return newest
   }
-  throw new Error('Development release search exceeded its page limit')
 }
 
 export async function githubReleaseCatalog(environment: string) {

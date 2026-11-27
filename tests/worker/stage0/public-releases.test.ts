@@ -23,22 +23,26 @@ const asset = (tag: string, name: string) => ({
 })
 afterEach(() => vi.unstubAllGlobals())
 
-it('selects a published development prerelease and uses only its actual executable links', async () => {
+it('selects the newest published development prerelease across unsorted pages and uses only its actual executable links', async () => {
   const { env, head } = fixture()
   const mac = asset(devTag, 'Ovelle-2.3.4-mac-arm64.zip')
+  const olderTag = `desktop-dev-${'c'.repeat(40)}`
+  const earlier = { id: 12, tag_name: olderTag, draft: false, prerelease: true, published_at: '2026-11-27T10:19:44Z', assets: [] }
   const win = asset(devTag, 'Ovelle-2.3.4-win-x64.exe')
   const fetch = vi.fn()
     .mockResolvedValueOnce(Response.json([
-      { tag_name: stableTag, draft: false, prerelease: false },
+      earlier,
+      { tag_name: stableTag, draft: false, prerelease: false, published_at: '2026-11-27T10:40:00Z' },
       { tag_name: `desktop-dev-${'b'.repeat(40)}`, draft: true, prerelease: true },
       { tag_name: 'another-preview', draft: false, prerelease: true },
     ], { headers: { link: '<https://api.github.com>; rel="next"' } }))
     .mockResolvedValueOnce(Response.json([
-      { tag_name: devTag, draft: false, prerelease: true, assets: [
+      { id: 11, tag_name: devTag, draft: false, prerelease: true, published_at: '2026-11-27T10:30:23Z', assets: [
         mac, win, { ...asset(devTag, 'Ovelle-2.3.4-mac-x64.zip'), browser_download_url: 'https://example.com/wrong.zip' },
         { ...asset(devTag, 'Ovelle-2.3.4-mac-x64.zip'), state: 'starter' },
         asset(devTag, 'Source-code.zip'),
       ] },
+      { ...earlier, published_at: 'invalid timestamp' },
     ]))
   vi.stubGlobal('fetch', fetch)
   const response = await releaseCatalog(request('/api/releases'), env)
@@ -48,8 +52,8 @@ it('selects a published development prerelease and uses only its actual executab
     [mac.name, true, mac.browser_download_url], [undefined, false, ''], [win.name, true, win.browser_download_url],
   ])
   expect(fetch.mock.calls.map(([url]) => url)).toEqual([
-    'https://api.github.com/repos/Atripix-Design/ovelle/releases?per_page=30&page=1',
-    'https://api.github.com/repos/Atripix-Design/ovelle/releases?per_page=30&page=2',
+    'https://api.github.com/repos/Atripix-Design/ovelle/releases?per_page=100&page=1',
+    'https://api.github.com/repos/Atripix-Design/ovelle/releases?per_page=100&page=2',
   ])
   expect(head).not.toHaveBeenCalled()
 })
