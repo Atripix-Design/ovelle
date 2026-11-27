@@ -58,6 +58,7 @@ test('packaging stays secret-free while delivery and cleanup require a separate 
   const download = jobs.deploy.steps.find(step => step.uses?.startsWith('actions/download-artifact@'))
   assert.equal(download.with.name, undefined)
   assert.equal(download.with['artifact-ids'], '${{ needs.build.outputs.package_artifact_id }}')
+  assert.equal(download.with['merge-multiple'], true)
   assert.ok(jobs.typecheck.steps.some(step => step.run === 'npm run test:stage0 -- --maxWorkers=1'))
   assert.equal(download.with.path, 'release/desktop')
   assert.equal(jobs['cleanup-packages']['runs-on'].group, 'atripix-ovelle-publishers')

@@ -207,6 +207,7 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           artifact-ids: ${{ needs.build.outputs.package_artifact_id }}
+          merge-multiple: true
           path: release/desktop
       - name: Verify local packages
         env:
