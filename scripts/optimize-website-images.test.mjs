@@ -33,3 +33,16 @@ test('rejects unsupported animation instead of silently discarding frames', asyn
     assert.equal(await readFile(path.join(dir, 'animated.gif'), 'utf8'), 'fixture');
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
+
+test('preserves the exact JPEG URL and bytes used outside the website by email', async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), 'ovelle-email-images-'));
+  try {
+    await mkdir(path.join(dir, 'email'));
+    const name = path.join(dir, 'email', 'ovelle-volunteer-cleanup.jpg');
+    const source = await sharp({ create: { width: 12, height: 8, channels: 3, background: '#00598a' } }).jpeg().toBuffer();
+    await writeFile(name, source);
+    execFileSync(process.execPath, [script, dir]);
+    assert.deepEqual(await readdir(path.join(dir, 'email')), ['ovelle-volunteer-cleanup.jpg']);
+    assert.deepEqual(await readFile(name), source);
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
