@@ -6,7 +6,7 @@ const safeTag = /^[A-Za-z0-9][A-Za-z0-9._-]*$/
 const targets = [
   { platform: 'macOS', title: 'Mac · Apple silicon', description: 'For Macs with an Apple silicon chip.', label: 'Download for Apple silicon', suffix: '-mac-arm64.zip', format: 'ZIP archive' },
   { platform: 'macOS', title: 'Mac · Intel', description: 'For Macs with an Intel processor.', label: 'Download for Intel', suffix: '-mac-x64.zip', format: 'ZIP archive' },
-  { platform: 'Windows', title: 'Windows · x64', description: 'Install Ovelle on your Windows computer.', label: 'Download for Windows', suffix: '-win-x64.exe', format: 'EXE installer' },
+  { platform: 'Windows', title: 'Windows · x64', description: 'Run Ovelle on your Windows computer.', label: 'Download for Windows', suffix: '-win-x64.exe', format: 'Windows executable' },
 ]
 
 interface GitHubAsset {

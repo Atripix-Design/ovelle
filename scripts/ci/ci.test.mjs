@@ -160,7 +160,10 @@ test('development deployments preserve a separate sender-restricted authenticati
     name: 'AUTH_EMAIL', allowed_sender_addresses: ['accounts@dev.mail.ovelle.org'],
   })
   assert.deepEqual(bindings.find(binding => binding.name === 'EMAIL').allowed_sender_addresses, ['downloads@dev.mail.ovelle.org'])
-  assert.equal(config.env.production.send_email, undefined)
+  assert.deepEqual(config.env.production.send_email, [
+    { name: 'EMAIL', allowed_sender_addresses: ['downloads@mail.ovelle.org'] },
+  ])
+  assert.equal(config.env.production.vars.DOWNLOAD_EMAIL_FROM, 'downloads@mail.ovelle.org')
   for (const name of ['AUTH_ADMISSION_KEY', 'TURNSTILE_SECRET_KEY']) {
     assert.ok(!(name in config.env.development.vars), 'secret values must stay out of deployment vars')
   }
