@@ -69,13 +69,16 @@ test('production promotions retain real exact-SHA checks from trusted branch pus
   const workflow = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
   assert.deepEqual(workflow.on.pull_request.branches, ['development'])
   assert.deepEqual(workflow.on.push.branches, ['development', 'main'])
-  for (const name of ['build', 'typecheck', 'lint']) {
+  const predecessors = { lint: undefined, typecheck: 'lint', build: 'typecheck', 'saml-browser': 'build' }
+  for (const [name, predecessor] of Object.entries(predecessors)) {
     const job = workflow.jobs[name]
-    assert.equal(job.name, name)
-    assert.equal(job.if, undefined)
+    assert.equal(job.name, name === 'saml-browser' ? 'Identity browser acceptance' : name)
+    assert.equal(job.needs, predecessor)
+    assert.equal(job.if, predecessor ? '${{ !cancelled() }}' : undefined)
     assert.equal(job['runs-on'].group, 'atripix-private-builders')
     assert.match(job.steps.find(step => step.uses?.startsWith('actions/checkout@')).with.ref, /github\.sha/)
   }
+  assert.deepEqual(new Set(workflow.jobs.deploy.needs), new Set(Object.keys(predecessors)))
 })
 
 test('identity deployment gate requires protocol matrices and the existing passkey ceremony', async () => {

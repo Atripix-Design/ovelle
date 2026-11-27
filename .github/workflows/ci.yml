@@ -17,8 +17,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Keep heavy jobs from competing for memory on the shared self-hosted box.
+  # Ordering is not a success dependency: GitHub treats skipped required jobs
+  # as passing, so run each check even if its predecessor failed.
   build:
     name: build
+    needs: typecheck
+    if: ${{ !cancelled() }}
     runs-on:
       group: atripix-private-builders
       labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral]
@@ -79,6 +84,8 @@ jobs:
 
   typecheck:
     name: typecheck
+    needs: lint
+    if: ${{ !cancelled() }}
     runs-on:
       group: atripix-private-builders
       labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral]
@@ -126,6 +133,8 @@ jobs:
 
   saml-browser:
     name: Identity browser acceptance
+    needs: build
+    if: ${{ !cancelled() }}
     runs-on:
       group: atripix-private-builders
       labels: [self-hosted, linux, x64, atripix-build, atripix-ephemeral, atripix-browser]
