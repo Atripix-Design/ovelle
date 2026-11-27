@@ -7,6 +7,31 @@ import { join, resolve } from 'node:path'
 const root = resolve(import.meta.dirname, '../..')
 const node = process.execPath
 
+test('only production initializes the download email quota schema before deployment', () => {
+  const dir = mkdtempSync(join(root, '.ci-email-db-test-'))
+  try {
+    for (const path of ['scripts/ci', 'node_modules/.bin']) mkdirSync(join(dir, path), { recursive: true })
+    copyFileSync(join(root, 'scripts/ci/deploy-worker.mjs'), join(dir, 'scripts/ci/deploy-worker.mjs'))
+    const wrangler = join(dir, 'node_modules/.bin/wrangler')
+    writeFileSync(wrangler, '#!/bin/sh\nprintf "%s\\n" "$*"\nif [ "$TEST_FAIL_D1" = 1 ] && [ "$1" = d1 ]; then exit 1; fi\n')
+    chmodSync(wrangler, 0o755)
+    const accountId = 'a'.repeat(32)
+    const run = (environment, fail = '0') => spawnSync(node, [join(dir, 'scripts/ci/deploy-worker.mjs'), environment], {
+      env: { ...process.env, CLOUDFLARE_ACCOUNT_ID: accountId, TEST_FAIL_D1: fail }, encoding: 'utf8',
+    })
+    const quota = 'd1 execute DB --remote --env production --file migrations/0001_download_email_limits.sql --yes'
+    const prod = run('production')
+    assert.equal(prod.status, 0, prod.stderr)
+    assert.deepEqual(prod.stdout.trim().split('\n'), [quota, `deploy --env production --var R2_ACCOUNT_ID:${accountId}`])
+    const dev = run('development')
+    assert.equal(dev.status, 0, dev.stderr)
+    assert.equal(dev.stdout.trim(), `deploy --env development --var R2_ACCOUNT_ID:${accountId}`)
+    const failure = run('production', '1')
+    assert.notEqual(failure.status, 0)
+    assert.equal(failure.stdout.trim(), quota)
+  } finally { rmSync(dir, { recursive: true, force: true }) }
+})
+
 test('packaging stays secret-free while delivery and cleanup require a separate runner group', async () => {
   const { load } = await import('js-yaml')
   const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
@@ -148,7 +173,7 @@ test('every workflow fails closed to isolated self-hosted capacity', async () =>
   assert.throws(() => validate(privileged), /OS dependencies/)
 })
 
-test('development deployments preserve a separate sender-restricted authentication binding', () => {
+test('deployment mail bindings isolate dev authentication and restrict download senders', () => {
   const config = JSON.parse(readFileSync(join(root, 'wrangler.jsonc'), 'utf8'))
   assert.equal(config.main, 'src/cloudflare/worker.ts')
   assert.equal(config.env.development.main, 'src/cloudflare/worker-development.ts')
@@ -164,6 +189,7 @@ test('development deployments preserve a separate sender-restricted authenticati
     { name: 'EMAIL', allowed_sender_addresses: ['downloads@mail.ovelle.org'] },
   ])
   assert.equal(config.env.production.vars.DOWNLOAD_EMAIL_FROM, 'downloads@mail.ovelle.org')
+  assert.ok(config.env.production.assets.run_worker_first.includes('/api/*'))
   for (const name of ['AUTH_ADMISSION_KEY', 'TURNSTILE_SECRET_KEY']) {
     assert.ok(!(name in config.env.development.vars), 'secret values must stay out of deployment vars')
   }

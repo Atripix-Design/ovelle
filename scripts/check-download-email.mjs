@@ -51,4 +51,17 @@ const oversized = new Request('https://dev.ovelle.org/api/download-email',{
 });
 assert.equal((await sendDownloadEmail(oversized,env)).status,413);
 assert.equal(cancelled,true);
+const production = { ...env, APP_ENV: 'production', DOWNLOAD_EMAIL_FROM: 'downloads@mail.ovelle.org' };
+const prodOrigin = 'https://ovelle.org';
+const prodRequest = new Request(`${prodOrigin}/api/download-email`, {
+  method: 'POST', headers: { 'Content-Type': 'application/json', Origin: prodOrigin, 'CF-Connecting-IP': '192.0.2.4' },
+  body: JSON.stringify({ email: 'production-test@example.com' }),
+});
+assert.equal((await sendDownloadEmail(prodRequest, production)).status, 200);
+const prodMessage = messages.at(-1);
+assert.deepEqual(prodMessage.from, { email: 'downloads@mail.ovelle.org', name: 'Ovelle' });
+assert.ok(prodMessage.text.includes(`${prodOrigin}/#download`));
+assert.ok(prodMessage.html.includes(`href="${prodOrigin}/#download"`));
+assert.ok(prodMessage.html.includes(`src="${prodOrigin}/email/ovelle-volunteer-cleanup.jpg"`));
+assert.ok(!prodMessage.html.includes('dev.ovelle.org'));
 sqlite.close(); console.log('ovelle download email validation and quotas verified');
