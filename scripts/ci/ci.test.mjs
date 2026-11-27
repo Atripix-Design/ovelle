@@ -64,6 +64,20 @@ test('packaging stays secret-free while delivery and cleanup require a separate 
   assert.ok(jobs['cleanup-packages'].steps.find(step => step.name === 'Delete temporary package transfer').run.includes('--method DELETE'))
 })
 
+test('production promotions retain real exact-SHA checks from trusted branch pushes', async () => {
+  const { load } = await import('js-yaml')
+  const workflow = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))
+  assert.deepEqual(workflow.on.pull_request.branches, ['development'])
+  assert.deepEqual(workflow.on.push.branches, ['development', 'main'])
+  for (const name of ['build', 'typecheck', 'lint']) {
+    const job = workflow.jobs[name]
+    assert.equal(job.name, name)
+    assert.equal(job.if, undefined)
+    assert.equal(job['runs-on'].group, 'atripix-private-builders')
+    assert.match(job.steps.find(step => step.uses?.startsWith('actions/checkout@')).with.ref, /github\.sha/)
+  }
+})
+
 test('identity deployment gate requires protocol matrices and the existing passkey ceremony', async () => {
   const { load } = await import('js-yaml')
   const { jobs } = load(readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8'))

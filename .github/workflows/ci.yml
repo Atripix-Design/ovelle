@@ -1,7 +1,10 @@
 name: Ovelle CI/CD
 
 on:
+  # Main promotions use the exact SHA already checked by a trusted branch push.
+  # Synthetic PR refs cannot use the restricted self-hosted runner group.
   pull_request:
+    branches: [development]
   push:
     branches: [development, main]
   workflow_dispatch:
