@@ -2,16 +2,17 @@ import assert from 'node:assert/strict'
 import { execFileSync, spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import test from 'node:test'
 
+const root = resolve(import.meta.dirname, '../..')
 const script = new URL('./publish-github-release.mjs', import.meta.url).pathname
 const sha = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim()
 const repository = 'Atripix-Design/ovelle'
 for (const environment of ['development', 'production']) {
   test(`publisher checks exact source and digests before publishing a ${environment} release`, () => {
-    const dir = mkdtempSync(join(tmpdir(), 'ovelle-release-test-'))
+    // The isolated runner mounts its OS temp directory noexec.
+    const dir = mkdtempSync(join(root, '.ci-release-test-'))
     try {
       mkdirSync(join(dir, 'apps/desktop'), { recursive: true })
       mkdirSync(join(dir, 'release/desktop'), { recursive: true })
