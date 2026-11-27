@@ -11,7 +11,10 @@ async function files(dir) {
     ? files(path.join(dir, entry.name)) : [path.join(dir, entry.name)]))).flat();
 }
 const all = await files(root);
-const images = all.filter(file => /\.(png|jpe?g)$/i.test(file));
+// The Worker and sent emails reference these stable URLs outside Vite's
+// bundles. Keep their exact filenames and email-client-compatible formats.
+const emailAssets = path.join(root, 'email') + path.sep;
+const images = all.filter(file => !file.startsWith(emailAssets) && /\.(png|jpe?g)$/i.test(file));
 const unsupported = all.filter(file => /\.(gif|tiff?|bmp)$/i.test(file));
 if (unsupported.length) throw new Error(`Unsupported images require review: ${unsupported.join(', ')}`);
 const replacements = new Map();
