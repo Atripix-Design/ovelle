@@ -1,5 +1,5 @@
 import type { D1Database, SendEmail } from '@cloudflare/workers-types';
-import { downloadEmailContent } from './download-email-template';
+import { downloadEmailContent } from './download-email-template.ts';
 
 const delivery = {
   development: { sender: 'downloads@dev.mail.ovelle.org', origin: 'https://dev.ovelle.org' },
