@@ -20,7 +20,7 @@ function request(path: string, options: { origin?: string; ip?: string; edge?: b
 function environment(db: D1Database) {
   return { APP_ENV: 'development', DB: db, AUTH_EMAIL: { send: async () => ({ messageId: 'fixture' }) } as unknown as SendEmail,
     AUTH_ORIGIN: origin, AUTH_RP_ID: 'dev.ovelle.org', AUTH_EMAIL_FROM: 'accounts@dev.mail.ovelle.org', TURNSTILE_SITE_KEY: 'fixture-site', TURNSTILE_SECRET_KEY: 'fixture-secret', AUTH_ADMISSION_KEY: validKey,
-    ASSETS: { fetch: async () => new Response('asset') }, STORAGE: {}, RELEASE_VERSION: '1.0.0', R2_ACCOUNT_ID: 'fixture', R2_BUCKET_NAME: 'fixture', R2_ACCESS_KEY_ID: '', R2_SECRET_ACCESS_KEY: '' }
+    ASSETS: { fetch: async () => new Response('asset') }, STORAGE: {}, R2_ACCOUNT_ID: 'fixture', R2_BUCKET_NAME: 'fixture', R2_ACCESS_KEY_ID: '', R2_SECRET_ACCESS_KEY: '' }
 }
 it('admits only reviewed development routes through direct Cloudflare edge metadata', async () => {
   const f = await databaseFixture(), env = environment(f.db)

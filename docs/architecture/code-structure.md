@@ -197,12 +197,12 @@ Strict sessions/flows, Lax OIDC redirects and Secure/None SAML POST bindings are
 different policies, not interchangeable serializer defaults.
 
 The public Worker is a separate composition owner. `releases.ts` owns the release
-catalog, metadata-backed availability and R2 download transport; it cannot import
-the Worker entry point. Storage failures propagate instead of becoming absent
-releases. HEAD does not read bodies or sign URLs. Clients and signed URLs are
-request-scoped, with no cross-request cache. UI fallback catalog/type ownership
-still requires the shared-application review; this server boundary alone does not
-resolve that separate concern.
+catalog HTTP boundary and legacy R2 download transport; it cannot import
+the Worker entry point. The catalog resolves stable/preview GitHub releases via
+`github-releases.ts` and never advertises fabricated URLs. R2 failures on
+legacy downloads propagate instead of looking like absent files. HEAD does not read bodies or sign URLs. Clients and signed URLs are
+request-scoped, with no cross-request cache. The catalog has a 60-second freshness window and does not
+cache upstream failures.
 
 `db.ts` owns SQL value types and numbered binding assembly alongside guarded D1
 batches and audit statement construction. `access/policy.ts` consumes that binder

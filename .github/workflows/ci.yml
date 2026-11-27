@@ -164,7 +164,7 @@ jobs:
       labels: [self-hosted, linux, x64, ovelle-publish, atripix-ephemeral]
     timeout-minutes: 45
     permissions:
-      contents: read
+      contents: write
     environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
     concurrency:
       group: delivery-${{ github.ref }}
@@ -214,6 +214,14 @@ jobs:
           DELIVERY_SOURCE_SHA: ${{ github.sha }}
           DELIVERY_SOURCE_REF: ${{ github.ref }}
         run: node scripts/ci/verify-delivery-source.mjs
+      - name: Publish verified GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DELIVERY_SOURCE_EVENT: ${{ github.event_name }}
+          DELIVERY_SOURCE_SHA: ${{ github.sha }}
+          DELIVERY_SOURCE_REF: ${{ github.ref }}
+          APP_ENV: ${{ steps.source.outputs.environment }}
+        run: node scripts/ci/publish-github-release.mjs "$APP_ENV"
       - name: Upload packages and deploy Worker
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -226,6 +234,11 @@ jobs:
           APP_ENV: ${{ steps.source.outputs.environment }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: node scripts/verify-desktop-releases.mjs "$APP_ENV"
+      - name: Verify live GitHub release downloads
+        env:
+          DELIVERY_SOURCE_SHA: ${{ github.sha }}
+          APP_ENV: ${{ steps.source.outputs.environment }}
+        run: node scripts/ci/verify-github-downloads.mjs "$APP_ENV"
 
   # Remove transfer storage even when a check or deployment fails. One-day
   # retention bounds leftovers if a cancellation prevents cleanup from starting.
