@@ -9,7 +9,7 @@ try {
   await page.getByRole('heading', { name: 'Better relationships. Less busywork.' }).waitFor();
   const releases = await page.evaluate(() => window.ovelleDownloads.loadReleases());
   assert.equal(releases.length, 3);
-  assert.ok(releases.every(release => release.available && release.href.startsWith('https://cdn.dev.ovelle.org/releases/desktop/')));
+  assert.ok(releases.every(release => release.available && /^https:\/\/github\.com\/Atripix-Design\/ovelle\/releases\/download\/desktop-dev-[a-f0-9]{40}\//.test(release.href)));
   await application.evaluate(({ shell }) => {
     globalThis.ovelleTestRequests = [];
     globalThis.ovelleTestExternal = [];
