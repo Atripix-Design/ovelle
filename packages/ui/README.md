@@ -179,8 +179,8 @@ See [source captures and implementation evidence](../../docs/design-system/migra
 Use `SiteFooter` at the end of a marketing layout, outside the main landmark. Pass
 `homeHref` and the named `groups` of `{ label, href }` links owned by the app.
 `className`, `contentClassName`, and `tideClassName` style the section, content, and art.
-The surface is deliberately opaque. The existing Switch receives the provider
-or component material, frost and reduced-transparency settings.
+The surface is deliberately opaque. The existing Section label and Switch receive
+the provider or component material, frost and reduced-transparency settings.
 The decorative tide does no work offscreen and respects system reduced motion.
 The optional animation setting is saved in local storage and does not affect links.
 See the [native Penpot variant mapping](./penpot-manifest.json) and the

@@ -1,43 +1,46 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent, KeyboardEvent } from 'react'
+import type { FormEvent } from 'react'
 import { Button, Field } from '@ovelle/ui'
-import tide from './onboarding-tide.svg'
-import { addressLimit, useAddressSuggestions } from './onboarding-address'
+import communityLoop from './community-loop.webp'
 import './organization-setup.css'
 
 type Props = { request: (input: unknown) => Promise<unknown>; onCreated: () => void; onBusyChange: (busy: boolean) => void }
 type Details = { name: string; contactEmail: string; timeZone: string; firstProgram: string; firstLocation: string }
-type Detail = Exclude<keyof Details, 'timeZone'>
+type Detail = keyof Details
 const steps = [
   { label: 'Organization', title: 'Create your organization', intro: 'Give your volunteer team a place to plan shifts, coordinate people, and track hours.' },
-  { label: 'First program', title: 'Build your experience', intro: 'Name the first program your team will run at this location.' },
+  { label: 'First program', title: 'Build your experience', intro: 'Add your first program and the place where it happens.' },
   { label: 'Review', title: 'Review your workspace', intro: 'Check the details before you create your organization.' },
 ]
 const fields = {
   name: { label: 'Organization name', example: 'e.g. Harbor Community Center…', autoComplete: 'organization', hint: '' },
   contactEmail: { label: 'Organization contact email', example: 'e.g. team@example.org…', autoComplete: 'email', hint: 'This can be different from your sign-in email.' },
+  timeZone: { label: 'Time zone', example: 'e.g. America/New_York…', autoComplete: 'off', hint: 'This starts with your device time zone. Change it if needed.' },
   firstProgram: { label: 'First program', example: 'e.g. Community Pantry…', autoComplete: 'off', hint: '' },
-  firstLocation: { label: 'First location address', example: 'Start with a street number and name…', autoComplete: 'street-address', hint: 'Choose a Photon suggestion or enter the full address manually.' },
+  firstLocation: { label: 'First location', example: 'e.g. North Hall…', autoComplete: 'off', hint: 'Enter the site name, not a street address.' },
 } satisfies Record<Detail, { label: string; example: string; autoComplete: string; hint: string }>
-const groups: readonly (readonly Detail[])[] = [['name', 'contactEmail', 'firstLocation'], ['firstProgram']]
+const groups: readonly (readonly Detail[])[] = [['name', 'contactEmail', 'timeZone'], ['firstProgram', 'firstLocation']]
 const allFields = groups.flat()
 
 function fieldError(key: Detail, raw: string) {
   const value = raw.trim()
-  if (!value) return `Enter the ${fields[key].label.toLowerCase()}.`
+  if (!value) return `Enter ${key === 'timeZone' ? 'a time zone' : `the ${fields[key].label.toLowerCase()}`}.`
   if ([...value].some(character => character.charCodeAt(0) < 32 || (character.charCodeAt(0) >= 127 && character.charCodeAt(0) <= 159))) return 'Remove any line breaks or special control characters.'
   if (key === 'contactEmail' && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(value)) return 'Enter an email address like team@example.org.'
+  if (key === 'timeZone') {
+    try {
+      if (!/^[A-Za-z][A-Za-z0-9_+/-]*$/.test(value)) throw new RangeError()
+      new Intl.DateTimeFormat('en', { timeZone: value })
+    } catch { return 'Enter a recognized time zone, such as America/New_York.' }
+  }
   return undefined
 }
 
 /** Compose shared controls without moving the service’s passkey or write authority into the renderer. */
 export default function OrganizationSetup({ request, onCreated, onBusyChange }: Props) {
   const [details, setDetails] = useState<Details>(() => ({
-    name: '', contactEmail: '', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', firstProgram: '', firstLocation: '',
+    name: '', contactEmail: '', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || '', firstProgram: '', firstLocation: '',
   }))
-  const [addressOpen, setAddressOpen] = useState(false)
-  const [addressIndex, setAddressIndex] = useState(-1)
-  const [chosenAddress, setChosenAddress] = useState('')
   const [step, setStep] = useState(0)
   const [errors, setErrors] = useState<Partial<Record<Detail, string>>>({})
   const [busy, setBusy] = useState(false)
@@ -47,32 +50,6 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
   const inFlight = useRef(false)
   // When the response is lost, the request may already have succeeded. Never regenerate the key on retry.
   const pending = useRef<{ values: Details; key: string } | null>(null)
-  const { options, unavailable } = useAddressSuggestions(details.firstLocation.trim(),
-    step === 0 && addressOpen && details.firstLocation !== chosenAddress)
-  const expanded = addressOpen && options.length > 0
-  function update(key: Detail, value: string) {
-    setDetails(prior => ({ ...prior, [key]: value }))
-    setErrors(prior => prior[key] ? { ...prior, [key]: undefined } : prior)
-  }
-  function chooseAddress(value: string) {
-    update('firstLocation', value)
-    setChosenAddress(value)
-    setAddressOpen(false)
-    setAddressIndex(-1)
-  }
-  function addressKeys(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key === 'Escape') { setAddressOpen(false); setAddressIndex(-1); return }
-    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-      if (!expanded) { setAddressOpen(true); return }
-      event.preventDefault()
-      const direction = event.key === 'ArrowDown' ? 1 : -1
-      setAddressIndex(index => index < 0 ? (direction > 0 ? 0 : options.length - 1) : (index + direction + options.length) % options.length)
-    } else if (event.key === 'Enter' && expanded && options[addressIndex]) {
-      event.preventDefault()
-      chooseAddress(options[addressIndex])
-    }
-  }
-
 
   useEffect(() => { heading.current?.focus() }, [step])
   useEffect(() => { if (failed) alert.current?.focus() }, [failed])
@@ -128,42 +105,19 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
         <p className="organization-setup__intro">{current.intro}</p>
         <form noValidate onSubmit={advance}>
           {step < 2 ? <div className="organization-setup__fields">
-            {groups[step].map(key => {
-              const address = key === 'firstLocation'
-              const control = <Field id={`setup-${key}`} name={key}
-                label={fields[key].label} placeholder={fields[key].example} autoComplete={fields[key].autoComplete}
-                type={key === 'contactEmail' ? 'email' : 'text'} spellCheck={key !== 'contactEmail' && !address}
-                autoCapitalize={key === 'contactEmail' ? 'none' : undefined} required
-                maxLength={key === 'contactEmail' ? 254 : address ? addressLimit : 120}
-                value={details[key]} hint={fields[key].hint} error={errors[key]}
-                supportingText={fields[key].hint ? 'visible' : 'hidden'}
-                material="solid" className="organization-setup__field"
-                {...(address ? {
-                  role: 'combobox', 'aria-autocomplete': 'list', 'aria-expanded': expanded,
-                  'aria-controls': expanded ? 'setup-address-options' : undefined,
-                  'aria-activedescendant': expanded && options[addressIndex] ? `setup-address-${addressIndex}` : undefined,
-                  onFocus: () => setAddressOpen(true),
-                  onBlur: () => { setAddressOpen(false); setAddressIndex(-1) },
-                  onKeyDown: addressKeys,
-                } as const : {})}
-                onChange={event => {
-                  update(key, event.target.value)
-                  if (address) { setAddressOpen(true); setAddressIndex(-1) }
-                }} />
-              return <div key={key}>{control}
-                {address && expanded && <ul id="setup-address-options" role="listbox" aria-label="Address suggestions" className="organization-setup__suggestions">
-                  {options.map((value, index) => <li key={value} id={`setup-address-${index}`} role="option"
-                    aria-selected={index === addressIndex} onPointerDown={event => event.preventDefault()}
-                    onClick={() => chooseAddress(value)}>{value}</li>)}
-                </ul>}
-                {address && <p className="organization-setup__address-source" role="status">
-                  {unavailable ? 'Suggestions unavailable. You can still enter the address manually.' : expanded ? 'Address data © OpenStreetMap contributors via Photon' : ''}
-                </p>}
-              </div>
-            })}
+            {groups[step].map(key => <Field key={key} id={`setup-${key}`} name={key}
+              label={fields[key].label} placeholder={fields[key].example} autoComplete={fields[key].autoComplete}
+              type={key === 'contactEmail' ? 'email' : 'text'} spellCheck={key !== 'contactEmail' && key !== 'timeZone'}
+              autoCapitalize={key === 'contactEmail' || key === 'timeZone' ? 'none' : undefined} required
+              maxLength={key === 'contactEmail' ? 254 : 120} value={details[key]} hint={fields[key].hint}
+              error={errors[key]} supportingText={fields[key].hint ? 'visible' : 'hidden'}
+              material="solid" className="organization-setup__field"
+              onChange={event => {
+                setDetails({ ...details, [key]: event.target.value })
+                if (errors[key]) setErrors({ ...errors, [key]: undefined })
+              }} />)}
           </div> : <dl className="organization-setup__summary">
             {allFields.map(key => <div key={key}><dt>{fields[key].label}</dt><dd>{details[key].trim()}</dd></div>)}
-            <div><dt>Device time zone</dt><dd>{details.timeZone}</dd></div>
           </dl>}
           {failed && <div className="organization-setup__alert" tabIndex={-1} ref={alert} role="alert">
             <strong>Creation could not be confirmed.</strong>
@@ -175,7 +129,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
               material="solid" state={busy ? 'loading' : 'default'} loadingLabel="Creating organization…">
               {failed ? 'Retry setup' : ['Continue', 'Review details', 'Create organization'][step]}
               {step < 2 && <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none">
-                <path d="M4.25 10h10.5m-4.7-4.55L14.75 10l-4.7 4.55" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3 10h13m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>}
             </Button>
           </div>
@@ -185,7 +139,9 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
       </div>
     </div>
     <div className="organization-setup__art" aria-hidden="true">
-      <img src={tide} alt="" width="960" height="1022" />
+      <img src={communityLoop} alt="" width="1380" height="1480" />
+      <span className="organization-setup__art-label">Ovelle Studio / 001</span>
+      <div className="organization-setup__caption"><strong>The Community Loop</strong><span>Three parts. One shared purpose.</span></div>
     </div>
   </main>
 }
