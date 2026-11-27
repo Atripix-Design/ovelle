@@ -94,6 +94,7 @@ export default function LiveWorkspace() {
   const busy = mutating || loading;
   const [organizationState, setOrganizationState] = useState<"loading" | "ready" | "error">("loading");
   const [organizationRevision, setOrganizationRevision] = useState(0);
+  const [createdOrganization, setCreatedOrganization] = useState(false);
   const [organizations, setOrganizations] = useState<Named[]>([]),
     [programs, setPrograms] = useState<Named[]>([]),
     [locations, setLocations] = useState<Named[]>([]);
@@ -354,6 +355,7 @@ export default function LiveWorkspace() {
     try {
       const result = await api.signOut();
       setSignedIn(false);
+      setCreatedOrganization(false);
       setOrganizations([]);
       setOrganizationState("loading");
       setOrg("");
@@ -387,8 +389,11 @@ export default function LiveWorkspace() {
       setMutating(false);
     }
   };
+  const settingUp = signedIn && bridgeAvailable && organizationState === "ready" && organizations.length === 0 && !createdOrganization;
+  const awaitingOrganizations = signedIn && bridgeAvailable && organizationState !== "ready";
+  const emptyAfterCreate = signedIn && createdOrganization && organizationState === "ready" && organizations.length === 0;
   return (
-    <div className="workflow-app">
+    <div className="workflow-app" data-organization-setup={settingUp || undefined}>
       <header className="workflow-topbar">
         <strong className="workflow-brand">ovelle</strong>
         {signedIn && (
@@ -397,7 +402,13 @@ export default function LiveWorkspace() {
           </button>
         )}
       </header>
-      <main className="workflow-main">
+      {settingUp ? (
+        <OrganizationSetup request={api!.request} onBusyChange={setMutating} onCreated={() => {
+          setCreatedOrganization(true);
+          setOrganizationState("loading");
+          setOrganizationRevision(v => v + 1);
+        }} />
+      ) : <main className="workflow-main">
         <div className="workflow-heading">
           <h1>Workspace</h1>
           <p>
@@ -422,10 +433,20 @@ export default function LiveWorkspace() {
               Sign in
             </Button>
           </section>
+        ) : awaitingOrganizations || emptyAfterCreate ? (
+          <LoadingBoundary loading={organizationState === "loading"} label="Loading organizations">
+            <section className="workflow-card">
+              <h2>{createdOrganization ? "Organization created" : "Your organizations"}</h2>
+              {organizationState === "loading" ? <p role="status">Loading organizations…</p> : (
+                <>
+                  <p>{createdOrganization ? "Your organization was created. Refresh to load the workspace." : "The workspace list couldn’t be loaded."}</p>
+                  <Button onClick={() => setOrganizationRevision(v => v + 1)}>Refresh organizations</Button>
+                </>
+              )}
+            </section>
+          </LoadingBoundary>
         ) : (
           <>
-            {organizationState === "loading" && <p role="status">Loading organizations…</p>}
-            {organizationState === "ready" && organizations.length === 0 && <OrganizationSetup request={api!.request} onBusyChange={setMutating} onCreated={() => setOrganizationRevision(v => v + 1)} />}
             <section className="workflow-card live-selectors">
               <label>
                 Organization
@@ -1055,7 +1076,7 @@ export default function LiveWorkspace() {
             {error}
           </p>
         )}
-      </main>
+      </main>}
     </div>
   );
 }

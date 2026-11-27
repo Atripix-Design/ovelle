@@ -383,9 +383,6 @@
   -webkit-app-region: no-drag;
 }
 
-.workflow-app .account-fields { display: grid; gap: 12px; margin: 20px 0; }
-.workflow-app .account-fields label { display: grid; gap: 6px; }
-.workflow-app .account-fields input { box-sizing: border-box; width: 100%; min-width: 0; padding: 10px 12px; border: 1px solid #b8c8d2; border-radius: 8px; font: inherit; color: inherit; }
 
 /* Reserve space for OS-owned caption controls; the rest of the header remains draggable. */
 [data-desktop-platform="macos"] .workflow-app { --workflow-header-height: 36px; }
