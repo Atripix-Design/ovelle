@@ -34,6 +34,15 @@ try {
       },
     }
   })
+  let providerUnavailable = false
+  const expectedAddress = '350 5th Avenue, New York, NY 10118, United States'
+  await page.route('https://photon.komoot.io/api/**', async route => {
+    const query = new URL(route.request().url()).searchParams.get('q')
+    assert.ok(query === '350 5th' || query === '78 Manual Avenue', query)
+    if (providerUnavailable) return route.fulfill({ status: 503 })
+    const properties = { housenumber: '350', street: '5th Avenue', city: 'New York', state: 'NY', postcode: '10118', country: 'United States' }
+    await route.fulfill({ json: { features: [{properties}, {properties}, {properties:{city:'New York'}}] } })
+  })
   await page.goto(url)
   const heading = name => page.getByRole('heading', { name, exact: true })
   const field = name => page.getByLabel(name, { exact: true })
@@ -48,8 +57,8 @@ try {
 
   await heading('Create your organization').waitFor()
   assert.equal(await page.getByRole('navigation', { name: 'Live workflow' }).count(), 0)
-  assert.equal(await field('Time zone').inputValue(), 'America/New_York')
-  assert.equal(await page.locator('.organization-setup__art img').evaluate(img => img.complete && img.naturalWidth === 1380), true)
+  assert.equal(await field('Time zone').count(), 0)
+  assert.equal(await page.locator('.organization-setup__art img').evaluate(img => img.complete && img.naturalWidth === 960), true)
   await capture('implemented-organization')
   await button('Continue').click()
   await page.waitForFunction(() => document.activeElement?.id === 'setup-name')
@@ -63,11 +72,22 @@ try {
   }
   await field('Organization name').fill('Harbor Community Center ')
   await field('Organization contact email').fill('team@example.org')
-  await field('Time zone').fill('made/up')
-  await field('Time zone').press('Enter')
-  await page.getByText('Enter a recognized time zone, such as America/New_York.').waitFor()
-  await field('Time zone').fill('America/New_York')
-  await field('Time zone').press('Enter')
+  const address = page.getByRole('combobox', { name: 'First location address' })
+  await address.fill('350 5th')
+  const option = page.getByRole('option', { name: expectedAddress, exact: true })
+  await option.waitFor()
+  assert.equal(await page.getByRole('listbox').getByRole('option').count(), 1)
+  await capture('implemented-address-suggestions')
+  await address.press('ArrowDown')
+  assert.equal(await option.getAttribute('aria-selected'), 'true')
+  await address.press('Enter')
+  assert.equal(await address.inputValue(), expectedAddress)
+  assert.equal(await page.getByRole('listbox').count(), 0)
+  assert.equal(await button('Continue').locator('path').getAttribute('stroke'), 'white')
+  const action = await button('Continue').boundingBox()
+  const form = await page.locator('.organization-setup form').boundingBox()
+  assert.ok(Math.abs((form.x + form.width) - (action.x + action.width)) < 1)
+  await button('Continue').click()
   await heading('Build your experience').waitFor()
   assert.equal(await heading('Build your experience').evaluate(el => el === document.activeElement), true)
   await page.keyboard.press('Tab')
@@ -75,7 +95,6 @@ try {
   await capture('implemented-experience')
   const long = 'Community'.repeat(12)
   await field('First program').fill(long)
-  await field('First location').fill('North Hall')
   await button('Review details').click()
   await heading('Review your workspace').waitFor()
   assert.deepEqual(await attempts(), [])
@@ -87,9 +106,14 @@ try {
   await field('First program').fill('Community Pantry')
   await button('Back').click()
   assert.equal(await field('Organization name').inputValue(), 'Harbor Community Center ')
+  assert.equal(await address.inputValue(), expectedAddress)
+  providerUnavailable = true
+  await address.fill('78 Manual Avenue')
+  await page.getByText('Suggestions unavailable. You can still enter the address manually.').waitFor()
+  await address.fill(expectedAddress)
   await button('Continue').click()
-  assert.equal(await field('First location').inputValue(), 'North Hall')
   await button('Review details').click()
+  await page.getByText('America/New_York', { exact: true }).waitFor()
   await capture('implemented-review')
   await button('Create organization').click()
   await button('Creating organization…').waitFor()
@@ -111,7 +135,7 @@ try {
   assert.deepEqual(calls[0], calls[1])
   assert.deepEqual({ ...calls[0], idempotencyKey: '<key>' }, {
     operation: 'createOrganization', name: 'Harbor Community Center', contactEmail: 'team@example.org', timeZone: 'America/New_York',
-    firstProgram: 'Community Pantry', firstLocation: 'North Hall', idempotencyKey: '<key>',
+    firstProgram: 'Community Pantry', firstLocation: expectedAddress, idempotencyKey: '<key>',
   })
   assert.deepEqual(pageErrors, [])
   console.log('Verified setup validation, focus order, reflow, retained values, explicit creation, safe retry and workspace readback.')

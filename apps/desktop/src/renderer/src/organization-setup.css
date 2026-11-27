@@ -36,10 +36,17 @@
 }
 .organization-setup__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
 .organization-setup .organization-setup__next, .organization-setup .organization-setup__back { width: auto; min-height: 52px; }
+.organization-setup__next { margin-inline-start: auto; }
 .organization-setup .ov-action-surface { min-height: 48px; padding-inline: 18px; }
 .organization-setup .organization-setup__next-surface { box-shadow: inset 0 1px 0 #a0d8ee55, 0 4px 8px #00598a24; }
 .organization-setup .organization-setup__next:active:not(:disabled) .organization-setup__next-surface { box-shadow: inset 0 2px 6px #00223965; }
-.organization-setup__next-surface > span { display: flex; align-items: center; gap: 12px; }
+.organization-setup__next-surface > span { display: flex; align-items: center; gap: 9px; }
+.organization-setup__next-surface svg { display: block; flex: none; }
+.organization-setup__suggestions { list-style: none; margin: 6px 0 0; padding: 4px; border: 1px solid var(--ov-border-default); border-radius: 12px; background: var(--ov-surface-default); }
+.organization-setup__suggestions li { padding: 10px 12px; border-radius: 8px; cursor: pointer; overflow-wrap: anywhere; }
+.organization-setup__suggestions li:hover, .organization-setup__suggestions [aria-selected="true"] { background: var(--ov-surface-subtle); }
+.organization-setup__address-source { margin: 5px 0 0; color: var(--ov-text-secondary); font-size: 12px; }
+.organization-setup__address-source:empty { margin: 0; }
 .organization-setup__summary { margin: 0 0 22px; display: grid; border-top: 1px solid var(--ov-border-default); }
 .organization-setup__summary div { display: grid; grid-template-columns: minmax(120px, 40%) minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ov-border-default); overflow-wrap: anywhere; }
 .organization-setup__summary dt, .organization-setup__note { color: var(--ov-text-secondary); font-size: 13px; }
@@ -47,40 +54,10 @@
 .organization-setup__note { margin: 18px 0 0; }
 .organization-setup__alert { border-left: 3px solid var(--ov-border-error); padding: 10px 14px; margin-bottom: 20px; color: var(--ov-status-error); }
 .organization-setup__alert p { margin: 4px 0 0; color: var(--ov-text-primary); }
-.organization-setup__art {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-width: 0;
-  border-left: 1px solid #bfdae8;
-  background: radial-gradient(ellipse at 20% 19%, #e4f4f6 0%, transparent 61%), linear-gradient(151deg, #d7e9f4, #b1cbef 70%, #92b5e2);
-}
-.organization-setup__art::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(#194b7711 1px, transparent 1px), linear-gradient(90deg, #194b7711 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: linear-gradient(#000, transparent 70%);
-}
-.organization-setup__art img {
-  position: absolute;
-  width: auto;
-  max-width: none;
-  height: min(94%, 1060px);
-  top: 50%;
-  left: 65%;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 32px 42px #31578c44);
-}
-.organization-setup__art-label { position: absolute; top: 40px; left: 40px; display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 750; letter-spacing: .2em; text-transform: uppercase; color: #254b66; }
-.organization-setup__art-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #00598a; }
-.organization-setup__caption { position: absolute; bottom: 32px; left: 40px; color: #183c59; }
-.organization-setup__caption strong { display: block; font-size: 19px; letter-spacing: -.02em; }
-.organization-setup__caption span { font-size: 13px; }
+.organization-setup__art { position: relative; overflow: hidden; min-width: 0; background: #e7f4fc; }
+.organization-setup__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; }
 @media (max-width: 950px) {
   .organization-setup__content { padding-inline: 38px; }
-  .organization-setup__art img { height: 80%; }
 }
 @media (max-width: 720px) {
   .organization-setup { display: block; }
