@@ -13,5 +13,5 @@ if (stage0Origin && stage0Origin !== 'https://dev.ovelle.org') throw new Error('
 export default defineConfig({
   main: { plugins: [externalizeDepsPlugin()], define: { __OVELLE_LIVE_URL__: JSON.stringify(liveUrl), __OVELLE_STAGE0_ORIGIN__: JSON.stringify(stage0Origin) } },
   preload: { build: { rollupOptions: { output: { format: "cjs", entryFileNames: "index.cjs" } } } },
-  renderer: { plugins: [react(), tailwindcss()], server: { host: liveHost ? '127.0.0.1' : '0.0.0.0', port:5175, strictPort:true, ...(liveHost ? { allowedHosts: [liveHost], hmr: { host: liveHost, protocol: 'wss', clientPort: 18767 } } : {}), proxy:{'/api':'http://127.0.0.1:8790'} } },
+  renderer: { define: { __OVELLE_ONBOARDING_PREVIEW__: JSON.stringify(!liveUrl && !!stage0Origin) }, plugins: [react(), tailwindcss()], server: { host: liveHost ? '127.0.0.1' : '0.0.0.0', port:5175, strictPort:true, ...(liveHost ? { allowedHosts: [liveHost], hmr: { host: liveHost, protocol: 'wss', clientPort: 18767 } } : {}), proxy:{'/api':'http://127.0.0.1:8790'} } },
 })

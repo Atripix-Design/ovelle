@@ -5,6 +5,7 @@ import { chromium } from 'playwright'
 
 const url = process.env.OVELLE_DESKTOP_PREVIEW_URL || 'http://127.0.0.1:5175/'
 const artifacts = process.env.OVELLE_ONBOARDING_CAPTURES
+const expectPreview = process.env.OVELLE_EXPECT_ONBOARDING_PREVIEW === '1'
 const browser = await chromium.launch()
 try {
   // The real renderer runs against a controlled bridge. No accounts or data are written.
@@ -183,6 +184,34 @@ try {
     operation: 'createOrganization', name: 'Harbor Community Center', contactEmail: 'team@example.org', timeZone: 'America/New_York',
     firstProgram: 'Community Pantry', firstLocation: expectedAddress, idempotencyKey: '<key>',
   })
+  const preview = button('Preview onboarding')
+  assert.equal(await preview.count(), expectPreview ? 1 : 0)
+  if (expectPreview) {
+    const organization = page.getByRole('combobox', { name: 'Organization', exact: true })
+    await organization.getByRole('option', { name: 'Harbor Community Center' }).waitFor({ state: 'attached' })
+    await preview.click()
+    await heading('Create your organization').waitFor()
+    assert.equal(await button('Sign out').count(), 0)
+    await field('Organization name').fill('Unsaved Preview Organization')
+    await button('Exit preview').click()
+    await preview.waitFor()
+    await preview.click()
+    assert.equal(await field('Organization name').inputValue(), '')
+    await field('Organization name').fill('Sample Organization')
+    await field('Organization contact email').fill('example@example.org')
+    await address.fill('78 Manual Avenue')
+    await button('Continue').click()
+    await field('First program').fill('Sample Program')
+    await button('Review details').click()
+    await heading('Review your workspace').waitFor()
+    assert.equal(await button('Create organization').count(), 0)
+    await page.getByText('Preview only. No organization will be created or changed.', { exact: true }).waitFor()
+    await capture('preview-review-no-write')
+    await button('Finish preview').click()
+    await organization.getByRole('option', { name: 'Harbor Community Center' }).waitFor({ state: 'attached' })
+    await page.waitForFunction(() => document.activeElement?.textContent?.trim() === 'Preview onboarding')
+    assert.deepEqual(await attempts(), calls)
+  }
   assert.deepEqual(pageErrors, [])
   console.log('Verified setup validation, focus order, centered progress, reduced motion, reflow, retained values, explicit creation, safe retry and workspace readback.')
 } finally {

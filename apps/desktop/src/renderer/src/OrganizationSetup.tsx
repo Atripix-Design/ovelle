@@ -5,7 +5,9 @@ import tide from './onboarding-tide.svg'
 import { addressLimit, useAddressSuggestions } from './onboarding-address'
 import './organization-setup.css'
 
-type Props = { request: (input: unknown) => Promise<unknown>; onCreated: () => void; onBusyChange: (busy: boolean) => void }
+type Props =
+  | { mode: 'setup'; request: (input: unknown) => Promise<unknown>; onCreated: () => void; onBusyChange: (busy: boolean) => void }
+  | { mode: 'preview'; onFinish: () => void }
 type Details = { name: string; contactEmail: string; timeZone: string; firstProgram: string; firstLocation: string }
 type Detail = Exclude<keyof Details, 'timeZone'>
 const steps = [
@@ -31,7 +33,7 @@ function fieldError(key: Detail, raw: string) {
 }
 
 /** Compose shared controls without moving the service’s passkey or write authority into the renderer. */
-export default function OrganizationSetup({ request, onCreated, onBusyChange }: Props) {
+export default function OrganizationSetup(props: Props) {
   const [details, setDetails] = useState<Details>(() => ({
     name: '', contactEmail: '', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', firstProgram: '', firstLocation: '',
   }))
@@ -81,7 +83,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
   useEffect(() => { if (failed) alert.current?.focus() }, [failed])
 
   async function create() {
-    if (inFlight.current) return
+    if (props.mode !== 'setup' || inFlight.current) return
     inFlight.current = true
     const command = pending.current ?? {
       key: crypto.randomUUID(),
@@ -90,23 +92,28 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
     }
     pending.current = command
     setBusy(true)
-    onBusyChange(true)
+    props.onBusyChange(true)
     setFailed(false)
     try {
-      await request({ operation: 'createOrganization', ...command.values, idempotencyKey: command.key })
-      onCreated()
+      await props.request({ operation: 'createOrganization', ...command.values, idempotencyKey: command.key })
+      props.onCreated()
     } catch {
       setFailed(true)
     } finally {
       inFlight.current = false
       setBusy(false)
-      onBusyChange(false)
+      props.onBusyChange(false)
     }
   }
 
   function advance(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (step === 2) { void create(); return }
+    if (step === 2) {
+      // The preview has no organization bridge or write callback.
+      if (props.mode === 'preview') props.onFinish()
+      else void create()
+      return
+    }
     const nextErrors: Partial<Record<Detail, string>> = {}
     for (const key of groups[step]) nextErrors[key] = fieldError(key, details[key])
     setErrors(nextErrors)
@@ -184,14 +191,16 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
             {step > 0 && !pending.current && <Button variant="secondary" className="organization-setup__back" onClick={() => { setErrors({}); setPhase({ step: step - 1, direction: 'back' }) }}>Back</Button>}
             <Button type="submit" className="organization-setup__next" surfaceClassName="organization-setup__next-surface"
               material="solid" state={busy ? 'loading' : 'default'} loadingLabel="Creating organization…">
-              {failed ? 'Retry setup' : ['Continue', 'Review details', 'Create organization'][step]}
+              {failed ? 'Retry setup' : ['Continue', 'Review details', props.mode === 'preview' ? 'Finish preview' : 'Create organization'][step]}
               {step < 2 && <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none">
                 <path d="M4.25 10h10.5m-4.7-4.55L14.75 10l-4.7 4.55" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>}
             </Button>
           </div>
           <span className="ov-sr-only" role="status">{busy ? 'Creating organization…' : ''}</span>
-          {step === 2 && !pending.current && <p className="organization-setup__note">Creating an organization requires a passkey-verified session.</p>}
+          {step === 2 && !pending.current && <p className="organization-setup__note">
+            {props.mode === 'preview' ? 'Preview only. No organization will be created or changed.' : 'Creating an organization requires a passkey-verified session.'}
+          </p>}
         </form>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, LoadingBoundary } from "@ovelle/ui";
 import ScheduleEditor from "./ScheduleEditor";
 import ReadinessEvidence from "./ReadinessEvidence";
@@ -6,6 +6,8 @@ import ReadinessIntake from "./ReadinessIntake";
 import ReadinessAssignment from "./ReadinessAssignment";
 import HoursSubmission from "./HoursSubmission";
 import OrganizationSetup from "./OrganizationSetup";
+
+declare const __OVELLE_ONBOARDING_PREVIEW__: boolean;
 
 type Bridge = {
   status: () => Promise<{ signedIn: boolean }>;
@@ -86,6 +88,12 @@ const displayTime = (value: number | null) =>
 /** Live data is always fetched through the fixed, main-process native bridge. */
 export default function LiveWorkspace() {
   const api = window.ovelleWorkflow;
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewButton = useRef<HTMLButtonElement>(null);
+  const closePreview = () => {
+    setPreviewOpen(false);
+    requestAnimationFrame(() => previewButton.current?.focus());
+  };
   const [bridgeAvailable, setBridgeAvailable] = useState<boolean | null>(null);
   const [signedIn, setSignedIn] = useState(false),
     [mutating, setMutating] = useState(false),
@@ -393,17 +401,25 @@ export default function LiveWorkspace() {
   const awaitingOrganizations = signedIn && bridgeAvailable && organizationState !== "ready";
   const emptyAfterCreate = signedIn && createdOrganization && organizationState === "ready" && organizations.length === 0;
   return (
-    <div className="workflow-app" data-organization-setup={settingUp || undefined}>
+    <div className="workflow-app" data-organization-setup={settingUp || previewOpen || undefined}>
       <header className="workflow-topbar">
         <strong className="workflow-brand">ovelle</strong>
-        {signedIn && (
+        {__OVELLE_ONBOARDING_PREVIEW__ && !settingUp && (
+          <button type="button" className="text-action" ref={previewButton} disabled={!previewOpen && busy}
+            onClick={previewOpen ? closePreview : () => setPreviewOpen(true)}>
+            {previewOpen ? "Exit preview" : "Preview onboarding"}
+          </button>
+        )}
+        {signedIn && !previewOpen && (
           <button className="text-action" disabled={busy} onClick={signOut}>
             Sign out
           </button>
         )}
       </header>
-      {settingUp ? (
-        <OrganizationSetup request={api!.request} onBusyChange={setMutating} onCreated={() => {
+      {previewOpen ? (
+        <OrganizationSetup key="preview" mode="preview" onFinish={closePreview} />
+      ) : settingUp ? (
+        <OrganizationSetup key="setup" mode="setup" request={api!.request} onBusyChange={setMutating} onCreated={() => {
           setCreatedOrganization(true);
           setOrganizationState("loading");
           setOrganizationRevision(v => v + 1);
