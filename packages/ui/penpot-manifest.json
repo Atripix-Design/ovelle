@@ -20,7 +20,6 @@
         "Motion": "Wave motion Switch / local preference, system and provider reduced motion."
       },
       "linkedComponents": {
-        "SectionLabel": "2d265e7b-9f2f-5123-b415-538873c81596",
         "Switch": "6b4856c9-33fa-5821-856e-7945a3f4e503"
       },
       "variants": [

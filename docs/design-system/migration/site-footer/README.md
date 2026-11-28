@@ -28,9 +28,9 @@ The editable [desktop board](https://design.penpot.app/?screen=viewer&file-id=51
 
 The native `Ovelle / Site footer` variant set is saved on [05 Components](https://design.penpot.app/?screen=workspace&team-id=51f2d744-23b9-8138-8008-f26e22c5d30e&file-id=51f2d744-23b9-8138-8008-f3bdd65662b2&page-id=2afdd151-2efd-80d3-8008-f3bd24d32ed7&board-id=77c95fc7-4c17-805c-8009-0257c3853f90), separate from the Home compositions. Seven native main instances occupy one vertical column across Size, Theme, Material and Motion. The system-reduced variant replaces the Switch with explanatory text, as the runtime does. The other six variants use the linked Switch. The [Penpot manifest](../../../../packages/ui/penpot-manifest.json) records the verified sheet, component and board IDs, and runtime mappings.
 
-The simplified copy is verified in the Home compositions and application. The copy update to the seven reusable variants is not yet verified.
+The simplified copy is verified in the Home compositions, all seven main variants on 05 Components, and the development application. The variant update preserved the component IDs, navigation, wave artwork and linked switches.
 
-[Browser desktop and mobile](website-layouts.webp)
+[Penpot desktop and mobile variants](penpot-updated-layouts.webp) · [Browser desktop and mobile](website-layouts.webp)
 
 Exact source exports from Penpot retain their native dimensions. [Desktop SVG (1440 × 584)](penpot-desktop-exact.svg) · [Mobile SVG (390 × 727)](penpot-mobile-exact.svg)
 
