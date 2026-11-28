@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 
 const endpoint = 'https://photon.komoot.io/api/'
 export const addressLimit = 120
+type AddressSuggestion = { street: string; locality: string; value: string }
 
-export async function suggestAddresses(query: string, signal: AbortSignal): Promise<string[]> {
+export async function suggestAddresses(query: string, signal: AbortSignal): Promise<AddressSuggestion[]> {
   const url = new URL(endpoint)
   url.searchParams.set('q', query)
   url.searchParams.set('limit', '8')
@@ -12,21 +13,25 @@ export async function suggestAddresses(query: string, signal: AbortSignal): Prom
   if (!response.ok) throw new Error('Address suggestions unavailable')
   const body = await response.json() as { features?: { properties?: Record<string, unknown> }[] }
   if (!Array.isArray(body.features)) throw new Error('Unexpected address response')
-  const addresses = new Set<string>()
+  const addresses = new Map<string, AddressSuggestion>()
   for (const result of body.features.slice(0, 8)) {
     const entry = result?.properties
     const get = (key: string) => typeof entry?.[key] === 'string' ? entry[key].trim() : ''
     if (!get('street') || !get('housenumber')) continue
     // Preserve the provider’s house number and street. Missing regional fields never create punctuation gaps.
-    const address = [[get('housenumber'), get('street')].join(' '), get('city') || get('district'),
-      [get('state'), get('postcode')].filter(Boolean).join(' '), get('country')].filter(Boolean).join(', ')
-    if (address.length <= addressLimit && !/\p{Cc}/u.test(address)) addresses.add(address)
+    const street = [get('housenumber'), get('street')].join(' ')
+    const city = get('city') || get('district')
+    const state = get('state'), postalCode = get('postcode'), country = get('country')
+    const locality = [city, state, postalCode].filter(Boolean).join(', ')
+    // Keep the complete, existing autofill format separate from the option's two-line label.
+    const value = [street, city, [state, postalCode].filter(Boolean).join(' '), country].filter(Boolean).join(', ')
+    if (value.length <= addressLimit && !/\p{Cc}/u.test(value)) addresses.set(value, { street, locality: locality || country, value })
   }
-  return [...addresses].slice(0, 5)
+  return [...addresses.values()].slice(0, 5)
 }
 
 export function useAddressSuggestions(query: string, enabled: boolean) {
-  const [result, setResult] = useState<{ query: string; options: string[]; unavailable?: boolean }>({ query: '', options: [] })
+  const [result, setResult] = useState<{ query: string; options: AddressSuggestion[]; unavailable?: boolean }>({ query: '', options: [] })
   useEffect(() => {
     if (!enabled || query.length < 5) return
     const controller = new AbortController()

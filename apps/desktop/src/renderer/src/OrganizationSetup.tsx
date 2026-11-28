@@ -72,7 +72,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
       setAddressIndex(index => index < 0 ? (direction > 0 ? 0 : options.length - 1) : (index + direction + options.length) % options.length)
     } else if (event.key === 'Enter' && expanded && options[addressIndex]) {
       event.preventDefault()
-      chooseAddress(options[addressIndex])
+      chooseAddress(options[addressIndex].value)
     }
   }
 
@@ -156,9 +156,12 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
               return <div key={key} className={address ? "organization-setup__address" : undefined}>{control}
                 {address && expanded && <div className="organization-setup__address-menu">
                   <ul id="setup-address-options" role="listbox" aria-label="Address suggestions">
-                  {options.map((value, index) => <li key={value} id={`setup-address-${index}`} role="option"
+                  {options.map((option, index) => <li key={option.value} id={`setup-address-${index}`} role="option" aria-label={option.value}
                     aria-selected={index === addressIndex} onPointerDown={event => event.preventDefault()}
-                    onClick={() => chooseAddress(value)}>{value}</li>)}
+                    onClick={() => chooseAddress(option.value)}>
+                    <span className="organization-setup__address-street">{option.street}</span>
+                    {option.locality && <span className="organization-setup__address-locality">{option.locality}</span>}
+                  </li>)}
                   </ul>
                   <small className="organization-setup__address-source">© OpenStreetMap contributors</small>
                 </div>}
