@@ -52,7 +52,7 @@ try {
     if (!artifacts) return
     await mkdir(artifacts, { recursive: true })
     await page.evaluate(() => document.fonts.ready)
-    await page.screenshot({ path: join(artifacts, name + '.png') })
+    await page.screenshot({ path: join(artifacts, name + '.png'), animations: 'disabled' })
   }
 
   await heading('Create your organization').waitFor()
@@ -60,6 +60,18 @@ try {
   assert.equal(await page.getByRole('navigation', { name: 'Live workflow' }).count(), 0)
   assert.equal(await field('Time zone').count(), 0)
   assert.equal(await page.locator('.organization-setup__art img').evaluate(img => img.complete && img.naturalWidth === 960), true)
+  const setup = name => page.locator('.organization-setup__' + name)
+  const midpoint = box => box.x + box.width / 2
+  const tracker = await setup('tracker').boundingBox()
+  const content = await setup('content').boundingBox()
+  const progressBars = await setup('progress').locator('span').all()
+  const firstBar = await progressBars[0].boundingBox()
+  const lastBar = await progressBars.at(-1).boundingBox()
+  assert.ok(Math.abs(midpoint(tracker) - midpoint(content)) < 1)
+  assert.ok(Math.abs((firstBar.x + lastBar.x + lastBar.width) / 2 - midpoint(tracker)) < 1)
+  assert.equal(await setup('step').evaluate(el => getComputedStyle(el).textAlign), 'center')
+  assert.ok(tracker.y - content.y < 80)
+  assert.ok((await setup('title').boundingBox()).y - tracker.y - tracker.height > 50)
   await capture('implemented-organization')
   await button('Continue').click()
   await page.waitForFunction(() => document.activeElement?.id === 'setup-name')
@@ -87,6 +99,10 @@ try {
   assert.ok((await localityLine.boundingBox()).y > (await streetLine.boundingBox()).y)
   const list = page.getByRole('listbox')
   assert.equal(await list.getByRole('option').count(), 2)
+  const menu = setup('address-menu')
+  const animationName = element => element.evaluate(el => getComputedStyle(el).animationName)
+  assert.equal(await animationName(menu), 'organization-setup-options-in')
+  await menu.evaluate(el => Promise.all(el.getAnimations().map(animation => animation.finished)))
   const inputBox = await address.boundingBox()
   const menuBox = await list.boundingBox()
   assert.ok(menuBox.y - inputBox.y - inputBox.height >= 0 && menuBox.y - inputBox.y - inputBox.height <= 8)
@@ -112,6 +128,13 @@ try {
   assert.equal(await heading('Build your experience').evaluate(el => el === document.activeElement), true)
   await page.keyboard.press('Tab')
   assert.equal(await field('First program').evaluate(el => el === document.activeElement), true)
+  assert.equal(await animationName(setup('stack')), 'organization-setup-step-in')
+  const focusDuration = () => setup('field').first().evaluate(el => getComputedStyle(el, '::after').transitionDuration)
+  assert.equal(await focusDuration(), '0.12s')
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  assert.equal(await animationName(setup('stack')), 'none')
+  assert.equal(await focusDuration(), '0s')
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await capture('implemented-experience')
   const long = 'Community'.repeat(12)
   await field('First program').fill(long)
@@ -161,7 +184,7 @@ try {
     firstProgram: 'Community Pantry', firstLocation: expectedAddress, idempotencyKey: '<key>',
   })
   assert.deepEqual(pageErrors, [])
-  console.log('Verified setup validation, focus order, reflow, retained values, explicit creation, safe retry and workspace readback.')
+  console.log('Verified setup validation, focus order, centered progress, reduced motion, reflow, retained values, explicit creation, safe retry and workspace readback.')
 } finally {
   await browser.close()
 }

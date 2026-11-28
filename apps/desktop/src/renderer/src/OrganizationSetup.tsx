@@ -38,7 +38,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
   const [addressOpen, setAddressOpen] = useState(false)
   const [addressIndex, setAddressIndex] = useState(-1)
   const [chosenAddress, setChosenAddress] = useState('')
-  const [step, setStep] = useState(0)
+  const [{ step, direction }, setPhase] = useState<{ step: number; direction?: 'forward' | 'back' }>({ step: 0 })
   const [errors, setErrors] = useState<Partial<Record<Detail, string>>>({})
   const [busy, setBusy] = useState(false)
   const [failed, setFailed] = useState(false)
@@ -116,17 +116,19 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
       requestAnimationFrame(() => document.getElementById(`setup-${invalid}`)?.focus())
       return
     }
-    setStep(step + 1)
+    setPhase({ step: step + 1, direction: 'forward' })
   }
 
   const current = steps[step]
   return <main className="organization-setup" data-ovelle-theme="light">
     <div className="organization-setup__content">
-      <div className="organization-setup__stack">
+      <div className="organization-setup__tracker">
         <div className="organization-setup__progress" aria-hidden="true">
           {steps.map((item, index) => <span key={item.label} data-current={index === step || undefined} />)}
         </div>
         <p className="organization-setup__step">Step {step + 1} of {steps.length} / {current.label}</p>
+      </div>
+      <div className="organization-setup__stack" key={step} data-direction={direction}>
         <h1 className="organization-setup__title" tabIndex={-1} ref={heading}>{current.title}</h1>
         <p className="organization-setup__intro">{current.intro}</p>
         <form noValidate onSubmit={advance}>
@@ -179,7 +181,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
             <p>Retry the same request to avoid creating a duplicate. If your session isn’t passkey verified, sign out and approve this device again.</p>
           </div>}
           <div className="organization-setup__actions">
-            {step > 0 && !pending.current && <Button variant="secondary" className="organization-setup__back" onClick={() => { setErrors({}); setStep(step - 1) }}>Back</Button>}
+            {step > 0 && !pending.current && <Button variant="secondary" className="organization-setup__back" onClick={() => { setErrors({}); setPhase({ step: step - 1, direction: 'back' }) }}>Back</Button>}
             <Button type="submit" className="organization-setup__next" surfaceClassName="organization-setup__next-surface"
               material="solid" state={busy ? 'loading' : 'default'} loadingLabel="Creating organization…">
               {failed ? 'Retry setup' : ['Continue', 'Review details', 'Create organization'][step]}

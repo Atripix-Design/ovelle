@@ -6,12 +6,13 @@
   color: var(--ov-text-primary);
   font-family: Inter, system-ui, sans-serif;
 }
-.organization-setup__content { display: grid; place-items: center; padding: 48px clamp(28px, 6vw, 112px); min-width: 0; }
+.organization-setup__content { display: grid; grid-template-rows: auto 1fr; justify-items: center; align-items: center; gap: clamp(40px, 7vh, 76px); padding: clamp(32px, 6vh, 64px) clamp(28px, 6vw, 112px) 48px; min-width: 0; }
 .organization-setup__stack { width: min(100%, 482px); }
-.organization-setup__progress { display: flex; gap: 6px; margin-bottom: 18px; }
+.organization-setup__tracker { text-align: center; }
+.organization-setup__progress { display: flex; justify-content: center; gap: 6px; margin-bottom: 9px; }
 .organization-setup__progress span { width: 32px; height: 4px; border-radius: 99px; background: var(--ov-border-default); }
 .organization-setup__progress [data-current] { background: var(--ov-action-brand); }
-.organization-setup__step { margin: 0 0 12px; color: var(--ov-text-brand); font-size: 12px; letter-spacing: .15em; font-weight: 750; text-transform: uppercase; }
+.organization-setup__step { margin: 0; color: var(--ov-text-brand); font-size: 12px; letter-spacing: .15em; font-weight: 750; text-transform: uppercase; }
 .organization-setup__title { margin: 0 0 15px; font-size: clamp(36px, 3.4vw, 64px); font-weight: 690; line-height: 1.04; letter-spacing: -.058em; text-wrap: balance; }
 .organization-setup__title:focus { outline: none; }
 .organization-setup__intro { max-width: 41ch; margin: 0 0 30px; color: var(--ov-text-secondary); font-size: 16px; line-height: 1.5; }
@@ -20,6 +21,7 @@
 .organization-setup__fields label { font-weight: 650; }
 .organization-setup__fields .ov-hint { font-size: 13px; }
 .organization-setup .organization-setup__field {
+  position: relative;
   padding-inline: 15px;
   height: 52px;
   border-radius: 13px;
@@ -28,6 +30,16 @@
   box-shadow: inset 0 2px 4px #526e8122, 0 1px 0 var(--ov-surface-default);
   font-size: 16px;
 }
+.organization-setup__field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ov-border-focus);
+  opacity: 0;
+  pointer-events: none;
+}
+.organization-setup__field:focus-within::after { opacity: .045; }
 .organization-setup .organization-setup__field[data-validation="error"] { border-color: var(--ov-border-error); }
 .organization-setup .organization-setup__field:focus-within {
   outline: 3px solid var(--ov-border-focus);
@@ -92,3 +104,21 @@
 .workflow-app[data-organization-setup] .workflow-topbar { justify-content: space-between; }
 .workflow-app[data-organization-setup] .workflow-topbar .text-action { min-height: 32px; }
 .workflow-app[data-organization-setup] .text-action:focus-visible { outline: 3px solid var(--ov-border-focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .organization-setup__stack[data-direction] {
+    --setup-step-offset: 6px;
+    animation: organization-setup-step-in 180ms cubic-bezier(.23, 1, .32, 1);
+  }
+  .organization-setup__stack[data-direction="back"] { --setup-step-offset: -6px; }
+  .organization-setup__address-menu { animation: organization-setup-options-in 150ms cubic-bezier(.23, 1, .32, 1); }
+  .organization-setup__field::after { transition: opacity 120ms ease-out; }
+}
+@keyframes organization-setup-step-in {
+  from { opacity: .65; transform: translateX(var(--setup-step-offset)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes organization-setup-options-in {
+  from { opacity: .7; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
