@@ -12,7 +12,7 @@ The mobile download form emails a link to the desktop chooser in the same enviro
 | [Prospa app launch](https://reallygoodemails.com/emails/the-prospa-app-has-launched-/info) | Use a visual related to the work people do with the app, separated from the download action. |
 | [WeTransfer download email](https://wetransfer.com/resources/share-files-via-email/share-files-without-email-attachment) | One primary link to a hosted download page, without an installer attachment. |
 
-Ovelle uses the site's canvas, brand blue, text and border tokens. Its 24px outer shell, 16px inner surfaces and pill action echo the mobile form. The glass look comes from a pale blue rim and a translucent inner fill with a solid white fallback. The button has a solid background even when the client drops gradients or rounding.
+Ovelle uses the site's canvas, brand blue, text and border tokens. Its 464px layout, 20px outer shell, 16px inner surfaces and pill action echo the mobile form without taking over the reading pane. The compact footer identifies Ovelle and links to the matching site's homepage and download FAQ in both HTML and plain text. The glass look comes from a pale blue rim and a translucent inner fill with a solid white fallback. The button has a solid background even when the client drops gradients or rounding.
 
 The single photo is [Volunteer People Picking Up Trash and Plastics](https://www.pexels.com/photo/volunteer-people-picking-up-trash-and-plastics-7656742/) by Thirdman, under the [Pexels License](https://www.pexels.com/license/). Ovelle hosts a fixed crop of the stock JPEG with no third-party pixel or recipient-specific image URL.
 
