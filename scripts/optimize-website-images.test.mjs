@@ -34,15 +34,19 @@ test('rejects unsupported animation instead of silently discarding frames', asyn
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
-test('preserves the exact JPEG URL and bytes used outside the website by email', async () => {
+test('preserves the stable JPEG and PNG URLs and bytes used by email', async () => {
   const dir = await mkdtemp(path.join(tmpdir(), 'ovelle-email-images-'));
   try {
     await mkdir(path.join(dir, 'email'));
     const name = path.join(dir, 'email', 'ovelle-volunteer-cleanup.jpg');
     const source = await sharp({ create: { width: 12, height: 8, channels: 3, background: '#00598a' } }).jpeg().toBuffer();
     await writeFile(name, source);
+    const wave = path.join(dir, 'email', 'ovelle-many-hands-wave.png');
+    const waveSource = await sharp({ create: { width: 12, height: 3, channels: 4, background: '#8db8cd' } }).png().toBuffer();
+    await writeFile(wave, waveSource);
     execFileSync(process.execPath, [script, dir]);
-    assert.deepEqual(await readdir(path.join(dir, 'email')), ['ovelle-volunteer-cleanup.jpg']);
+    assert.deepEqual((await readdir(path.join(dir, 'email'))).sort(), ['ovelle-many-hands-wave.png', 'ovelle-volunteer-cleanup.jpg']);
+    assert.deepEqual(await readFile(wave), waveSource);
     assert.deepEqual(await readFile(name), source);
   } finally { await rm(dir, { recursive: true, force: true }); }
 });

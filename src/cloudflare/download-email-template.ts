@@ -3,8 +3,12 @@
 export function downloadEmailContent(origin: 'https://ovelle.org' | 'https://dev.ovelle.org') {
   const url = `${origin}/#download`
   const website = `${origin}/`
+  const features = `${origin}/#connected`
   const help = `${origin}/#questions`
   const project = 'Ovelle · Volunteer coordination'
+  const tagline = 'More time for the people who show up.'
+  const about = 'Plan shifts, coordinate volunteers, and keep track of service hours.'
+  const wave = `${origin}/email/ovelle-many-hands-wave.png`
   const image = `${origin}/email/ovelle-volunteer-cleanup.jpg`
   const subject = 'Your Ovelle download link'
   const heading = 'Get Ovelle on your computer.'
@@ -13,7 +17,7 @@ export function downloadEmailContent(origin: 'https://ovelle.org' | 'https://dev
 
   return {
     subject,
-    text: `${heading}\n\n${instructions}\n\nDownload Ovelle: ${url}\n\n${project}\nWebsite: ${website}\nDownload help: ${help}\n\n${receipt}`,
+    text: `${heading}\n\n${instructions}\n\nDownload Ovelle: ${url}\n\n${project}\n${tagline}\n${about}\nWebsite: ${website}\nVolunteer features: ${features}\nDownload help: ${help}\n\n${receipt}`,
     html: `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${subject}</title></head>
 <body style="margin:0;padding:0;background-color:#fafaf8;color:#172b3d;font-family:Inter,Arial,sans-serif">
@@ -39,8 +43,12 @@ export function downloadEmailContent(origin: 'https://ovelle.org' | 'https://dev
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
 <tr><td style="padding-top:10px;border-top:1px solid #cbd5de">
 <p style="margin:0 0 4px;color:#172b3d;font-weight:700">${project}</p>
-<p style="margin:0 0 6px"><a href="${website}" style="color:#00598a;text-decoration:underline">Ovelle website</a>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="${help}" style="color:#00598a;text-decoration:underline">Download help</a></p>
-<p style="margin:0">${receipt}</p>
+<p style="margin:0 0 3px;color:#172b3d">${tagline}</p>
+<p style="margin:0 0 7px">${about}</p>
+<p style="margin:0"><a href="${website}" style="color:#00598a;text-decoration:underline">Ovelle website</a>&nbsp; · <a href="${features}" style="color:#00598a;text-decoration:underline">Volunteer features</a>&nbsp; · <a href="${help}" style="color:#00598a;text-decoration:underline">Download help</a></p>
+</td></tr>
+<tr><td align="center" style="padding:8px 0"><img src="${wave}" width="376" alt="" role="presentation" style="display:block;width:100%;max-width:376px;height:auto;border:0"></td></tr>
+<tr><td style="font-size:12px;line-height:17px">${receipt}
 </td></tr>
 </table>
 </td></tr>

@@ -64,12 +64,14 @@ assert.ok(prodMessage.text.includes(`${prodOrigin}/#download`));
 assert.ok(prodMessage.html.includes(`href="${prodOrigin}/#download"`));
 assert.ok(prodMessage.html.includes(`src="${prodOrigin}/email/ovelle-volunteer-cleanup.jpg"`));
 for (const [message, origin] of [[messages[0], 'https://dev.ovelle.org'], [prodMessage, prodOrigin]]) {
-  for (const path of ['/', '/#questions']) {
+  for (const path of ['/', '/#connected', '/#questions']) {
     assert.ok(message.html.includes(`href="${origin}${path}"`), 'HTML footer must link to the right environment');
     assert.ok(message.text.split('\n').some(line => line.endsWith(` ${origin}${path}`)), 'Plain text footer must include the same links');
   }
   assert.ok(message.html.includes('Ovelle · Volunteer coordination'));
   assert.ok(message.html.includes('max-width:464px'));
+  assert.ok(message.text.includes('More time for the people who show up.'));
+  assert.ok(message.html.includes(`src="${origin}/email/ovelle-many-hands-wave.png" width="376" alt="" role="presentation"`));
 }
 assert.ok(!prodMessage.html.includes('dev.ovelle.org'));
 sqlite.close(); console.log('ovelle download email validation and quotas verified');
