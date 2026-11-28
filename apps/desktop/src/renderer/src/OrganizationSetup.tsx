@@ -17,7 +17,7 @@ const fields = {
   name: { label: 'Organization name', example: 'e.g. Harbor Community Center…', autoComplete: 'organization', hint: '' },
   contactEmail: { label: 'Organization contact email', example: 'e.g. team@example.org…', autoComplete: 'email', hint: 'This can be different from your sign-in email.' },
   firstProgram: { label: 'First program', example: 'e.g. Community Pantry…', autoComplete: 'off', hint: '' },
-  firstLocation: { label: 'First location address', example: 'Start with a street number and name…', autoComplete: 'street-address', hint: 'Choose a Photon suggestion or enter the full address manually.' },
+  firstLocation: { label: 'First location address', example: 'Start with a street number and name…', autoComplete: 'street-address', hint: 'Choose an address from the list or enter it manually.' },
 } satisfies Record<Detail, { label: string; example: string; autoComplete: string; hint: string }>
 const groups: readonly (readonly Detail[])[] = [['name', 'contactEmail', 'firstLocation'], ['firstProgram']]
 const allFields = groups.flat()

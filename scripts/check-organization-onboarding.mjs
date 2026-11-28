@@ -56,6 +56,7 @@ try {
   }
 
   await heading('Create your organization').waitFor()
+  await page.getByText('Choose an address from the list or enter it manually.', { exact: true }).waitFor()
   assert.equal(await page.getByRole('navigation', { name: 'Live workflow' }).count(), 0)
   assert.equal(await field('Time zone').count(), 0)
   assert.equal(await page.locator('.organization-setup__art img').evaluate(img => img.complete && img.naturalWidth === 960), true)
