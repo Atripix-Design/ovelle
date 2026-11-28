@@ -71,7 +71,8 @@ for (const [message, origin] of [[messages[0], 'https://dev.ovelle.org'], [prodM
   assert.ok(message.html.includes('Ovelle · Volunteer coordination'));
   assert.ok(message.html.includes('max-width:464px'));
   assert.ok(message.text.includes('More time for the people who show up.'));
-  assert.ok(message.html.includes(`src="${origin}/email/ovelle-many-hands-wave.png" width="376" alt="" role="presentation"`));
+  assert.ok(message.html.includes(`background-image:url('${origin}/email/ovelle-many-hands-wave.png');background-position:center bottom`));
+  assert.ok(!message.html.includes(`src="${origin}/email/ovelle-many-hands-wave.png"`), 'The footer wave is a background, not an image row');
 }
 assert.ok(!prodMessage.html.includes('dev.ovelle.org'));
 sqlite.close(); console.log('ovelle download email validation and quotas verified');

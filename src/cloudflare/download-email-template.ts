@@ -39,16 +39,14 @@ export function downloadEmailContent(origin: 'https://ovelle.org' | 'https://dev
 <tr><td style="padding-top:8px"><img src="${image}" width="446" alt="Volunteers picking up litter outdoors" style="display:block;width:100%;max-width:446px;height:auto;border:0;border-radius:16px;color:#172b3d;background-color:#eef2f5;font-size:14px"></td></tr>
 </table>
 </td></tr>
-<tr><td style="padding:12px 8px 0;color:#536a7a;font-size:13px;line-height:18px">
+<tr><td style="padding-top:10px">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-<tr><td style="padding-top:10px;border-top:1px solid #cbd5de">
-<p style="margin:0 0 4px;color:#172b3d;font-weight:700">${project}</p>
-<p style="margin:0 0 3px;color:#172b3d">${tagline}</p>
+<tr><td bgcolor="#eef5f8" style="padding:14px 16px 49px;border:1px solid #cbd5de;border-radius:16px;background-color:#eef5f8;background-image:url('${wave}');background-position:center bottom;background-size:100% auto;background-repeat:no-repeat;color:#172b3d;font-size:13px;line-height:18px">
+<p style="margin:0 0 3px;font-weight:700">${project}</p>
+<p style="margin:0 0 3px">${tagline}</p>
 <p style="margin:0 0 7px">${about}</p>
-<p style="margin:0"><a href="${website}" style="color:#00598a;text-decoration:underline">Ovelle website</a>&nbsp; · <a href="${features}" style="color:#00598a;text-decoration:underline">Volunteer features</a>&nbsp; · <a href="${help}" style="color:#00598a;text-decoration:underline">Download help</a></p>
-</td></tr>
-<tr><td align="center" style="padding:8px 0"><img src="${wave}" width="376" alt="" role="presentation" style="display:block;width:100%;max-width:376px;height:auto;border:0"></td></tr>
-<tr><td style="font-size:12px;line-height:17px">${receipt}
+<p style="margin:0 0 8px"><a href="${website}" style="color:#00598a;text-decoration:underline">Ovelle website</a>&nbsp; · <a href="${features}" style="color:#00598a;text-decoration:underline">Volunteer features</a>&nbsp; · <a href="${help}" style="color:#00598a;text-decoration:underline">Download help</a></p>
+<p style="margin:0;font-size:12px;line-height:17px">${receipt}</p>
 </td></tr>
 </table>
 </td></tr>

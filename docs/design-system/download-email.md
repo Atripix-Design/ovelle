@@ -16,7 +16,7 @@ Ovelle uses the site's canvas, brand blue, text and border tokens. Its 464px lay
 
 The single photo is [Volunteer People Picking Up Trash and Plastics](https://www.pexels.com/photo/volunteer-people-picking-up-trash-and-plastics-7656742/) by Thirdman, under the [Pexels License](https://www.pexels.com/license/). Ovelle hosts a fixed crop of the stock JPEG with no third-party pixel or recipient-specific image URL.
 
-The decorative email tide is a static transparent PNG derived from the three original ink paths in the [official Penpot desktop export](migration/site-footer/penpot-desktop-exact.svg), group `shape-f4b2b2fe-96aa-80e1-8009-0252e46f3833`. The paths were rasterized, trimmed to the alpha bounds and resized proportionally to 896 × 187. The footer renders the wave at up to 376 px wide. Its tagline, product description, and navigation are live text and remain intact with remote images blocked. The website's procedural tide and motion control are unchanged.
+The decorative email tide is a static transparent PNG derived from the three original ink paths in the [official Penpot desktop export](migration/site-footer/penpot-desktop-exact.svg), group `shape-f4b2b2fe-96aa-80e1-8009-0252e46f3833`. The paths were rasterized, trimmed to the alpha bounds and resized proportionally to 896 × 187. The wave meets the bottom edge of the same footer panel that holds the tagline, product description, navigation, and receipt note. The panel uses a solid fallback color in clients that block remote images or do not render background artwork. All footer text and links stay live. The website's procedural tide and motion control are unchanged.
 
 ## Deployment
 
