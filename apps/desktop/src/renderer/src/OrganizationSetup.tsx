@@ -50,6 +50,9 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
   const { options, unavailable } = useAddressSuggestions(details.firstLocation.trim(),
     step === 0 && addressOpen && details.firstLocation !== chosenAddress)
   const expanded = addressOpen && options.length > 0
+  useEffect(() => {
+    if (expanded && addressIndex >= 0) document.getElementById(`setup-address-${addressIndex}`)?.scrollIntoView({ block: 'nearest' })
+  }, [addressIndex, expanded])
   function update(key: Detail, value: string) {
     setDetails(prior => ({ ...prior, [key]: value }))
     setErrors(prior => prior[key] ? { ...prior, [key]: undefined } : prior)
@@ -135,7 +138,7 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
                 type={key === 'contactEmail' ? 'email' : 'text'} spellCheck={key !== 'contactEmail' && !address}
                 autoCapitalize={key === 'contactEmail' ? 'none' : undefined} required
                 maxLength={key === 'contactEmail' ? 254 : address ? addressLimit : 120}
-                value={details[key]} hint={fields[key].hint} error={errors[key]}
+                value={details[key]} hint={address && unavailable ? 'Enter the full address manually.' : fields[key].hint} error={errors[key]}
                 supportingText={fields[key].hint ? 'visible' : 'hidden'}
                 material="solid" className="organization-setup__field"
                 {...(address ? {
@@ -150,15 +153,18 @@ export default function OrganizationSetup({ request, onCreated, onBusyChange }: 
                   update(key, event.target.value)
                   if (address) { setAddressOpen(true); setAddressIndex(-1) }
                 }} />
-              return <div key={key}>{control}
-                {address && expanded && <ul id="setup-address-options" role="listbox" aria-label="Address suggestions" className="organization-setup__suggestions">
+              return <div key={key} className={address ? "organization-setup__address" : undefined}>{control}
+                {address && expanded && <div className="organization-setup__address-menu">
+                  <ul id="setup-address-options" role="listbox" aria-label="Address suggestions">
                   {options.map((value, index) => <li key={value} id={`setup-address-${index}`} role="option"
                     aria-selected={index === addressIndex} onPointerDown={event => event.preventDefault()}
                     onClick={() => chooseAddress(value)}>{value}</li>)}
-                </ul>}
-                {address && <p className="organization-setup__address-source" role="status">
-                  {unavailable ? 'Suggestions unavailable. You can still enter the address manually.' : expanded ? 'Address data © OpenStreetMap contributors via Photon' : ''}
-                </p>}
+                  </ul>
+                  <small className="organization-setup__address-source">© OpenStreetMap contributors</small>
+                </div>}
+                {address && <span className="ov-sr-only" role="status">
+                  {unavailable ? 'Address suggestions are unavailable.' : expanded ? `${options.length} address suggestions available.` : ''}
+                </span>}
               </div>
             })}
           </div> : <dl className="organization-setup__summary">
